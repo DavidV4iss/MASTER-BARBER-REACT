@@ -9,7 +9,7 @@ export default function NavbarBarber() {
   return (
     <div className="navbar border-bottom bg-dark shadow">
       <div class="container-fluid">
-        <a class="navbar-brand text-warning anton fs-2">
+        <a class="navbar-brand text-warning zoomhover2 anton fs-2">
           <img
             src="LOGO.png"
             alt=""
