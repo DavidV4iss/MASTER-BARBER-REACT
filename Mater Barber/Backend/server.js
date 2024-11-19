@@ -138,7 +138,8 @@ app.post('/registrar', (req, res) => {
     const contraseña = req.body.contraseña
     const confirmar_contraseña = req.body.confirmar_contraseña
 
-    db.query("SELECT * FROM usuarios WHERE email = ?", [email], (err, result) => {
+
+    db.query("SELECT * FROM usuarios WHERE email = ? OR nit = ?", [email, nit], (err, result) => {
 
         if (err) {
             console.log(err)
@@ -161,6 +162,9 @@ app.post('/registrar', (req, res) => {
         }
         else if (nit.length < 10) {
             return res.status(400).send('Tu numero de documento debe tener 10 caracteres');
+        }
+        else if (telefono.length > 10) {
+            return res.status(400).send('Tu numero de telefono debe tener 10 caracteres');
         }
 
         else {
@@ -499,9 +503,7 @@ const verifyTokenAndRole = (allowedRoles) => {
 //     res.send('Bienvenido Administrador');
 // });
 
-// app.get('/barber-route', verifyTokenAndRole(['2', '1']), (req, res) => {
-//     res.send('Bienvenido Barbero');
-// });
+
 
 // app.get('/client-route', verifyTokenAndRole(['1']), (req, res) => {
 //     res.send('Bienvenido Cliente');

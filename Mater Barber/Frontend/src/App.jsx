@@ -41,7 +41,7 @@ function App() {
             <Route exact path="/Registro" element={<Registro />} />
             <Route exact path="/EnvEmail" element={<EnvEmail />} />
             <Route exact path="/cambiarpasscod" element={<Cambiarpasscod />} />
-            <Route exact path="/Iniciobarber" element={<Iniciobarber />} />
+          
             {/* FIN RUTAS PUBLICAS */}
 
             {/* RUTAS PRIVDAS ADMINISTRADOR*/}
@@ -108,7 +108,7 @@ function App() {
             <Route
               exact
               path='/Iniciobarber'
-              element={<PrivateRoute roles={['2', '1']} element={<Iniciobarber />} />}
+              element={<PrivateRoute roles={['2']} element={<Iniciobarber />} />}
               
             />
             {/* FIN RUTAS PRIVADAS BARBEROS */}

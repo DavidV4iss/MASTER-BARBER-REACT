@@ -32,7 +32,7 @@ export default function Login() {
                         navigate('/InicioAdmin');
                         break;
                     case 2: // Barbero
-                        navigate('/barber-route');  // Cambia a la ruta correspondiente de barberos
+                        navigate('/Iniciobarber');  // Cambia a la ruta correspondiente de barberos
                         break;
                     case 3: // Cliente
                         navigate('/IndexUser');

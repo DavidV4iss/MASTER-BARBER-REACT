@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import Reservations from "../../Components/NavbarBarber";
 
-const Dashboard = () => {
+const Iniciobarber = () => {
   return (
     <div>
       <Reservations />
@@ -10,5 +10,5 @@ const Dashboard = () => {
   );
 };
 
-export default Dashboard;
+export default Iniciobarber;
 
