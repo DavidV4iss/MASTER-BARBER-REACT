@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link rel="stylesheet" href="Estilos.css">
+    <link rel="icon" type="image/png" href="images/logoLogin.png">
+    <title>Login</title>
+</head>
+<body class="body" id="body">
+    <!-- <div class="logo">
+        <a href="./MASTER BARBER.html">
+            <img src="images/mb-removebg-preview.png" alt="" class="logo"></a>
+    </div> -->
+<div class="container" id="container">
+        <div class="form-container sign-up">
+            <form>
+                <h1>Crear cuenta</h1>
+                <div class="social-icons">
+                    <a href="#" class="icons"><i class="fa-brands fa-google-plus-g"></i></a>
+                    <a href="#" class="icons"><i class="fa-brands fa-facebook-f"></i></a>
+                </div>
+                <span>Use su información personal para registrarse</span>
+                <input type="name" placeholder="Nombre de usuario">
+                <input type="email" placeholder="Correo electronico">
+                <input type="nit" placeholder="Nit">
+                <input type="contraseña" placeholder="Contraseña">
+                <input type="confir_contraseña" placeholder="Confirme su contraseña">
+                <button>Registrarse</button>
+            </form>
+        </div>
+
+        <div class="form-container sign-in">
+            <form>
+                <h1>Iniciar sesion</h1>
+                <div class="social-icons">
+                    <a href="#" class="icons"><i class="fa-brands fa-google-plus-g"></i></a>
+                    <a href="#" class="icons"><i class="fa-brands fa-facebook-f"></i></a>
+                </div>
+                <span>Iniciar sesion</span>
+                <input type="nombre" placeholder="Nombre de usuario">
+                <input type="correo" placeholder="Correo electronico">
+                <input type="contraseña" placeholder="Contraseña">
+                <a href="">¿Olvido su contraseña?</a>
+                <button>Iniciar sesion</button>
+            </form>
+        </div>
+        <div class="toggle-container">
+            <div class="toggle">
+                <div class="toggle-panel toggle-left">
+                        <h1>Bievenido de nuevo</h1>
+                        <p>ingrese sus datos personales para utilizar todas las funciones del sitio</p>
+                        <button class="hidden" id="login">Inicia sesion</button>
+                </div>
+                <div class="toggle-panel toggle-right">
+                        <h1>Hola amigo</h1>
+                        <p>Registre sus datos personales para utilizar todas las funciones del sitio</p>
+                        <button class="hidden" id="register">Registrarse</button>
+                </div>
+            </div>
+        </div>
+</div>
+
+
+    <script src="script.js"></script>
+</body>
+</html>
