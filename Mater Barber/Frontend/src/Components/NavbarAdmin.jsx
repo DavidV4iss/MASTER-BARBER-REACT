@@ -15,7 +15,7 @@ export default function NavbarAdmin() {
                 <div class="d-flex ">
                     <div class="dropdown position-absolute top-0 end-0 pe-2 me-2" >
                         <button class="btn dropdown text-white d-none d-sm-block" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <small className='d-none d-sm-block mt-1 mx-3 fw-bold text-white'>BIENVENIDO ADMINISTRADOR</small>
+                            <small className='d-none d-sm-block mt-1 mx-3 fw-bold text-white sm zoomhover2'>BIENVENIDO ADMINISTRADOR </small>
                             <i class="bi bi-person-circle fs-3"></i>
                         </button>
                         <ul class="dropdown-menu bg-dark">

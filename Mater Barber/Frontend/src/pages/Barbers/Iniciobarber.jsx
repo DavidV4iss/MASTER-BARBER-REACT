@@ -1,11 +1,12 @@
 // BARBEROS
 import React, { useState } from "react";
-import Reservations from "../../Components/NavbarBarber";
+import NavBarber from "../../Components/NavbarBarber";
+
 
 const Iniciobarber = () => {
   return (
     <div>
-      <Reservations />
+      <NavBarber />
     </div>
   );
 };

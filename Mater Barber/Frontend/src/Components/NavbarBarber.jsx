@@ -9,14 +9,7 @@ export default function NavbarBarber() {
   return (
     <div className="navbar border-bottom bg-dark shadow">
       <div class="container-fluid">
-        <a class="navbar-brand text-warning zoomhover2 anton fs-2">
-          <img
-            src="LOGO.png"
-            alt=""
-            width="40"
-            height="40"
-            class="d-inline-block align-text-top mx-4 mt-1"
-          />
+        <a class="navbar-brand text-danger zoomhover2 anton fs-2 mx-4">
           Master Barber
         </a>
         <div class="d-flex ">
@@ -27,21 +20,21 @@ export default function NavbarBarber() {
               data-bs-toggle="dropdown"
               aria-expanded="false"
             >
-              <small className="d-none d-sm-block mt-1 mx-3 fw-bold text-white">
-                BIENVENIDO ADMINISTRADOR
+              <small className="d-none d-sm-block mt-1 mx-3 fw-bold text-white sm">
+                BARBER HOMECENTER
               </small>
               <i class="bi bi-person-circle fs-3"></i>
             </button>
             <ul class="dropdown-menu bg-dark">
               <li>
-                <a class="dropdown-item bebas text-danger" href="/PerfilAdmin">
+                <a class="dropdown-item bebas text-danger" href="/PerfilBarber">
                   Perfil
                 </a>
               </li>
               <li>
                 <a
                   class="dropdown-item bebas text-danger"
-                  href="/ConfiguracionAdmin"
+                  href="/ConfiguracionBarber"
                 >
                   Configuración
                 </a>

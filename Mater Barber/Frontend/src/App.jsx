@@ -27,6 +27,7 @@ import PerfilUser from './pages/Usuario/PerfilUser';
 // ESTILOS DE LA PAGINA
 import './App.scss';
 import 'bootstrap/scss/bootstrap.scss';
+import PerfilBarber from './pages/Barbers/PerfilBarber';
 //FIN ESTILOS
 
 function App() {
@@ -41,7 +42,7 @@ function App() {
             <Route exact path="/Registro" element={<Registro />} />
             <Route exact path="/EnvEmail" element={<EnvEmail />} />
             <Route exact path="/cambiarpasscod" element={<Cambiarpasscod />} />
-          
+
             {/* FIN RUTAS PUBLICAS */}
 
             {/* RUTAS PRIVDAS ADMINISTRADOR*/}
@@ -95,7 +96,6 @@ function App() {
             />
             {/* FIN RUTAS PRIVDAS ADMINISTRADOR*/}
 
-
             {/* RUTAS PRIVADAS BARBEROS */}
 
             {/* <Route
@@ -107,9 +107,15 @@ function App() {
             /> */}
             <Route
               exact
-              path='/Iniciobarber'
-              element={<PrivateRoute roles={['2']} element={<Iniciobarber />} />}
-              
+              path="/Iniciobarber"
+              element={
+                <PrivateRoute roles={["2"]} element={<Iniciobarber />} />
+              }
+            />
+            <Route
+              exact
+              path="/PerfilBarber"
+              element={<PrivateRoute roles={["2"]} element={<PerfilBarber />} />}
             />
             {/* FIN RUTAS PRIVADAS BARBEROS */}
 
