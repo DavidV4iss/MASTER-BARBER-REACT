@@ -8,7 +8,7 @@ export default function PerfilBarber() {
     <div className="">
       <div className="min-vh-100 align-content-center mx-5 justify-content-end">
         <div className='container p-sm-5  border border-2 shadow border-white rounded-4 '>
-        <a href="/InicioAdmin"><i className="bi bi-arrow-left-circle-fill text-white fs-2"></i></a>
+        <a href="/InicioBarber"><i className="bi bi-arrow-left-circle-fill text-white fs-2"></i></a>
           <div className="row justify-content-center align-items-center">
             <div className="col col-lg-6 bi-text-lg-center ">
               <i className="bi bi-person-circle icono mt-5">

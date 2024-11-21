@@ -3,9 +3,9 @@ import PrivateRoute from './Components/PrivateRoute';  // Importa tu componente 
 import AccessDenied from './pages/default/AccessDenied'; // Importa el componente de acceso denegado
 
 // IMPORTACION PARA RUTAS
-import Login from './pages/Usuario/Login';
+import Login from './pages/default/Login';
 import Index from './pages/default/Index';
-import Registro from './pages/Usuario/Registro';
+import Registro from './pages/default/Registro';
 import GestionarBarberos from './pages/Admin/GestionarBarberos';
 import Inventario from './pages/Admin/Inventario';
 import HrsBarberos from './pages/Admin/HrsBarberos';
@@ -15,10 +15,12 @@ import Gestiondeventas from './pages/Admin/Gestiondeventas';
 import EnvEmail from './pages/default/EnvEmail';
 import Cambiarpasscod from './pages/default/Cambiarpasscod';
 import IndexUser from './pages/Usuario/IndexUser';
-import Iniciobarber from './pages/Barbers/Iniciobarber';
 import PerfilAdmin from './pages/Admin/PerfilAdmin';
 import ConfiguracionAdmin from './pages/Admin/ConfiguracionAdmin';
-import PerfilUser from './pages/Usuario/PerfilUser';
+import Iniciobarber from "./pages/Barbers/Iniciobarber";
+import PerfilBarber from "./pages/Barbers/PerfilBarber";
+import GestionReservas from "./pages/Barbers/GestionReservas";
+import PerfilUser from "./pages/Usuario/PerfilUser";
 //FIN IMPORTACION DE RUTAS
 
 
@@ -27,7 +29,6 @@ import PerfilUser from './pages/Usuario/PerfilUser';
 // ESTILOS DE LA PAGINA
 import './App.scss';
 import 'bootstrap/scss/bootstrap.scss';
-import PerfilBarber from './pages/Barbers/PerfilBarber';
 //FIN ESTILOS
 
 function App() {
@@ -96,6 +97,8 @@ function App() {
             />
             {/* FIN RUTAS PRIVDAS ADMINISTRADOR*/}
 
+
+
             {/* RUTAS PRIVADAS BARBEROS */}
 
             {/* <Route
@@ -117,7 +120,17 @@ function App() {
               path="/PerfilBarber"
               element={<PrivateRoute roles={["2"]} element={<PerfilBarber />} />}
             />
+
+            <Route
+              exact
+              path="/GestionReservas"
+              element={
+                <PrivateRoute roles={["2"]} element={<GestionReservas />} />
+              }
+            />
             {/* FIN RUTAS PRIVADAS BARBEROS */}
+
+
 
             {/* RUTAS PRIVADAS CLIENTE*/}
             <Route

@@ -21,7 +21,7 @@ export default function NavbarBarber() {
               aria-expanded="false"
             >
               <small className="d-none d-sm-block mt-1 mx-3 fw-bold text-white sm">
-                BARBER HOMECENTER
+                HOME BARBER
               </small>
               <i class="bi bi-person-circle fs-3"></i>
             </button>
