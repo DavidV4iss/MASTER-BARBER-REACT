@@ -6,6 +6,7 @@ const nodemailer = require('nodemailer');
 const moment = require('moment');
 const bodyParser = require('body-parser');
 const jwt = require('jsonwebtoken');
+const multer = require('multer');
 
 const app = express();
 app.use(express.urlencoded({ extended: true }));
@@ -30,6 +31,7 @@ const db = mysql.createConnection({
     password: "",
     database: "master_barber"
 })
+
 
 // Configuración de transporte de nodemailer para enviar correos electrónicos
 const transporter = nodemailer.createTransport({
@@ -74,7 +76,7 @@ app.post('/login', (req, res) => {
                 const secretKey = 'miClaveSecreta';  // Debes guardar la clave secreta en un entorno seguro
 
                 // Crear el token JWT con una expiración de 1 hora
-                const token = jwt.sign({ email: usuario.email, role: usuario.id_rol }, secretKey, { expiresIn: '1h' });
+                const token = jwt.sign({ id: usuario.id_usuario, email: usuario.email, role: usuario.id_rol }, secretKey, { expiresIn: '1h' });
 
                 // Enviar la respuesta con el token generado
                 return res.status(200).json({
@@ -113,20 +115,7 @@ const verificarToken = (req, res, next) => {
     });
 };
 
-// app.get('/ruta-protegida', verificarToken, (req, res) => {
-//     // Aquí puedes acceder a req.usuario
-//     res.status(200).json({
-//         message: "Ruta protegida",
-//         usuario: req.id_usuario
-//     });
-// });
 
-// app.get('/perfil', verificarToken, (req, res) => {
-//     res.status(200).json({
-//         message: "Bienvenido al perfil",
-//         usuario: req.id_usuario
-//     });
-// });
 
 
 app.post('/registrar', (req, res) => {
@@ -383,9 +372,6 @@ app.post('/Cambiarpasscod', (req, res) => {
 
 });
 
-
-
-
 app.get('/GetBarberos', (req, res) => {
     db.query('SELECT * FROM addbarberos', (err, results) => {
         if (err) {
@@ -497,18 +483,45 @@ const verifyTokenAndRole = (allowedRoles) => {
     };
 };
 
-// Rutas protegidas por rol
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, '../Frontend/public/images/perfil/')
+    },
+    filename: function (req, file, cb) {
+        cb(null, Date.now() + '-' + file.originalname)
+    }
+})
 
-// app.get('/admin-route', verifyTokenAndRole(['1']), (req, res) => {
-//     res.send('Bienvenido Administrador');
-// });
+const upload = multer({ storage: storage })
 
+app.put('/actualizarUsuario/:email', upload.single('file'), (req, res) => {
+    const file = req.file;
 
+    const email = req.params.email
+    const nombre = req.body.nombre
 
-// app.get('/client-route', verifyTokenAndRole(['1']), (req, res) => {
-//     res.send('Bienvenido Cliente');
-// });
+    db.query('UPDATE usuarios SET nombre_usuario = ?, Foto = ? WHERE email = ?', [nombre, file.filename, email], (err, results) => {
+        if (err) {
+            console.log(err);
+            return res.status(500).send('Error en el servidor');
+        } else {
+            return res.status(200).send('Perfil actualizado exitosamente');
+        }
+    })
+})
 
+app.get ('/traerUsuario/:email', (req, res) => {
+    const email = req.params.email
+    db.query('SELECT * FROM usuarios WHERE email = ?', [email], (err, results) => {
+        if (err) {
+            console.log(err);
+            return res.status(500).send('Error en el servidor');
+        }
+        else {
+            return res.status(200).send(results);
+        }
+    })
+})
 
 app.listen(8081, () => {
     console.log("Conexion exitosa:)")
