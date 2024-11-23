@@ -35,7 +35,7 @@ export default function Login() {
                         navigate('/Iniciobarber');  // Cambia a la ruta correspondiente de barberos
                         break;
                     case 3: // Cliente
-                        navigate('/IndexUser');
+                        navigate('/InicioUsuario');
                         break;
                     default:
                         navigate('/access-denied');

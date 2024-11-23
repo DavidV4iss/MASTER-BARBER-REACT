@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.1.1
+-- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 26-10-2024 a las 00:30:04
--- Versión del servidor: 10.4.22-MariaDB
--- Versión de PHP: 8.1.2
+-- Tiempo de generación: 23-11-2024 a las 07:29:43
+-- Versión del servidor: 10.4.32-MariaDB
+-- Versión de PHP: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -31,7 +31,7 @@ CREATE TABLE `addbarberos` (
   `id_barbero` int(11) NOT NULL,
   `nombre` varchar(200) NOT NULL,
   `descripcion` varchar(200) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Volcado de datos para la tabla `addbarberos`
@@ -50,7 +50,7 @@ INSERT INTO `addbarberos` (`id_barbero`, `nombre`, `descripcion`) VALUES
 CREATE TABLE `categoria_producto` (
   `id_categoria_producto` int(255) NOT NULL,
   `categoria` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Volcado de datos para la tabla `categoria_producto`
@@ -74,7 +74,7 @@ CREATE TABLE `inventario` (
   `cantidad` int(255) NOT NULL,
   `id_categoria_producto` int(255) NOT NULL,
   `PrecioUnitario` int(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -90,7 +90,7 @@ CREATE TABLE `reserva_turno` (
   `Aceptar_Turno` varchar(2) NOT NULL,
   `Cancelar_Turno` varchar(2) NOT NULL,
   `id_usuario` int(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -101,7 +101,7 @@ CREATE TABLE `reserva_turno` (
 CREATE TABLE `rol` (
   `id_rol` int(255) NOT NULL,
   `nombre_rol` varchar(55) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Volcado de datos para la tabla `rol`
@@ -123,7 +123,7 @@ CREATE TABLE `tipo_servicio` (
   `nombre` varchar(255) NOT NULL,
   `descripcion_S` varchar(255) NOT NULL,
   `precio` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -140,16 +140,19 @@ CREATE TABLE `usuarios` (
   `contrasena` varchar(255) NOT NULL,
   `id_rol` int(255) NOT NULL,
   `user_reset_code` varchar(7) DEFAULT NULL,
-  `user_reset_code_expiration` datetime DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  `user_reset_code_expiration` datetime DEFAULT NULL,
+  `Foto` varchar(255) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Volcado de datos para la tabla `usuarios`
 --
 
-INSERT INTO `usuarios` (`id_usuario`, `nombre_usuario`, `email`, `nit`, `telefono`, `contrasena`, `id_rol`, `user_reset_code`, `user_reset_code_expiration`) VALUES
-(5, 'Fidel Espitia ', 'fideljoseespi10@gmail.com', 1028662003, '3142758305', '$2a$10$Wu5aatNss9/D/N/DQ5v2uuvP9BhDL09q8/v8XQHUHUvjqCxQ6rCKG', 3, NULL, NULL),
-(6, 'ADMIN', 'Admin@gmail.com', 1028662003, '3142758305', '$2a$10$gKkjGOeNlRvXzyePlVJq1.r/9Y.F6.f.UROSSUNuM7Sjv1xkZyRo.', 1, NULL, NULL);
+INSERT INTO `usuarios` (`id_usuario`, `nombre_usuario`, `email`, `nit`, `telefono`, `contrasena`, `id_rol`, `user_reset_code`, `user_reset_code_expiration`, `Foto`) VALUES
+(5, 'Fidel Espitia ', 'fideljoseespi10@gmail.com', 1028662003, '3142758305', '$2a$10$Wu5aatNss9/D/N/DQ5v2uuvP9BhDL09q8/v8XQHUHUvjqCxQ6rCKG', 3, NULL, NULL, '1732327290703-B1.JPG'),
+(6, 'ADMINISTRADOR', 'Admin@gmail.com', 1028662003, '3142758305', '$2a$10$gKkjGOeNlRvXzyePlVJq1.r/9Y.F6.f.UROSSUNuM7Sjv1xkZyRo.', 1, NULL, NULL, '1732325814777-B1.JPG'),
+(7, 'Julio Cesar', 'jespitiagalvis@gmail.com', 1028662005, '3196524963', '$2a$10$xQyXwmewFti5MfBoxGR06eYSvgqSkKZ9Uc.At9kZnbxyGpYYnw2lG', 3, NULL, NULL, '1732327755702-B1.JPG'),
+(8, 'BARBEROS', 'Barber@gmail.com', 1014481682, '3107877172', '$2a$10$G/u8lp8/i78hNpTwFbjMse9KyDkgx0xnnCQoFwlmdg4Yj6C5Piy4u', 2, NULL, NULL, '1732329447437-B1.JPG');
 
 --
 -- Índices para tablas volcadas
@@ -209,7 +212,7 @@ ALTER TABLE `usuarios`
 -- AUTO_INCREMENT de la tabla `addbarberos`
 --
 ALTER TABLE `addbarberos`
-  MODIFY `id_barbero` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id_barbero` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT de la tabla `categoria_producto`
@@ -221,13 +224,13 @@ ALTER TABLE `categoria_producto`
 -- AUTO_INCREMENT de la tabla `inventario`
 --
 ALTER TABLE `inventario`
-  MODIFY `id_producto` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+  MODIFY `id_producto` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
 
 --
 -- AUTO_INCREMENT de la tabla `usuarios`
 --
 ALTER TABLE `usuarios`
-  MODIFY `id_usuario` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id_usuario` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- Restricciones para tablas volcadas

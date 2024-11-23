@@ -6,7 +6,7 @@ const PrivateRoute = ({ roles, element }) => {
 
     // Si no hay token, redirigir a la página de login
     if (!token) {
-        console.log("No token found. Redirecting to Login.");
+        console.log("NO HAY TOKEN. PORFAVOR INICIA SESION O REGISTRATE");
         return <Navigate to="/Login" />;
     }
 
@@ -23,7 +23,7 @@ const PrivateRoute = ({ roles, element }) => {
 
     // Asegúrate de que el rol sea una cadena antes de compararlo
     if (!roles.includes(userRole.toString())) {
-        console.log(`Access denied. User role: ${userRole}, required roles: ${roles}`);
+        console.log(`Acceso Denegado. Tu Rol Es: ${userRole}, Y Para Ir Alla Se Requiere Tener El Rol: ${roles}`);
         return <Navigate to="/access-denied" />;
     }
 

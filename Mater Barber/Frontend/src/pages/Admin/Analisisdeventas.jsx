@@ -33,7 +33,7 @@ export default function Analisisdeventas() {
                 <p className='text-center text-white mt-5 display-6 bebas col-sm-12 col'>HOLA,  <span className='text-danger'>ADMINISTRADOR</span>| ESTE ES EL ANALISIS DE VENTAS</p>
                 <div className='container pt-5 col-sm12 col justify-content-center'>
                     <div className="row g-5">
-                        <div className="col col-sm-12">
+                        <div className="col col-sm-12 animate__hinge">
                             <Graficas data={data} tipo='line' options={options} />
                         </div>
                         <div className="col-12 col-sm border border-2 mx-0 mx-sm-5 border-secondary  text-center">

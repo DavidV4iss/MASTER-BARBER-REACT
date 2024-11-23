@@ -14,7 +14,7 @@ import Analisisdeventas from './pages/Admin/Analisisdeventas';
 import Gestiondeventas from './pages/Admin/Gestiondeventas';
 import EnvEmail from './pages/default/EnvEmail';
 import Cambiarpasscod from './pages/default/Cambiarpasscod';
-import IndexUser from './pages/Usuario/IndexUser';
+import InicioUsuario from './pages/Usuario/InicioUsuario';
 import PerfilAdmin from './pages/Admin/PerfilAdmin';
 import ConfiguracionAdmin from './pages/Admin/ConfiguracionAdmin';
 import Iniciobarber from "./pages/Barbers/Iniciobarber";
@@ -27,8 +27,10 @@ import PerfilUser from "./pages/Usuario/PerfilUser";
 
 
 // ESTILOS DE LA PAGINA
+import 'animate.css';
 import './App.scss';
-import 'bootstrap/scss/bootstrap.scss';
+import 'bootstrap/scss/bootstrap.scss'
+
 //FIN ESTILOS
 
 function App() {
@@ -37,14 +39,23 @@ function App() {
       <div className="flex">
         <div className="content w-100">
           <Routes>
+
+
+
+
             {/* RUTAS PUBLICAS */}
             <Route exact path="/" element={<Index />} />
             <Route exact path="/Login" element={<Login />} />
             <Route exact path="/Registro" element={<Registro />} />
             <Route exact path="/EnvEmail" element={<EnvEmail />} />
             <Route exact path="/cambiarpasscod" element={<Cambiarpasscod />} />
-
             {/* FIN RUTAS PUBLICAS */}
+
+
+
+
+
+
 
             {/* RUTAS PRIVDAS ADMINISTRADOR*/}
             <Route
@@ -99,6 +110,14 @@ function App() {
 
 
 
+
+
+
+
+
+
+
+
             {/* RUTAS PRIVADAS BARBEROS */}
 
             {/* <Route
@@ -132,11 +151,18 @@ function App() {
 
 
 
+
+
+
+
+
+
+
             {/* RUTAS PRIVADAS CLIENTE*/}
             <Route
               exact
-              path="/IndexUser"
-              element={<PrivateRoute roles={["3"]} element={<IndexUser />} />}
+              path="/InicioUsuario"
+              element={<PrivateRoute roles={["3"]} element={<InicioUsuario />} />}
             />
 
             <Route
@@ -146,9 +172,19 @@ function App() {
             />
             {/* FIN RUTAS PRIVADAS CLIENTE*/}
 
+
+
+
+
+
+
+
+
             {/* RUTA ACCESO DENEGADO*/}
             <Route exact path="/access-denied" element={<AccessDenied />} />
             {/* FIN RUTA ACCESO DENEGADO*/}
+
+
           </Routes>
         </div>
       </div>

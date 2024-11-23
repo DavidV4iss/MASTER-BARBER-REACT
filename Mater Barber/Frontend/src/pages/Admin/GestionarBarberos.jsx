@@ -181,12 +181,12 @@ const openEditModal = (barbero) => {
               <div class="modal-body">
                 <form>
                   <div class="mb-3">
-                    <label for="recipient-name" class="col-form-label text-white">Nombre Barbero</label>
-                    <input type="text" class="form-control" id="recipient-name" value={barberoEdit.nombre} name='nombre' onChange={handleChangeEdit} placeholder='Escriba un nombre'/>
+                    <label aria-required for="recipient-name" class="col-form-label text-white">Nombre Barbero</label>
+                    <input required type="text" class="form-control" id="recipient-name" value={barberoEdit.nombre} name='nombre' onChange={handleChangeEdit} placeholder='Escriba un nombre'/>
                   </div>
                   <div class="mb-3">
-                    <label for="recipient-name" class="col-form-label text-white">Descripcion</label>
-                    <input type="text" class="form-control" id="recipient-name" value={barberoEdit.descripcion} name='descripcion' onChange={handleChangeEdit} placeholder='Escriba una Descripcion'/>
+                    <label  for="recipient-name" class="col-form-label text-white">Descripcion</label>
+                    <input required type="text" class="form-control" id="recipient-name" value={barberoEdit.descripcion} name='descripcion' onChange={handleChangeEdit} placeholder='Escriba una Descripcion'/>
                   </div>
                   {/* <div className="col-12 mb-3">
                     <label htmlFor="floatingInput" className='text-white'>Imagen</label>
@@ -216,12 +216,12 @@ const openEditModal = (barbero) => {
               <div class="modal-body">
                 <form>
                   <div class="mb-3">
-                    <label for="recipient-name" class="col-form-label text-white">Nombre Barbero</label>
-                    <input type="text" class="form-control" id="recipient-name" name='nombre' onChange={handleChange} placeholder='Escriba un Nombre'/>
+                    <label  for="recipient-name" class="col-form-label text-white">Nombre Barbero</label>
+                    <input required type="text" class="form-control" id="recipient-name" name='nombre' onChange={handleChange} placeholder='Escriba un Nombre'/>
                   </div>
                   <div class="mb-3">
                     <label for="recipient-name" class="col-form-label text-white">Descripcion</label>
-                    <input type="text" class="form-control" id="recipient-name" name='descripcion' onChange={handleChange} placeholder='Escriba una Descripcion'/>
+                    <input required type="text" class="form-control" id="recipient-name" name='descripcion' onChange={handleChange} placeholder='Escriba una Descripcion'/>
                   </div>
                   {/* <div className="col-12 mb-3">
                     <label htmlFor="floatingInput" className='text-white'>Imagen</label>

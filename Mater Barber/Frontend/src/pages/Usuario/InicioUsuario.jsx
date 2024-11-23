@@ -1,7 +1,7 @@
 import React from 'react'
 import NavbarUserIndex from '../../Components/NavbarUserIndex'
 
-export default function IndexUser() {
+export default function InicioUsuario() {
     return (
         <div>
             <NavbarUserIndex />

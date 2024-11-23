@@ -6,9 +6,10 @@ import { useNavigate } from 'react-router-dom';
 
 
 export default function PerfilAdmin() {
+
   const navigate = useNavigate();
 
-  const [user, setUser] = useState({});
+  const [admin, setAdmin] = useState({});
 
   const token = localStorage.getItem("token");
 
@@ -16,19 +17,19 @@ export default function PerfilAdmin() {
   const email = usuario.email;
 
   useEffect(() => {
-    const fetchUser = async () => {
+    const fetchAdmin = async () => {
       try {
         const res = await axios.get(`http://localhost:8081/traerUsuario/${email}`);
-        setUser(res.data[0]);
+        setAdmin(res.data[0]);
       } catch (err) {
         console.log("Error al obtener los datos:", err);
       }
     };
-    fetchUser();
+    fetchAdmin();
   }, [email]);
 
   const handleChange = (e) => {
-    setUser({ ...user, [e.target.name]: e.target.value });
+    setAdmin({ ...admin, [e.target.name]: e.target.value });
   };
 
   const handleClick = async (e) => {
@@ -78,7 +79,7 @@ export default function PerfilAdmin() {
                       readonly
                       className="form-control-plaintext text-white antonparabackend "
                       id="staticEmail"
-                      value={user.nombre_usuario}
+                      value={admin.nombre_usuario}
                     />
                   </div>
                 </div>
