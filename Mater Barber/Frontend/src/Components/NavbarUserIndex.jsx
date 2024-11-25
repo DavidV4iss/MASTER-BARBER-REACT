@@ -1,11 +1,38 @@
 import React from 'react'
-import 'bootstrap/dist/css/bootstrap.min.css'
+import Swal from 'sweetalert2';
+import { useNavigate } from 'react-router-dom';
 
 export default function NavbarUserIndex() {
-    const cerrarSesion = () => {
-        localStorage.removeItem('token');
-        // Redirige a la página de inicio de sesión
-        window.location.href = '/';
+    const navigate = useNavigate();
+    const handleLogout = () => {
+      Swal.fire({
+        title: "¿Estas Seguro Que Deseas Cerrar Sesion?",
+        text: "Tu sesión será cerrada.",
+        imageUrl: "/LOGO.png",
+        imageWidth: 200,
+        imageHeight: 200,
+        showCancelButton: true,
+        confirmButtonColor: "#DC3545",
+        cancelButtonColor: "",
+        confirmButtonText: "Sí, cerrar sesión",
+        cancelButtonText: "Cancelar",
+        customClass: {
+          popup: "dark-theme-popup bg-dark antonparabackend ",
+        },
+      }).then((result) => {
+        if (result.isConfirmed) {
+          localStorage.removeItem("token");
+          navigate("/login");
+
+          Swal.fire({
+            title: "Sesión Cerrada",
+            text: "Has cerrado sesión exitosamente.",
+            icon: "success",
+            timer: 2000,
+            showConfirmButton: false,
+          });
+        }
+      });
     };
 
     return (
@@ -42,12 +69,12 @@ export default function NavbarUserIndex() {
                         </button>
                         <ul class="dropdown-menu bg-dark">
                             <li>
-                                <a class="dropdown-item bebas text-white " href="/PerfilUser">Perfil</a>
+                                <a class="dropdown-item bebas text-warning " href="/PerfilUser">Perfil</a>
                             </li>
                             <li>
-                                <a class="dropdown-item bebas text-white" href="#">Configuración</a>
+                                <a class="dropdown-item bebas text-warning" href="#">Configuración</a>
                             </li>
-                            <li onClick={cerrarSesion}>
+                            <li onClick={handleLogout}>
                                 <a class="dropdown-item text-danger bebas" href="#">
                                     <i class="bi bi-box-arrow-right mx-1">
                                     </i> Cerrar sesión</a>

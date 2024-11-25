@@ -1,11 +1,40 @@
 import React from "react";
+import Swal from "sweetalert2";
+import { useNavigate } from "react-router-dom";
+
 
 export default function NavbarBarber() {
-  const cerrarSesion = () => {
-    localStorage.removeItem("token");
-    // Redirige a la página de inicio de sesión
-    window.location.href = "/";
-  }; 
+   const navigate = useNavigate();
+  const handleLogout = () => {
+    Swal.fire({
+      title: "¿Estas Seguro Que Deseas Cerrar Sesion?",
+      text: "Tu sesión será cerrada.",
+      imageUrl: "/LOGO.png",
+      imageWidth: 200,
+      imageHeight: 200,
+      showCancelButton: true,
+      confirmButtonColor: "#DC3545",
+      cancelButtonColor: "",
+      confirmButtonText: "Sí, cerrar sesión",
+      cancelButtonText: "Cancelar",
+      customClass: {
+        popup: "dark-theme-popup bg-dark antonparabackend ",
+      },
+    }).then((result) => {
+      if (result.isConfirmed) {
+        localStorage.removeItem("token");
+        navigate("/login");
+
+        Swal.fire({
+          title: "Sesión Cerrada",
+          text: "Has cerrado sesión exitosamente.",
+          icon: "success",
+          timer: 2000,
+          showConfirmButton: false,
+        });
+      }
+    });
+  };
   return (
     <div className="navbar border-bottom bg-dark shadow">
       <div class="container-fluid">
@@ -13,7 +42,7 @@ export default function NavbarBarber() {
           Master Barber
         </a>
         <div class="d-flex ">
-          <div class="dropdown position-absolute top-0 end-0 pe-2 me-2">
+          <div class="dropdown position-absolute top-0 end-0 pe-2 me-4">
             <button
               class="btn dropdown text-white d-none d-sm-block"
               type="button"
@@ -39,12 +68,13 @@ export default function NavbarBarber() {
                   Configuración
                 </a>
               </li>
-              <li onClick={cerrarSesion}>
+              <li onClick={handleLogout}>
                 <a class="dropdown-item text-warning bebas" href="#">
                   <i class="bi bi-box-arrow-right mx-1"></i> Cerrar sesión
                 </a>
               </li>
             </ul>
+
           </div>
         </div>
       </div>

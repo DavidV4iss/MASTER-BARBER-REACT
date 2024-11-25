@@ -10,36 +10,33 @@ export default function NavbarAdmin() {
 
 
         Swal.fire({
-            title: "¿Estas Seguro Que Deseas Cerrar Sesion?",
-            text: "Tu sesión será cerrada.",
-            imageUrl: "/LOGO.png", 
-            imageWidth: 200, 
-            imageHeight: 200, 
-            showCancelButton: true,
-            confirmButtonColor: "",
-            cancelButtonColor: "",
-            confirmButtonText: "Sí, cerrar sesión",
-            cancelButtonText: "Cancelar",
-            customClass: {
-                popup: 'dark-theme-popup bg-dark antonparabackend ', 
-            },
+          title: "¿Estas Seguro Que Deseas Cerrar Sesion?",
+          text: "Tu sesión será cerrada.",
+          imageUrl: "/LOGO.png",
+          imageWidth: 200,
+          imageHeight: 200,
+          showCancelButton: true,
+          confirmButtonColor: "#DC3545",
+          cancelButtonColor: "",
+          confirmButtonText: "Sí, cerrar sesión",
+          cancelButtonText: "Cancelar",
+          customClass: {
+            popup: "dark-theme-popup bg-dark antonparabackend ",
+          },
+        }).then((result) => {
+          if (result.isConfirmed) {
+            localStorage.removeItem("token");
+            navigate("/login");
 
-
-      }).then((result) => {
-        if (result.isConfirmed) {
-          localStorage.removeItem('token');
-          navigate("/login");
-
-
-          Swal.fire({
-            title: "Sesión Cerrada",
-            text: "Has cerrado sesión exitosamente.",
-            icon: "success",
-            timer: 2000,
-            showConfirmButton: false,
-          });
-        }
-      });
+            Swal.fire({
+              title: "Sesión Cerrada",
+              text: "Has cerrado sesión exitosamente.",
+              icon: "success",
+              timer: 2000,
+              showConfirmButton: false,
+            });
+          }
+        });
     };
     return (
         <div className='navbar border-bottom bg-dark shadow'>

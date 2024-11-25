@@ -4,8 +4,6 @@ import NavbarAdmin from '../../Components/NavbarAdmin'
 import axios from 'axios'
 import 'animate.css';
 
-
-
 export default function InicioAdmin() {
 
     const [barberos, setBarberos] = useState([]);
