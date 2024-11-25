@@ -29,6 +29,7 @@ export default function PerfilAdmin() {
   }, [email]);
 
   const handleChange = (e) => {
+
     setAdmin({ ...admin, [e.target.name]: e.target.value });
   };
 
@@ -38,14 +39,24 @@ export default function PerfilAdmin() {
       const form = document.querySelector("form");
       const formData = new FormData(form);
       await axios.put(`http://localhost:8081/actualizarUsuario/${email}`, formData);
-      navigate(0);
-      Swal.fire("Perfil actualizado!", "", "success");
+      navigate('/InicioAdmin');
+      Swal.fire({
+        position: "top-end",
+        icon: "success",
+        title: "Perfil Actualizado",
+        showConfirmButton: false,
+        customClass: {
+          popup: "dark-theme-popup bg-dark antonparabackend ",
+        },
+      });
+      
     } catch (err) {
       Swal.fire({
         title: "Error",
         text: "Ocurrio un error al actualizar tu perfil. Por favor, intenta de nuevo.",
         icon: "error",
       });
+      
       console.log(err);
     }
   };

@@ -498,20 +498,39 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage })
 
 app.put('/actualizarUsuario/:email', upload.single('file'), (req, res) => {
-    const file = req.file;
+    const file = req.file;  
+    const email = req.params.email;
+    const nombre = req.body.nombre;
 
-    const email = req.params.email
-    const nombre = req.body.nombre
+    let queryValues = [];
+    let queryString = 'UPDATE usuarios SET ';
+    
+    if (nombre) {
+        queryValues.push(nombre);
+        queryString += 'nombre_usuario = ?';
+    }
 
-    db.query('UPDATE usuarios SET nombre_usuario = ?, Foto = ? WHERE email = ?', [nombre, file.filename, email], (err, results) => {
-        if (err) {+
+    if (file) {
+        if (queryValues.length > 0) {
+            queryString += ', '; //
+        }
+        queryValues.push(file.filename);
+        queryString += 'Foto = ?';
+    }
+
+    queryString += ' WHERE email = ?';
+    queryValues.push(email);
+
+    db.query(queryString, queryValues, (err, results) => {
+        if (err) {
             console.log(err);
             return res.status(500).send('Error en el servidor');
         } else {
             return res.status(200).send('Perfil actualizado exitosamente');
         }
-    })
-})
+    });
+});
+
 
 app.get('/traerUsuario/:email', (req, res) => {
     const email = req.params.email
@@ -525,6 +544,8 @@ app.get('/traerUsuario/:email', (req, res) => {
         }
     })
 })
+
+
 
 app.listen(8081, () => {
     console.log("Conexion exitosa:)")

@@ -1,10 +1,36 @@
-import React from 'react'
+import React , { useState, useEffect } from 'react';
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
+import axios from 'axios';
+
 
 
 export default function NavbarAdmin() {
     const navigate = useNavigate();
+
+    const [admin, setAdmin] = useState({});
+  
+  
+    const usuario = JSON.parse(atob(token.split(".")[1]));
+    const email = usuario.email;
+  
+    useEffect(() => {
+      const fetchAdmin = async () => {
+        try {
+          const res = await axios.get(`http://localhost:8081/traerUsuario/${email}`);
+          setAdmin(res.data[0]);
+        } catch (err) {
+          console.log("Error al obtener los datos:", err);
+        }
+      };
+      fetchAdmin();
+    }, [email]);
+  
+    const handleChange = (e) => {
+  
+      setAdmin({ ...admin, [e.target.name]: e.target.value });
+    };
+    console.log(admin);
 
     const handleLogout = () => {
 
@@ -49,7 +75,7 @@ export default function NavbarAdmin() {
                 <div class="d-flex ">
                     <div class="dropdown position-absolute top-0 end-0 pe-2 me-2 " >
                         <button class="btn dropdown text-white d-none d-sm-block" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <small className='d-none d-sm-block mt-1 mx-3 fw-bold text-white sm zoomhover2'>BIENVENIDO ADMINISTRADOR </small>
+                            <small className='d-none d-sm-block mt-1 mx-3 fw-bold text-white sm zoomhover2' type="text" onChange={handleChange} value={admin.nombre_usuario}> </small>
                             <i class="bi bi-person-circle fs-3"></i>
                         </button>
                         <ul class="dropdown-menu bg-dark">
