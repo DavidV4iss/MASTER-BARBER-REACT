@@ -493,7 +493,7 @@ const storage = multer.diskStorage({
         cb(null, Date.now() + '-' + file.originalname)
     }
 
-})
+})  
 
 const upload = multer({ storage: storage })
 
@@ -513,7 +513,7 @@ app.put('/actualizarUsuario/:email', upload.single('file'), (req, res) => {
     })
 })
 
-app.get ('/traerUsuario/:email', (req, res) => {
+app.get('/traerUsuario/:email', (req, res) => {
     const email = req.params.email
     db.query('SELECT * FROM usuarios WHERE email = ?', [email], (err, results) => {
         if (err) {
