@@ -504,7 +504,7 @@ app.put('/actualizarUsuario/:email', upload.single('file'), (req, res) => {
     const nombre = req.body.nombre
 
     db.query('UPDATE usuarios SET nombre_usuario = ?, Foto = ? WHERE email = ?', [nombre, file.filename, email], (err, results) => {
-        if (err) {
+        if (err) {+
             console.log(err);
             return res.status(500).send('Error en el servidor');
         } else {

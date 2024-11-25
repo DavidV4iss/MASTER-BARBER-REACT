@@ -7,7 +7,7 @@ export default function NavbarBarber() {
    const navigate = useNavigate();
   const handleLogout = () => {
     Swal.fire({
-      title: "¿Estas Seguro Que Deseas Cerrar Sesion?",
+      title: "¿Estas seguro que deseas cerrar sesion?",
       text: "Tu sesión será cerrada.",
       imageUrl: "/LOGO.png",
       imageWidth: 200,
@@ -27,10 +27,13 @@ export default function NavbarBarber() {
 
         Swal.fire({
           title: "Sesión Cerrada",
-          text: "Has cerrado sesión exitosamente.",
+          text: "Has cerrado sesión correctamente.",
           icon: "success",
           timer: 2000,
           showConfirmButton: false,
+          customClass: {
+            popup: "dark-theme-popup bg-dark antonparabackend ",
+          },
         });
       }
     });

@@ -20,10 +20,14 @@ export default function Login() {
                 localStorage.setItem('token', token); // Guardar el token en localStorage
                 console.log(user);
                 Swal.fire({
-                    title: 'Iniciaste sesión',
-                    text: 'Has iniciado sesión correctamente',
-                    icon: 'success',
-                    confirmButtonText: 'Continuar'
+                  title: "Iniciaste sesión",
+                  text: "Has iniciado sesión correctamente",
+                  icon: "success",
+                  confirmButtonColor: "#DC3545",
+                  confirmButtonText: "Continuar",
+                  customClass: {
+                    popup: "dark-theme-popup bg-dark antonparabackend ",
+                  },
                 });
 
                 // Redirigir según el rol del usuario
