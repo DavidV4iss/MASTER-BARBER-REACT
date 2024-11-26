@@ -1,19 +1,19 @@
-import React , { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import axios from 'axios';
 import Swal from 'sweetalert2';
 import { useNavigate } from 'react-router-dom';
 
-
 export default function PerfilAdmin() {
-
   const navigate = useNavigate();
 
   const [admin, setAdmin] = useState({});
+  const [file, setFile] = useState(null);
+  const [imagePreview, setImagePreview] = useState('');
+  const [isUpdating, setIsUpdating] = useState(false);
 
-  const token = localStorage.getItem("token");
-
-  const usuario = JSON.parse(atob(token.split(".")[1]));
+  const token = localStorage.getItem('token');
+  const usuario = JSON.parse(atob(token.split('.')[1]));
   const email = usuario.email;
 
   useEffect(() => {
@@ -21,59 +21,108 @@ export default function PerfilAdmin() {
       try {
         const res = await axios.get(`http://localhost:8081/traerUsuario/${email}`);
         setAdmin(res.data[0]);
+        if (res.data[0].Foto) {
+          setImagePreview(`/images/perfil/${res.data[0].Foto}`);
+        }
       } catch (err) {
-        console.log("Error al obtener los datos:", err);
+        console.error('Error al obtener los datos:', err);
+        Swal.fire({
+          title: 'Error',
+          text: 'No se pudo cargar la información del perfil.',
+          icon: 'error',
+          customClass: {
+            popup: "dark-theme-popup bg-dark antonparabackend ",
+          },
+        });
       }
     };
     fetchAdmin();
   }, [email]);
 
   const handleChange = (e) => {
-
     setAdmin({ ...admin, [e.target.name]: e.target.value });
+  };
+
+  const handleFileChange = (e) => {
+    const selectedFile = e.target.files[0];
+    if (selectedFile) {
+      setFile(selectedFile);
+      setImagePreview(URL.createObjectURL(selectedFile));
+    }
   };
 
   const handleClick = async (e) => {
     e.preventDefault();
-    try {
-      const form = document.querySelector("form");
-      const formData = new FormData(form);
-      await axios.put(`http://localhost:8081/actualizarUsuario/${email}`, formData);
-      navigate('/InicioAdmin');
-      Swal.fire({
-        position: "top-end",
-        icon: "success",
-        title: "Perfil Actualizado",
-        showConfirmButton: false,
+    const formData = new FormData();
+
+    // Verificar si se actualizó el nombre
+    if (admin.nombre && admin.nombre.trim() !== '') {
+      formData.append('nombre', admin.nombre);
+    }
+
+    // Si Se Selecciono Un Archivo Lo Verifica
+    if (file) {
+      formData.append('file', file);
+    }
+
+    // Evitar Que Ambos Campos Esten Vacios
+    if (!formData.has('nombre') && !formData.has('file')) {
+      return Swal.fire({
+        title: 'Atención',
+        text: 'No se detectaron cambios para actualizar.',
+        icon: 'info',
         customClass: {
           popup: "dark-theme-popup bg-dark antonparabackend ",
         },
       });
-      
+    }
+
+    setIsUpdating(true);
+
+    try {
+      await axios.put(`http://localhost:8081/actualizarUsuario/${email}`, formData);
+      Swal.fire({
+        position: 'top-end',
+        icon: 'success',
+        title: 'Perfil actualizado exitosamente.',
+        showConfirmButton: false,
+        timer: 2000,
+        customClass: {
+          popup: "dark-theme-popup bg-dark antonparabackend ",
+        },
+      });
+      navigate('/Inicioadmin');
     } catch (err) {
       Swal.fire({
-        title: "Error",
-        text: "Ocurrio un error al actualizar tu perfil. Por favor, intenta de nuevo.",
-        icon: "error",
+        title: 'Error',
+        text: 'Hubo un problema al actualizar el perfil.',
+        icon: 'error',
         customClass: {
           popup: "dark-theme-popup bg-dark antonparabackend ",
         },
       });
-      
-      console.log(err);
+      console.error(err);
     }
   };
 
   return (
-    <div className="">
+    <div>
       <div className="min-vh-100 align-content-center mx-5 justify-content-end">
-        <div className="container p-sm-5  border border-2 shadow border-white rounded-4 ">
+        <div className="container p-sm-5 border border-2 shadow border-white rounded-4">
           <a href="/InicioAdmin">
             <i className="bi bi-arrow-left-circle-fill text-white fs-2 zoomhover2"></i>
           </a>
           <div className="row justify-content-center align-items-center">
-            <div className="col col-lg-6 bi-text-lg-center ">
-              <i className="bi bi-person-circle icono mt-5 "></i>
+            <div className="col col-lg-6 bi-text-lg-center">
+            <img
+                  src={imagePreview || 'default-avatar.png'}
+                  alt="Imagen de perfil"
+                  className="img-fluid rounded-circle contenido3 mt-5 "
+                  style={{ width: '250px', height: '250px', objectFit: 'cover' }}
+                />
+              <div className="mt-5">
+            
+              </div>
             </div>
             <div className="col-12 col-lg-6 container">
               <h1 className="text-warning text-center anton mb-4">¡Perfil!</h1>
@@ -81,7 +130,7 @@ export default function PerfilAdmin() {
               <form onSubmit={handleClick} id="form" className="row g-1 mb-5">
                 <div className="mb-1 row">
                   <label
-                    for="staticNombre"
+                    htmlFor="staticNombre"
                     className="col-sm-2 col-form-label text-white antonparabackend"
                   >
                     Nombre:
@@ -89,11 +138,10 @@ export default function PerfilAdmin() {
                   <div className="col-sm-10">
                     <input
                       type="text"
-                      onChange={handleChange}
-                      readonly
-                      className="form-control-plaintext text-white antonparabackend "
+                      readOnly
+                      className="form-control-plaintext text-white antonparabackend"
                       id="staticEmail"
-                      value={admin.nombre_usuario}
+                      value={admin.nombre_usuario || ''}
                     />
                   </div>
                 </div>
@@ -102,18 +150,17 @@ export default function PerfilAdmin() {
                     type="text"
                     className="form-control bg-dark text-white mt-2"
                     id="floatingInput"
-                    placeholder="name@example.com"
+                    placeholder="Nuevo nombre"
                     onChange={handleChange}
-                    name='nombre'
+                    name="nombre"
+                    value={admin.nombre || ''}
                   />
-                  <label for="floatingInput" className="text-dark">
+                  <label htmlFor="floatingInput" className="text-dark">
                     Nombre
                   </label>
                 </div>
-                <div className=" container row mt-3">
-                  <p className="text-white antonparabackend">
-                    Actualizar Foto De Perfil
-                  </p>
+                <div className="container row mt-3">
+                  <p className="text-white antonparabackend">Actualizar Foto De Perfil</p>
                   <div className="input-group">
                     <input
                       name="file"
@@ -121,15 +168,14 @@ export default function PerfilAdmin() {
                       type="file"
                       className="form-control bg-dark text-white"
                       id="inputGroupFile04"
-                      aria-describedby="inputGroupFileAddon04"
-                      aria-label="Upload"
+                      onChange={handleFileChange}
                     />
                     <button
                       type="submit"
                       className="btn btn-outline-danger mx-1"
-                      id="inputGroupFileAddon04"
+                      disabled={isUpdating}
                     >
-                      Actualizar
+                      {isUpdating ? 'Actualizando...' : 'Actualizar'}
                     </button>
                   </div>
                 </div>
