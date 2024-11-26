@@ -10,7 +10,6 @@ const multer = require('multer');
 
 
 
-
 const app = express();
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
@@ -486,8 +485,6 @@ const verifyTokenAndRole = (allowedRoles) => {
     };
 };
 
-
-
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
         cb(null, '../Frontend/public/images/perfil/')
@@ -515,7 +512,7 @@ app.put('/actualizarUsuario/:email', upload.single('file'), (req, res) => {
 
     if (file) {
         if (queryValues.length > 0) {
-            queryString += ','; //
+            queryString += ', '; //
         }
         queryValues.push(file.filename);
         queryString += 'Foto = ?';

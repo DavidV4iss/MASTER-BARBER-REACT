@@ -3,7 +3,7 @@ import NavbarIndex from '../../Components/NavbarIndex'
 import CarrouselShop from '../../Components/CarrouselShop'
 import CarrouselGaleria from '../../Components/CarrouselGaleria'
 import Swal from 'sweetalert2'
-// import Calificaciones from '../../Components/Calificaciones'
+import Calificaciones from '../../Components/Calificaciones'
 import Darkandlight from "../../Components/Dark and light";
 
 export default function Index() {
@@ -367,13 +367,13 @@ export default function Index() {
                     <img src="/Ubicacion.JPG" alt="" className=' mx-auto map mt-5 col m-3' height="560px" />
                 </div>
             </div>
-            {/* <div className={`antonparabackend text-center pt-5  ${theme === "light" ? "dark" : "text-white"}`} id='calificaciones'>
+            <div className={`antonparabackend text-center pt-5  ${theme === "light" ? "dark" : "text-white"}`} id='calificaciones'>
                 <h1>Calificación con Estrellas</h1>
                 <Calificaciones onRate={handleRating} />
-            </div> */}
+            </div> 
 
 
-            <footer>
+            <footer className="mt-5">
                 <p className={`text-center ${theme === "light" ? "dark" : "text-white"}`}>Copyright © 2022. Todos los derechos reservados. MASTER BARBER VIP </p>
             </footer>
 

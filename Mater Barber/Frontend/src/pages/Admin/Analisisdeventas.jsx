@@ -32,8 +32,8 @@ export default function Analisisdeventas() {
             <div className='contenido'  id='Analisisdeventas'>
                 <p className='text-center text-white mt-5 display-6 bebas col-sm-12 col'>HOLA,  <span className='text-danger'>ADMINISTRADOR</span>| ESTE ES EL ANALISIS DE VENTAS</p>
                 <div className='container pt-5 col-sm12 col justify-content-center'>
-                    <div className="row g-5">
-                        <div className="col col-sm-12 animate__hinge">
+                    <div className="row g-5 mt-5">
+                        <div className="col col-sm-12 mt-5">
                             <Graficas data={data} tipo='line' options={options} />
                         </div>
                         <div className="col-12 col-sm border border-2 mx-0 mx-sm-5 border-secondary  text-center">
@@ -47,21 +47,9 @@ export default function Analisisdeventas() {
                             <h4 className='pb-4 text-danger'>-5 % este mes</h4>
                         </div>
                     </div>
-                    <div className="container border border-2 border-secondary my-5 p-4 row g-0">
-                        <div className="row justify-content-between col col-sm-12">
-                            <h4 className="col-12 col-sm-10 text-white mt-2">Productos más vendidos</h4>
-
-                            <select name="" id="" className="form-select col-12 col-sm bg-secondary text-white">
-                                <option value="">Enero</option>
-                                <option value="">Febrero</option>
-                                <option value="">Marzo</option>
-                                <option value="">Abril</option>
-                            </select>
-                        </div>
                     </div>
                 </div>
             </div>
 
-        </div>
     )
 }
