@@ -6,6 +6,7 @@ const Calificaciones= ({ totalStars = 5, onRate }) => {
   const handleClick = (index) => {
     setRating(index);
     onRate(index);
+    console.log(`Calificaste con ${index} estrellas`);
   };
 
   return (
@@ -15,8 +16,8 @@ const Calificaciones= ({ totalStars = 5, onRate }) => {
           key={index}
           onClick={() => handleClick(index + 1)}
           style={{ fontSize: '100px', color: index < rating ? '#FF0000FF' : '#ccc' }}
+          className="bi bi-star-fill mx-3"
         >
-          ★
         </span>
       ))}
     </div>

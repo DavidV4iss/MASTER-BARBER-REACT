@@ -29,7 +29,10 @@ export default function GestionarBarberos() {
       if (res.status === 200) {
         Swal.fire({
           icon: 'success',
-          title: res.data
+          title: res.data,
+          customClass: {
+            popup: "dark-theme-popup bg-dark antonparabackend ",
+          },
         }).then(() => {
           navigate(0);
         })
@@ -40,6 +43,9 @@ export default function GestionarBarberos() {
         icon: 'error',
         title: 'Error',
         text: err.response.data,
+        customClass: {
+          popup: "dark-theme-popup bg-dark antonparabackend ",
+        },
       });
     }
   };
@@ -50,7 +56,10 @@ export default function GestionarBarberos() {
       if (res.status === 200) {
         Swal.fire({
           icon: 'success',
-          title: res.data
+          title: res.data,
+          customClass: {
+            popup: "dark-theme-popup bg-dark antonparabackend ",
+          },
         }).then(() => {
           navigate(0);
         })
@@ -61,6 +70,9 @@ export default function GestionarBarberos() {
         icon: 'error',
         title: 'Error',
         text: err.response.data,
+        customClass: {
+          popup: "dark-theme-popup bg-dark antonparabackend ",
+        },
       });
     }
   };
@@ -77,52 +89,61 @@ export default function GestionarBarberos() {
   const DeleteBarberos = async (id) => {
     try {
       const confirm = await Swal.fire({
-          title: '¿Estas seguro de borrar este barbero?',
-          text: "No podrás revertir esta acción",
-          icon: 'warning',
-          showCancelButton: true,
-          confirmButtonColor: '#3085d6',
-          cancelButtonColor: '#d33',
-          confirmButtonText: 'Sí, borrar'
+        title: '¿Estas seguro de borrar este barbero?',
+        text: "No podrás revertir esta acción",
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Sí, borrar',
+        customClass: {
+          popup: "dark-theme-popup bg-dark antonparabackend ",
+        },
       });
       if (!confirm.isConfirmed) {
-          return;
+        return;
       }
       const res = await axios.delete(`http://localhost:8081/DeleteBarberos/${id}`);
       console.log(res);
       if (res.status === 200) {
-          Swal.fire({
-              icon: 'success',
-              title: res.data
-          }).then(() => {
-              navigate(0);
-          })
+        Swal.fire({
+          icon: 'success',
+          title: res.data,
+          customClass: {
+            popup: "dark-theme-popup bg-dark antonparabackend ",
+          },
+        }).then(() => {
+          navigate(0);
+        })
       }
-  } catch (error) {
+    } catch (error) {
       console.log(error);
       Swal.fire({
-          icon: 'error',
-          title: 'Error al borrar',
-          text: error.response.data
+        icon: 'error',
+        title: 'Error al borrar',
+        text: error.response.data,
+        customClass: {
+          popup: "dark-theme-popup bg-dark antonparabackend ",
+        },
       });
-  }
-};
-
-useEffect(() => {
-  const fetchBarberos = async () => {
-    try {
-      const res = await axios.get("http://localhost:8081/GetBarberos");
-      setBarberos(res.data);
-    } catch (err) {
-      console.log("Error al obtener los datos:", err);
     }
-  }
-  fetchBarberos()
-}, [])
+  };
 
-const openEditModal = (barbero) => {
-  setBarberoEdit(barbero);
-};
+  useEffect(() => {
+    const fetchBarberos = async () => {
+      try {
+        const res = await axios.get("http://localhost:8081/GetBarberos");
+        setBarberos(res.data);
+      } catch (err) {
+        console.log("Error al obtener los datos:", err);
+      }
+    }
+    fetchBarberos()
+  }, [])
+
+  const openEditModal = (barbero) => {
+    setBarberoEdit(barbero);
+  };
 
   return (
     <div>
@@ -153,15 +174,15 @@ const openEditModal = (barbero) => {
                     <td>{barbero.descripcion}</td>
                     <td>
                       <div className="d-flex justify-content-center">
-                          <button type="button" className="btn btn-outline-warning me-3" onClick={() => openEditModal(barbero)} data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@mdo">
+                        <button type="button" className="btn btn-outline-warning me-3" onClick={() => openEditModal(barbero)} data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@mdo">
                           <i className='bi bi-pencil-fill text-white'></i>
-                          </button>
-                          <button className='btn btn-outline-danger' onClick={() => DeleteBarberos(barbero.id_barbero)}>
+                        </button>
+                        <button className='btn btn-outline-danger' onClick={() => DeleteBarberos(barbero.id_barbero)}>
                           <i className="bi bi-trash-fill"  ></i>
-                          </button>
+                        </button>
                       </div>
                     </td>
-                 </tr>
+                  </tr>
                 ))}
               </tbody>
             </table>
@@ -182,11 +203,11 @@ const openEditModal = (barbero) => {
                 <form>
                   <div class="mb-3">
                     <label aria-required for="recipient-name" class="col-form-label text-white">Nombre Barbero</label>
-                    <input required type="text" class="form-control" id="recipient-name" value={barberoEdit.nombre} name='nombre' onChange={handleChangeEdit} placeholder='Escriba un nombre'/>
+                    <input required type="text" class="form-control" id="recipient-name" value={barberoEdit.nombre} name='nombre' onChange={handleChangeEdit} placeholder='Escriba un nombre' />
                   </div>
                   <div class="mb-3">
-                    <label  for="recipient-name" class="col-form-label text-white">Descripcion</label>
-                    <input required type="text" class="form-control" id="recipient-name" value={barberoEdit.descripcion} name='descripcion' onChange={handleChangeEdit} placeholder='Escriba una Descripcion'/>
+                    <label for="recipient-name" class="col-form-label text-white">Descripcion</label>
+                    <input required type="text" class="form-control" id="recipient-name" value={barberoEdit.descripcion} name='descripcion' onChange={handleChangeEdit} placeholder='Escriba una Descripcion' />
                   </div>
                   {/* <div className="col-12 mb-3">
                     <label htmlFor="floatingInput" className='text-white'>Imagen</label>
@@ -195,8 +216,8 @@ const openEditModal = (barbero) => {
                 </form>
               </div>
               <div class="modal-footer">
-              <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" >Close</button>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" >Close</button>
                   <button type="sumbit" class="btn btn-danger" onClick={() => handleSubmitEdit(barberoEdit.id_barbero)}>Editar</button>
                 </div>
               </div>
@@ -216,12 +237,12 @@ const openEditModal = (barbero) => {
               <div class="modal-body">
                 <form>
                   <div class="mb-3">
-                    <label  for="recipient-name" class="col-form-label text-white">Nombre Barbero</label>
-                    <input required type="text" class="form-control" id="recipient-name" name='nombre' onChange={handleChange} placeholder='Escriba un Nombre'/>
+                    <label for="recipient-name" class="col-form-label text-white">Nombre Barbero</label>
+                    <input required type="text" class="form-control" id="recipient-name" name='nombre' onChange={handleChange} placeholder='Escriba un Nombre' />
                   </div>
                   <div class="mb-3">
                     <label for="recipient-name" class="col-form-label text-white">Descripcion</label>
-                    <input required type="text" class="form-control" id="recipient-name" name='descripcion' onChange={handleChange} placeholder='Escriba una Descripcion'/>
+                    <input required type="text" class="form-control" id="recipient-name" name='descripcion' onChange={handleChange} placeholder='Escriba una Descripcion' />
                   </div>
                   {/* <div className="col-12 mb-3">
                     <label htmlFor="floatingInput" className='text-white'>Imagen</label>
@@ -230,8 +251,8 @@ const openEditModal = (barbero) => {
                 </form>
               </div>
               <div class="modal-footer">
-              <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                   <button type="submit" class="btn btn-danger" onClick={handleSubmit}>Añadir</button>
                 </div>
               </div>

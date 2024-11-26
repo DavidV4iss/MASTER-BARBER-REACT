@@ -37,7 +37,10 @@ export default function Inventario() {
             if (res.status === 200) {
                 Swal.fire({
                     icon: 'success',
-                    title: res.data
+                    title: res.data,
+                    customClass: {
+                        popup: "dark-theme-popup bg-dark antonparabackend ",
+                    }
                 }).then(() => {
                     navigate(0);
                 })
@@ -48,6 +51,9 @@ export default function Inventario() {
                 icon: 'error',
                 title: 'Error',
                 text: err.response.data,
+                customClass: {
+                    popup: "dark-theme-popup bg-dark antonparabackend ",
+                },
             });
         }
     };
@@ -58,7 +64,10 @@ export default function Inventario() {
             if (res.status === 200) {
                 Swal.fire({
                     icon: 'success',
-                    title: res.data
+                    title: res.data,
+                    customClass: {
+                        popup: "dark-theme-popup bg-dark antonparabackend ",
+                    },
                 }).then(() => {
                     navigate(0);
                 })
@@ -69,6 +78,9 @@ export default function Inventario() {
                 icon: 'error',
                 title: 'Error',
                 text: err.response.data,
+                customClass: {
+                    popup: "dark-theme-popup bg-dark antonparabackend ",
+                },
             });
         }
     };
@@ -87,11 +99,14 @@ export default function Inventario() {
             const confirm = await Swal.fire({
                 title: '¿Estas seguro de borrar este producto?',
                 text: "No podrás revertir esta acción",
-                icon: 'warning',
+                icon: 'question',
                 showCancelButton: true,
                 confirmButtonColor: '#3085d6',
                 cancelButtonColor: '#d33',
-                confirmButtonText: 'Sí, borrar'
+                confirmButtonText: 'Sí, borrar',
+                customClass: {
+                    popup: "dark-theme-popup bg-dark antonparabackend ",
+                },
             });
             if (!confirm.isConfirmed) {
                 return;
@@ -101,7 +116,10 @@ export default function Inventario() {
             if (res.status === 200) {
                 Swal.fire({
                     icon: 'success',
-                    title: res.data
+                    title: res.data,
+                    customClass: {
+                        popup: "dark-theme-popup bg-dark antonparabackend ",
+                    },
                 }).then(() => {
                     navigate(0);
                 })
@@ -111,7 +129,10 @@ export default function Inventario() {
             Swal.fire({
                 icon: 'error',
                 title: 'Error al borrar',
-                text: error.response.data
+                text: error.response.data,
+                customClass: {
+                    popup: "dark-theme-popup bg-dark antonparabackend ",
+                },
             });
         }
     };
