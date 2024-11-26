@@ -9,6 +9,9 @@ export default function NavbarAdmin() {
     const navigate = useNavigate();
 
     const [admin, setAdmin] = useState({});
+
+    const token = localStorage.getItem("token");
+    
   
   
     const usuario = JSON.parse(atob(token.split(".")[1]));
@@ -26,12 +29,6 @@ export default function NavbarAdmin() {
       fetchAdmin();
     }, [email]);
   
-    const handleChange = (e) => {
-  
-      setAdmin({ ...admin, [e.target.name]: e.target.value });
-    };
-    console.log(admin);
-
     const handleLogout = () => {
 
 
@@ -68,14 +65,16 @@ export default function NavbarAdmin() {
         });
     };
     return (
-        <div className='navbar border-bottom bg-dark shadow'>
+      // fixed-top //PROBAR
+        <div className='navbar shadow'>
             <div class="container-fluid">
                 <a class="navbar-brand text-warning anton fs-2 "><img src="LOGO.png" alt="" width="40" height="40" class="d-inline-block align-text-top mx-4 mt-1" />
                     Master Barber</a>
-                <div class="d-flex ">
-                    <div class="dropdown position-absolute top-0 end-0 pe-2 me-2 " >
-                        <button class="btn dropdown text-white d-none d-sm-block" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <small className='d-none d-sm-block mt-1 mx-3 fw-bold text-white sm zoomhover2' type="text" onChange={handleChange} value={admin.nombre_usuario}> </small>
+                <div class="d-flex">
+                  <div className="container me-5">
+                  <div class="dropdown position-absolute top-0 end-0 me-5" >
+                        <button class="btn dropdown-toggle text-white d-none d-sm-block" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <div className='d-none d-sm-block text-white fw-bold '>{admin.nombre_usuario}</div>
                             <i class="bi bi-person-circle fs-3"></i>
                         </button>
                         <ul class="dropdown-menu bg-dark">
@@ -92,6 +91,8 @@ export default function NavbarAdmin() {
                             </li>
                         </ul>
                     </div>
+                  </div>
+               
                 </div>
             </div>
         </div>

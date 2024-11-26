@@ -38,13 +38,24 @@ export default function PerfilUser() {
       const form = document.querySelector("form");
       const formData = new FormData(form);
       await axios.put(`http://localhost:8081/actualizarUsuario/${email}`, formData);
-      navigate(0);
-      Swal.fire("Perfil actualizado!", "", "success");
+      navigate('/iniciousuario');
+      Swal.fire({
+        position: "top-end",
+        icon: "success",
+        title: "Perfil Actualizado",
+        showConfirmButton: false,
+        customClass: {
+          popup: "dark-theme-popup bg-dark antonparabackend ",
+        },
+      });
     } catch (err) {
       Swal.fire({
         title: "Error",
         text: "Ocurrio un error al actualizar tu perfil. Por favor, intenta de nuevo.",
         icon: "error",
+        customClass: {
+          popup: "dark-theme-popup bg-dark antonparabackend ",
+        },
       });
       console.log(err);
     }
@@ -54,7 +65,7 @@ export default function PerfilUser() {
     <div className="">
       <div className="min-vh-100 align-content-center mx-5 justify-content-end">
         <div className="container p-sm-5  border border-2 shadow border-white rounded-4 ">
-          <a href="/IndexUser">
+          <a href="/iniciousuario">
             <i className="bi bi-arrow-left-circle-fill text-white fs-2"></i>
           </a>
           <div className="row justify-content-center align-items-center">

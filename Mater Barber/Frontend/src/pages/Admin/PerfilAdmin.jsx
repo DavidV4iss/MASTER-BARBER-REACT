@@ -55,6 +55,9 @@ export default function PerfilAdmin() {
         title: "Error",
         text: "Ocurrio un error al actualizar tu perfil. Por favor, intenta de nuevo.",
         icon: "error",
+        customClass: {
+          popup: "dark-theme-popup bg-dark antonparabackend ",
+        },
       });
       
       console.log(err);
@@ -66,11 +69,11 @@ export default function PerfilAdmin() {
       <div className="min-vh-100 align-content-center mx-5 justify-content-end">
         <div className="container p-sm-5  border border-2 shadow border-white rounded-4 ">
           <a href="/InicioAdmin">
-            <i className="bi bi-arrow-left-circle-fill text-white fs-2"></i>
+            <i className="bi bi-arrow-left-circle-fill text-white fs-2 zoomhover2"></i>
           </a>
           <div className="row justify-content-center align-items-center">
             <div className="col col-lg-6 bi-text-lg-center ">
-              <i className="bi bi-person-circle icono mt-5"></i>
+              <i className="bi bi-person-circle icono mt-5 "></i>
             </div>
             <div className="col-12 col-lg-6 container">
               <h1 className="text-warning text-center anton mb-4">¡Perfil!</h1>

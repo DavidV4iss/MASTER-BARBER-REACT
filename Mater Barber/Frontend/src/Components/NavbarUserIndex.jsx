@@ -1,9 +1,36 @@
-import React from 'react'
+import React , { useState, useEffect } from 'react';
 import Swal from 'sweetalert2';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+
 
 export default function NavbarUserIndex() {
     const navigate = useNavigate();
+
+    const [user, setUser] = useState({});
+
+    const token = localStorage.getItem("token");
+    
+  
+  
+    const usuario = JSON.parse(atob(token.split(".")[1]));
+    const email = usuario.email;
+  
+    useEffect(() => {
+      const fetchUser = async () => {
+        try {
+          const res = await axios.get(`http://localhost:8081/traerUsuario/${email}`);
+          setUser(res.data[0]);
+        } catch (err) {
+          console.log("Error al obtener los datos:", err);
+        }
+      };
+      fetchUser();
+    }, [email]);
+    console.log(user);
+
+
+
     const handleLogout = () => {
       Swal.fire({
         title: "¿Estas seguro que deseas cerrar sesion?",
@@ -67,7 +94,8 @@ export default function NavbarUserIndex() {
                     </button>
 
                     <div class="dropdown pe-4 me-4" >
-                        <button class=" btn dropdown text-white mx-2 " type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <button class=" btn dropdown-toggle text-white mx-2 " type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                      <div className='d-none d-sm-block text-white fw-bold '>{user.nombre_usuario}</div>
                             <i class="bi bi-person-circle fs-2"></i>
                         </button>
                         <ul class="dropdown-menu bg-dark">
