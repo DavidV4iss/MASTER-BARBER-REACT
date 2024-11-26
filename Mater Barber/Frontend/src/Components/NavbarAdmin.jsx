@@ -82,9 +82,9 @@ export default function NavbarAdmin() {
           Master Barber</a>
         <div class="d-flex">
           <div className="container me-5">
-            <div class="dropdown position-absolute top-0 end-0 me-5" >
+            <div class="dropdown position-absolute top-0 end-0 me-3 pe-3" >
               <button class="btn dropdown-toggle text-white d-none d-sm-block" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                <div className='d-none d-sm-block text-white fw-bold '>{admin.nombre_usuario}</div>
+                <div className='d-none d-sm-block text-white fw-bold small'>{admin.nombre_usuario}</div>
                  <img
                   src={imagePreview || 'default-avatar.png'}
                   alt="Imagen de perfil"
@@ -92,7 +92,7 @@ export default function NavbarAdmin() {
                   style={{ width: '40px', height: '40px', objectFit: 'cover' }}
                 /> 
               </button>
-              <ul class="dropdown-menu bg-dark">
+              <ul class="dropdown-menu dropdown-menu-end bg-dark">
                 <li>
                   <a class="dropdown-item bebas text-danger" href="/PerfilAdmin">Perfil</a>
                 </li>
