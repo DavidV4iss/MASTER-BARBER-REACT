@@ -71,44 +71,11 @@ export default function NavbarAdmin() {
             popup: "dark-theme-popup bg-dark antonparabackend ",
           },
         });
-<<<<<<< Updated upstream
     };
-    return (
-      // fixed-top //PROBAR
-        <div className='navbar shadow'>
-            <div class="container-fluid">
-                <a class="navbar-brand text-warning anton fs-2 "><img src="LOGO.png" alt="" width="40" height="40" class="d-inline-block align-text-top mx-4 mt-1" />
-                    Master Barber</a>
-                <div class="d-flex">
-                  <div className="container me-5">
-                  <div class="dropdown position-absolute top-0 end-0 me-3 pe-3" >
-                        <button class="btn dropdown-toggle text-white d-none d-sm-block" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                    <div className='d-none d-sm-block text-white fw-bold small'>{admin.nombre_usuario}</div>
-                            <i class="bi bi-person-circle fs-3"></i>
-                        </button>
-                        <ul class="dropdown-menu dropdown-menu-end bg-dark ">
-                            <li>
-                                <a class="dropdown-item bebas text-danger" href="/PerfilAdmin">Perfil</a>
-                            </li>
-                            <li>
-                                <a class="dropdown-item bebas text-danger" href="/ConfiguracionAdmin">Configuración</a>
-                            </li>
-                            <li onClick={handleLogout}>
-                                <button class="dropdown-item text-warning bebas">
-                                    <i class="bi bi-box-arrow-right mx-1">
-                                    </i> Cerrar sesión</button>
-                            </li>
-                        </ul>
-                    </div>
-                  </div>
-               
-                </div>
-=======
-      }
     });
   };
   return (
-    // fixed-top //PROBAR
+
     <div className='navbar shadow'>
       <div class="container-fluid">
         <a class="navbar-brand text-warning anton fs-2 "><img src="LOGO.png" alt="" width="40" height="40" class="d-inline-block align-text-top mx-4 mt-1" />
@@ -138,12 +105,12 @@ export default function NavbarAdmin() {
                     </i> Cerrar sesión</button>
                 </li>
               </ul>
->>>>>>> Stashed changes
             </div>
           </div>
 
         </div>
       </div>
     </div>
-  )
+
+  );
 }
