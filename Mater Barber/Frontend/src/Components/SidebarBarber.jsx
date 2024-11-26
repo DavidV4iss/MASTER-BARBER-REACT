@@ -7,7 +7,7 @@ import { IoPersonAddSharp } from "react-icons/io5";
 
 export default function SidebarBarber() {
   return (
-    <div className="min-vh-100 bg-dark border-end sidebar2 position-fixed px-1 text-center justify-content-center">
+    <div className="min-vh-100 sidebar2 position-fixed px-1 text-center justify-content-center">
       <li className="text-center align-items-center justify-content-center">
         <NavLink
           to="/InicioBarber"

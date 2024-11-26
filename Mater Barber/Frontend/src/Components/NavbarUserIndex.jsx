@@ -93,12 +93,12 @@ export default function NavbarUserIndex() {
                         <span class="position-absolute top-0 start-100 translate-middle badge border border-light rounded-circle bg-danger p-2"><span class="visually-hidden">unread messages</span></span>
                     </button>
 
-                    <div class="dropdown pe-4 me-4" >
+                    <div class="dropdown me-2 pe-5" >
                         <button class=" btn dropdown-toggle text-white mx-2 " type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                      <div className='d-none d-sm-block text-white fw-bold '>{user.nombre_usuario}</div>
+                      <div className='d-none d-sm-block text-white fw-bold small '>{user.nombre_usuario}</div>
                             <i class="bi bi-person-circle fs-2"></i>
                         </button>
-                        <ul class="dropdown-menu bg-dark">
+                        <ul class="dropdown-menu dropdown-menu-start bg-dark">
                             <li>
                                 <a class="dropdown-item bebas text-warning " href="/PerfilUser">Perfil</a>
                             </li>
