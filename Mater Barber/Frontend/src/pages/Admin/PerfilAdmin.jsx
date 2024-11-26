@@ -5,6 +5,8 @@ import Swal from 'sweetalert2';
 import { useNavigate } from 'react-router-dom';
 
 export default function PerfilAdmin() {
+
+
   const navigate = useNavigate();
 
   const [admin, setAdmin] = useState({});
@@ -117,7 +119,7 @@ export default function PerfilAdmin() {
             <img
                   src={imagePreview || 'default-avatar.png'}
                   alt="Imagen de perfil"
-                  className="img-fluid rounded-circle contenido3 mt-5 "
+                  className="img-fluid rounded-circle contenido3 mt-5 zoomhover2"
                   style={{ width: '250px', height: '250px', objectFit: 'cover' }}
                 />
               <div className="mt-5">
