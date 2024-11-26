@@ -23,6 +23,7 @@ export default function Login() {
                   title: "Iniciaste sesión",
                   text: "Has iniciado sesión correctamente",
                   icon: "success",
+                  iconColor: "#1bf30b",
                   confirmButtonColor: "#DC3545",
                   confirmButtonText: "Continuar",
                   customClass: {

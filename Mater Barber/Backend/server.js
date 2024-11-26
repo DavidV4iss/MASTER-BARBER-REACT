@@ -486,8 +486,6 @@ const verifyTokenAndRole = (allowedRoles) => {
     };
 };
 
-
-
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
         cb(null, '../Frontend/public/images/perfil/')
@@ -496,18 +494,18 @@ const storage = multer.diskStorage({
         cb(null, Date.now() + '-' + file.originalname)
     }
 
-})
+})  
 
 const upload = multer({ storage: storage })
 
 app.put('/actualizarUsuario/:email', upload.single('file'), (req, res) => {
-    const file = req.file;
+    const file = req.file;  
     const email = req.params.email;
     const nombre = req.body.nombre;
 
     let queryValues = [];
     let queryString = 'UPDATE usuarios SET ';
-
+    
     if (nombre) {
         queryValues.push(nombre);
         queryString += 'nombre_usuario = ?';
@@ -515,7 +513,7 @@ app.put('/actualizarUsuario/:email', upload.single('file'), (req, res) => {
 
     if (file) {
         if (queryValues.length > 0) {
-            queryString += ','; //
+            queryString += ', '; //
         }
         queryValues.push(file.filename);
         queryString += 'Foto = ?';

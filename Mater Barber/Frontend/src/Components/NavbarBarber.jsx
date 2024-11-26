@@ -9,9 +9,13 @@ export default function NavbarBarber() {
    const navigate = useNavigate();
 
    const [barber, setBarber] = useState({});
+   const [imagePreview, setImagePreview] = useState("");
+
 
    const token = localStorage.getItem("token");
  
+
+
    const usuario = JSON.parse(atob(token.split(".")[1]));
    const email = usuario.email;
  
@@ -20,6 +24,9 @@ export default function NavbarBarber() {
        try {
          const res = await axios.get(`http://localhost:8081/traerUsuario/${email}`);
          setBarber(res.data[0]);
+         if (res.data[0].Foto) {
+           setImagePreview(`/images/perfil/${res.data[0].Foto}`);
+         }
        } catch (err) {
          console.log("Error al obtener los datos:", err);
        }
@@ -52,6 +59,7 @@ export default function NavbarBarber() {
           title: "Sesión Cerrada",
           text: "Has cerrado sesión correctamente.",
           icon: "success",
+          iconColor: "#1bf30b",
           timer: 2000,
           showConfirmButton: false,
           customClass: {
@@ -75,9 +83,15 @@ export default function NavbarBarber() {
               data-bs-toggle="dropdown"
               aria-expanded="false"
             >
-              <div className='d-none d-sm-block text-white fw-bold small '>{barber.nombre_usuario}</div>
-
-              <i class="bi bi-person-circle fs-3"></i>
+              <div className="d-none d-sm-block text-white fw-bold small ">
+                {barber.nombre_usuario}
+              </div>
+              <img
+                src={imagePreview || "default-avatar.png"}
+                alt="Imagen de perfil"
+                className="img-fluid rounded-circle contenido3 "
+                style={{ width: "40px", height: "40px", objectFit: "cover" }}
+              />
             </button>
             <ul class="dropdown-menu dropdown-menu-end bg-dark">
               <li>
@@ -99,7 +113,6 @@ export default function NavbarBarber() {
                 </a>
               </li>
             </ul>
-
           </div>
         </div>
       </div>

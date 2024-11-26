@@ -8,11 +8,13 @@ import { useNavigate } from 'react-router-dom';
 export default function PerfilBarber() {
 
   const navigate = useNavigate();
-
+  
   const [barber, setBarber] = useState({});
+  const [file, setFile] = useState(null);
+  const [imagePreview, setImagePreview] = useState("");
+  const [isUpdating, setIsUpdating] = useState(false);
 
   const token = localStorage.getItem("token");
-
   const usuario = JSON.parse(atob(token.split(".")[1]));
   const email = usuario.email;
 
@@ -21,8 +23,19 @@ export default function PerfilBarber() {
       try {
         const res = await axios.get(`http://localhost:8081/traerUsuario/${email}`);
         setBarber(res.data[0]);
+        if (res.data[0].Foto) {
+          setImagePreview(`/images/perfil/${res.data[0].Foto}`);
+        }
       } catch (err) {
         console.log("Error al obtener los datos:", err);
+        Swal.fire({
+          title: "Error",
+          text: "No se pudo cargar la información del perfil.",
+          icon: "error",
+          customClass: {
+            popup: "dark-theme-popup bg-dark antonparabackend ",
+          },
+        });
       }
     };
     fetchBarber();
@@ -32,32 +45,71 @@ export default function PerfilBarber() {
     setBarber({ ...barber, [e.target.name]: e.target.value });
   };
 
+  const handleFileChange = (e) => {
+    const selectedFile = e.target.files[0];
+    if (selectedFile) {
+      setFile(selectedFile);
+      setImagePreview(URL.createObjectURL(selectedFile));
+    }
+  };
+
   const handleClick = async (e) => {
     e.preventDefault();
-    try {
-      const form = document.querySelector("form");
-      const formData = new FormData(form);
-      await axios.put(`http://localhost:8081/actualizarUsuario/${email}`, formData);
-      navigate('/Iniciobarber');
-      Swal.fire({
-        position: "top-end",
-        icon: "success",
-        title: "Perfil Actualizado",
-        showConfirmButton: false,
+    const formData = new FormData();
+
+    // Verificar si se actualizó el nombre
+    if (barber.nombre && barber.nombre.trim() !== "") {
+      formData.append("nombre", barber.nombre);
+    }
+
+    // Si Se Selecciono Un Archivo Lo Verifica
+    if (file) {
+      formData.append("file", file);
+    }
+
+    // Evitar Que Ambos Campos Esten Vacios
+    if (!formData.has("nombre") && !formData.has("file")) {
+      return Swal.fire({
+        title: "Atención",
+        text: "No se detectaron cambios para actualizar.",
+        icon: "info",
+        iconColor: "#DC3545",
+        confirmButtonColor: "#DC3545",
         customClass: {
           popup: "dark-theme-popup bg-dark antonparabackend ",
         },
       });
+    }
+
+    setIsUpdating(true);
+
+    try {
+      await axios.put(
+        `http://localhost:8081/actualizarUsuario/${email}`,
+        formData
+      );
+      Swal.fire({
+        position: "top-end",
+        icon: "success",
+        iconColor: "#1bf30b",
+        title: "Perfil actualizado exitosamente.",
+        showConfirmButton: false,
+        timer: 2000,
+        customClass: {
+          popup: "dark-theme-popup bg-dark antonparabackend ",
+        },
+      });
+      navigate("/Iniciobarber");
     } catch (err) {
       Swal.fire({
         title: "Error",
-        text: "Ocurrio un error al actualizar tu perfil. Por favor, intenta de nuevo.",
+        text: "Hubo un problema al actualizar el perfil.",
         icon: "error",
         customClass: {
           popup: "dark-theme-popup bg-dark antonparabackend ",
         },
       });
-      console.log(err);
+      console.error(err);
     }
   };
 
@@ -70,7 +122,12 @@ export default function PerfilBarber() {
           </a>
           <div className="row justify-content-center align-items-center">
             <div className="col col-lg-6 bi-text-lg-center ">
-              <i className="bi bi-person-circle icono mt-5"></i>
+              <img
+                src={imagePreview || "default-avatar.png"}
+                alt="Imagen de perfil"
+                className="img-fluid rounded-circle contenido3 mt-5 zoomhover2"
+                style={{ width: "250px", height: "250px", objectFit: "cover" }}
+              />
             </div>
             <div className="col-12 col-lg-6 container">
               <h1 className="text-warning text-center anton mb-4">¡Perfil!</h1>
@@ -101,7 +158,7 @@ export default function PerfilBarber() {
                     id="floatingInput"
                     placeholder="name@example.com"
                     onChange={handleChange}
-                    name='nombre'
+                    name="nombre"
                   />
                   <label for="floatingInput" className="text-dark">
                     Nombre
@@ -120,13 +177,15 @@ export default function PerfilBarber() {
                       id="inputGroupFile04"
                       aria-describedby="inputGroupFileAddon04"
                       aria-label="Upload"
+                      onChange={handleFileChange}
                     />
                     <button
                       type="submit"
                       className="btn btn-outline-danger mx-1"
                       id="inputGroupFileAddon04"
+                      disabled={isUpdating}
                     >
-                      Actualizar
+                      {isUpdating ? "Actualizando..." : "Actualizar"}
                     </button>
                   </div>
                 </div>

@@ -73,6 +73,8 @@ export default function PerfilAdmin() {
         title: 'Atención',
         text: 'No se detectaron cambios para actualizar.',
         icon: 'info',
+        iconColor: '#DC3545',
+        confirmButtonColor: '#DC3545',
         customClass: {
           popup: "dark-theme-popup bg-dark antonparabackend ",
         },
@@ -86,6 +88,7 @@ export default function PerfilAdmin() {
       Swal.fire({
         position: 'top-end',
         icon: 'success',
+        iconColor: '#1bf30b',
         title: 'Perfil actualizado exitosamente.',
         showConfirmButton: false,
         timer: 2000,
