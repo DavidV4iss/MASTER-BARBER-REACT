@@ -91,6 +91,7 @@ export default function PerfilUser() {
       Swal.fire({
         position: "top-end",
         icon: "success",
+        iconColor: "#1bf30b", 
         title: "Perfil actualizado exitosamente.",
         showConfirmButton: false,
         timer: 2000,
