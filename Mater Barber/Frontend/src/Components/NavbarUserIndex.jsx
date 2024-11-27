@@ -31,7 +31,6 @@ export default function NavbarUserIndex() {
       };
       fetchUser();
     }, [email]);
-    console.log(user);
 
 
 

@@ -7,7 +7,8 @@ const moment = require('moment');
 const bodyParser = require('body-parser');
 const jwt = require('jsonwebtoken');
 const multer = require('multer');
-
+const fs = require('fs')
+const path = require('path');
 
 
 const app = express();
@@ -493,42 +494,61 @@ const storage = multer.diskStorage({
         cb(null, Date.now() + '-' + file.originalname)
     }
 
-})  
+})
 
 const upload = multer({ storage: storage })
 
+const borrarFoto = async (foto) => {
+    try {
+        const filePath = path.resolve(__dirname, `../Frontend/public/images/perfil/${foto}`);
+        await fs.promises.unlink(filePath);
+    } catch (err) {
+        console.error('Error eliminando imagen:', err);
+    }
+};
+
+
 app.put('/actualizarUsuario/:email', upload.single('file'), (req, res) => {
-    const file = req.file;  
+    const file = req.file;
     const email = req.params.email;
     const nombre = req.body.nombre;
 
-    let queryValues = [];
-    let queryString = 'UPDATE usuarios SET ';
-    
-    if (nombre) {
-        queryValues.push(nombre);
-        queryString += 'nombre_usuario = ?';
-    }
-
-    if (file) {
-        if (queryValues.length > 0) {
-            queryString += ', '; //
-        }
-        queryValues.push(file.filename);
-        queryString += 'Foto = ?';
-    }
-
-    queryString += ' WHERE email = ?';
-    queryValues.push(email);
-
-    db.query(queryString, queryValues, (err, results) => {
+    db.query('SELECT * FROM usuarios WHERE email = ?', [email], (err, results) => {
         if (err) {
             console.log(err);
             return res.status(500).send('Error en el servidor');
-        } else {
-            return res.status(200).send('Perfil actualizado exitosamente');
         }
-    });
+        else {
+            borrarFoto(results[0].Foto)
+            let queryValues = [];
+            let queryString = 'UPDATE usuarios SET ';
+
+            if (nombre) {
+                queryValues.push(nombre);
+                queryString += 'nombre_usuario = ?';
+            }
+
+            if (file) {
+                if (queryValues.length > 0) {
+                    queryString += ', '; //
+                }
+                queryValues.push(file.filename);
+                queryString += 'Foto = ?';
+            }
+
+            queryString += ' WHERE email = ?';
+            queryValues.push(email);
+
+            db.query(queryString, queryValues, (err, results) => {
+                if (err) {
+                    console.log(err);
+                    return res.status(500).send('Error en el servidor');
+                } else {
+                    return res.status(200).send('Perfil actualizado exitosamente');
+                }
+            });
+        }
+    })
 });
 
 
