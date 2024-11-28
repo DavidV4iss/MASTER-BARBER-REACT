@@ -160,7 +160,7 @@ export default function PerfilUser() {
                     placeholder="name@example.com"
                     onChange={handleChange}
                     name="nombre"
-                    value={user.nombre || ""}
+                    value={user.nombre_usuario || ""}
                   />
                   <label for="floatingInput" className="text-dark">
                     Nombre
