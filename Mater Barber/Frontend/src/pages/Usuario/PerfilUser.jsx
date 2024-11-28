@@ -126,7 +126,7 @@ export default function PerfilUser() {
               <img
                 src={imagePreview || "default-avatar.png"}
                 alt="Imagen de perfil"
-                className="img-fluid rounded-circle contenido3 mt-5 zoomhover2"
+                className="img-fluid rounded-circle contenido3 mt-5 text-white zoomhover2"
                 style={{ width: "250px", height: "250px", objectFit: "cover" }}
               />
             </div>
@@ -160,7 +160,6 @@ export default function PerfilUser() {
                     placeholder="name@example.com"
                     onChange={handleChange}
                     name="nombre"
-                    value={user.nombre || ""}
                   />
                   <label for="floatingInput" className="text-dark">
                     Nombre
