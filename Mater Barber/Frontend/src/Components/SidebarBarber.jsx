@@ -3,7 +3,7 @@ import { NavLink } from "react-router-dom";
 import "bootstrap/scss/bootstrap.scss";
 import * as faIncons from "react-icons/fa";
 import { GiBleedingEye } from "react-icons/gi";
-import { IoPersonAddSharp } from "react-icons/io5";
+
 
 export default function SidebarBarber() {
   return (

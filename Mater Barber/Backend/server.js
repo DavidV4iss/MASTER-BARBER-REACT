@@ -600,15 +600,26 @@ app.post('/api/reservas', (req, res) => {
         if (err) {
             res.status(500).send(err);
         } else {
-            res.status(201).json({ id: result.insertId });
+            res.status(201).json({ id_reserva: result.insertId });
+        }
+    });
+});
+
+// Obtener todas las reservas
+app.get('/api/reservas', (req, res) => {
+    db.query('SELECT * FROM reservas', (err, results) => {
+        if (err) {
+            res.status(500).send(err);
+        } else {
+            res.json(results);
         }
     });
 });
 
 // Actualizar el estado de la reserva (aceptar o cancelar)
 app.put('/api/reservas/:id', (req, res) => {
-    const { estado } = req.body;
-    const { id_reserva } = req.params;
+    const estado = req.body.estado;
+    const id_reserva= req.params.id;
     const query = 'UPDATE reservas SET estado = ? WHERE id_reserva = ?';
     db.query(query, [estado, id_reserva], (err, result) => {
         if (err) {
