@@ -102,10 +102,13 @@ export default function NavbarAdmin() {
                   <a class="dropdown-item bebas text-danger" href="/ConfiguracionAdmin">Configuración</a>
                 </li>
                 <li onClick={handleLogout}>
-                  <button class="dropdown-item text-warning bebas">
-                    <i class="bi bi-box-arrow-right mx-1">
-                    </i> Cerrar sesión</button>
-                </li>
+                <div class="box-2">
+                  <div class="btn btn-two text-white">
+                    <i><i class="bi bi-box-arrow-right mx-1">
+                    </i> Cerrar sesión</i>
+                  </div>
+                </div>
+              </li>
               </ul>
             </div>
           </div>

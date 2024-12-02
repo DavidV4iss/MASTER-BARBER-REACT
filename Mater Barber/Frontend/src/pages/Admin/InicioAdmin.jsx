@@ -25,7 +25,7 @@ export default function InicioAdmin() {
             <NavbarAdmin />
             <SidebarAdmin />
             <div className='contenido p-5 mt-5'>
-                <p className='text-center text-white display-3 bebas mx-3 animate__hinge'>MASTER <span className='text-danger'>BARBER</span>| INICIO </p>
+                <p className='text-center text-white display-3 bebas mx-3'>MASTER <span className='text-danger'>BARBER</span>| INICIO </p>
                 {/* <div className="container col border border mt-4 bg-dark row col contenido mt-5">
                         <h2 className='bebas text-center text-white mt-2'>Inicio</h2>
                     </div> */}
