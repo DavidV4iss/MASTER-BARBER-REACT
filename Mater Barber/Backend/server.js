@@ -35,6 +35,14 @@ const db = mysql.createConnection({
     database: "master_barber"
 })
 
+db.connect((err) => {
+    if (err) {
+        console.log(err);
+    } else {
+        console.log("Conectado a la base de datos");
+    }
+})
+
 
 // Configuración de transporte de nodemailer para enviar correos electrónicos
 const transporter = nodemailer.createTransport({
