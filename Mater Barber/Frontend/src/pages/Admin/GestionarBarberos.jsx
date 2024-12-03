@@ -8,16 +8,19 @@ import { useNavigate } from 'react-router-dom'
 
 
 export default function GestionarBarberos() {
-
+  const [imagePreview, setImagePreview] = useState('');
+  const [imagePreviewEdit, setImagePreviewEdit] = useState('');
   const [barberos, setBarberos] = useState([]);
   const [barbero, setBarbero] = useState({
     nombre: "",
     descripcion: "",
+    foto: null,
   });
 
   const [barberoEdit, setBarberoEdit] = useState({
     nombre: "",
     descripcion: "",
+    foto: null,
   });
   const navigate = useNavigate();
 
@@ -25,11 +28,17 @@ export default function GestionarBarberos() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post(`http://localhost:8081/CreateBarberos`, barbero);
+      const formData = new FormData();
+      formData.append('nombre', barbero.nombre);
+      formData.append('descripcion', barbero.descripcion);
+      formData.append('foto', barbero.foto);
+
+      const res = await axios.post(`http://localhost:8081/CreateBarberos`, formData);
       if (res.status === 200) {
         Swal.fire({
           icon: 'success',
           title: res.data,
+          timer: 1000,
           customClass: {
             popup: "dark-theme-popup bg-dark antonparabackend ",
           },
@@ -52,7 +61,11 @@ export default function GestionarBarberos() {
 
   const handleSubmitEdit = async (id) => {
     try {
-      const res = await axios.put(`http://localhost:8081/UpdateBarberos/${id}`, barberoEdit);
+      const formData = new FormData();
+      formData.append('foto', barberoEdit.foto);
+      formData.append('nombre', barberoEdit.nombre);
+      formData.append('descripcion', barberoEdit.descripcion);
+      const res = await axios.put(`http://localhost:8081/UpdateBarberos/${id}`, formData);
       if (res.status === 200) {
         Swal.fire({
           icon: 'success',
@@ -77,13 +90,31 @@ export default function GestionarBarberos() {
     }
   };
 
+  //handle change para añadir
+  const handleChange = (e) => {
+    setBarbero(prev => ({ ...prev, [e.target.name]: e.target.value }));
+  };
+
+  //handle change para editar
   const handleChangeEdit = (e) => {
     setBarberoEdit(prev => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
-  //handle change para añadir
-  const handleChange = (e) => {
-    setBarbero(prev => ({ ...prev, [e.target.name]: e.target.value }));
+  //handle change para añadir foto
+  const handleFileChange = (e) => {
+    const selectedFile = e.target.files[0];
+    if (selectedFile) {
+      setBarbero({ ...barbero, [e.target.name]: selectedFile });
+      setImagePreview(URL.createObjectURL(selectedFile));
+    }
+  };
+
+  const handleFileChangeEdit = (e) => {
+    const selectedFile = e.target.files[0];
+    if (selectedFile) {
+      setBarberoEdit({ ...barberoEdit, [e.target.name]: selectedFile });
+      setImagePreviewEdit(URL.createObjectURL(selectedFile));
+    }
   };
 
   const DeleteBarberos = async (id) => {
@@ -163,7 +194,7 @@ export default function GestionarBarberos() {
                 <tr className='bg-white'>
                   <th scope="col" className='p-2 display-6 bebas'>Nombre</th>
                   <th scope="col" className='p-2 display-6 bebas w-50'>Descripcion</th>
-                  {/* <th scope="col" className='p-2 display-6 bebas'>imagen Barbero</th> */}
+                  <th scope="col" className='p-2 display-6 bebas'>imagen Barbero</th>
                   <th scope="col" className='p-2 text-warning display-6 bebas'>Acciones</th>
                 </tr>
               </thead>
@@ -172,6 +203,7 @@ export default function GestionarBarberos() {
                   <tr key={barbero.id_barbero}>
                     <td>{barbero.nombre}</td>
                     <td>{barbero.descripcion}</td>
+                    <td><img src={`/images/imagesBarbero/${barbero.Foto}`} className='w-25 zoomhover2' alt="" /></td>
                     <td>
                       <div className="d-flex justify-content-center">
                         <button type="button" className="btn btn-outline-warning me-3" onClick={() => openEditModal(barbero)} data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@mdo">
@@ -195,12 +227,12 @@ export default function GestionarBarberos() {
         <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
           <div class="modal-dialog">
             <div class="modal-content bg-dark">
-              <div class="modal-header">
-                <h1 class="modal-title fs-5 text-white text-white" id="exampleModalLabel">EDITAR</h1>
-                <button type="button" class="btn-close bg-white" data-bs-dismiss="modal" aria-label="Close"></button>
-              </div>
-              <div class="modal-body">
-                <form>
+              <form onSubmit={handleSubmitEdit}>
+                <div class="modal-header">
+                  <h1 class="modal-title fs-5 text-white text-white" id="exampleModalLabel">EDITAR</h1>
+                  <button type="button" class="btn-close bg-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
                   <div class="mb-3">
                     <label aria-required for="recipient-name" class="col-form-label text-white">Nombre Barbero</label>
                     <input required type="text" class="form-control" id="recipient-name" value={barberoEdit.nombre} name='nombre' onChange={handleChangeEdit} placeholder='Escriba un nombre' />
@@ -209,18 +241,24 @@ export default function GestionarBarberos() {
                     <label for="recipient-name" class="col-form-label text-white">Descripcion</label>
                     <input required type="text" class="form-control" id="recipient-name" value={barberoEdit.descripcion} name='descripcion' onChange={handleChangeEdit} placeholder='Escriba una Descripcion' />
                   </div>
-                  {/* <div className="col-12 mb-3">
-                    <label htmlFor="floatingInput" className='text-white'>Imagen</label>
-                    <input className='form-control' type="file" accept='image/*' autoComplete='off' id='photo' name='photo' required />
-                  </div> */}
-                </form>
-              </div>
-              <div class="modal-footer">
+                  <p className="text-white antonparabackend"> Imagen Del Barbero</p>
+                  <div className="input-group">
+                    <input
+                      name="foto"
+                      accept="image/*"
+                      type="file"
+                      className="form-control bg-dark text-white"
+                      id="inputGroupFile04"
+                      onChange={handleFileChangeEdit}
+                    />
+                  </div>
+                </div>
                 <div class="modal-footer">
                   <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" >Close</button>
-                  <button type="sumbit" class="btn btn-danger" onClick={() => handleSubmitEdit(barberoEdit.id_barbero)}>Editar</button>
+                  <button type="submit" class="btn btn-danger" >Editar</button>
                 </div>
-              </div>
+              </form>
+
             </div>
           </div>
         </div>
@@ -230,12 +268,15 @@ export default function GestionarBarberos() {
         <div class="modal fade" id="AñadirModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
           <div class="modal-dialog">
             <div class="modal-content bg-dark">
-              <div class="modal-header">
-                <h1 class="modal-title fs-5 text-white text-white" id="exampleModalLabel">Añadir</h1>
-                <button type="button" class="btn-close bg-white" data-bs-dismiss="modal" aria-label="Close"></button>
-              </div>
-              <div class="modal-body">
-                <form>
+              <form onSubmit={handleSubmit}>
+                <div class="modal-header">
+                  <h1 class="modal-title fs-5 text-white text-white" id="exampleModalLabel">Añadir</h1>
+                  <button type="button" class="btn-close bg-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                  <div class="mb-3">
+                    <img src={imagePreview || ''} className="img-fluid" alt="" />
+                  </div>
                   <div class="mb-3">
                     <label for="recipient-name" class="col-form-label text-white">Nombre Barbero</label>
                     <input required type="text" class="form-control" id="recipient-name" name='nombre' onChange={handleChange} placeholder='Escriba un Nombre' />
@@ -244,18 +285,23 @@ export default function GestionarBarberos() {
                     <label for="recipient-name" class="col-form-label text-white">Descripcion</label>
                     <input required type="text" class="form-control" id="recipient-name" name='descripcion' onChange={handleChange} placeholder='Escriba una Descripcion' />
                   </div>
-                  {/* <div className="col-12 mb-3">
-                    <label htmlFor="floatingInput" className='text-white'>Imagen</label>
-                    <input className='form-control' type="file" accept='image/*' autoComplete='off' id='photo' name='photo' required />
-                  </div> */}
-                </form>
-              </div>
-              <div class="modal-footer">
+                  <p className="text-white antonparabackend"> Imagen Del Barbero</p>
+                  <div className="input-group">
+                    <input
+                      name="foto"
+                      accept="image/*"
+                      type="file"
+                      className="form-control bg-dark text-white"
+                      id="inputGroupFile04"
+                      onChange={handleFileChange}
+                    />
+                  </div>
+                </div>
                 <div class="modal-footer">
                   <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                  <button type="submit" class="btn btn-danger" onClick={handleSubmit}>Añadir</button>
+                  <button type="submit" class="btn btn-danger">Añadir</button>
                 </div>
-              </div>
+              </form>
             </div>
           </div>
         </div>

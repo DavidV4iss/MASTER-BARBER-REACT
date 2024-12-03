@@ -383,6 +383,27 @@ app.post('/Cambiarpasscod', (req, res) => {
 
 });
 
+
+
+
+
+
+
+
+// CRUD DEL BARBERO
+
+const storageBarbero = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, '../Frontend/public/images/imagesBarbero/')
+    },
+    filename: function (req, file, cb) {
+        cb(null, `barbero_${Date.now()}` + '-' + file.originalname)
+    }
+
+})
+
+const uploadBarbero = multer({ storage: storageBarbero })
+
 app.get('/GetBarberos', (req, res) => {
     db.query('SELECT * FROM addbarberos', (err, results) => {
         if (err) {
@@ -394,6 +415,15 @@ app.get('/GetBarberos', (req, res) => {
         }
     })
 })
+
+const borrarFotoBarbero = async (foto) => {
+    try {
+        const filePath = path.resolve(__dirname, `../Frontend/public/images/imagesBarbero/${foto}`);
+        await fs.promises.unlink(filePath);
+    } catch (err) {
+        console.error('Error eliminando imagen:', err);
+    }
+};
 
 app.get('/GetBarberos/:id', (req, res) => {
     const id = req.params.id;
@@ -408,45 +438,54 @@ app.get('/GetBarberos/:id', (req, res) => {
     })
 })
 
-app.post('/CreateBarberos', (req, res) => {
+app.post('/CreateBarberos', uploadBarbero.single('foto'), (req, res) => {
     const nombre = req.body.nombre
     const descripcion = req.body.descripcion
+    const fotoName = req.file.filename
 
-    const q = 'INSERT INTO addbarberos (nombre,descripcion) VALUES (?,?)'
 
-    const values = [
-        nombre,
-        descripcion
-    ]
-
-    db.query(q, values, (err, results) => {
-        if (err) {
-            console.log(err);
-            return res.status(500).send('Error en el servidor');
-        } else {
-            return res.status(200).send('Barbero añadido exitosamente');
-        }
-    })
-})
-
-app.put('/UpdateBarberos/:id', (req, res) => {
-    const id = req.params.id;
-    const nombre = req.body.nombre
-    const descripcion = req.body.descripcion
-
-    const q = 'UPDATE addbarberos SET nombre = ?, descripcion = ? WHERE id_barbero = ?'
+    const q = 'INSERT INTO addbarberos (nombre,descripcion,Foto) VALUES (?,?,?)'
 
     const values = [
         nombre,
         descripcion,
-        id
+        fotoName
     ]
 
     db.query(q, values, (err, results) => {
         if (err) {
             console.log(err);
             return res.status(500).send('Error en el servidor');
-        } else {
+        }
+        else {
+            return res.status(200).send('Barbero creado exitosamente');
+        }
+    })
+})
+
+app.put('/UpdateBarberos/:id', uploadBarbero.single('file'), (req, res) => {
+    const id = req.params.id;
+    const nombre = req.body.nombre
+    const descripcion = req.body.descripcion
+    const fotoName = req.file.filename
+
+    const q = 'UPDATE addbarberos SET nombre = ?, descripcion = ?, Foto = ? WHERE id = ?'
+
+    const values = [
+        nombre,
+        descripcion,
+        fotoName,
+        id
+    ]
+
+
+    db.query(q, values, (err, results) => {
+        if (err) {
+            console.log(err);
+            return res.status(500).send('Error en el servidor');
+        }
+        else {
+            borrarFotoBarbero(foto);
             return res.status(200).send('Barbero actualizado exitosamente');
         }
     })
@@ -463,6 +502,12 @@ app.delete('/DeleteBarberos/:id', (req, res) => {
         }
     })
 });
+
+
+
+// FIN CRUD BARBERO
+
+
 
 
 
@@ -574,6 +619,11 @@ app.get('/traerUsuario/:email', (req, res) => {
 })
 
 
+
+
+
+
+
 //CRUD PARA RESERVAS DE BARBEROS Y CLIENTES
 
 // Rutas
@@ -627,7 +677,7 @@ app.get('/api/reservas', (req, res) => {
 // Actualizar el estado de la reserva (aceptar o cancelar)
 app.put('/api/reservas/:id', (req, res) => {
     const estado = req.body.estado;
-    const id_reserva= req.params.id;
+    const id_reserva = req.params.id;
     const query = 'UPDATE reservas SET estado = ? WHERE id_reserva = ?';
     db.query(query, [estado, id_reserva], (err, result) => {
         if (err) {
