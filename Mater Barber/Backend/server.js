@@ -247,7 +247,7 @@ app.get('/GetInventario', (req, res) => {
             console.log(err);
             return res.status(500).send('Error en el servidor');
         }
-        else {
+        else {  
             return res.status(200).send(results);
         }
     })
@@ -687,6 +687,102 @@ app.put('/api/reservas/:id', (req, res) => {
         }
     });
 });
+
+app.get('GetInventarioVendido', (req, res) => {
+    db.query('SELECT * FROM inventario_vendido', (err, results) => {
+        if (err) {
+            res.status(500).send(err);
+        } else {
+            res.json(results);
+        }
+    });
+});
+
+app.get('GetInventarioVendido/:id', (req, res) => {
+    const id = req.params.id;
+    db.query('SELECT * FROM inventario_vendido WHERE id_venta = ?', [id], (err, results) => {
+        if (err) {
+            res.status(500).send(err);
+        } else {
+            res.json(results);
+        }
+    });
+});
+
+app.post('/CreateInventarioVendido', (req, res) => {
+    const id_producto = req.body.id_producto
+    const id_categoria_producto = req.body.id_categoria_producto
+    const proveedor = req.body.proveedor
+    const cantidad = req.body.cantidad
+    const fecha_venta = req.body.fecha_venta
+    const total_venta = req.body.total_venta
+
+    const q = 'INSERT INTO inventario_vendido (id_producto,id_categoria_producto,proveedor,cantidad,fecha_venta,total_venta) VALUES (?,?,?,?,?,?)'
+
+    const values = [
+        id_producto,
+        id_categoria_producto,
+        proveedor,
+        cantidad,
+        fecha_venta,
+        total_venta
+    ]
+
+    db.query(q, values, (err, results) => {
+        if (err) {
+            console.log(err);
+            return res.status(500).send('Error en el servidor');
+        }
+        else {
+            return res.status(200).send('Producto creado exitosamente');
+        }
+    })
+})
+
+app.put('/UpdateInventarioVendido/:id', (req, res) => {
+    const id_venta = req.params.id_venta;
+    const id_producto = req.body.id_producto
+    const id_categoria_producto = req.body.id_categoria_producto
+    const proveedor = req.body.proveedor
+    const cantidad = req.body.cantidad
+    const fecha_venta = req.body.fecha_venta
+    const total_venta = req.body.total_venta
+
+    const q = 'UPDATE inventario_vendido SET id_producto = ?, id_categoria_producto = ?, proveedor = ?, cantidad = ?, fecha_venta = ?, total_venta = ? WHERE id_venta = ?'
+
+    const values = [
+        id_producto,
+        id_categoria_producto,
+        proveedor,
+        cantidad,
+        fecha_venta,
+        total_venta,
+        id_venta
+    ]
+    db.query(q, values, (err, results) => {
+        if (err) {
+            console.log(err);
+            return res.status(500).send('Error en el servidor');
+        }
+        else {
+            return res.status(200).send('Producto actualizado exitosamente');
+        }   
+    })
+})
+
+app.delete('/DeleteInventarioVendido/:id', (req, res) => {
+    const id = req.params.id;
+    db.query('DELETE FROM inventario_vendido WHERE id_venta = ?', [id], (err, results) => {
+        if (err) {
+            console.log(err);
+            return res.status(500).send('Error en el servidor');
+        }
+        else {
+            return res.status(200).send('Producto eliminado exitosamente');
+        }
+    })
+})
+
 
 
 
