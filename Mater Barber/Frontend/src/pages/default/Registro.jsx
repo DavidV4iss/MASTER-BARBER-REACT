@@ -54,6 +54,9 @@ export default function Registro() {
             <div className="min-vh-100 align-content-center mx-5 justify-content-end">
                 <div className='container px-3 p-sm-5 border border-4 border-white border table-responsive border rounded-4 bg-dark.bg-gradient'>
                     <div className="row justify-content-center align-items-center">
+                        <a href="/">
+                            <i className="bi bi-arrow-left-circle-fill text-white fs-3 zoomhover2"></i>
+                        </a>
                         <div className="col-12 col-sm-6 bi-text-center mt-5">
                             <img src="/LOGO.png" alt="" className='img-fluid' />
                         </div>

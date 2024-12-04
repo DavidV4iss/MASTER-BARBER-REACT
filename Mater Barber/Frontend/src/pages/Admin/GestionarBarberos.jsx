@@ -117,6 +117,7 @@ export default function GestionarBarberos() {
       setBarberoEdit({ ...barberoEdit, [e.target.name]: selectedFile });
       setImagePreviewEdit(URL.createObjectURL(selectedFile));
     }
+    console.log(barberoEdit);
   };
 
   const DeleteBarberos = async (id) => {
@@ -194,7 +195,7 @@ export default function GestionarBarberos() {
             <table class="table table-dark table-hover mt-4 container p-5">
               <thead>
                 <tr className='bg-white'>
-                  <th scope="col" classNameName='p-2 display-6 bebas'>Nombre</th>
+                  <th scope="col" className='p-2 display-6 bebas'>Nombre</th>
                   <th scope="col" className='p-2 display-6 bebas w-50'>Descripcion</th>
                   <th scope="col" className='p-2 display-6 bebas'>imagen Barbero</th>
                   <th scope="col" className='p-2 text-warning display-6 bebas'>Acciones</th>
@@ -234,14 +235,19 @@ export default function GestionarBarberos() {
                   <h1 className="modal-title fs-5 text-white text-white" id="exampleModalLabel">EDITAR</h1>
                   <button type="button" className="btn-close bg-white" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
+                <div className="modal-body d-flex justify-content-center ">
+                  <div className="card bg-dark" style={{ width: '10rem' }}>
+                    <img src={imagePreviewEdit || ''} style={{ width: '100%', height: '100%', objectFit: 'cover' }} className='img-fluid text-white rounded' alt="Imagen Barbero" />
+                  </div>
+                </div>
                 <div className="modal-body">
                   <div className="mb-3">
                     <label aria-required for="recipient-name" className="col-form-label text-white">Nombre Barbero</label>
-                    <input required type="text" className="form-control" id="recipient-name" value={barberoEdit.nombre} name='nombre' onChange={handleChangeEdit} placeholder='Escriba un nombre' />
+                    <input required type="text" className="form-control bg-dark text-white" pattern='^[A-Za-z\s]+$' id="recipient-name" value={barberoEdit.nombre} name='nombre' onChange={handleChangeEdit} placeholder='Escriba un nombre' />
                   </div>
                   <div className="mb-3">
                     <label for="recipient-name" className="col-form-label text-white">Descripcion</label>
-                    <input required type="text" className="form-control" id="recipient-name" value={barberoEdit.descripcion} name='descripcion' onChange={handleChangeEdit} placeholder='Escriba una Descripcion' />
+                    <input required type="text" className="form-control bg-dark text-white" id="recipient-name" value={barberoEdit.descripcion} name='descripcion' onChange={handleChangeEdit} placeholder='Escriba una Descripcion' />
                   </div>
                   <p className="text-white antonparabackend"> Imagen Del Barbero</p>
                   <div className="input-group">
@@ -275,41 +281,32 @@ export default function GestionarBarberos() {
                   <h1 className="modal-title fs-5 text-white text-white" id="exampleModalLabel">Añadir</h1>
                   <button type="button" className="btn-close bg-white" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div className="modal-body col-12 col-lg-12">
-
-                <div className="card bg-dark" style={{ width: '10rem' }}>
-                <img src={imagePreview || ''} style={{ width: '100%', height: '100%', objectFit: 'cover' }} className='img-fluid text-white' alt="Imagen Barbero" />
-                </div>
-                </div>
-
-                
-                  <div className="mb-3">
-
-
-                  <div className="col-12 col-lg-12">
-                    <div className="mb-3">
-                      <label for="recipient-name" className="col-form-label text-white">Nombre Barbero</label>
-                      <input required type="text" className="form-control bg-dark text-white" id="recipient-name" name='nombre' onChange={handleChange} placeholder='Escriba un Nombre' />
-                    </div>
-                    <div class="mb-3">
-                      <label for="recipient-name" className="col-form-label text-white">Descripcion</label>
-                      <input required type="text" className="form-control bg-dark text-white" id="recipient-name" name='descripcion' onChange={handleChange} placeholder='Escriba una Descripcion' />
-                    </div>
-                    <p className="text-white antonparabackend"> Imagen Del Barbero</p>
-                    <div className="input-group">
-                      <input
-                        required
-                        name="foto"
-                        accept="image/*"
-                        type="file"
-                        className="form-control bg-dark text-white "
-                        id="inputGroupFile04"
-                        onChange={handleFileChange}
-                      />
-                    </div>
+                <div className="modal-body d-flex justify-content-center ">
+                  <div className="card bg-dark" style={{ width: '10rem' }}>
+                    <img src={imagePreview || ''} style={{ width: '100%', height: '100%', objectFit: 'cover' }} className='img-fluid text-white rounded' alt="Imagen Barbero" />
                   </div>
                 </div>
-                <div className="modal-footer">
+                <div className="mb-3">
+                  <label for="recipient-name" className="col-form-label text-white">Nombre Barbero</label>
+                  <input required type="text" className="form-control bg-dark text-white" id="recipient-name" name='nombre' onChange={handleChange} placeholder='Escriba un Nombre' />
+                </div>
+                <div class="mb-3">
+                  <label for="recipient-name" className="col-form-label text-white">Descripcion</label>
+                  <input required type="text" className="form-control bg-dark text-white" id="recipient-name" name='descripcion' onChange={handleChange} placeholder='Escriba una Descripcion' />
+                </div>
+                <p className="text-white antonparabackend"> Imagen Del Barbero</p>
+                <div className="input-group">
+                  <input
+                    required
+                    name="foto"
+                    accept="image/*"
+                    type="file"
+                    className="form-control bg-dark text-white "
+                    id="inputGroupFile04"
+                    onChange={handleFileChange}
+                  />
+                </div>
+                <div className="modal-footer mt-4">
                   <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                   <button type="submit" className="btn btn-danger">Añadir</button>
                 </div>
