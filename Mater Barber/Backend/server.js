@@ -416,9 +416,9 @@ app.get('/GetBarberos', (req, res) => {
     })
 })
 
-const borrarFotoBarbero = async (fotos) => {
+const borrarFotoBarbero = async (foto) => {
     try {
-        const filePath = path.resolve(__dirname, `../Frontend/public/images/imagesBarbero/${fotos}`);
+        const filePath = path.resolve(__dirname, `../Frontend/public/images/imagesBarbero/${foto}`);
         await fs.promises.unlink(filePath);
     } catch (err) {
         console.error('Error eliminando imagen:', err);
@@ -427,7 +427,7 @@ const borrarFotoBarbero = async (fotos) => {
 
 app.get('/GetBarberos/:id', (req, res) => {
     const id = req.params.id;
-    db.query('SELECT * FROM addbarberos WHERE id = ?', [id], (err, results) => {
+    db.query('SELECT * FROM addbarberos WHERE id_barbero = ?', [id], (err, results) => {
         if (err) {
             console.log(err);
             return res.status(500).send('Error en el servidor');
@@ -463,13 +463,13 @@ app.post('/CreateBarberos', uploadBarbero.single('foto'), (req, res) => {
     })
 })
 
-app.put('/UpdateBarberos/:id', uploadBarbero.single('file'), (req, res) => {
-    const id = req.params.id;
+app.put('/UpdateBarberos/:id', uploadBarbero.single('foto'), (req, res) => {
+    const id = req.params.id_barbero;
     const nombre = req.body.nombre
     const descripcion = req.body.descripcion
     const fotoName = req.file.filename
 
-    const q = 'UPDATE addbarberos SET nombre = ?, descripcion = ?, Foto = ? WHERE id = ?'
+    const q = 'UPDATE addbarberos SET nombre = ?, descripcion = ?, Foto = ? WHERE id_barbero = ?'
 
     const values = [
         nombre,
@@ -485,7 +485,7 @@ app.put('/UpdateBarberos/:id', uploadBarbero.single('file'), (req, res) => {
             return res.status(500).send('Error en el servidor');
         }
         else {
-            borrarFotoBarbero(fotos);
+            borrarFotoBarbero(fotoName);
             return res.status(200).send('Barbero actualizado exitosamente');
         }
     })
