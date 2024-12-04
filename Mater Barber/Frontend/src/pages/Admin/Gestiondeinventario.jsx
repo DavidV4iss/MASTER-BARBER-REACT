@@ -270,7 +270,7 @@ export default function Gestiondeinventario() {
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" >Cerrar</button>
-                                    <button type="sumbit" class="btn btn-danger" onClick={() => handleSubmitEdit(productoEditar.id_producto)}>Editar</button>
+                                    <button type="sumbit" class="btn btn-danger" onClick={() => handleSubmitEdit(productoVendidoEditar.id_venta)}>Editar</button>
                                 </div>
                             </div>
                         </div>
