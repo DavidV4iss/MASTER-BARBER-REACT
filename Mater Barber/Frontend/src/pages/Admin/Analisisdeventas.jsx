@@ -30,7 +30,7 @@ export default function Analisisdeventas() {
             <NavbarAdmin />
             <SidebarAdmin />
             <div className='contenido'  id='Analisisdeventas'>
-                <p className='text-center text-white mt-5 display-6 bebas col-sm-12 col'>HOLA,  <span className='text-danger'>ADMINISTRADOR</span>| ESTE ES EL ANALISIS DE VENTAS</p>
+                <p className='text-center text-white mt-5 display-6 bebas col-sm-12 col'>HOLA,  <span className='text-danger'>ADMINISTRADOR</span>| ESTE ES EL ANALISIS DEL INVENTARIO</p>
                 <div className='container pt-5 col-sm12 col justify-content-center'>
                     <div className="row g-5 mt-5">
                         <div className="col col-sm-12 mt-5">

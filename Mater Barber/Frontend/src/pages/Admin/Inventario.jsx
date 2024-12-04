@@ -16,13 +16,13 @@ export default function Inventario() {
         PrecioUnitario: ''
     });
 
-    const [productoEditar, setProductoEditar] = useState({
-        nombre: '',
-        descripcion_P: '',
-        cantidad: '',
-        id_categoria_producto: '',
-        PrecioUnitario: ''
-    });
+        const [productoEditar, setProductoEditar] = useState({
+            nombre: '',
+            descripcion_P: '',
+            cantidad: '',
+            id_categoria_producto: '',
+            PrecioUnitario: ''
+        });
 
     const [categorias, setCategorias] = useState([]);
 
@@ -173,7 +173,7 @@ export default function Inventario() {
             <SidebarAdmin />
             <div className='mt-5'>
                 <div className='contenido ' id='Inventario'>
-                    <p className='text-center text-white mt-5 display-6 bebas mx-3 '>HOLA, <span className='text-danger'>ADMINISTRADOR</span>| ESTE ES EL INVENTARIO DE PRODUCTOS</p>
+                    <p className='text-center text-white mt-5 display-6 bebas mx-3 '>HOLA, <span className='text-danger'>ADMINISTRADOR</span>| ESTE ES EL INVENTARIO DE PRODUCTOS QUE LLEGAN A LA BARBERIA</p>
 
                     <div className="d-flex justify-content-end mx-5 mt-5">
                         <button type="button" class="btn btn-danger .col-md-4" data-bs-toggle="modal" data-bs-target="#AñadirModal" data-bs-whatever="@mdo" >Añadir</button>
@@ -183,12 +183,12 @@ export default function Inventario() {
                             <table class="table table-dark mt-5">
                                 <thead>
                                     <tr>
-                                        <th >Id Producto</th>
+                                        <th >ID Producto</th>
                                         <th >Nombre</th>
                                         <th >Descripcion</th>
                                         <th >Cantidad</th>
                                         <th >Categoria producto</th>
-                                        <th >PrecioUnitario</th>
+                                        <th >Precio unitario</th>
                                         <th >Acciones</th>
                                     </tr>
                                 </thead>
@@ -253,13 +253,13 @@ export default function Inventario() {
                                             </select>
                                         </div>
                                         <div class="mb-3">
-                                            <label for="recipient-name" class="col-form-label text-white">Precio:</label>
+                                            <label for="recipient-name" class="col-form-label text-white">Precio unitario:</label>
                                             <input value={productoEditar.PrecioUnitario} type="text" class="form-control" id="recipient-name" name='PrecioUnitario' onChange={handleChangeEdit} />
                                         </div>
                                     </form>
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" >Close</button>
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" >Cerrar</button>
                                     <button type="sumbit" class="btn btn-danger" onClick={() => handleSubmitEdit(productoEditar.id_producto)}>Editar</button>
                                 </div>
                             </div>
@@ -298,14 +298,14 @@ export default function Inventario() {
                                             </select>
                                         </div>
                                         <div class="mb-3">
-                                            <label for="recipient-name" class="col-form-label text-white">Precio:</label>
+                                            <label for="recipient-name" class="col-form-label text-white">Precio unitario:</label>
                                             <input type="text" class="form-control" id="recipient-name" name='PrecioUnitario' onChange={handleChange} />
                                         </div>
 
                                     </form>
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
                                     <button type="submit" class="btn btn-danger" onClick={handleSubmit}>Añadir</button>
                                 </div>
                             </div>

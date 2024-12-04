@@ -11,7 +11,7 @@ import Inventario from './pages/Admin/Inventario';
 import HrsBarberos from './pages/Admin/HrsBarberos';
 import InicioAdmin from './pages/Admin/InicioAdmin';
 import Analisisdeventas from './pages/Admin/Analisisdeventas';
-import Gestiondeventas from './pages/Admin/Gestiondeventas';
+import Gestiondeinventario from './pages/Admin/Gestiondeinventario';
 import EnvEmail from './pages/default/EnvEmail';
 import Cambiarpasscod from './pages/default/Cambiarpasscod';
 import InicioUsuario from './pages/Usuario/InicioUsuario';
@@ -89,9 +89,9 @@ function App() {
             />
             <Route
               exact
-              path="/Gestiondeventas"
+              path="/Gestiondeinventario"
               element={
-                <PrivateRoute roles={["1"]} element={<Gestiondeventas />} />
+                <PrivateRoute roles={["1"]} element={<Gestiondeinventario />} />
               }
             />
             <Route

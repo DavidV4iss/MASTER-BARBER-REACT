@@ -20,10 +20,10 @@ export default function SidebarAdmin() {
                         </li>
 
                         <li>
-                              <NavLink to="/Inventario" exact className='rounded py-2 d-inline-block  text-white fw-bold w-100' activeClassName='active'><BsBasket3Fill className='me-2' /><span className='d-none d-lg-block'>inventario</span></NavLink>
+                              <NavLink to="/Inventario" exact className='rounded py-2 d-inline-block  text-white fw-bold w-100' activeClassName='active'><BsBasket3Fill className='me-2' /><span className='d-none d-lg-block'>Inventario</span></NavLink>
                         </li>
                         <li>
-                              <NavLink to="/Gestiondeventas" exact className='rounded py-2 d-inline-block  text-white fw-bold w-100' activeClassName='active'><i class="bi bi-bar-chart-fill"></i> <span className='d-none d-lg-block'>Gestion De Ventas</span></NavLink>
+                              <NavLink to="/Gestiondeinventario" exact className='rounded py-2 d-inline-block  text-white fw-bold w-100' activeClassName='active'><i class="bi bi-bar-chart-fill"></i> <span className='d-none d-lg-block'>Gestion De Inventario</span></NavLink>
                         </li>
                         <li>
                               <NavLink to="/Analisisdeventas" exact className='rounded py-2 d-inline-block  text-white fw-bold w-100' activeClassName='active'><i class="bi bi-graph-up"></i> <span className='d-none d-lg-block'>Analisis De Ventas</span></NavLink>
