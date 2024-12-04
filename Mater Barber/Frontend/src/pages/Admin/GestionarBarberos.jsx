@@ -3,7 +3,6 @@ import SidebarAdmin from '../../Components/SidebarAdmin'
 import Swal from 'sweetalert2'
 import React, { useEffect, useState } from 'react';
 import axios from 'axios'
-import { useNavigate } from 'react-router-dom'
 
 
 
@@ -22,7 +21,6 @@ export default function GestionarBarberos() {
     descripcion: "",
     foto: null,
   });
-  const navigate = useNavigate();
 
   //crear barberos
   const handleSubmit = async (e) => {
@@ -43,7 +41,7 @@ export default function GestionarBarberos() {
             popup: "dark-theme-popup bg-dark antonparabackend ",
           },
         }).then(() => {
-          navigate(0);
+          window.location.reload(0);
         })
       }
     } catch (err) {
@@ -62,9 +60,9 @@ export default function GestionarBarberos() {
   const handleSubmitEdit = async (id) => {
     try {
       const formData = new FormData();
-      formData.append('foto', barberoEdit.foto);
       formData.append('nombre', barberoEdit.nombre);
       formData.append('descripcion', barberoEdit.descripcion);
+      formData.append('foto', barberoEdit.foto);
       const res = await axios.put(`http://localhost:8081/UpdateBarberos/${id}`, formData);
       if (res.status === 200) {
         Swal.fire({
@@ -74,7 +72,7 @@ export default function GestionarBarberos() {
             popup: "dark-theme-popup bg-dark antonparabackend ",
           },
         }).then(() => {
-          navigate(0);
+          window.location.reload(0);
         })
       }
     } catch (err) {
@@ -108,6 +106,10 @@ export default function GestionarBarberos() {
       setImagePreview(URL.createObjectURL(selectedFile));
     }
   };
+
+
+
+  //handle change para editar foto
 
   const handleFileChangeEdit = (e) => {
     const selectedFile = e.target.files[0];
@@ -144,7 +146,7 @@ export default function GestionarBarberos() {
             popup: "dark-theme-popup bg-dark antonparabackend ",
           },
         }).then(() => {
-          navigate(0);
+          window.location.reload(0);
         })
       }
     } catch (error) {
@@ -184,7 +186,7 @@ export default function GestionarBarberos() {
         <p className='text-center  mt-5 text-white display-6 bebas col-sm-12 col'>HOLA, <span className='text-danger'>ADMINISTRADOR</span> |AQUI PODRAS EDITAR, AÑADIR Y ELIMINAR BARBEROS</p>
 
         <div className="d-flex justify-content-end mt-3 p-5 mx-5">
-          <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#AñadirModal" data-bs-whatever="@mdo" >Añadir</button>
+          <button type="button" className="btn btn-danger" data-bs-toggle="modal" data-bs-target="#AñadirModal" data-bs-whatever="@mdo" >Añadir</button>
         </div>
 
         <div className=' text-center row col col-sm-12 justify-content-end'>
@@ -192,7 +194,7 @@ export default function GestionarBarberos() {
             <table class="table table-dark table-hover mt-4 container p-5">
               <thead>
                 <tr className='bg-white'>
-                  <th scope="col" className='p-2 display-6 bebas'>Nombre</th>
+                  <th scope="col" classNameName='p-2 display-6 bebas'>Nombre</th>
                   <th scope="col" className='p-2 display-6 bebas w-50'>Descripcion</th>
                   <th scope="col" className='p-2 display-6 bebas'>imagen Barbero</th>
                   <th scope="col" className='p-2 text-warning display-6 bebas'>Acciones</th>
@@ -224,22 +226,22 @@ export default function GestionarBarberos() {
 
         {/* MODAL EDIT */}
 
-        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-          <div class="modal-dialog">
-            <div class="modal-content bg-dark">
+        <div className="modal fade" id="exampleModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div className="modal-dialog">
+            <div className="modal-content bg-dark">
               <form onSubmit={handleSubmitEdit}>
-                <div class="modal-header">
-                  <h1 class="modal-title fs-5 text-white text-white" id="exampleModalLabel">EDITAR</h1>
-                  <button type="button" class="btn-close bg-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                <div className="modal-header">
+                  <h1 className="modal-title fs-5 text-white text-white" id="exampleModalLabel">EDITAR</h1>
+                  <button type="button" className="btn-close bg-white" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body">
-                  <div class="mb-3">
-                    <label aria-required for="recipient-name" class="col-form-label text-white">Nombre Barbero</label>
-                    <input required type="text" class="form-control" id="recipient-name" value={barberoEdit.nombre} name='nombre' onChange={handleChangeEdit} placeholder='Escriba un nombre' />
+                <div className="modal-body">
+                  <div className="mb-3">
+                    <label aria-required for="recipient-name" className="col-form-label text-white">Nombre Barbero</label>
+                    <input required type="text" className="form-control" id="recipient-name" value={barberoEdit.nombre} name='nombre' onChange={handleChangeEdit} placeholder='Escriba un nombre' />
                   </div>
-                  <div class="mb-3">
-                    <label for="recipient-name" class="col-form-label text-white">Descripcion</label>
-                    <input required type="text" class="form-control" id="recipient-name" value={barberoEdit.descripcion} name='descripcion' onChange={handleChangeEdit} placeholder='Escriba una Descripcion' />
+                  <div className="mb-3">
+                    <label for="recipient-name" className="col-form-label text-white">Descripcion</label>
+                    <input required type="text" className="form-control" id="recipient-name" value={barberoEdit.descripcion} name='descripcion' onChange={handleChangeEdit} placeholder='Escriba una Descripcion' />
                   </div>
                   <p className="text-white antonparabackend"> Imagen Del Barbero</p>
                   <div className="input-group">
@@ -253,9 +255,9 @@ export default function GestionarBarberos() {
                     />
                   </div>
                 </div>
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" >Close</button>
-                  <button type="submit" class="btn btn-danger" >Editar</button>
+                <div className="modal-footer">
+                  <button type="button" className="btn btn-secondary" data-bs-dismiss="modal" >Close</button>
+                  <button type="submit" className="btn btn-danger" >Editar</button>
                 </div>
               </form>
 
@@ -265,41 +267,51 @@ export default function GestionarBarberos() {
 
         {/* MODAL AÑADIR */}
 
-        <div class="modal fade" id="AñadirModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-          <div class="modal-dialog">
-            <div class="modal-content bg-dark">
+        <div className="modal fade" id="AñadirModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div className="modal-dialog">
+            <div className="modal-content bg-dark row">
               <form onSubmit={handleSubmit}>
-                <div class="modal-header">
-                  <h1 class="modal-title fs-5 text-white text-white" id="exampleModalLabel">Añadir</h1>
-                  <button type="button" class="btn-close bg-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                <div className="modal-header">
+                  <h1 className="modal-title fs-5 text-white text-white" id="exampleModalLabel">Añadir</h1>
+                  <button type="button" className="btn-close bg-white" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body">
-                  <div class="mb-3">
-                    <img src={imagePreview || ''} className="img-fluid" alt="" />
-                  </div>
-                  <div class="mb-3">
-                    <label for="recipient-name" class="col-form-label text-white">Nombre Barbero</label>
-                    <input required type="text" class="form-control" id="recipient-name" name='nombre' onChange={handleChange} placeholder='Escriba un Nombre' />
-                  </div>
-                  <div class="mb-3">
-                    <label for="recipient-name" class="col-form-label text-white">Descripcion</label>
-                    <input required type="text" class="form-control" id="recipient-name" name='descripcion' onChange={handleChange} placeholder='Escriba una Descripcion' />
-                  </div>
-                  <p className="text-white antonparabackend"> Imagen Del Barbero</p>
-                  <div className="input-group">
-                    <input
-                      name="foto"
-                      accept="image/*"
-                      type="file"
-                      className="form-control bg-dark text-white"
-                      id="inputGroupFile04"
-                      onChange={handleFileChange}
-                    />
+                <div className="modal-body col-12 col-lg-12">
+
+                <div className="card bg-dark" style={{ width: '10rem' }}>
+                <img src={imagePreview || ''} style={{ width: '100%', height: '100%', objectFit: 'cover' }} className='img-fluid text-white' alt="Imagen Barbero" />
+                </div>
+                </div>
+
+                
+                  <div className="mb-3">
+
+
+                  <div className="col-12 col-lg-12">
+                    <div className="mb-3">
+                      <label for="recipient-name" className="col-form-label text-white">Nombre Barbero</label>
+                      <input required type="text" className="form-control bg-dark text-white" id="recipient-name" name='nombre' onChange={handleChange} placeholder='Escriba un Nombre' />
+                    </div>
+                    <div class="mb-3">
+                      <label for="recipient-name" className="col-form-label text-white">Descripcion</label>
+                      <input required type="text" className="form-control bg-dark text-white" id="recipient-name" name='descripcion' onChange={handleChange} placeholder='Escriba una Descripcion' />
+                    </div>
+                    <p className="text-white antonparabackend"> Imagen Del Barbero</p>
+                    <div className="input-group">
+                      <input
+                        required
+                        name="foto"
+                        accept="image/*"
+                        type="file"
+                        className="form-control bg-dark text-white "
+                        id="inputGroupFile04"
+                        onChange={handleFileChange}
+                      />
+                    </div>
                   </div>
                 </div>
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                  <button type="submit" class="btn btn-danger">Añadir</button>
+                <div className="modal-footer">
+                  <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                  <button type="submit" className="btn btn-danger">Añadir</button>
                 </div>
               </form>
             </div>

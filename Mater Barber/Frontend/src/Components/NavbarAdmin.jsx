@@ -34,7 +34,7 @@ export default function NavbarAdmin() {
     fetchAdmin();
   }, [email]);
 
-  
+
 
 
 
@@ -70,45 +70,45 @@ export default function NavbarAdmin() {
           showConfirmButton: false,
           customClass: {
             popup: "dark-theme-popup bg-dark antonparabackend ",
-          },
+          }
         });
-    };
+      };
     });
   };
   return (
 
     <div className='navbar shadow'>
-      <div class="container-fluid">
-        <a class="navbar-brand text-warning anton fs-2 "><img src="LOGO.png" alt="" width="40" height="40" class="d-inline-block align-text-top mx-4 mt-1" />
+      <div className="container-fluid">
+        <a className="navbar-brand text-warning anton fs-2 "><img src="LOGO.png" alt="" width="40" height="40" className="d-inline-block align-text-top mx-4 mt-1" />
           Master Barber</a>
-        <div class="d-flex">
+        <div className="d-flex">
           <div className="container me-5">
-            <div class="dropdown position-absolute top-0 end-0 me-3 pe-3" >
-              <button class="btn dropdown-toggle text-white d-none d-sm-block" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                
+            <div className="dropdown position-absolute top-0 end-0 me-3 pe-3" >
+              <button className="btn dropdown-toggle text-white d-none d-sm-block" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+
                 <div className='d-none d-sm-block text-white fw-bold small'>{admin.nombre_usuario}</div>
-                 <img
+                <img
                   src={imagePreview || 'default-avatar.png'}
                   alt="Imagen de perfil"
                   className="img-fluid rounded-circle contenido3 "
                   style={{ width: '40px', height: '40px', objectFit: 'cover' }}
-                /> 
+                />
               </button>
-              <ul class="dropdown-menu dropdown-menu-end bg-dark">
+              <ul className="dropdown-menu dropdown-menu-end bg-dark">
                 <li>
-                  <a class="dropdown-item bebas text-danger" href="/PerfilAdmin">Perfil</a>
+                  <a className="dropdown-item bebas text-danger" href="/PerfilAdmin">Perfil</a>
                 </li>
                 <li>
-                  <a class="dropdown-item bebas text-danger" href="/ConfiguracionAdmin">Configuración</a>
+                  <a className="dropdown-item bebas text-danger" href="/ConfiguracionAdmin">Configuración</a>
                 </li>
                 <li onClick={handleLogout}>
-                <div class="box-2">
-                  <div class="btn btn-two text-white">
-                    <i><i class="bi bi-box-arrow-right mx-1">
-                    </i> Cerrar sesión</i>
+                  <div className="box-2">
+                    <div className="btn btn-two text-white">
+                      <i><i className="bi bi-box-arrow-right mx-1">
+                      </i> Cerrar sesión</i>
+                    </div>
                   </div>
-                </div>
-              </li>
+                </li>
               </ul>
             </div>
           </div>

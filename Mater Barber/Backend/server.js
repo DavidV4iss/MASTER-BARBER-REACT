@@ -416,9 +416,9 @@ app.get('/GetBarberos', (req, res) => {
     })
 })
 
-const borrarFotoBarbero = async (foto) => {
+const borrarFotoBarbero = async (fotos) => {
     try {
-        const filePath = path.resolve(__dirname, `../Frontend/public/images/imagesBarbero/${foto}`);
+        const filePath = path.resolve(__dirname, `../Frontend/public/images/imagesBarbero/${fotos}`);
         await fs.promises.unlink(filePath);
     } catch (err) {
         console.error('Error eliminando imagen:', err);
@@ -485,7 +485,7 @@ app.put('/UpdateBarberos/:id', uploadBarbero.single('file'), (req, res) => {
             return res.status(500).send('Error en el servidor');
         }
         else {
-            borrarFotoBarbero(foto);
+            borrarFotoBarbero(fotos);
             return res.status(200).send('Barbero actualizado exitosamente');
         }
     })
