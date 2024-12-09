@@ -17,6 +17,7 @@ export default function GestionarBarberos() {
   });
 
   const [barberoEdit, setBarberoEdit] = useState({
+    id_barbero: "",
     nombre: "",
     descripcion: "",
     foto: null,
@@ -57,17 +58,19 @@ export default function GestionarBarberos() {
     }
   };
 
-  const handleSubmitEdit = async (id) => {
+  const handleSubmitEdit = async ( e) => {
+    e.preventDefault()
     try {
       const formData = new FormData();
       formData.append('nombre', barberoEdit.nombre);
       formData.append('descripcion', barberoEdit.descripcion);
       formData.append('foto', barberoEdit.foto);
-      const res = await axios.put(`http://localhost:8081/UpdateBarberos/${id}`, formData);
+      const res = await axios.put(`http://localhost:8081/UpdateBarberos/${barberoEdit.id_barbero}`, formData);
       if (res.status === 200) {
         Swal.fire({
           icon: 'success',
           title: res.data,
+          timer: 1000,
           customClass: {
             popup: "dark-theme-popup bg-dark antonparabackend ",
           },
@@ -117,7 +120,6 @@ export default function GestionarBarberos() {
       setBarberoEdit({ ...barberoEdit, [e.target.name]: selectedFile });
       setImagePreviewEdit(URL.createObjectURL(selectedFile));
     }
-    console.log(barberoEdit);
   };
 
   const DeleteBarberos = async (id) => {
@@ -237,7 +239,7 @@ export default function GestionarBarberos() {
                 </div>
                 <div className="modal-body d-flex justify-content-center ">
                   <div className="card bg-dark" style={{ width: '10rem' }}>
-                    <img src={imagePreviewEdit || ''} style={{ width: '100%', height: '100%', objectFit: 'cover' }} className='img-fluid text-white rounded' alt="Imagen Barbero" />
+                    <img src={imagePreviewEdit || `/images/imagesBarbero/${barberoEdit.foto}`} style={{ width: '100%', height: '100%', objectFit: 'cover' }} className='img-fluid text-white rounded' alt="Imagen Barbero" />
                   </div>
                 </div>
                 <div className="modal-body">

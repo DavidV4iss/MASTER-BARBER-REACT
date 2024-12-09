@@ -468,7 +468,7 @@ app.put('/UpdateBarberos/:id', uploadBarbero.single('foto'), (req, res) => {
     const nombre = req.body.nombre
     const descripcion = req.body.descripcion
     const fotoName = req.file.filename
-    
+
     const q = 'UPDATE addbarberos SET nombre = ?, descripcion = ?, Foto = ? WHERE id_barbero = ?'
 
     const values = [
@@ -477,6 +477,7 @@ app.put('/UpdateBarberos/:id', uploadBarbero.single('foto'), (req, res) => {
         fotoName,
         id
     ]
+
 
     db.query(q, values, (err, results) => {
         if (err) {

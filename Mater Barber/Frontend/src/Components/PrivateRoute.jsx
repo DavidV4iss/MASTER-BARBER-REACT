@@ -15,7 +15,7 @@ const PrivateRoute = ({ roles, element }) => {
         // Decodifica el token
         const user = JSON.parse(atob(token.split('.')[1]));
         userRole = user.role; // Asigna el rol
-        console.log("User role from token:", userRole);
+        console.log("Rol de usuario segun el token", userRole);
     } catch (error) {
         console.error("Error decoding token", error);
         return <Navigate to="/access-denied" />;
