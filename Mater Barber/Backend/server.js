@@ -464,11 +464,11 @@ app.post('/CreateBarberos', uploadBarbero.single('foto'), (req, res) => {
 })
 
 app.put('/UpdateBarberos/:id', uploadBarbero.single('foto'), (req, res) => {
-    const id = req.params.id_barbero;
+    const id = req.params.id;
     const nombre = req.body.nombre
     const descripcion = req.body.descripcion
     const fotoName = req.file.filename
-
+    
     const q = 'UPDATE addbarberos SET nombre = ?, descripcion = ?, Foto = ? WHERE id_barbero = ?'
 
     const values = [
@@ -477,7 +477,6 @@ app.put('/UpdateBarberos/:id', uploadBarbero.single('foto'), (req, res) => {
         fotoName,
         id
     ]
-
 
     db.query(q, values, (err, results) => {
         if (err) {
@@ -514,30 +513,6 @@ app.delete('/DeleteBarberos/:id', (req, res) => {
 
 
 
-// Middleware para verificar el token y el rol
-const verifyTokenAndRole = (allowedRoles) => {
-    return (req, res, next) => {
-        const token = req.headers['authorization'];
-
-        if (!token) {
-            return res.status(403).json({ message: 'No token provided.' });
-        }
-
-        jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
-            if (err) {
-                return res.status(401).json({ message: 'Unauthorized.' });
-            }
-
-            // Verificar si el rol del usuario está permitido
-            if (!allowedRoles.includes(decoded.role)) {
-                return res.status(403).json({ message: 'Access denied.' });
-            }
-
-            req.user = decoded; // Guardar los datos del usuario para usarlos en las rutas
-            next();
-        });
-    };
-};
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {

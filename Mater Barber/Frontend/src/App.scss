@@ -13,18 +13,20 @@
 }
 
 .dark-theme-popup .swal2-title {
-  color: #ffc107; /* Color del título */
+  color: #ffc107;
+  /* Color del título */
 }
+
 //FIN TEMAS PARA LAS ALERTAS
 
 
 //COLORES PARA BOTONES ALERTAS
 
-.colorojo{
+.colorojo {
   color: #DC3545;
 }
 
-.colorverde{
+.colorverde {
   color: #1bf30b;
 }
 
@@ -35,6 +37,7 @@
 :root {
   --swiper-theme-color: #DC3545 !important;
 }
+
 // FIN
 
 
@@ -65,6 +68,7 @@ body {
 .bg-warning {
   color: #ffc107;
 }
+
 // FIN BACGROUNDS
 
 
@@ -77,6 +81,7 @@ body {
 .Texto {
   font-family: "Bebas Neue", sans-serif;
 }
+
 .anton {
   letter-spacing: 5px;
   font-family: "Anton SC", sans-serif;
@@ -98,6 +103,7 @@ body {
 .texto {
   margin-bottom: -3px;
 }
+
 // FIN TEXTOS
 
 
@@ -129,6 +135,7 @@ body {
   opacity: 0.2;
   width: 50%;
 }
+
 // FIN IMGS
 
 
@@ -152,12 +159,15 @@ body {
 .contenido2 {
   margin-left: 12%;
 }
+
 .contenidol {
   margin-left: 3%;
 }
+
 .contenido3 {
   margin-left: 15%;
 }
+
 // FIN MARGENES
 
 
@@ -208,6 +218,7 @@ body {
   transition: 0.3s;
   border-radius: 100px;
 }
+
 // FIN
 
 
@@ -217,6 +228,7 @@ body {
 .map {
   width: 60%;
 }
+
 // FIN 
 
 
@@ -256,13 +268,14 @@ button:hover {
 
 // FIN DARK AND LIGHT 
 
-.icono{
-  font-size: 190px; /* Para íconos de texto */
+.icono {
+  font-size: 190px;
+  /* Para íconos de texto */
   color: #ffffff;
   margin: 50px;
 }
 
-.sm{
+.sm {
   font-size: 10px;
 }
 
@@ -270,15 +283,17 @@ button:hover {
 .btn-two {
   color: #FFF;
   transition: all 0.5s;
-  position: relative; 
+  position: relative;
 }
+
 .btn-two span {
-  z-index: 2; 
+  z-index: 2;
   display: block;
   position: absolute;
   width: 100%;
-  height: 100%; 
+  height: 100%;
 }
+
 .btn-two::before {
   content: '';
   position: absolute;
@@ -288,9 +303,10 @@ button:hover {
   height: 100%;
   z-index: 1;
   transition: all 0.5s;
-  border: 1px solid rgba(255,255,255,0.2);
-  background-color: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background-color: rgba(255, 255, 255, 0.1);
 }
+
 .btn-two::after {
   content: '';
   position: absolute;
@@ -300,13 +316,15 @@ button:hover {
   height: 100%;
   z-index: 1;
   transition: all 0.5s;
-  border: 1px solid rgba(255,255,255,0.2);
-  background-color: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background-color: rgba(255, 255, 255, 0.1);
 }
+
 .btn-two:hover::before {
   transform: rotate(-45deg);
   background-color: rgba(255, 255, 255, 0);
 }
+
 .btn-two:hover::after {
   transform: rotate(45deg);
   background-color: rgba(255, 255, 255, 0);

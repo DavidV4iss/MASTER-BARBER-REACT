@@ -34,7 +34,7 @@ export default function Analisisdeventas() {
                 <div className='container pt-5 col-sm12 col justify-content-center'>
                     <div className="row g-5 mt-5">
                         <div className="col col-sm-12 mt-5">
-                            <Graficas data={data} tipo='line' options={options} />
+                            <Graficas data={data} tipo='radar' options={options} />
                         </div>
                         <div className="col-12 col-sm border border-2 mx-0 mx-sm-5 border-secondary  text-center">
                             <h3 className='pt-4  text-warning'>Prductos vendidos</h3>
