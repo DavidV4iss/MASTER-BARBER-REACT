@@ -138,34 +138,25 @@ export default function Inventario() {
     };
 
     useEffect(() => {
-        const fetchInventario = async () => {
-            try {
-                const res = await axios.get("http://localhost:8081/GetInventario");
-                setInventario(res.data)
-                console.log(res)
-            } catch (err) {
-                console.log('Error al obtener los datos:', err)
-            }
+      const fetchData = async () => {
+        try {
+          const [inventarioRes, categoriasRes] = await Promise.all([
+            axios.get(`http://localhost:8081/GetInventario`),
+            axios.get(`http://localhost:8081/categorias`),
+          ]);
+          setInventario(inventarioRes.data);
+          setCategorias(categoriasRes.data);
+        } catch (error) {
+          console.log(error);
         }
-        fetchInventario()
-    }, [])
+      };
+      fetchData();
+    }, []);
 
     const openEditModal = (item) => {
         setProductoEditar(item);
     };
 
-    useEffect(() => {
-        const fetchCategorias = async () => {
-            try {
-                const res = await axios.get("http://localhost:8081/categorias");
-                setCategorias(res.data)
-                console.log(res)
-            } catch (err) {
-                console.log('Error al obtener los datos:', err)
-            }
-        }
-        fetchCategorias()
-    }, [])
 
     return (
         <div>
@@ -246,7 +237,7 @@ export default function Inventario() {
                                         <div class="mb-3">
                                             <label for="recipient-name" class="col-form-label text-white">Categoria:</label>
                                             <select name="id_categoria_producto" value={productoEditar.id_categoria_producto} class="form-select" id="" onChange={handleChangeEdit}>
-                                                <option selected disabled>Categoria</option>
+                                                <option selected disabled>Seleccione una categoria</option>
                                                 {categorias.map((item) => (
                                                     <option key={item.id_categoria} value={item.id_categoria_producto}>{item.categoria}</option>
                                                 ))}
@@ -291,7 +282,7 @@ export default function Inventario() {
                                         <div class="mb-3">
                                             <label for="recipient-name" class="col-form-label text-white">Categoria:</label>
                                             <select name="id_categoria_producto" class="form-select" id="" onChange={handleChange}>
-                                                <option selected disabled>Categoria</option>
+                                                <option selected disabled>Seleccione una categoria</option>
                                                 {categorias.map((item) => (
                                                     <option key={item.id_categoria} value={item.id_categoria_producto}>{item.categoria}</option>
                                                 ))}

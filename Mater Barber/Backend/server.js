@@ -21,7 +21,8 @@ const corsOptions = {
     origin: '*',
     credentials: true,
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-    optionSuccessStatus: 200
+    optionSuccessStatus: 200,
+    allowedHeaders: ['Content-Type', 'Authorization']
 }
 
 app.use(cors(corsOptions));
@@ -32,7 +33,7 @@ const db = mysql.createConnection({
     host: "localhost",
     user: "root",
     password: "",
-    database: "master_barber"
+    database: "master_barber",
 })
 
 db.connect((err) => {
@@ -664,7 +665,7 @@ app.put('/api/reservas/:id', (req, res) => {
     });
 });
 
-app.get('GetInventarioVendido', (req, res) => {
+app.get('/GetInventarioVendido', (req, res) => {
     db.query('SELECT * FROM inventario_vendido', (err, results) => {
         if (err) {
             res.status(500).send(err);
@@ -674,9 +675,9 @@ app.get('GetInventarioVendido', (req, res) => {
     });
 });
 
-app.get('GetInventarioVendido/:id', (req, res) => {
+app.get('/GetInventarioVendido/:id', (req, res) => {
     const id = req.params.id;
-    db.query('SELECT * FROM inventario_vendido WHERE id_venta = ?', [id], (err, results) => {
+    db.query('SELECT * FROM inventario_vendido WHERE id_producto_vendido = ?', [id], (err, results) => {
         if (err) {
             res.status(500).send(err);
         } else {
@@ -686,17 +687,17 @@ app.get('GetInventarioVendido/:id', (req, res) => {
 });
 
 app.post('/CreateInventarioVendido', (req, res) => {
-    const id_producto = req.body.id_producto
+    const id_producto_vendido = req.body.id_producto_vendido
     const id_categoria_producto = req.body.id_categoria_producto
     const proveedor = req.body.proveedor
     const cantidad = req.body.cantidad
     const fecha_venta = req.body.fecha_venta
     const total_venta = req.body.total_venta
 
-    const q = 'INSERT INTO inventario_vendido (id_producto,id_categoria_producto,proveedor,cantidad,fecha_venta,total_venta) VALUES (?,?,?,?,?,?)'
+    const q = 'INSERT INTO inventario_vendido (id_producto_vendido,id_categoria_producto,proveedor,cantidad,fecha_venta,total_venta) VALUES (?,?,?,?,?,?)'
 
     const values = [
-        id_producto,
+        id_producto_vendido,
         id_categoria_producto,
         proveedor,
         cantidad,
@@ -716,24 +717,22 @@ app.post('/CreateInventarioVendido', (req, res) => {
 })
 
 app.put('/UpdateInventarioVendido/:id', (req, res) => {
-    const id_venta = req.params.id_venta;
-    const id_producto = req.body.id_producto
+    const id_producto_vendido= req.params.id_producto_vendido;
     const id_categoria_producto = req.body.id_categoria_producto
     const proveedor = req.body.proveedor
     const cantidad = req.body.cantidad
     const fecha_venta = req.body.fecha_venta
     const total_venta = req.body.total_venta
 
-    const q = 'UPDATE inventario_vendido SET id_producto = ?, id_categoria_producto = ?, proveedor = ?, cantidad = ?, fecha_venta = ?, total_venta = ? WHERE id_venta = ?'
+    const q = 'UPDATE inventario_vendido SET id_producto_vendido = ?, id_categoria_producto = ?, proveedor = ?, cantidad = ?, fecha_venta = ?, total_venta = ? WHERE id_producto_vendido = ?'
 
     const values = [
-        id_producto,
+        id_producto_vendido,
         id_categoria_producto,
         proveedor,
         cantidad,
         fecha_venta,
-        total_venta,
-        id_venta
+        total_venta
     ]
     db.query(q, values, (err, results) => {
         if (err) {
@@ -748,7 +747,7 @@ app.put('/UpdateInventarioVendido/:id', (req, res) => {
 
 app.delete('/DeleteInventarioVendido/:id', (req, res) => {
     const id = req.params.id;
-    db.query('DELETE FROM inventario_vendido WHERE id_venta = ?', [id], (err, results) => {
+    db.query('DELETE FROM inventario_vendido WHERE id_producto_vendido = ?', [id], (err, results) => {
         if (err) {
             console.log(err);
             return res.status(500).send('Error en el servidor');
