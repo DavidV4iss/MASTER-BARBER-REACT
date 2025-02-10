@@ -139,7 +139,7 @@ export default function PerfilAdmin() {
                     className="col-sm-2 col-form-label text-white antonparabackend"
                   >
                     Nombre:
-                  </label>
+                  </label> 
                   <div className="col-sm-10">
                     <input
                       type="text"
