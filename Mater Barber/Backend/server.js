@@ -465,30 +465,41 @@ app.post('/CreateBarberos', uploadBarbero.single('foto'), (req, res) => {
 })
 
 app.put('/UpdateBarberos/:id', uploadBarbero.single('foto'), (req, res) => {
+
     const id = req.params.id;
-    const nombre = req.body.nombre
-    const descripcion = req.body.descripcion
-    const fotoName = req.file.filename
 
-    const q = 'UPDATE addbarberos SET nombre = ?, descripcion = ?, Foto = ? WHERE id_barbero = ?'
+    const select = "SELECT * FROM addbarberos WHERE id_barbero = ?";
 
-    const values = [
-        nombre,
-        descripcion,
-        fotoName,
-        id
-    ]
-
-
-    db.query(q, values, (err, results) => {
+    db.query(select, [req.params.id], (err, results) => {
         if (err) {
             console.log(err);
             return res.status(500).send('Error en el servidor');
         }
-        else {
-            borrarFotoBarbero(fotoName);
-            return res.status(200).send('Barbero actualizado exitosamente');
-        }
+
+        const nombre = req.body.nombre
+        const descripcion = req.body.descripcion
+        const fotoName = req.file? req.file.filename : ''
+        console.log (fotoName);
+    
+        const q = 'UPDATE addbarberos SET nombre = ?, descripcion = ?, Foto = ? WHERE id_barbero = ?'
+    
+        const values = [
+            nombre,
+            descripcion,
+            fotoName,
+            id
+        ]
+    
+        db.query(q, values, (err, results) => {
+            if (err) {
+                console.log(err);
+                return res.status(500).send('Error en el servidor');
+            }
+            else {
+                borrarFotoBarbero(fotoName);
+                return res.status(200).send('Barbero actualizado exitosamente');
+            }
+        })
     })
 })
 

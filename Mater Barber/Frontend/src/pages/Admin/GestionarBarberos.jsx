@@ -239,7 +239,7 @@ export default function GestionarBarberos() {
                 </div>
                 <div className="modal-body d-flex justify-content-center ">
                   <div className="card bg-dark" style={{ width: '10rem' }}>
-                    <img src={imagePreviewEdit || `/images/imagesBarbero/${barberoEdit.foto}`} style={{ width: '100%', height: '100%', objectFit: 'cover' }} className='img-fluid text-white rounded' alt="Imagen Barbero" />
+                    <img src={imagePreviewEdit || `/images/imagesBarbero/${barberoEdit.Foto}`} style={{ width: '100%', height: '100%', objectFit: 'cover' }} className='img-fluid text-white rounded' alt="Imagen Barbero" />
                   </div>
                 </div>
                 <div className="modal-body">
