@@ -3,7 +3,6 @@ import Swal from 'sweetalert2';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
-
 export default function NavbarUserIndex() {
   const navigate = useNavigate();
 
@@ -11,8 +10,6 @@ export default function NavbarUserIndex() {
   const [imagePreview, setImagePreview] = useState("");
 
   const token = localStorage.getItem("token");
-
-
 
   const usuario = JSON.parse(atob(token.split(".")[1]));
   const email = usuario.email;
@@ -31,8 +28,6 @@ export default function NavbarUserIndex() {
     };
     fetchUser();
   }, [email]);
-
-
 
   const handleLogout = () => {
     Swal.fire({
@@ -69,8 +64,20 @@ export default function NavbarUserIndex() {
     });
   };
 
+  const handleNotification = () => {
+    Swal.fire({
+      position: "top-end",
+      title: "NOTIFICACIONES",
+      confirmButtonColor: "#DC3545",
+      customClass: {
+        popup: "dark-theme-popup bg-dark antonparabackend ",
+      },
+    });
+  };
+
+
   return (
-    <div className="navbar navbar-expand-md">
+    <div className="navbar navbar-expand-md shadow-lg">
       <div class="container-fluid justify-content-end">
         <button
           class="navbar-toggler bg-secondary"
@@ -83,40 +90,13 @@ export default function NavbarUserIndex() {
         >
           <span class="navbar-toggler-icon"></span>
         </button>
+        <p className='position-absolute top-0 start-50 translate-middle-x  fw-bold mt-4 anton fs-5 text-uppercase text-danger'>¡Bienvenido!</p>
         <div className="collapse navbar-collapse" id="menu">
-          <ul class="navbar-nav nav-underline me-auto position-fixed mx-4 mt-3 position-absolute top-0 start-50 translate-middle-x ">
-            <li class="nav-item">
-              <a class="nav-link mx-5 text-primary " href="#homeuser">
-                Inicio
-              </a>
-            </li>
-
-            <li class="nav-item">
-              <a class="nav-link  mx-5 text-primary" href="#">
-                Link
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link mx-5 text-primary" href="#">
-                Link
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link mx-5 text-primary" href="#">
-                Link
-              </a>
-            </li>
-          </ul>
-          <button
-            type="button"
-            class="btn btn-dark border-light  mt-3 position-fixed top-0 end-0 translate-middle-x"
-            data-bs-toggle="offcanvas"
-            data-bs-target="#offcanvasTop"
-            aria-controls="offcanvasTop"
-          >
+       
+          <button className='btn btn-dark mt-3 position-fixed top-0 end-0 translate-middle-x' onClick={handleNotification}>
             <i class="bi bi-alarm-fill"></i>
             <span class="position-absolute top-0 start-100 translate-middle badge border border-light rounded-circle bg-danger p-2">
-              <span class="visually-hidden">unread messages</span>
+              {/* <span class="visually-hidde"></span> */}
             </span>
           </button>
 
@@ -127,9 +107,9 @@ export default function NavbarUserIndex() {
               data-bs-toggle="dropdown"
               aria-expanded="false"
             >
-              <div className="d-none d-sm-block text-white fw-bold small ">
+              {/* <div className="d-none d-sm-block text-white fw-bold small ">
                 {user.nombre_usuario}
-              </div>
+              </div> */}
               <img
                 src={imagePreview || "default-avatar.png"}
                 alt="Imagen de perfil"
