@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 13-02-2025 a las 14:44:20
+-- Tiempo de generación: 20-02-2025 a las 15:37:00
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -160,7 +160,8 @@ INSERT INTO `usuarios` (`id_usuario`, `nombre_usuario`, `email`, `nit`, `telefon
 (6, 'Fidel Jose ', 'Admin@gmail.com', 1028662003, '3142758305', '$2a$10$gKkjGOeNlRvXzyePlVJq1.r/9Y.F6.f.UROSSUNuM7Sjv1xkZyRo.', 1, NULL, NULL, '1732824864824-MB3.JPG'),
 (7, 'Julio Cesar', 'jespitiagalvis@gmail.com', 1028662005, '3196524963', '$2a$10$xQyXwmewFti5MfBoxGR06eYSvgqSkKZ9Uc.At9kZnbxyGpYYnw2lG', 3, NULL, NULL, '1732327755702-B1.JPG'),
 (8, 'David Vaiss', 'Barber@gmail.com', 1014481681, '3107877172', '$2a$10$G/u8lp8/i78hNpTwFbjMse9KyDkgx0xnnCQoFwlmdg4Yj6C5Piy4u', 2, NULL, NULL, '1732827233417-logomastershop.png'),
-(9, 'David Vaiss', 'cristianrueda0313@gmail.com', 1014481682, '3044495505', '$2a$10$xywk1zgIsOcpzHqybgjV8e.4YNuOQg5nhvCRvxD5bwXc42kKpTooe', 3, NULL, NULL, '1732827364642-MB1.JPG');
+(9, 'David Vaiss', 'cristianrueda0313@gmail.com', 1014481682, '3044495505', '$2a$10$xywk1zgIsOcpzHqybgjV8e.4YNuOQg5nhvCRvxD5bwXc42kKpTooe', 3, NULL, NULL, '1732827364642-MB1.JPG'),
+(10, 'David', 'cris031331@gmail.com', 1014481683, '3044495506', '$2a$10$zdq6rw8dxvVK19UeIie37uFB/VPbQnaqCIDbtV3A3o2C622578YPu', 3, NULL, NULL, '1740056554991-MB1.JPG');
 
 --
 -- Índices para tablas volcadas
@@ -245,7 +246,7 @@ ALTER TABLE `reservas`
 -- AUTO_INCREMENT de la tabla `usuarios`
 --
 ALTER TABLE `usuarios`
-  MODIFY `id_usuario` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id_usuario` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- Restricciones para tablas volcadas
