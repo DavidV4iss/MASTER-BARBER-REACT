@@ -612,69 +612,9 @@ app.get('/traerUsuario/:email', (req, res) => {
 
 
 
-//CRUD PARA RESERVAS DE BARBEROS Y CLIENTES
 
-// Rutas
 
-// Obtener todos los tipos de servicio
-app.get('/api/servicios', (req, res) => {
-    db.query('SELECT * FROM tipo_servicio', (err, results) => {
-        if (err) {
-            res.status(500).send(err);
-        } else {
-            res.json(results);
-        }
-    });
-});
 
-// Obtener los barberos
-app.get('/api/barberos', (req, res) => {
-    db.query('SELECT * FROM usuarios WHERE id_rol = 2', (err, results) => {
-        if (err) {
-            res.status(500).send(err);
-        } else {
-            res.json(results);
-        }
-    });
-});
-
-// Crear una nueva reserva
-app.post('/api/reservas', (req, res) => {
-    const { fecha, usuario_id, barbero_id, tipo_servicio_id } = req.body;
-    const query = 'INSERT INTO reservas (fecha, usuario_id, barbero_id, tipo_servicio_id) VALUES (?, ?, ?, ?)';
-    db.query(query, [fecha, usuario_id, barbero_id, tipo_servicio_id], (err, result) => {
-        if (err) {
-            res.status(500).send(err);
-        } else {
-            res.status(201).json({ id_reserva: result.insertId });
-        }
-    });
-});
-
-// Obtener todas las reservas
-app.get('/api/reservas', (req, res) => {
-    db.query('SELECT * FROM reservas', (err, results) => {
-        if (err) {
-            res.status(500).send(err);
-        } else {
-            res.json(results);
-        }
-    });
-});
-
-// Actualizar el estado de la reserva (aceptar o cancelar)
-app.put('/api/reservas/:id', (req, res) => {
-    const estado = req.body.estado;
-    const id_reserva = req.params.id;
-    const query = 'UPDATE reservas SET estado = ? WHERE id_reserva = ?';
-    db.query(query, [estado, id_reserva], (err, result) => {
-        if (err) {
-            res.status(500).send(err);
-        } else {
-            res.status(200).send('Reserva actualizada');
-        }
-    });
-});
 
 app.get('/GetInventarioVendido', (req, res) => {
     db.query('SELECT * FROM inventario_vendido', (err, results) => {

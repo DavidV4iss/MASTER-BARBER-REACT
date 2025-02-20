@@ -67,7 +67,7 @@ export default function NavbarUserIndex() {
   const handleNotification = () => {
     Swal.fire({
       position: "top-end",
-      title: "NOTIFICACIONES",
+      title: "TUS NOTIFICACIONES",
       confirmButtonColor: "#DC3545",
       customClass: {
         popup: "dark-theme-popup bg-dark antonparabackend ",

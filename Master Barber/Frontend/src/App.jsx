@@ -19,7 +19,6 @@ import PerfilAdmin from './pages/Admin/PerfilAdmin';
 import ConfiguracionAdmin from './pages/Admin/ConfiguracionAdmin';
 import Iniciobarber from "./pages/Barbers/Iniciobarber";
 import PerfilBarber from "./pages/Barbers/PerfilBarber";
-import GestionReservas from "./pages/Barbers/GestionReservas";
 import PerfilUser from "./pages/Usuario/PerfilUser";
 //FIN IMPORTACION DE RUTAS
 
@@ -140,13 +139,7 @@ function App() {
               element={<PrivateRoute roles={["2"]} element={<PerfilBarber />} />}
             />
 
-            <Route
-              exact
-              path="/GestionReservas"
-              element={
-                <PrivateRoute roles={["2"]} element={<GestionReservas />} />
-              }
-            />
+          
             {/* FIN RUTAS PRIVADAS BARBEROS */}
 
 
