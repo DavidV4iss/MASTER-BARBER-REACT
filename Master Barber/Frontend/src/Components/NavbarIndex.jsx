@@ -47,6 +47,11 @@ export default function NavbarIndex() {
                                 <li class="nav-item">
                                     <a class="nav-link active mt-3 bg-warning text-dark" href="../Registro"><i class="bi bi-arrow-right mx-3"></i>Crear Mi Cuenta</a>
                                 </li>
+                                <li class="nav-item">
+                                    <a class="nav-link active text-center mt-3"><i class="bi bi-facebook mx-5" ></i><i class="bi bi-instagram"></i></a>
+                                </li>
+                                
+
 
                             </ul>
 

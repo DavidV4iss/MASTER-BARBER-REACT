@@ -35,40 +35,43 @@ export default function Index() {
             <div><Darkandlight /></div>
             <NavbarIndex />
 
-            <div className="img position-absolute top-50 start-50 translate-middle row h-100 col-1 col-sm-12"><img src="/LOGO.png" alt="" className='' /></div>
+            <div className="img position-fixed top-50 start-50 translate-middle row h-100 col-1 col-sm-12"><img src="/LOGO.png" alt="" className='' /></div>
             <div className='container p-5 mt-5 table-responsive col col-sm-12' id='home'>
 
-                <h1 className={`text-center display-1 anton fw-bold mt-5 ${theme === "light" ? "dark" : "text-white"}`}>
-                    MASTER BARBER VIP
+                <h1 className={`text-center display-1 anton fw-bold mt-5 pt-5 ${theme === "light" ? "dark" : "text-white"}`}>
+                    <small>TE DAMOS LA BIENVENIDA A</small> <p>MASTER BARBER VIP</p>
+                  
                 </h1>
-                <h2 className={`text-center mt-5 anton fw-bold ${theme === "light" ? "text-warning" : "text-warning"}`}>
-                    BOGOTA
-                </h2>
-                <p className={`text-center mt-5 p-5 ${theme === "light" ? "dark" : "text-white"}`}>
-                    Lorem ipsum, dolor sit amet consectetur adipisicing elit. Laudantium animi, cum quas delectus nulla voluptate velit, corrupti beatae in rerum sint, minima doloribus fugit officia quae dolor doloremque aspernatur voluptas!
-                </p>
-                <div className=" row m-5">
-                    <div className="col-sm-12 col-2">
-                        <div className="nav mx-5">
-                            <h1 className={`anton text-center mx-5 ${theme === "light" ? "text-warning" : "text-warning"}`}>
-                                TELÉFONO:
-                            </h1>
-
-                            <h3 className={`bebas text-center mt-2 col ${theme === "light" ? "dark" : "text-white"}`}>
-                                3142758305
-                            </h3>
-                            <h1 className={`anton  text-center mx-5   ${theme === "light" ? "text-warning" : "text-warning"}`}>
-                                HORARIO:
-                            </h1>
-                            <h3 className={`bebas text-center mt-2 col col-sm-2 ${theme === "light" ? "dark" : "text-white"}`}>
-                                10am-8pm
-                            </h3>
-                        </div>
-                    </div>
+                <ul className="nav-item">
+                    <a className="nav-link active mt-5 fs-1 text-center pt-5">
+                        <a href="https://www.facebook.com" target="_blank" rel="noopener noreferrer">
+                            <i className="bi bi-facebook m-5 text-white"></i>
+                        </a>
+                        <a href="https://www.twitter.com" target="_blank" rel="noopener noreferrer">
+                            <i className="bi bi-twitter m-5 text-white"></i>
+                        </a>
+                        <a href="https://www.instagram.com" target="_blank" rel="noopener noreferrer">
+                            <i className="bi bi-instagram m-5 text-white"></i>
+                        </a>
+                    </a>
+                </ul>
+                <h1 className="text-center antonparabackend fw-bold mt-5 pt-5">
+                    <p>
+                        <span className="text-danger">"DONDE LA BARBERIA </span>
+                        <span className="text-warning">SE CONVIERTE EN ARTE"</span>
+                        
+                    </p>
+                    
+                </h1>
+               
+          
+                <div className={`text-center mt-5 p-5 ${theme === "light" ? "dark" : "text-white"}`}>
+          
                 </div>
+            
             </div>
 
-            <div className="welcome ">
+            <div className="welcomeindex ">
                 <div className="container-fluid">
                     <div className="row">
                         <div class="col-12 col-sm-5 d-none d-sm-block">
@@ -361,12 +364,14 @@ export default function Index() {
             </div>
 
             <div className="welcome" id='ubicacion'>
-                <h1 className={`text-center display-1 anton ${theme === "light" ? "dark" : "text-white"}`}>¿Como Llegar?</h1>
+                <h1 className={`text-center display-1 antonparabackend  ${theme === "light" ? "dark" : "text-white"}`}>Donde Nos Puedes Ubicar</h1>
                 <div className="container-fluid d-flex mt-5 row justify-content-center">
                     <iframe class="map mt-5 m-3 " src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3977.224597345888!2d-74.09438192628066!3d4.553574442918059!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8e3f99e5c678c39f%3A0xe8d6bf03bd32ac11!2sMASTER%20BARBER%20VIP!5e0!3m2!1ses!2sco!4v1717791930339!5m2!1ses!2sco" height="560px" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-                    <img src="/Ubicacion.JPG" alt="" className=' mx-auto map mt-5 col m-3' height="560px" />
+                    {/* <img src="/Ubicacion.JPG" alt="" className=' mx-auto map mt-5 col m-3' height="560px" /> */}
                 </div>
             </div>
+            
+
             <div className={`antonparabackend text-center pt-5  ${theme === "light" ? "dark" : "text-white"}`} id='calificaciones'>
                 <h1>Calificación con Estrellas</h1>
                 <Calificaciones onRate={handleRating} />

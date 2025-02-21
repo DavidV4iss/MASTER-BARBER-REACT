@@ -37,15 +37,15 @@ export default function InicioUsuario() {
         id="homeuser"
       >
         <h1 className=" mt-5  pt-2  text-white text-center display-1 anton fw-bold">
-          HOLA, {user.nombre_usuario}
+          Hola, {user.nombre_usuario}
         </h1>
         {/* <h1 className="text-danger text-center mt-3 pt-5 anton fw-bold">
           BIENVENIDO
         </h1> */}
-        <div className=" text-white text-center p-5 mt-5">
+        <div className="text-center p-5 mt-5">
           <div className="row row-cols-1 row-cols-md-2 g-4 mt-5">
-            <div className="col text-white text-center p-5 pt-5 mt-5">
-              <h2 className="display-5 anton mt-5 pt-5">Horarios Barberos</h2>
+            <div className="col  text-center p-5 pt-5 mt-5">
+              <h2 className="display-5 anton mt-5 pt-5 text-white">Horarios Barberos</h2>
               <p className="mt-5">
                 Lorem, ipsum dolor sit amet consectetur adipisicing elit.
                 Facere pariatur mollitia illo perspiciatis velit tempora fugiat neque ut,
