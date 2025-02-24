@@ -712,6 +712,36 @@ app.delete('/DeleteInventarioVendido/:id', (req, res) => {
 
 
 
+
+app.get('/calificaciones', (req, res) => {
+    db.query('SELECT c.*, u.nombre_usuario FROM calificaciones c JOIN usuarios u ON c.usuario_id = u.id_usuario ORDER BY fecha DESC', (err, results) => {
+        if (err) return res.status(500).json({ error: "Error en el servidor" });
+        return res.status(200).json(results);
+    });
+});
+
+
+
+
+app.post('/calificaciones', verificarToken, (req, res) => {
+    const { puntuacion, comentario } = req.body;
+    const usuario_id = req.usuario.id;
+
+    if (!puntuacion || puntuacion < 1 || puntuacion > 5) {
+        return res.status(400).json({ error: "La puntuación debe estar entre 1 y 5" });
+    }
+
+    const sql = "INSERT INTO calificaciones (usuario_id, puntuacion, comentario) VALUES (?, ?, ?)";
+    db.query(sql, [usuario_id, puntuacion, comentario], (err) => {
+        if (err) return res.status(500).json({ error: "Error en el servidor" });
+        return res.status(201).json({ message: "Calificación añadida correctamente" });
+    });
+});
+
+
+
+
+
 app.listen(8081, () => {
     console.log("Conexion exitosa:)")
 });

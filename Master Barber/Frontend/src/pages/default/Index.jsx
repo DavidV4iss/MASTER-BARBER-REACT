@@ -22,13 +22,7 @@ export default function Index() {
 
 
     // CODIGO CALIFICACION
-    const handleRating = (rating) => {
-        Swal.fire({
-            icon: 'success',
-            title: 'Gracias por su opinion',
-            text: `Calificaste con ${rating} estrellas`
-        })
-    };
+
 
     return (
         <div>
@@ -374,7 +368,7 @@ export default function Index() {
 
             <div className={`antonparabackend text-center pt-5  ${theme === "light" ? "dark" : "text-white"}`} id='calificaciones'>
                 <h1>Calificación con Estrellas</h1>
-                <Calificaciones onRate={handleRating} />
+            
             </div> 
 
 
