@@ -8,12 +8,10 @@ import { useNavigate } from 'react-router-dom';
 
 export default function InicioUsuario() {
   const [user, setUser] = useState({});
-
   const token = localStorage.getItem("token");
-
-
   const usuario = JSON.parse(atob(token.split(".")[1]));
   const email = usuario.email;
+  const id = usuario.id;
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -28,42 +26,48 @@ export default function InicioUsuario() {
     fetchUser();
   }, [email]);
 
-  const [calificaciones, setCalificaciones] = useState([]);
+
+
+
+
+
+  //CODIGO PARA CALIFICACIONES
+  
+    
   const [nuevaCalificacion, setNuevaCalificacion] = useState({
-    nombre_usuario: "",
+    id: id,
     puntuacion: "",
     comentario: ""
   });
 
-  const navigate = useNavigate();
 
+  const navigate = useNavigate();
   useEffect(() => {
-    fetch("http://localhost:8081/calificaciones")
-      .then(res => res.json())
-      .then(data => setCalificaciones(data))
-      .catch(err => console.error("Error:", err));
+    const fetchCalificaciones = async () => {
+      try {
+        const res = await axios.get("http://localhost:8081/traerCalificaciones");
+        setCalificaciones(res.data);
+      } catch (err) {
+        console.log("Error al obtener las calificaciones:", err);
+      }
+    };
+    fetchCalificaciones();
   }, []);
 
   const handleChange = (e) => {
     setNuevaCalificacion(prev => ({ ...prev, [e.target.name]: e.target.value }));
   }
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const token = localStorage.getItem("token"); // Obtén el token de autenticación
-      const res = await axios.post("http://localhost:8081/calificaciones", nuevaCalificacion, {
-        headers: {
-          Authorization: `Bearer ${token}` // Incluye el token en los encabezados
-        }
-      });
+      const res = await axios.post("http://localhost:8081/Createcalificaciones", nuevaCalificacion);
       if (res.status === 200) {
         Swal.fire({
           title: 'Tu calificación ha sido enviada',
           icon: 'success',
           confirmButtonText: 'Continuar'
         });
-        navigate("/Gracias");
+        navigate("/inicioUsuario");
       }
     } catch (error) {
       console.log(error);
@@ -94,22 +98,11 @@ export default function InicioUsuario() {
           BIENVENIDO
         </h1> */}
 
-        <div>
-          <h2>Calificaciones</h2>
-          {calificaciones.map((calificacion) => (
-            <div key={calificacion.id}>
-              <h4>{calificacion.nombre_usuario}</h4>
-              <p>{"⭐".repeat(calificacion.puntuacion)}</p>
-              <p>{calificacion.comentario}</p>
-            </div>
-          ))}
+        <div className="container-fluid p-5 mt-5">
 
           <h2>Enviar Calificación</h2>
           <form onSubmit={handleSubmit}>
-            <div>
-              <label>Nombre de Usuario:</label>
-              <input type="text" name="nombre_usuario" value={nuevaCalificacion.nombre_usuario} onChange={handleChange} required />
-            </div>
+
             <div>
               <label>Puntuación (1-5):</label>
               <input type="number" name="puntuacion" value={nuevaCalificacion.puntuacion} onChange={handleChange} required min="1" max="5" />

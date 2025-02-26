@@ -368,6 +368,7 @@ export default function Index() {
 
             <div className={`antonparabackend text-center pt-5  ${theme === "light" ? "dark" : "text-white"}`} id='calificaciones'>
                 <h1>Calificación con Estrellas</h1>
+                <Calificaciones />
             
             </div> 
 

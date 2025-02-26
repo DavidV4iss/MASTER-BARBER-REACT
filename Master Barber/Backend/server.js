@@ -248,7 +248,7 @@ app.get('/GetInventario', (req, res) => {
             console.log(err);
             return res.status(500).send('Error en el servidor');
         }
-        else {  
+        else {
             return res.status(200).send(results);
         }
     })
@@ -478,18 +478,18 @@ app.put('/UpdateBarberos/:id', uploadBarbero.single('foto'), (req, res) => {
 
         const nombre = req.body.nombre
         const descripcion = req.body.descripcion
-        const fotoName = req.file? req.file.filename : ''
-        console.log (fotoName);
-    
+        const fotoName = req.file ? req.file.filename : ''
+        console.log(fotoName);
+
         const q = 'UPDATE addbarberos SET nombre = ?, descripcion = ?, Foto = ? WHERE id_barbero = ?'
-    
+
         const values = [
             nombre,
             descripcion,
             fotoName,
             id
         ]
-    
+
         db.query(q, values, (err, results) => {
             if (err) {
                 console.log(err);
@@ -592,6 +592,18 @@ app.put('/actualizarUsuario/:email', upload.single('file'), (req, res) => {
     })
 });
 
+app.get('/traerUsuarios', (req, res) => {
+    db.query('SELECT * FROM usuarios', (err, results) => {
+        if (err) {
+            console.log(err);
+            return res.status(500).send('Error en el servidor');
+        }
+        else {
+            return res.status(200).send(results);
+        }
+    })
+}
+)
 
 app.get('/traerUsuario/:email', (req, res) => {
     const email = req.params.email
@@ -668,7 +680,7 @@ app.post('/CreateInventarioVendido', (req, res) => {
 })
 
 app.put('/UpdateInventarioVendido/:id', (req, res) => {
-    const id_producto_vendido= req.params.id_producto_vendido;
+    const id_producto_vendido = req.params.id_producto_vendido;
     const id_categoria_producto = req.body.id_categoria_producto
     const proveedor = req.body.proveedor
     const cantidad = req.body.cantidad
@@ -692,7 +704,7 @@ app.put('/UpdateInventarioVendido/:id', (req, res) => {
         }
         else {
             return res.status(200).send('Producto actualizado exitosamente');
-        }   
+        }
     })
 })
 
@@ -713,8 +725,8 @@ app.delete('/DeleteInventarioVendido/:id', (req, res) => {
 
 
 
-app.get('/calificaciones', (req, res) => {
-    db.query('SELECT c.*, u.nombre_usuario FROM calificaciones c JOIN usuarios u ON c.usuario_id = u.id_usuario ORDER BY fecha DESC', (err, results) => {
+app.get('/traerCalificaciones', (req, res) => {
+    db.query('SELECT * FROM calificaciones', (err, results) => {
         if (err) return res.status(500).json({ error: "Error en el servidor" });
         return res.status(200).json(results);
     });
@@ -723,19 +735,21 @@ app.get('/calificaciones', (req, res) => {
 
 
 
-app.post('/calificaciones', verificarToken, (req, res) => {
-    const { puntuacion, comentario } = req.body;
-    const usuario_id = req.usuario.id;
+app.post('/Createcalificaciones', (req, res) => {
+    
+    const comentario = req.body.comentario;
+    const puntuacion = req.body.puntuacion;
+    const id_usuario = req.body.id;
 
-    if (!puntuacion || puntuacion < 1 || puntuacion > 5) {
-        return res.status(400).json({ error: "La puntuación debe estar entre 1 y 5" });
+    const q = 'INSERT INTO calificaciones (comentario, puntuacion, usuario_id) VALUES (?,?,?)';
+    const values = [comentario, puntuacion, id_usuario];
+
+    db.query(q, values, (err, results) => {
+        if (err) return res.status(500).json({ error: `Error al registrar la calificación: ${err.message}` });
+        console.log(err);
+        return res.status(200).json({ message: "Calificación registrada exitosamente" });
     }
-
-    const sql = "INSERT INTO calificaciones (usuario_id, puntuacion, comentario) VALUES (?, ?, ?)";
-    db.query(sql, [usuario_id, puntuacion, comentario], (err) => {
-        if (err) return res.status(500).json({ error: "Error en el servidor" });
-        return res.status(201).json({ message: "Calificación añadida correctamente" });
-    });
+    );
 });
 
 
