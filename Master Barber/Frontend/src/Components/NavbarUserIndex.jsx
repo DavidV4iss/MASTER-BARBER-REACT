@@ -114,7 +114,7 @@ export default function NavbarUserIndex() {
                 src={imagePreview || "default-avatar.png"}
                 alt="Imagen de perfil"
                 className="img-fluid rounded-circle contenido3 "
-                style={{ width: "40px", height: "40px", objectFit: "cover" }}
+                style={{ width: "50px", height: "50px", objectFit: "cover" }}
               />
             </button>
             <ul class="dropdown-menu dropdown-menu-start bg-dark">
