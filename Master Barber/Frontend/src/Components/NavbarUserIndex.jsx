@@ -77,7 +77,7 @@ export default function NavbarUserIndex() {
 
 
   return (
-    <div className="navbar navbar-expand-md shadow-lg">
+    <div className="navbar navbar-expand-md shadow border-bottom border-1">
       <div class="container-fluid justify-content-end">
         <button
           class="navbar-toggler bg-secondary"

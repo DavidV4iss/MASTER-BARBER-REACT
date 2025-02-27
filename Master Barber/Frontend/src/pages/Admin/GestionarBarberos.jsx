@@ -205,8 +205,8 @@ export default function GestionarBarberos() {
               </thead>
               <tbody className='p-5'>
                 {barberos.map((barbero) => (
-                  <tr key={barbero.id_barbero}>
-                    <td>{barbero.nombre}</td>
+                  <tr key={barbero.id_usuario}>
+                    <td>{barbero.nombre_usuario}</td>
                     <td>{barbero.descripcion}</td>
                     <td><img src={`/images/imagesBarbero/${barbero.Foto}`} className='w-25 zoomhover2' alt="" /></td>
                     <td>
@@ -214,7 +214,7 @@ export default function GestionarBarberos() {
                         <button type="button" className="btn btn-outline-warning me-3" onClick={() => openEditModal(barbero)} data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@mdo">
                           <i className='bi bi-pencil-fill text-white'></i>
                         </button>
-                        <button className='btn btn-outline-danger' onClick={() => DeleteBarberos(barbero.id_barbero)}>
+                        <button className='btn btn-outline-danger' onClick={() => DeleteBarberos(barbero.id_usuario)}>
                           <i className="bi bi-trash-fill"  ></i>
                         </button>
                       </div>
@@ -245,7 +245,7 @@ export default function GestionarBarberos() {
                 <div className="modal-body">
                   <div className="mb-3">
                     <label aria-required for="recipient-name" className="col-form-label text-white">Nombre Barbero</label>
-                    <input required type="text" className="form-control bg-dark text-white" pattern='^[A-Za-z\s]+$' id="recipient-name" value={barberoEdit.nombre} name='nombre' onChange={handleChangeEdit} placeholder='Escriba un nombre' />
+                    <input required type="text" className="form-control bg-dark text-white" pattern='^[A-Za-z\s]+$' id="recipient-name" value={barberoEdit.nombre_usuario } name='nombre' onChange={handleChangeEdit} placeholder='Escriba un nombre' />
                   </div>
                   <div className="mb-3">
                     <label for="recipient-name" className="col-form-label text-white">Descripcion</label>

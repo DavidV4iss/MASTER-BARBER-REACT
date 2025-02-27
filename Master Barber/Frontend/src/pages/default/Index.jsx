@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import NavbarIndex from '../../Components/NavbarIndex'
 import CarrouselShop from '../../Components/CarrouselShop'
 import CarrouselGaleria from '../../Components/CarrouselGaleria'
-import Swal from 'sweetalert2'
 import Calificaciones from '../../Components/Calificaciones'
 import Darkandlight from "../../Components/Dark and light";
 
@@ -15,14 +14,6 @@ export default function Index() {
     useEffect(() => {
         document.body.className = theme;
     }, [theme]);
-
-
-
-
-
-
-    // CODIGO CALIFICACION
-
 
     return (
         <div>

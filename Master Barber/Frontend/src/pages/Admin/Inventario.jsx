@@ -164,7 +164,7 @@ export default function Inventario() {
             <SidebarAdmin />
             <div className='mt-5'>
                 <div className='contenido ' id='Inventario'>
-                    <p className='text-center text-white mt-5 display-6 bebas mx-3 '>HOLA, <span className='text-danger'>ADMINISTRADOR</span>| ESTE ES EL INVENTARIO DE PRODUCTOS QUE LLEGAN A LA BARBERIA</p>
+                    <p className='text-center text-white mt-5 display-6 bebas mx-3 '>HOLA, <span className='text-danger'>ADMINISTRADOR</span>| ESTE ES EL INVENTARIO DE LOS PRODUCTOS QUE SALEN DE LA BARBERIA</p>
 
                     <div className="d-flex justify-content-end mx-5 mt-5">
                         <button type="button" class="btn btn-danger .col-md-4" data-bs-toggle="modal" data-bs-target="#AñadirModal" data-bs-whatever="@mdo" >Añadir</button>
@@ -178,8 +178,8 @@ export default function Inventario() {
                                         <th >Nombre</th>
                                         <th >Descripcion</th>
                                         <th >Cantidad</th>
-                                        <th >Categoria producto</th>
-                                        <th >Precio unitario</th>
+                                        <th >Categoria</th>
+                                        <th >Costo de venta</th>
                                         <th >Acciones</th>
                                     </tr>
                                 </thead>
@@ -244,7 +244,7 @@ export default function Inventario() {
                                             </select>
                                         </div>
                                         <div class="mb-3">
-                                            <label for="recipient-name" class="col-form-label text-white">Precio unitario:</label>
+                                            <label for="recipient-name" class="col-form-label text-white">Costo de venta:</label>
                                             <input value={productoEditar.PrecioUnitario} type="text" class="form-control" id="recipient-name" name='PrecioUnitario' onChange={handleChangeEdit} />
                                         </div>
                                     </form>
@@ -289,7 +289,7 @@ export default function Inventario() {
                                             </select>
                                         </div>
                                         <div class="mb-3">
-                                            <label for="recipient-name" class="col-form-label text-white">Precio unitario:</label>
+                                            <label for="recipient-name" class="col-form-label text-white">Costo de venta:</label>
                                             <input type="text" class="form-control" id="recipient-name" name='PrecioUnitario' onChange={handleChange} />
                                         </div>
 

@@ -406,7 +406,7 @@ const storageBarbero = multer.diskStorage({
 const uploadBarbero = multer({ storage: storageBarbero })
 
 app.get('/GetBarberos', (req, res) => {
-    db.query('SELECT * FROM addbarberos', (err, results) => {
+    db.query('SELECT * FROM usuarios WHERE id_rol = 2', (err, results) => {
         if (err) {
             console.log(err);
             return res.status(500).send('Error en el servidor');
@@ -428,7 +428,7 @@ const borrarFotoBarbero = async (foto) => {
 
 app.get('/GetBarberos/:id', (req, res) => {
     const id = req.params.id;
-    db.query('SELECT * FROM addbarberos WHERE id_barbero = ?', [id], (err, results) => {
+    db.query('SELECT * FROM usuarios WHERE id_usuario = ? AND id_rol = 2', [id], (err, results) => {
         if (err) {
             console.log(err);
             return res.status(500).send('Error en el servidor');
@@ -445,12 +445,13 @@ app.post('/CreateBarberos', uploadBarbero.single('foto'), (req, res) => {
     const fotoName = req.file.filename
 
 
-    const q = 'INSERT INTO addbarberos (nombre,descripcion,Foto) VALUES (?,?,?)'
+    const q = 'INSERT INTO usuarios (nombre_usuario , descripcion,Foto, id_rol) VALUES (?,?,?, ?)'
 
     const values = [
         nombre,
         descripcion,
-        fotoName
+        fotoName,
+        2
     ]
 
     db.query(q, values, (err, results) => {
@@ -468,7 +469,7 @@ app.put('/UpdateBarberos/:id', uploadBarbero.single('foto'), (req, res) => {
 
     const id = req.params.id;
 
-    const select = "SELECT * FROM addbarberos WHERE id_barbero = ?";
+    const select = "SELECT * FROM usuarios WHERE id_usuario = ? AND id_rol = 2";
 
     db.query(select, [req.params.id], (err, results) => {
         if (err) {
@@ -481,7 +482,7 @@ app.put('/UpdateBarberos/:id', uploadBarbero.single('foto'), (req, res) => {
         const fotoName = req.file ? req.file.filename : ''
         console.log(fotoName);
 
-        const q = 'UPDATE addbarberos SET nombre = ?, descripcion = ?, Foto = ? WHERE id_barbero = ?'
+        const q = 'UPDATE usuarios SET nombre_usuario = ?, descripcion = ?, Foto = ? WHERE id_usuario = ? AND id_rol = 2'
 
         const values = [
             nombre,
@@ -505,7 +506,7 @@ app.put('/UpdateBarberos/:id', uploadBarbero.single('foto'), (req, res) => {
 
 app.delete('/DeleteBarberos/:id', (req, res) => {
     const id = req.params.id;
-    db.query('DELETE FROM addbarberos WHERE id_barbero = ?', [id], (err, results) => {
+    db.query('DELETE FROM usuarios  WHERE id_usuario = ? and id_rol = 2', [id], (err, results) => {
         if (err) {
             console.log(err);
             return res.status(500).send('Error en el servidor');

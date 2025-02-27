@@ -51,13 +51,10 @@ export default function InicioAdmin() {
                         <div className='text-white antonparabackend fs-5 mx-4 mt-3'>
                             {barberos.map((barbero) => (
                                 <div className="">
-                                    <li>{barbero.nombre}</li>
+                                    <li>{barbero.nombre_usuario + " - " + barbero.descripcion}</li>
                                 </div>
                             ))}
                         </div>
-                    </div>
-                    <div className="container col border border mt-4 col mt-5 ">
-                        <h2 className='bebas text-center text-white mt-2 border-bottom fs-1'>Reseñas</h2>
                     </div>
                 </div>
             </div>

@@ -176,12 +176,12 @@ export default function Gestiondeinventario() {
                             <table class="table table-dark mt-5">
                                 <thead>
                                     <tr>
-                                        <th >ID Producto vendido</th>
+                                        <th >ID Producto</th>
                                         <th >Categoría</th>
                                         <th >Proveedor</th>
                                         <th >Cantidad</th>
-                                        <th >Fecha de venta</th>
-                                        <th >Total de venta</th>
+                                        <th >Fecha de compra</th>
+                                        <th >Precio</th>
                                         <th >Acciones</th>
                                     </tr>
                                 </thead>
@@ -228,7 +228,7 @@ export default function Gestiondeinventario() {
                                             <select name="id_categoria_producto" class="form-select" id="" onChange={handleChange}>
                                                 <option selected disabled>Seleccione una categoria</option>
                                                 {categorias.map((item) => (
-                                                    <option key={item.id_categoria} value={item.id_categoria_producto}>{item.categoria}</option>
+                                                    <option key={item.id_categoria_producto} value={item.id_categoria_producto}>{item.categoria}</option>
                                                 ))}
                                             </select>
                                         </div>
