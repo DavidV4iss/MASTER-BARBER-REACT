@@ -132,60 +132,71 @@ const verificarToken = (req, res, next) => {
 
 app.post('/registrar', (req, res) => {
 
-    const nombreusuario = req.body.nombre_usuario
-    const email = req.body.email
-    const nit = req.body.nit
-    const telefono = req.body.telefono
-    const contraseña = req.body.contraseña
-    const confirmar_contraseña = req.body.confirmar_contraseña
+    const nombreusuario = req.body.nombre_usuario;
+    const email = req.body.email;
+    const nit = req.body.nit;
+    const telefono = req.body.telefono;
+    const contraseña = req.body.contraseña;
+    const confirmar_contraseña = req.body.confirmar_contraseña;
 
+    // Expresión regular para validar el correo electrónico y dominios permitidos
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@(gmail\.com|hotmail\.com|outlook\.com)$/;
 
     db.query("SELECT * FROM usuarios WHERE email = ? OR nit = ?", [email, nit], (err, result) => {
 
         if (err) {
-            console.log(err)
-            return res.status(500).send(err)
+            console.log(err);
+            return res.status(500).send(err);
         }
 
         else if (result.length > 0) {
-            return res.status(400).send("El usuario ya existe")
+            return res.status(400).send("El usuario ya existe");
         }
 
         else if (contraseña !== confirmar_contraseña) {
-            return res.status(400).send('Las contraseñas no coinciden');
+            return res.status(400).send('Las contraseñas no coinciden');
+        }
+
+        else if (!/[a-z]/.test(contraseña) && !/[A-Z]/.test(contraseña)) {
+            return res.status(400).send('La contraseña debe contener al menos una letra');
         }
 
         else if (contraseña.length < 8) {
             return res.status(400).send('La contraseña debe tener al menos 8 caracteres');
         }
-        else if (nit.length > 10) {
-            return res.status(400).send('Tu numero de documento debe tener 10 caracteres');
+        else if (nombreusuario.length < 3) {
+            return res.status(400).send('El nombre debe tener al menos 3 caracteres');
         }
-        else if (nit.length < 10) {
-            return res.status(400).send('Tu numero de documento debe tener 10 caracteres');
+        else if (nit.length !== 10) {
+            return res.status(400).send('Tu número de documento debe tener 10 caracteres');
         }
-        else if (telefono.length > 10) {
-            return res.status(400).send('Tu numero de telefono debe tener 10 caracteres');
+        else if (telefono.length !== 10) {
+            return res.status(400).send('Tu número de teléfono debe tener 10 caracteres');
         }
-
+        else if (email.length < 5) {
+            return res.status(400).send('El email debe tener al menos 5 caracteres');
+        }
+        else if (!emailRegex.test(email)) {
+            return res.status(400).send('El email debe ser válido y pertenecer a gmail.com, hotmail.com o outlook.com');
+        }
         else {
-            const hashpassword = bcrypt.hashSync(contraseña, 10)
-            const q = "INSERT INTO usuarios (nombre_usuario, email, nit, telefono ,contrasena, id_rol) VALUES (?,?,?,?,?,3)"
+            const hashpassword = bcrypt.hashSync(contraseña, 10);
+            const q = "INSERT INTO usuarios (nombre_usuario, email, nit, telefono, contrasena, id_rol) VALUES (?,?,?,?,?,3)";
             const values = [
                 nombreusuario,
                 email,
                 nit,
                 telefono,
                 hashpassword
-            ]
+            ];
             db.query(q, values, (err) => {
                 if (err) {
-                    return res.status(500).send(err)
+                    return res.status(500).send(err);
                 }
-                return res.status(200).send("Usuario creado con exito")
-            })
+                return res.status(200).send("Usuario creado con éxito");
+            });
         }
-    })
+    });
 });
 
 app.post('/EnvEmail', (req, res) => {

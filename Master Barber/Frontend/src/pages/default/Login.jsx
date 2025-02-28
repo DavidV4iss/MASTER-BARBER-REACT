@@ -89,7 +89,7 @@ export default function Login() {
               </h1>
 
               <form className="row g-1" onSubmit={handleSubmit}>
-                <div className="text-center">
+                {/* <div className="text-center">
                   <button
                     className="btn btn  mb-3 border border rounded-circle text-primary bg-white"
                     type="button"
@@ -103,9 +103,9 @@ export default function Login() {
                   >
                     <i className="bi bi-facebook"></i>
                   </button>
-                </div>
+                </div> */}
 
-                <div className="input-group mb-3">
+                <div className="input-group mb-3 mt-5">
                   <span className="input-group-text" id="basic-addon2">
                     <i className="bi bi-envelope"></i>
                   </span>

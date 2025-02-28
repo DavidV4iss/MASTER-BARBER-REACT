@@ -72,10 +72,10 @@ export default function Registro() {
                             <h1 className='text-white text-center anton mb-4'>¡Registrate Aqui!</h1>
 
                             <form className='row g-1' onSubmit={handleSubmit}>
-                                <div className="text-center ">
+                                {/* <div className="text-center ">
                                     <button className="btn btn  mb-3 border border rounded-circle text-primary bg-white" type="button"> <i class="bi bi-google"></i> </button>
                                     <button className="btn btn  mb-3 mx-3 border border rounded-circle text-primary bg-white" type="button"><i className="bi bi-facebook"></i></button>
-                                </div>
+                                </div> */}
                                 <label for="validationCustom01" className="texto form-label text-white antonparabackend" htmlFor="floatingInput" >Nombre de usuario</label>
                                 <div className="input-group mb-3 ">
                                     <span className="input-group-text" id="basic-addon2"><i className="bi bi-person"></i></span>
