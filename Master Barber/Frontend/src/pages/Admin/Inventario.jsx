@@ -16,13 +16,13 @@ export default function Inventario() {
         PrecioUnitario: ''
     });
 
-        const [productoEditar, setProductoEditar] = useState({
-            nombre: '',
-            descripcion_P: '',
-            cantidad: '',
-            id_categoria_producto: '',
-            PrecioUnitario: ''
-        });
+    const [productoEditar, setProductoEditar] = useState({
+        nombre: '',
+        descripcion_P: '',
+        cantidad: '',
+        id_categoria_producto: '',
+        PrecioUnitario: ''
+    });
 
     const [categorias, setCategorias] = useState([]);
 
@@ -138,19 +138,19 @@ export default function Inventario() {
     };
 
     useEffect(() => {
-      const fetchData = async () => {
-        try {
-          const [inventarioRes, categoriasRes] = await Promise.all([
-            axios.get(`http://localhost:8081/GetInventario`),
-            axios.get(`http://localhost:8081/categorias`),
-          ]);
-          setInventario(inventarioRes.data);
-          setCategorias(categoriasRes.data);
-        } catch (error) {
-          console.log(error);
-        }
-      };
-      fetchData();
+        const fetchData = async () => {
+            try {
+                const [inventarioRes, categoriasRes] = await Promise.all([
+                    axios.get(`http://localhost:8081/GetInventario`),
+                    axios.get(`http://localhost:8081/categorias`),
+                ]);
+                setInventario(inventarioRes.data);
+                setCategorias(categoriasRes.data);
+            } catch (error) {
+                console.log(error);
+            }
+        };
+        fetchData();
     }, []);
 
     const openEditModal = (item) => {

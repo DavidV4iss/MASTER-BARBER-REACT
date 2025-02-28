@@ -5,8 +5,6 @@ import NavbarAdmin from '../../Components/NavbarAdmin'
 import SidebarAdmin from '../../Components/SidebarAdmin'
 import { useNavigate } from 'react-router-dom'
 
-
-
 export default function Gestiondeinventario() {
 
     const [inventarioVendido, setInventarioVendido] = useState([]);
@@ -17,90 +15,88 @@ export default function Gestiondeinventario() {
         cantidad: "",
         fecha_venta: "",
         total_venta: "",
-
     });
 
     const [productoVendidoEditar, setProductoVendidoEditar] = useState({
-      id_producto_vendido: "",
-      id_categoria_producto: "",
-      proveedor: "",
-      cantidad: "",
-      fecha_venta: "",
-      total_venta: "",
+        id_producto_vendido: "",
+        id_categoria_producto: "",
+        proveedor: "",
+        cantidad: "",
+        fecha_venta: "",
+        total_venta: "",
     });
 
     const [categorias, setCategorias] = useState([]);
 
     const navigate = useNavigate();
 
-
     const handleSubmit = async (e) => {
-      e.preventDefault();
-      try {
-        const res = await axios.post(
-          `http://localhost:8081/CreateInventarioVendido`, productoVendido);
-        if (res.status === 200) {
-          Swal.fire({
-            icon: "success",
-            title: res.data,
-            customClass: {
-              popup: "dark-theme-popup bg-dark antonparabackend ",
-            },
-          }).then(() => {
-            navigate(0);
-          });
+        e.preventDefault();
+        try {
+            const res = await axios.post(
+                `http://localhost:8081/CreateInventarioVendido`, productoVendido);
+            if (res.status === 200) {
+                Swal.fire({
+                    icon: "success",
+                    title: res.data,
+                    customClass: {
+                        popup: "dark-theme-popup bg-dark antonparabackend ",
+                    },
+                }).then(() => {
+                    navigate(0);
+                });
+            }
+        } catch (err) {
+            console.log(err);
+            Swal.fire({
+                icon: "error",
+                title: "Error",
+                text: err.response.data,
+                customClass: {
+                    popup: "dark-theme-popup bg-dark antonparabackend ",
+                },
+            });
         }
-      } catch (err) {
-        console.log(err);
-        Swal.fire({
-          icon: "error",
-          title: "Error",
-          text: err.response.data,
-          customClass: {
-            popup: "dark-theme-popup bg-dark antonparabackend ",
-          },
-        });
-      }
     };
 
     const handleSubmitEdit = async (id) => {
-      try {
-        const res = await axios.put(
-          `http://localhost:8081/UpdateInventarioVendido/${id}`,productoVendidoEditar);
-        if (res.status === 200) {
-          Swal.fire({
-            icon: "success",
-            title: res.data,
-            customClass: {
-              popup: "dark-theme-popup bg-dark antonparabackend ",
-            },
-          }).then(() => {
-            navigate(0);
-          });
+        try {
+            const res = await axios.put(
+                `http://localhost:8081/UpdateInventarioVendido/${id}`, productoVendidoEditar);
+            if (res.status === 200) {
+                Swal.fire({
+                    icon: "success",
+                    title: res.data,
+                    customClass: {
+                        popup: "dark-theme-popup bg-dark antonparabackend ",
+                    },
+                }).then(() => {
+                    navigate(0);
+                });
+            }
+        } catch (err) {
+            console.log(err);
+            Swal.fire({
+                icon: "error",
+                title: "Error",
+                text: err.response.data,
+                customClass: {
+                    popup: "dark-theme-popup bg-dark antonparabackend ",
+                },
+            });
         }
-      } catch (err) {
-        console.log(err);
-        Swal.fire({
-          icon: "error",
-          title: "Error",
-          text: err.response.data,
-          customClass: {
-            popup: "dark-theme-popup bg-dark antonparabackend ",
-          },
-        });
-      }
     };
 
     const handleChangeEdit = (e) => {
-      setProductoVendidoEditar(prev => ({ ...prev, [e.target.name]: e.target.value }));
+        setProductoVendidoEditar(prev => ({ ...prev, [e.target.name]: e.target.value }));
     };
 
     const handleChange = (e) => {
-      setProductoVendido(prev => ({ ...prev, [e.target.name]: e.target.value }));
+        setProductoVendido(prev => ({ ...prev, [e.target.name]: e.target.value }));
     };
 
     const DeleteInventarioVendido = async (id) => {
-      try {
+        try {
             const confirm = await Swal.fire({
                 title: '¿Estas seguro de borrar este producto?',
                 text: "No podrás revertir esta acción",
@@ -142,6 +138,14 @@ export default function Gestiondeinventario() {
         }
     };
 
+    const openEditModal = (item) => {
+        const formattedItem = {
+            ...item,
+            fecha_venta: item.fecha_venta.split('T')[0] // Formatear la fecha para mostrar solo la parte de la fecha
+        };
+        setProductoVendidoEditar(formattedItem);
+    };
+
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -174,7 +178,7 @@ export default function Gestiondeinventario() {
                             <table class="table table-dark mt-5">
                                 <thead>
                                     <tr>
-                                        <th >ID Producto</th>
+                                        <th >ID Producto Vendido</th>
                                         <th >Categoría</th>
                                         <th >Proveedor</th>
                                         <th >Cantidad</th>
@@ -187,12 +191,11 @@ export default function Gestiondeinventario() {
                                     {inventarioVendido.map((item) => (
                                         <tr key={item.id_producto_vendido}>
                                             <th>{item.id_producto_vendido}</th>
-                                            <td>{categorias.find(c => c.id_categoria_producto === item.id_categoria_producto).categoria}</td>
+                                            <td>{categorias.find(c => c.id_categoria_producto === item.id_categoria_producto)?.categoria}</td>
                                             <td>{item.proveedor}</td>
                                             <td>{item.cantidad}</td>
                                             <td>{item.fecha_venta}</td>
                                             <td>{item.total_venta}</td>
-                                                                                 
                                             <td>
                                                 <div className="d-flex">
                                                     <button type="button" className="btn btn-outline-warning me-3" onClick={() => openEditModal(item)} data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@mdo">
@@ -208,11 +211,9 @@ export default function Gestiondeinventario() {
                                 </tbody>
                             </table>
                         </div>
-
                     </div>
 
                     {/* MODAL DE AÑADIR */}
-
                     <div class="modal fade" id="AñadirModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                         <div class="modal-dialog">
                             <div class="modal-content bg-dark">
@@ -246,7 +247,6 @@ export default function Gestiondeinventario() {
                                             <label for="recipient-name" class="col-form-label text-white">Total de venta:</label>
                                             <input type="text" class="form-control" id="recipient-name" name='total_venta' onChange={handleChange} />
                                         </div>
-
                                     </form>
                                 </div>
                                 <div class="modal-footer">
@@ -258,7 +258,6 @@ export default function Gestiondeinventario() {
                     </div>
 
                     {/* MODAL EDITAR */}
-
                     <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                         <div class="modal-dialog">
                             <div class="modal-content bg-dark">
@@ -273,7 +272,7 @@ export default function Gestiondeinventario() {
                                             <select name="id_categoria_producto" value={productoVendidoEditar.id_categoria_producto} class="form-select" id="" onChange={handleChangeEdit}>
                                                 <option selected disabled>Seleccione una categoria</option>
                                                 {categorias.map((item) => (
-                                                    <option key={item.id_categoria} value={item.id_categoria_producto}>{item.categoria}</option>
+                                                    <option key={item.id_categoria_producto} value={item.id_categoria_producto}>{item.categoria}</option>
                                                 ))}
                                             </select>
                                         </div>
@@ -287,12 +286,12 @@ export default function Gestiondeinventario() {
                                         </div>
                                         <div class="mb-3">
                                             <label for="recipient-name" class="col-form-label text-white">Fecha de venta:</label>
-                                            <input type="text" value={productoVendidoEditar.fecha_venta} class="form-control" id="recipient-name" name='fecha_venta' onChange={handleChangeEdit} />
+                                            <input type="date" value={productoVendidoEditar.fecha_venta} class="form-control" id="recipient-name" name='fecha_venta' onChange={handleChangeEdit} />
                                         </div >
                                         <div class="mb-3">
                                             <label for="recipient-name" class="col-form-label text-white">Total de venta:</label>
                                             <input value={productoVendidoEditar.total_venta} type="text" class="form-control" id="recipient-name" name='total_venta' onChange={handleChangeEdit} />
-                                        </div>                                                                  
+                                        </div>
                                     </form>
                                 </div>
                                 <div class="modal-footer">
@@ -304,8 +303,6 @@ export default function Gestiondeinventario() {
                     </div>
                 </div>
             </div>
-
         </div>
     )
-
 }
