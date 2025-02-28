@@ -440,30 +440,39 @@ app.get('/GetBarberos/:id', (req, res) => {
 })
 
 app.post('/CreateBarberos', uploadBarbero.single('foto'), (req, res) => {
-    const nombre = req.body.nombre
-    const descripcion = req.body.descripcion
-    const fotoName = req.file.filename
+    const nombre = req.body.nombre;
+    const email = req.body.email;
+    const contrasena = req.body.contrasena;
+    const descripcion = req.body.descripcion;
+    const fotoName = req.file.filename;
 
+    // Validar que la contraseña tenga al menos 8 caracteres
+    if (contrasena.length < 8) {
+        return res.status(400).send('La contraseña debe tener al menos 8 caracteres');
+    }
 
-    const q = 'INSERT INTO usuarios (nombre_usuario , descripcion,Foto, id_rol) VALUES (?,?,?, ?)'
+    const hashPassword = bcrypt.hashSync(contrasena, 10);
+
+    const q = 'INSERT INTO usuarios (nombre_usuario, email, contrasena, descripcion, Foto, id_rol) VALUES (?,?,?,?,?,?)';
 
     const values = [
         nombre,
+        email,
+        hashPassword,
         descripcion,
         fotoName,
         2
-    ]
+    ];
 
     db.query(q, values, (err, results) => {
         if (err) {
             console.log(err);
             return res.status(500).send('Error en el servidor');
-        }
-        else {
+        } else {
             return res.status(200).send('Barbero creado exitosamente');
         }
-    })
-})
+    });
+});
 
 app.put('/UpdateBarberos/:id', uploadBarbero.single('foto'), (req, res) => {
 
@@ -478,14 +487,18 @@ app.put('/UpdateBarberos/:id', uploadBarbero.single('foto'), (req, res) => {
         }
 
         const nombre = req.body.nombre
+        const email = req.body.email
+        const contrasena = req.body.contrasena
         const descripcion = req.body.descripcion
         const fotoName = req.file ? req.file.filename : ''
         console.log(fotoName);
 
-        const q = 'UPDATE usuarios SET nombre_usuario = ?, descripcion = ?, Foto = ? WHERE id_usuario = ? AND id_rol = 2'
-
+        const q = 'UPDATE usuarios SET nombre_usuario = ?, email = ?, contrasena = ?, descripcion = ?, Foto = ? WHERE id_usuario = ? AND id_rol = 2'
+       
         const values = [
             nombre,
+            email,
+            contrasena,
             descripcion,
             fotoName,
             id

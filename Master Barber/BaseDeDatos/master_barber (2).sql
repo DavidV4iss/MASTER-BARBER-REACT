@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 28-02-2025 a las 12:37:02
+-- Tiempo de generación: 28-02-2025 a las 15:15:02
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -107,6 +107,13 @@ CREATE TABLE `inventario_vendido` (
   `total_venta` decimal(10,2) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Volcado de datos para la tabla `inventario_vendido`
+--
+
+INSERT INTO `inventario_vendido` (`id_producto_vendido`, `id_categoria_producto`, `proveedor`, `cantidad`, `fecha_venta`, `total_venta`) VALUES
+(1, 2, 'Coca cola', 10, '2025-02-28', 20000.00);
+
 -- --------------------------------------------------------
 
 --
@@ -190,10 +197,9 @@ CREATE TABLE `usuarios` (
 INSERT INTO `usuarios` (`id_usuario`, `nombre_usuario`, `email`, `nit`, `telefono`, `contrasena`, `id_rol`, `user_reset_code`, `user_reset_code_expiration`, `Foto`, `descripcion`) VALUES
 (5, 'Fidel Espitia ', 'fideljoseespi10@gmail.com', 1028662003, '3142758305', '$2a$10$Wu5aatNss9/D/N/DQ5v2uuvP9BhDL09q8/v8XQHUHUvjqCxQ6rCKG', 3, NULL, NULL, '1740579974533-B2.JPG', ''),
 (6, 'Fidel Jose ', 'Admin@gmail.com', 1028662003, '3142758305', '$2a$10$gKkjGOeNlRvXzyePlVJq1.r/9Y.F6.f.UROSSUNuM7Sjv1xkZyRo.', 1, NULL, NULL, '1732824864824-MB3.JPG', ''),
-(7, 'Julio Cesar', 'jespitiagalvis@gmail.com', 1028662005, '3196524963', '$2a$10$xQyXwmewFti5MfBoxGR06eYSvgqSkKZ9Uc.At9kZnbxyGpYYnw2lG', 3, NULL, NULL, '1732327755702-B1.JPG', ''),
-(9, 'David Vaiss', 'cristianrueda0313@gmail.com', 1014481682, '3044495505', '$2a$10$xywk1zgIsOcpzHqybgjV8e.4YNuOQg5nhvCRvxD5bwXc42kKpTooe', 3, NULL, NULL, '1732827364642-MB1.JPG', ''),
-(10, 'David', 'cris031331@gmail.com', 1014481683, '3044495506', '$2a$10$zdq6rw8dxvVK19UeIie37uFB/VPbQnaqCIDbtV3A3o2C622578YPu', 3, NULL, NULL, '1740056554991-MB1.JPG', ''),
-(15, 'Cristian', '', 0, '', '', 2, NULL, NULL, 'barbero_1740665625034-MB1.JPG', 'Cuchillas');
+(38, 'Deiby', 'Deiby30@gmail.com', 0, '', '$2a$10$MBlG9zo7dSAq3BMMYfMLS.IBY48V8EGXybOdMa.NHqBUplwM2avuW', 2, NULL, NULL, 'barbero_1740751795938-B1.JPG', 'Cortes Perfilados , Accesoria En Imagen Buen Uso De Las Maquinas Y El Ambinte'),
+(39, 'Nixxon', 'nixon30@gmail.com', 0, '', '$2a$10$7snPIXXcHI2kawDZnws45.DIGdyNBEEIoJ4Mk8Ooc465FV36tEA3G', 2, NULL, NULL, 'barbero_1740751841470-B3.JPG', 'Cortes Perfilados , Accesoria En Imagen Buen Uso De Las Maquinas Y El Ambinte'),
+(40, 'Jeisson', 'jeisson30@gmail.com', 0, '', '$2a$10$6H.hF/CJRrYn.kWyRcHcwOphvMmX3bk4SLqM//wjZNJpX/t7Fyu52', 2, NULL, NULL, 'barbero_1740751877158-B2.JPG', 'Cortes Perfilados , Accesoria En Imagen Buen Uso De Las Maquinas Y El Ambinte');
 
 --
 -- Índices para tablas volcadas
@@ -280,7 +286,7 @@ ALTER TABLE `inventario`
 -- AUTO_INCREMENT de la tabla `inventario_vendido`
 --
 ALTER TABLE `inventario_vendido`
-  MODIFY `id_producto_vendido` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_producto_vendido` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT de la tabla `reservas`
@@ -292,7 +298,7 @@ ALTER TABLE `reservas`
 -- AUTO_INCREMENT de la tabla `usuarios`
 --
 ALTER TABLE `usuarios`
-  MODIFY `id_usuario` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `id_usuario` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=41;
 
 --
 -- Restricciones para tablas volcadas

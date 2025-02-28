@@ -34,7 +34,12 @@ export default function Registro() {
                     title: 'Cuenta creada',
                     text: 'Cuenta creada correctamente',
                     icon: 'success',
-                    confirmButtonText: 'Continuar'
+                    iconColor: "#1bf30b",
+                    confirmButtonColor: "#DC3545",
+                    confirmButtonText: 'Continuar',
+                    customClass: {
+                        popup: "dark-theme-popup bg-dark antonparabackend ",
+                    },
                 });
                 navigate("/login");
             }
@@ -44,7 +49,10 @@ export default function Registro() {
                 Swal.fire({
                     title: error.response.data || 'Credenciales incorrectas',
                     icon: 'error',
-                    confirmButtonText: 'Intentar de nuevo'
+                    confirmButtonText: 'Intentar de nuevo',
+                    cuestomClass: {
+                        popup: "dark-theme-popup bg-dark antonparabackend ",
+                    }
                 });
             }
         }

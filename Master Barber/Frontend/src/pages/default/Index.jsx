@@ -4,6 +4,7 @@ import CarrouselShop from '../../Components/CarrouselShop'
 import CarrouselGaleria from '../../Components/CarrouselGaleria'
 import Calificaciones from '../../Components/Calificaciones'
 import Darkandlight from "../../Components/Dark and light";
+import axios from 'axios'
 
 export default function Index() {
     const [theme] = useState(() => {
@@ -14,6 +15,20 @@ export default function Index() {
     useEffect(() => {
         document.body.className = theme;
     }, [theme]);
+
+    const [barberos, setBarberos] = useState([]);
+    
+    useEffect(() => {
+        const fetchBarberos = async () => {
+            try {
+                const res = await axios.get("http://localhost:8081/GetBarberos");
+                setBarberos(res.data);
+            } catch (err) {
+                console.log("Error al obtener los datos:", err);
+            }
+        }
+        fetchBarberos()
+    }, [])
 
     return (
         <div>
@@ -211,79 +226,21 @@ export default function Index() {
                 </p>
                 <div className="container mt-5 pt-5">
                     <div class="row row-cols-1 row-cols-md-3">
-                        <div class="col">
-                            <div class="card bg-dark mt-5">
-                                <img src="./B1.JPG" class="card-img-top img-fluid" alt="..." />
-                                <div class="card-body">
-                                    <h5 class="card-title text-danger text-center bebas">DEIBY</h5>
-                                    <p class="card-text text-white text-center">This is a wider card with supporting text below as a natural lead-in to additional content. This card has even longer content than the first to show that equal height action.</p>
-                                </div>
-                                <div class="card-footer">
-                                    <small class="text-body-white text-white">Last updated 3 mins ago</small>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col">
-                            <div class="card bg-dark mt-5">
-                                <img src="./B2.JPG" class="card-img-top img-fluid" alt="..." />
-                                <div class="card-body">
-                                    <h5 class="card-title text-danger text-center bebas">JEISON</h5>
-                                    <p class="card-text text-white text-center">This is a wider card with supporting text below as a natural lead-in to additional content. This card has even longer content than the first to show that equal height action.</p>
-                                </div>
-                                <div class="card-footer">
-                                    <small class="text-body-white text-white">Last updated 3 mins ago</small>
+                        {barberos.map((barbero) => (
+                            console.log(barbero),
+                            <div class="col" key={barbero.id_usuario}>
+                                <div class="card bg-dark mt-5">
+                                        <img src={`/images/imagesBarbero/${barbero.Foto}`} class="card-img-top img-fluid" alt="..." />
+                                    <div class="card-body">
+                                        <h5 class="card-title text-danger text-center bebas">{barbero.nombre_usuario}</h5>
+                                        <p class="card-text text-white text-center">{barbero.descripcion}</p>
+                                    </div>
+                                    <div class="card-footer">
+                                        <small class="text-body-white text-white">Last updated 3 mins ago</small>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="col">
-                            <div class="card bg-dark mt-5">
-                                <img src="./B3.JPG" class="card-img-top img-fluid" alt="..." />
-                                <div class="card-body">
-                                    <h5 class="card-title text-danger text-center bebas">NIXON</h5>
-                                    <p class="card-text text-white text-center">This is a wider card with supporting text below as a natural lead-in to additional content. This card has even longer content than the first to show that equal height action.</p>
-                                </div>
-                                <div class="card-footer">
-                                    <small class="text-body-white text-white">Last updated 3 mins ago</small>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col">
-                            <div class="card bg-dark mt-5">
-                                <img src="./LOGO.png" class="card-img-top img-fluid" alt="..." />
-                                <div class="card-body">
-                                    <h5 class="card-title text-danger text-center bebas mt-3">NOMBRE BARBERO</h5>
-                                    <p class="card-text text-white text-center">This is a wider card with supporting text below as a natural lead-in to additional content. This card has even longer content than the first to show that equal height action.</p>
-                                </div>
-                                <div class="card-footer">
-                                    <small class="text-body-white text-white">Last updated 3 mins ago</small>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col">
-                            <div class="card bg-dark mt-5">
-                                <img src="./LOGO.png" class="card-img-top img-fluid" alt="..." />
-                                <div class="card-body">
-                                    <h5 class="card-title text-danger text-center bebas mt-3">NOMBRE BARBERO</h5>
-                                    <p class="card-text text-white text-center">This is a wider card with supporting text below as a natural lead-in to additional content. This card has even longer content than the first to show that equal height action.</p>
-                                </div>
-                                <div class="card-footer">
-                                    <small class="text-body-white text-white">Last updated 3 mins ago</small>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col">
-                            <div class="card bg-dark mt-5">
-                                <img src="./LOGO.png" class="card-img-top img-fluid" alt="..." />
-                                <div class="card-body">
-                                    <h5 class="card-title text-danger text-center bebas mt-3">NOMBRE BARBERO</h5>
-                                    <p class="card-text text-white text-center">This is a wider card with supporting text below as a natural lead-in to additional content. This card has even longer content than the first to show that equal height action.</p>
-                                </div>
-                                <div class="card-footer">
-                                    <small class="text-body-white text-white">Last updated 3 mins ago</small>
-                                </div>
-                            </div>
-                        </div>
+                        ))}
                     </div>
                 </div>
             </div>
