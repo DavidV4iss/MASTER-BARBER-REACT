@@ -38,9 +38,7 @@ export default function Gestiondeinventario() {
       e.preventDefault();
       try {
         const res = await axios.post(
-          `http://localhost:8081/CreateInventarioVendido`,
-          productoVendido
-        );
+          `http://localhost:8081/CreateInventarioVendido`, productoVendido);
         if (res.status === 200) {
           Swal.fire({
             icon: "success",
@@ -145,19 +143,19 @@ export default function Gestiondeinventario() {
     };
 
     useEffect(() => {
-      const fetchData = async () => {
-        try {
-          const [inventarioVendido, categorias] = await Promise.all([
-            axios.get(`https://localhost:8081/GetInventarioVendido`),
-            axios.get(`https://localhost:8081/categorias`),
-          ]);
-          setInventarioVendido(inventarioVendido.data);
-          setCategorias(categorias.data);
-        } catch (error) {
-          console.log(error);
-        }
-      };
-      fetchData();
+        const fetchData = async () => {
+            try {
+                const [inventarioVendido, categoriasRes] = await Promise.all([
+                    axios.get(`http://localhost:8081/GetInventarioVendido`),
+                    axios.get(`http://localhost:8081/categorias`),
+                ]);
+                setInventarioVendido(inventarioVendido.data);
+                setCategorias(categoriasRes.data);
+            } catch (error) {
+                console.log(error);
+            }
+        };
+        fetchData();
     }, []);
 
     return (
