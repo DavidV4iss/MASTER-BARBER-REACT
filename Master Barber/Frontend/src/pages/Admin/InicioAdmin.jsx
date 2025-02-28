@@ -26,9 +26,6 @@ export default function InicioAdmin() {
             <SidebarAdmin />
             <div className='contenido p-5 mt-5'>
                 <p className='text-center text-white display-3 bebas mx-3'>MASTER <span className='text-danger'>BARBER</span>| INICIO </p>
-                {/* <div className="container col border border mt-4 bg-dark row col contenido mt-5">
-                        <h2 className='bebas text-center text-white mt-2'>Inicio</h2>
-                    </div> */}
                 <div className="row">
                     <div className="container col border border mt-5 row col contenidol">
                         <h1 className='bebas text-center text-white mt-2 border-bottom fs-1 animate__slideOutDown'>MENUUUUUU</h1>
@@ -48,9 +45,9 @@ export default function InicioAdmin() {
                     </div>
                     <div className=" col border border mt-4 col mx-5 mt-5">
                         <h2 className='bebas text-center text-white mt-2 border-bottom fs-1'>BARBEROS ACTUALES</h2>
-                        <div className='text-white antonparabackend fs-5 mx-4 mt-3'>
+                        <div className='text-white  fs-5 mx-4 mt-3'>
                             {barberos.map((barbero) => (
-                                <div className="">
+                                <div className="mt-3 fw-bold">
                                     <li>{barbero.nombre_usuario + " - " + barbero.descripcion}</li>
                                 </div>
                             ))}

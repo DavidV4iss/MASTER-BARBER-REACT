@@ -142,8 +142,7 @@ export default function Login() {
                     className=" bg-white border rounded-end"
                   >
                     {isPasswordVisible ? " 🙉" : "🙈"} {/* Iconos o texto */}
-                  </button>
-                  <div></div>
+                  </button>                  
                 </div>
 
                 <div className=" text-center">

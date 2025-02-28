@@ -96,7 +96,7 @@ export default function NavbarUserIndex() {
           <button className='btn btn-dark mt-3 position-fixed top-0 end-0 translate-middle-x' onClick={handleNotification}>
             <i class="bi bi-alarm-fill"></i>
             <span class="position-absolute top-0 start-100 translate-middle badge border border-light rounded-circle bg-danger p-2">
-              {/* <span class="visually-hidde"></span> */}
+               {/* <span class="visually-hidde"></span>  */}
             </span>
           </button>
 
@@ -107,9 +107,7 @@ export default function NavbarUserIndex() {
               data-bs-toggle="dropdown"
               aria-expanded="false"
             >
-              {/* <div className="d-none d-sm-block text-white fw-bold small ">
-                {user.nombre_usuario}
-              </div> */}
+            
               <img
                 src={imagePreview || "default-avatar.png"}
                 alt="Imagen de perfil"

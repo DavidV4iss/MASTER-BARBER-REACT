@@ -8,7 +8,9 @@ export default function GestionarBarberos() {
   const [imagePreview, setImagePreview] = useState('');
   const [imagePreviewEdit, setImagePreviewEdit] = useState('');
   const [barberos, setBarberos] = useState([]);
+  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [barbero, setBarbero] = useState({
+
     nombre: "",
     email: "",
     contrasena: "",
@@ -217,7 +219,7 @@ export default function GestionarBarberos() {
 
         <div className=' text-center row col col-sm-12 justify-content-end'>
           <div className="table-responsive">
-            <table className="table table-dark table-hover mt-4 container p-5">
+            <table className="table  table-bordered table-responsive table-dark table-hover mt-4 container p-5">
               <thead>
                 <tr className='bg-white'>
                   <th scope="col" className='display-6 bebas p-4 text-danger'>Nombre</th>
@@ -321,9 +323,16 @@ export default function GestionarBarberos() {
                   <label htmlFor="recipient-name" className="col-form-label text-white">Email</label>
                   <input required type="email" className="form-control bg-dark text-white" id="recipient-name" name='email' onChange={handleChange} placeholder='Escriba un Email' />
                 </div>
-                <div className="mb-3">
-                  <label htmlFor="recipient-name" className="col-form-label text-white">Contraseña</label>
-                  <input required type="password" className="form-control bg-dark text-white" id="recipient-name" name='contrasena' onChange={handleChange} placeholder='Escriba una Contrasena' />
+                <label htmlFor="recipient-name" className="col-form-label text-white">Contraseña</label>
+                <div className="mb-3 input-group">
+                  <input required className="form-control bg-dark text-white" id="recipient-name" name='contrasena' onChange={handleChange} placeholder='Escriba una Contraseña' type={isPasswordVisible ? "text" : "password"} />
+                  <button
+                    type="button"
+                    onClick={() => setIsPasswordVisible((prev) => !prev)}
+                    className=" bg-dark rounded-end"
+                  >
+                    {isPasswordVisible ? " 🙉" : "🙈"} 
+                  </button>
                 </div>
                 <div className="mb-3">
                   <label htmlFor="recipient-name" className="col-form-label text-white">Descripcion</label>
