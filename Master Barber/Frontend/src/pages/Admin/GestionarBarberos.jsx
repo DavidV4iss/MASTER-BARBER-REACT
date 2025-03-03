@@ -212,7 +212,6 @@ export default function GestionarBarberos() {
       <SidebarAdmin />
       <div className='contenido2' id='GestionarBarberos'>
         <p className='text-center  mt-5 text-white display-6 bebas col-sm-12 col'>HOLA, <span className='text-danger'>ADMINISTRADOR</span> |AQUI PODRAS EDITAR, AÑADIR Y ELIMINAR BARBEROS</p>
-
         <div className="d-flex justify-content-end mt-3 p-5 mx-5">
           <button type="button" className="btn btn-danger" data-bs-toggle="modal" data-bs-target="#AñadirModal" data-bs-whatever="@mdo" >Añadir</button>
         </div>

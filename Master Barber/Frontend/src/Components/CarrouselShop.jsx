@@ -1,13 +1,28 @@
-import React from 'react'
-import { Swiper, SwiperSlide, useSwiper } from 'swiper/react';
+import React, { useEffect, useState } from 'react';
+import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Pagination, EffectCreative } from 'swiper/modules';
 import 'swiper/css/bundle';
 import 'swiper/css/pagination';
 import 'swiper/css/scrollbar';
 import 'swiper/css/effect-creative';
+import axios from 'axios';
 
 export default function CarrouselShop() {
-    return  (
+    const [images, setImages] = useState([]);
+
+    useEffect(() => {
+        const fetchImages = async () => {
+            try {
+                const res = await axios.get("http://localhost:8081/GetCarrousel");
+                setImages(res.data);
+            } catch (err) {
+                console.log("Error al obtener las calificaciones:", err);
+            }
+        };
+        fetchImages();
+    }, []);
+
+    return (
         <Swiper
             grabCursor={true}
             effect={'creative'}
@@ -22,7 +37,6 @@ export default function CarrouselShop() {
             centeredSlides={true}
             modules={[Navigation, Pagination, EffectCreative]}
             navigation={{ clickable: true }}
-            // pagination={{ clickable: true }}
             loop={true}
             breakpoints={{
                 640: {
@@ -34,39 +48,18 @@ export default function CarrouselShop() {
             }}
             className="mySwiper2 mt-5 pt-5 "
         >
-            <SwiperSlide><div className="card text-center bg-dark">
-                <div className="card-body">
-                    <img className='col-sm-12 col' src="/logo512.png" alt="" />
-                    <h5 className="card-title text-white"></h5>
-                    <p className="card-text text-white"></p>
-                    <a href="#" className="btn btn-danger">Ver</a>
-                </div>
-            </div></SwiperSlide>
-            <SwiperSlide><div className="card text-center bg-dark">
-                <div className="card-body">
-                    <img className='col-sm-12 col' src="/logo512.png" alt="" />
-                    <h5 className="card-title text-white"></h5>
-                    <p className="card-text text-white"></p>
-                    <a href="#" className="btn btn-danger">Ver</a>
-                </div>
-            </div></SwiperSlide>
-            <SwiperSlide><div className="card text-center bg-dark">
-                <div className="card-body">
-                    <img className='col-sm-12 col' src="/logo512.png" alt="" />
-                    <h5 className="card-title text-white"></h5>
-                    <p className="card-text text-white"></p>
-                    <a href="#" className="btn btn-danger">Ver</a>
-                </div>
-            </div></SwiperSlide>
-            <SwiperSlide><div className="card text-center bg-dark">
-                <div className="card-body">
-                    <img className='col-sm-12 col' src="/logo512.png" alt="" />
-                    <h5 className="card-title text-white"></h5>
-                    <p className="card-text text-white"></p>
-                    <a href="#" className="btn btn-danger">Ver</a>
-                </div>
-            </div></SwiperSlide>
-
+            {images.map((carrousel) => (
+                <SwiperSlide key={carrousel.id}>
+                    <div className="card text-center bg-dark">
+                        <div className="card-body">
+                            <img src={`/images/imagescarrousel/${carrousel.Foto}`} className='img-fluid' alt="" />
+                            <h5 className="card-title text-white"></h5>
+                            <p className="card-text text-white"></p>
+                            <a href="#" className="btn btn-danger">Ver</a>
+                        </div>
+                    </div>
+                </SwiperSlide>
+            ))}
         </Swiper>
-    )
+    );
 }

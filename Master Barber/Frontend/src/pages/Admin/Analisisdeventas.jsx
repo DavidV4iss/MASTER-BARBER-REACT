@@ -1,55 +1,118 @@
-import React from 'react'
-import NavbarAdmin from '../../Components/NavbarAdmin'
-import SidebarAdmin from '../../Components/SidebarAdmin'
-import Graficas from '../../Components/Graficas';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import Swal from 'sweetalert2';
+import NavbarAdmin from '../../Components/NavbarAdmin';
+import SidebarAdmin from '../../Components/SidebarAdmin';
 
-export default function Analisisdeventas() {
-    const data = {
-        labels: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
-        datasets: [
-            {
-                label: 'Ventas',
-                data: [65, 59, 580, 81, 56, 55, 67, 100, 36, 10, 30, 60]
-            },
-            {
-                label: 'Gastos',
-                data: [28, 48, 40, 19, 86, 27, 72, 30, 0, 30, 39, 70]
-            },
+export default function UploadCarrousel() {
+    const [selectedFile, setSelectedFile] = useState(null);
+    const [isUpdating, setIsUpdating] = useState(false);
+    const [imagePreview, setImagePreview] = useState('');
+    const [Carrousel, setCarrousel] = useState({});
 
-        ],
+    useEffect(() => {
+        const fetchCarrousel = async () => {
+            try {
+                const res = await axios.get(`http://localhost:8081/GetCarrousel`);
+                setCarrousel(res.data[0]);
+                if (res.data[0].Foto) {
+                    setImagePreview(`/images/imagesCarrousel/${res.data[0].Foto}`);
+                }
+            } catch (err) {
+                console.error('Error al obtener los datos:', err);
+                Swal.fire({
+                    title: 'Error',
+                    text: 'No se pudo cargar la información',
+                    icon: 'error',
+                    customClass: {
+                        popup: "dark-theme-popup bg-dark antonparabackend ",
+                    },
+                });
+            }
+        };
+        fetchCarrousel();
+    }, []);
+
+    const handleChange = (e) => {
+        setCarrousel({ ...Carrousel, [e.target.name]: e.target.value });
     };
-    const options = {
-        scales: {
-            y: {
-                beginAtZero: true,
-            },
+
+    const handleFileChange = (event) => {
+        const file = event.target.files[0];
+        setSelectedFile(file);
+        setImagePreview(URL.createObjectURL(file));
+    };
+
+    const handleSubmit = async (event) => {
+        event.preventDefault();
+        const formData = new FormData();
+        formData.append('image', selectedFile);
+        try {
+            const res = await axios.post('http://localhost:8081/CreateCarrousel', formData,)
+            if (res.status === 200) {
+                Swal.fire({
+                    icon: 'success',
+                    title: res.data,
+                    timer: 1000,
+                    customClass: {
+                        popup: "dark-theme-popup bg-dark antonparabackend ",
+                    },
+                }).then(() => {
+                    window.location.reload(0);
+                });
+            }
+        } catch (err) {
+            console.log(err);
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: err.response.data,
+                customClass: {
+                    popup: "dark-theme-popup bg-dark antonparabackend ",
+                },
+            });
         }
+        setIsUpdating(true);
     };
+
     return (
         <div>
             <NavbarAdmin />
             <SidebarAdmin />
-            <div className='contenido'  id='Analisisdeventas'>
-                <p className='text-center text-white mt-5 display-6 bebas col-sm-12 col'>HOLA,  <span className='text-danger'>ADMINISTRADOR</span>| ESTE ES EL ANALISIS DEL INVENTARIO</p>
-                <div className='container pt-5 col-sm12 col justify-content-center'>
-                    <div className="row g-5 mt-5">
-                        <div className="col col-sm-12 mt-5">
-                            <Graficas data={data} tipo='radar' options={options} />
-                        </div>
-                        <div className="col-12 col-sm border border-2 mx-0 mx-sm-5 border-secondary  text-center">
-                            <h3 className='pt-4  text-warning'>Prductos vendidos</h3>
-                            <h4 className='pt-2 text-white'>1234 unidades</h4>
-                            <h4 className='pb-4 text-success'>+ 8% este mes</h4>
-                        </div>
-                        <div className="col-12 col-sm border mx-0 mx-sm-5 border-2 border-secondary text-center">
-                            <h3 className='pt-4 text-warning'>Total ganancias</h3>
-                            <h4 className='pt-2 text-white'>COP 10.000.000</h4>
-                            <h4 className='pb-4 text-danger'>-5 % este mes</h4>
-                        </div>
-                    </div>
-                    </div>
-                </div>
-            </div>
+            <p className='text-center  mt-5 text-white display-6 bebas col-sm-12 col'>HOLA, <span className='text-danger'>ADMINISTRADOR</span> |AQUI PODRAS SUBIR Y ELIMINAR IMAGENES AL CARRUSEL</p>
+            
+            
+            <div className="container text-center text-white">
+                <form onSubmit={handleSubmit}>
+                    <img
+                        src={imagePreview || 'default-avatar.png'}
+                        alt="Vista Previa"
+                        className="img-fluid text-center mx-5 m-5"
+                        style={{ width: '250px', height: '250px', objectFit: 'cover' }}
+                    />
+                    <h2 className="text-white antonparabackend mb-5">Subir Una Foto A <span className='text-success'> MASTER SHOP</span></h2>
 
-    )
+                    <div className=" container">
+                        <div className="input-group">
+                            <input
+                                name="file"
+                                accept="image/*"
+                                type="file" 
+                                className="form-control bg-black text-white border-light mx-5"
+                                id="inputGroupFile04"
+                                onChange={handleFileChange}
+                            />
+                                <button
+                                    type="submit"
+                                    className="btn btn-outline-success mx-5 text-white"
+                                    disabled={isUpdating}
+                                >
+                                    {isUpdating ? 'Subiendo...' : 'Subir'}
+                                </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    );
 }

@@ -457,7 +457,6 @@ app.post('/CreateBarberos', uploadBarbero.single('foto'), (req, res) => {
     const descripcion = req.body.descripcion;
     const fotoName = req.file.filename;
 
-    // Validar que la contraseña tenga al menos 8 caracteres
     if (contrasena.length < 8) {
         return res.status(400).send('La contraseña debe tener al menos 8 caracteres');
     }
@@ -502,7 +501,6 @@ app.put('/UpdateBarberos/:id', uploadBarbero.single('foto'), (req, res) => {
         const contrasena = req.body.contrasena
         const descripcion = req.body.descripcion
         const fotoName = req.file ? req.file.filename : ''
-        console.log(fotoName);
 
         const q = 'UPDATE usuarios SET nombre_usuario = ?, email = ?, contrasena = ?, descripcion = ?, Foto = ? WHERE id_usuario = ? AND id_rol = 2'
        
@@ -776,6 +774,54 @@ app.post('/Createcalificaciones', (req, res) => {
     }
     );
 });
+
+
+
+
+
+const storageCarrousel = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, '../Frontend/public/images/imagescarrousel/')
+    },
+    filename: function (req, file, cb) {
+        cb(null, `${Date.now()}` + '-' + file.originalname)
+    }
+
+})
+
+const uploadCarrousel = multer({ storage: storageCarrousel })
+
+
+app.get('/GetCarrousel', (req, res) => {
+    db.query('SELECT * FROM carrousel_images', (err, results) => {
+        if (err) {
+            console.log(err);
+            return res.status(500).send('Error en el servidor');
+        }
+        else {
+            return res.status(200).send(results);
+        }
+    })
+})
+
+app.post('/CreateCarrousel', uploadCarrousel.single('image'), (req, res) => {
+    const fotoName = req.file.filename;
+
+    const q = 'INSERT INTO carrousel_images (Foto) VALUES (?)';
+
+    const values = [fotoName];
+
+    db.query(q, values, (err, results) => {
+        if (err) {
+            console.log(err);
+            return res.status(500).send('Error en el servidor');
+        }
+        else {
+            return res.status(200).send('Imagen cargada exitosamente');
+        }
+    })
+})
+
 
 
 
