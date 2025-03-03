@@ -20,6 +20,9 @@ import ConfiguracionAdmin from './pages/Admin/ConfiguracionAdmin';
 import Iniciobarber from "./pages/Barbers/Iniciobarber";
 import PerfilBarber from "./pages/Barbers/PerfilBarber";
 import PerfilUser from "./pages/Usuario/PerfilUser";
+import GestionReservas from './pages/Barbers/GestionReservas';
+import ReservaCliente from './pages/Usuario/ReservaCliente';
+
 //FIN IMPORTACION DE RUTAS
 
 
@@ -29,6 +32,8 @@ import PerfilUser from "./pages/Usuario/PerfilUser";
 import 'animate.css';
 import './App.scss';
 import 'bootstrap/scss/bootstrap.scss'
+
+
 
 //FIN ESTILOS
 
@@ -119,13 +124,6 @@ function App() {
 
             {/* RUTAS PRIVADAS BARBEROS */}
 
-            {/* <Route
-              exact
-              path="/HorasBarberos"
-              element={
-                <PrivateRoute roles={["2", "1"]} element={<HrsBarberos />} />
-              }
-            /> */}
             <Route
               exact
               path="/Iniciobarber"
@@ -137,6 +135,11 @@ function App() {
               exact
               path="/PerfilBarber"
               element={<PrivateRoute roles={["2"]} element={<PerfilBarber />} />}
+            />
+            <Route
+              exact
+              path="/GestionReservas"
+              element={<PrivateRoute roles={["2"]} element={<GestionReservas />} />}
             />
 
           
@@ -163,6 +166,13 @@ function App() {
               path="/PerfilUser"
               element={<PrivateRoute roles={["3"]} element={<PerfilUser />} />}
             />
+            <Route
+              exact
+              path="/ReservaCliente"
+              element={<PrivateRoute roles={["3"]} element={<ReservaCliente />} />}
+            />
+
+
             {/* FIN RUTAS PRIVADAS CLIENTE*/}
 
 

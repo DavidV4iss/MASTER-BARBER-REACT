@@ -775,6 +775,103 @@ app.post('/Createcalificaciones', (req, res) => {
     );
 });
 
+app.get('/GetServicios', (req, res) => {
+    db.query('SELECT * FROM tipo_servicio', (err, results) => {
+        if (err) return res.status(500).json({ error: "Error en el servidor" });
+        return res.status(200).json(results);
+    });
+});
+
+app.post('/CrearReservas', (req, res) => {
+    const cliente_id = req.body.cliente_id;
+    const barbero_id = req.body.barbero_id;
+    const servicio = req.body.servicio; // Asegúrate de que este sea el id_tipo_servicio
+    const fecha = req.body.fecha;
+    const estado = req.body.estado;
+
+    const q = 'INSERT INTO reservas (cliente_id, barbero_id, servicio, fecha, estado) VALUES (?,?,?,?,?)';
+    const values = [cliente_id, barbero_id, servicio, fecha, estado];
+
+    db.query(q, values, (err, results) => {
+        if (err) {
+            console.log(err);
+            return res.status(500).json({ error: "Error al crear la reserva" });
+        }
+        return res.status(200).json({ message: "Reserva creada exitosamente" });
+    });
+});
+
+app.get('/GetReservas', (req, res) => {
+    db.query('SELECT * FROM reservas', (err, results) => {
+        if (err) return res.status(500).json({ error: "Error en el servidor" });
+        return res.status(200).json(results);
+    });
+});
+
+app.get('/GetReservas/:id', (req, res) => {
+    const id = req.params.id;
+    db.query('SELECT * FROM reservas WHERE id_reserva = ?', [id], (err, results) => {
+        if (err) return res.status(500).json({ error: "Error en el servidor" });
+        return res.status(200).json(results);
+    });
+}
+);
+
+app.put('/UpdateReservas/:id', (req, res) => {
+    const id = req.params.id;
+    const cliente_id = req.body.cliente_id;
+    const barbero_id = req.body.barbero_id;
+    const servicio = req.body.servicio;
+    const fecha = req.body.fecha;
+    const estado = req.body.estado;
+
+    const q = 'UPDATE reservas SET cliente_id = ?, barbero_id = ?, servicio = ?, fecha = ?, estado = ? WHERE id_reserva = ?';
+    const values = [cliente_id, barbero_id, servicio, fecha, estado, id];
+
+    db.query(q, values, (err, results) => {
+        if (err) return res.status(500).json({ error: `Error al actualizar la reserva: ${err.message}` });
+        return res.status(200).json({ message: "Reserva actualizada exitosamente" });
+    }
+    );
+});
+
+app.delete('/DeleteReservas/:id', (req, res) => {
+    const id = req.params.id;
+    db.query('DELETE FROM reservas WHERE id_reserva = ?', [id], (err, results) => {
+        if (err) return res.status(500).json({ error: `Error al eliminar la reserva: ${err.message}` });
+        return res.status(200).json({ message: "Reserva eliminada exitosamente" });
+    });
+});
+
+app.get('/GetReservasCliente/:id', (req, res) => {
+    const id = req.params.id;
+    db.query('SELECT * FROM reservas WHERE cliente_id = ?', [id], (err, results) => {
+        if (err) return res.status(500).json({ error: "Error en el servidor" });
+        return res.status(200).json(results);
+    });
+});
+
+app.patch ('/UpdateReservasEstado/:id', (req, res) => {
+    const id = req.params.id;
+    const estado = req.body.estado;
+
+    const q = 'UPDATE reservas SET estado = ? WHERE id_reserva = ?';
+    const values = [estado, id];
+
+    db.query(q, values, (err, results) => {
+        if (err) return res.status(500).json({ error: `Error al actualizar la reserva: ${err.message}` });
+        return res.status(200).json({ message: "Reserva actualizada exitosamente" });
+    }
+    );
+});
+
+app.get('/GetClientes', (req, res) => {
+    db.query('SELECT * FROM usuarios WHERE id_rol = 3', (err, results) => {
+        if (err) return res.status(500).json({ error: "Error en el servidor" });
+        return res.status(200).json(results);
+    });
+});
+
 
 
 

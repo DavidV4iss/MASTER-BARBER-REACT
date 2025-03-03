@@ -4,6 +4,8 @@ import axios from 'axios';
 import Swal from 'sweetalert2';
 import { useNavigate } from 'react-router-dom';
 import Rating from 'react-rating-stars-component';
+import ReservaCliente from './ReservaCliente';
+
 
 export default function InicioUsuario() {
   const [user, setUser] = useState({});
@@ -100,6 +102,7 @@ export default function InicioUsuario() {
           Hola, {user.nombre_usuario}
         </h1>
 
+        <ReservaCliente />
 
 
 
