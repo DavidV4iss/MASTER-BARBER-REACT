@@ -1,10 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import io from 'socket.io-client';
 import SidebarBarber from '../../Components/SidebarBarber';
 import NavbarBarber from '../../Components/NavbarBarber';
 
-const socket = io('http://localhost:8081');
 
 export default function GestionReservas() {
     const [reservas, setReservas] = useState([]);
@@ -40,13 +38,7 @@ export default function GestionReservas() {
                 console.error('Hubo un error al obtener los clientes:', error);
             });
 
-        socket.on('reservaActualizada', (data) => {
-            alert(`Tu reserva ha sido ${data.estado}`);
-        });
-
-        return () => {
-            socket.off('reservaActualizada');
-        };
+       
     }, []);
 
     const handleAccept = (id) => {
