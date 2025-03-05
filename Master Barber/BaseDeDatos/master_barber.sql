@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 28-02-2025 a las 15:15:02
+-- Tiempo de generación: 05-03-2025 a las 15:35:15
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -34,21 +34,23 @@ CREATE TABLE `calificaciones` (
   `comentario` text DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+-- --------------------------------------------------------
+
 --
--- Volcado de datos para la tabla `calificaciones`
+-- Estructura de tabla para la tabla `carrousel_images`
 --
 
-INSERT INTO `calificaciones` (`id`, `usuario_id`, `puntuacion`, `comentario`) VALUES
-(7, 5, 5, 'Excelente Servicio, Ambiente Comodo Y Agradable. Recomendadisismo'),
-(16, 5, 2, 'a'),
-(17, 5, 3, 'afffffffffffffffffffffffffffffffffff'),
-(18, 5, 5, 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA'),
-(19, 5, 5, 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'),
-(20, 5, 5, 'e'),
-(21, 5, 5, 'dddd'),
-(22, 5, 5, 'w'),
-(23, 5, 4, ''),
-(24, 5, 5, '');
+CREATE TABLE `carrousel_images` (
+  `id` int(11) NOT NULL,
+  `Foto` varchar(255) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `carrousel_images`
+--
+
+INSERT INTO `carrousel_images` (`id`, `Foto`) VALUES
+(1, '1741176513936-MB3.JPG');
 
 -- --------------------------------------------------------
 
@@ -122,12 +124,21 @@ INSERT INTO `inventario_vendido` (`id_producto_vendido`, `id_categoria_producto`
 
 CREATE TABLE `reservas` (
   `id_reserva` int(11) NOT NULL,
+  `cliente_id` int(11) NOT NULL,
+  `barbero_id` int(11) NOT NULL,
+  `servicio` int(255) NOT NULL,
   `fecha` datetime NOT NULL,
-  `usuario_id` int(11) DEFAULT NULL,
-  `barbero_id` int(11) DEFAULT NULL,
-  `tipo_servicio_id` int(11) DEFAULT NULL,
-  `estado` enum('Pendiente','Aceptada','Cancelada') NOT NULL DEFAULT 'Pendiente'
+  `estado` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `reservas`
+--
+
+INSERT INTO `reservas` (`id_reserva`, `cliente_id`, `barbero_id`, `servicio`, `fecha`, `estado`) VALUES
+(48, 46, 39, 2, '2025-03-05 09:10:00', 'pendiente'),
+(59, 46, 38, 2, '2025-03-05 09:21:00', 'pendiente'),
+(60, 46, 39, 2, '2025-03-05 09:24:00', 'pendiente');
 
 -- --------------------------------------------------------
 
@@ -196,10 +207,11 @@ CREATE TABLE `usuarios` (
 
 INSERT INTO `usuarios` (`id_usuario`, `nombre_usuario`, `email`, `nit`, `telefono`, `contrasena`, `id_rol`, `user_reset_code`, `user_reset_code_expiration`, `Foto`, `descripcion`) VALUES
 (5, 'Fidel Espitia ', 'fideljoseespi10@gmail.com', 1028662003, '3142758305', '$2a$10$Wu5aatNss9/D/N/DQ5v2uuvP9BhDL09q8/v8XQHUHUvjqCxQ6rCKG', 3, NULL, NULL, '1740579974533-B2.JPG', ''),
-(6, 'Fidel Jose ', 'Admin@gmail.com', 1028662003, '3142758305', '$2a$10$gKkjGOeNlRvXzyePlVJq1.r/9Y.F6.f.UROSSUNuM7Sjv1xkZyRo.', 1, NULL, NULL, '1732824864824-MB3.JPG', ''),
+(6, 'ADMINISTRADOR', 'Admin@gmail.com', 1028662003, '3142758305', '$2a$10$gKkjGOeNlRvXzyePlVJq1.r/9Y.F6.f.UROSSUNuM7Sjv1xkZyRo.', 1, NULL, NULL, '1732824864824-MB3.JPG', ''),
 (38, 'Deiby', 'Deiby30@gmail.com', 0, '', '$2a$10$MBlG9zo7dSAq3BMMYfMLS.IBY48V8EGXybOdMa.NHqBUplwM2avuW', 2, NULL, NULL, 'barbero_1740751795938-B1.JPG', 'Cortes Perfilados , Accesoria En Imagen Buen Uso De Las Maquinas Y El Ambinte'),
 (39, 'Nixxon', 'nixon30@gmail.com', 0, '', '$2a$10$7snPIXXcHI2kawDZnws45.DIGdyNBEEIoJ4Mk8Ooc465FV36tEA3G', 2, NULL, NULL, 'barbero_1740751841470-B3.JPG', 'Cortes Perfilados , Accesoria En Imagen Buen Uso De Las Maquinas Y El Ambinte'),
-(40, 'Jeisson', 'jeisson30@gmail.com', 0, '', '$2a$10$6H.hF/CJRrYn.kWyRcHcwOphvMmX3bk4SLqM//wjZNJpX/t7Fyu52', 2, NULL, NULL, 'barbero_1740751877158-B2.JPG', 'Cortes Perfilados , Accesoria En Imagen Buen Uso De Las Maquinas Y El Ambinte');
+(40, 'Jeisson', 'jeisson30@gmail.com', 0, '', '$2a$10$6H.hF/CJRrYn.kWyRcHcwOphvMmX3bk4SLqM//wjZNJpX/t7Fyu52', 2, NULL, NULL, 'barbero_1740751877158-B2.JPG', 'Cortes Perfilados , Accesoria En Imagen Buen Uso De Las Maquinas Y El Ambinte'),
+(46, 'Cristian Rueda', 'cristianrueda0313@gmail.com', 1014481682, '3044495505', '$2a$10$bIWNt35HJxB.87Vr7PxyBuUBis7..1UoEontoGZ2okpnkLeBp8Lfe', 3, '338281', '2025-02-28 10:59:58', '1741002589544-MB7.JPG', '');
 
 --
 -- Índices para tablas volcadas
@@ -211,6 +223,12 @@ INSERT INTO `usuarios` (`id_usuario`, `nombre_usuario`, `email`, `nit`, `telefon
 ALTER TABLE `calificaciones`
   ADD PRIMARY KEY (`id`),
   ADD KEY `usuario_id` (`usuario_id`);
+
+--
+-- Indices de la tabla `carrousel_images`
+--
+ALTER TABLE `carrousel_images`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indices de la tabla `categoria_producto`
@@ -237,9 +255,9 @@ ALTER TABLE `inventario_vendido`
 --
 ALTER TABLE `reservas`
   ADD PRIMARY KEY (`id_reserva`),
-  ADD KEY `usuario_id` (`usuario_id`),
+  ADD KEY `cliente_id` (`cliente_id`),
   ADD KEY `barbero_id` (`barbero_id`),
-  ADD KEY `tipo_servicio_id` (`tipo_servicio_id`);
+  ADD KEY `servicio` (`servicio`);
 
 --
 -- Indices de la tabla `rol`
@@ -271,6 +289,12 @@ ALTER TABLE `calificaciones`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
 
 --
+-- AUTO_INCREMENT de la tabla `carrousel_images`
+--
+ALTER TABLE `carrousel_images`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
 -- AUTO_INCREMENT de la tabla `categoria_producto`
 --
 ALTER TABLE `categoria_producto`
@@ -292,13 +316,13 @@ ALTER TABLE `inventario_vendido`
 -- AUTO_INCREMENT de la tabla `reservas`
 --
 ALTER TABLE `reservas`
-  MODIFY `id_reserva` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `id_reserva` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=61;
 
 --
 -- AUTO_INCREMENT de la tabla `usuarios`
 --
 ALTER TABLE `usuarios`
-  MODIFY `id_usuario` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=41;
+  MODIFY `id_usuario` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=47;
 
 --
 -- Restricciones para tablas volcadas
@@ -326,9 +350,9 @@ ALTER TABLE `inventario_vendido`
 -- Filtros para la tabla `reservas`
 --
 ALTER TABLE `reservas`
-  ADD CONSTRAINT `reservas_ibfk_1` FOREIGN KEY (`usuario_id`) REFERENCES `usuarios` (`id_usuario`),
+  ADD CONSTRAINT `reservas_ibfk_1` FOREIGN KEY (`cliente_id`) REFERENCES `usuarios` (`id_usuario`),
   ADD CONSTRAINT `reservas_ibfk_2` FOREIGN KEY (`barbero_id`) REFERENCES `usuarios` (`id_usuario`),
-  ADD CONSTRAINT `reservas_ibfk_3` FOREIGN KEY (`tipo_servicio_id`) REFERENCES `tipo_servicio` (`id_tipo_servicio`);
+  ADD CONSTRAINT `reservas_ibfk_3` FOREIGN KEY (`servicio`) REFERENCES `tipo_servicio` (`id_tipo_servicio`);
 
 --
 -- Filtros para la tabla `usuarios`
