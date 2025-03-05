@@ -783,20 +783,13 @@ app.get('/GetServicios', (req, res) => {
 });
 
 app.post('/CrearReservas', (req, res) => {
-    const cliente_id = req.body.cliente_id;
-    const barbero_id = req.body.barbero_id;
-    const servicio = req.body.servicio; // Asegúrate de que este sea el id_tipo_servicio
-    const fecha = req.body.fecha;
-    const estado = req.body.estado;
+    const { cliente_id, barbero_id, servicio, fecha, estado } = req.body;
 
-    const q = 'INSERT INTO reservas (cliente_id, barbero_id, servicio, fecha, estado) VALUES (?,?,?,?,?)';
+    const q = 'INSERT INTO reservas (cliente_id, barbero_id, servicio, fecha, estado) VALUES (?, ?, ?, ?, ?)';
     const values = [cliente_id, barbero_id, servicio, fecha, estado];
 
     db.query(q, values, (err, results) => {
-        if (err) {
-            console.log(err);
-            return res.status(500).json({ error: "Error al crear la reserva" });
-        }
+        if (err) return res.status(500).json({ error: "Error al crear la reserva" });
         return res.status(200).json({ message: "Reserva creada exitosamente" });
     });
 });
@@ -807,6 +800,15 @@ app.get('/GetReservas', (req, res) => {
         return res.status(200).json(results);
     });
 });
+
+app.get('/GetReservas/barbero/:id', (req, res) => {
+    const id = req.params.id;
+    db.query('SELECT * FROM reservas WHERE barbero_id = ?', [id], (err, results) => {
+        if (err) return res.status(500).json({ error: "Error en el servidor" });
+        return res.status(200).json(results);
+    });
+}
+);
 
 app.get('/GetReservas/:id', (req, res) => {
     const id = req.params.id;

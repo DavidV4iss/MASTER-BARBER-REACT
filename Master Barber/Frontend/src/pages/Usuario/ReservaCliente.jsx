@@ -5,10 +5,13 @@ export default function Reserva() {
     const [service, setService] = useState('');
     const [date, setDate] = useState('');
     const [barberoId, setBarberoId] = useState('');
-    const [clienteId, setClienteId] = useState('');
+    const [clienteId, setClienteId] = useState(''); // Asume que tienes el ID del cliente de alguna manera
     const [barberos, setBarberos] = useState([]);
     const [servicios, setServicios] = useState([]);
-    const [clientes, setClientes] = useState([]);
+
+    const token = localStorage.getItem('token');
+    const tokenDecoded = token ? JSON.parse(atob(token.split('.')[1])) : null;
+    const id = tokenDecoded.id;
 
     useEffect(() => {
         axios.get('http://localhost:8081/GetBarberos')
@@ -26,22 +29,14 @@ export default function Reserva() {
             .catch(error => {
                 console.error('Hubo un error al obtener los servicios:', error);
             });
-
-        axios.get('http://localhost:8081/GetClientes')
-            .then(response => {
-                setClientes(response.data);
-            })
-            .catch(error => {
-                console.error('Hubo un error al obtener los clientes:', error);
-            });
     }, []);
 
     const handleSubmit = (e) => {
         e.preventDefault();
         const reserva = {
-            cliente_id: clienteId,
+            cliente_id: id, // Asegúrate de que este valor esté disponible
             barbero_id: barberoId,
-            servicio: service, // Asegúrate de que este sea el id_tipo_servicio
+            servicio: service,
             fecha: date,
             estado: 'pendiente'
         };
@@ -86,18 +81,6 @@ export default function Reserva() {
                         {barberos.map(barbero => (
                             <option key={barbero.id_usuario} value={barbero.id_usuario}>
                                 {barbero.nombre_usuario}
-                            </option>
-                        ))}
-                    </select>
-                </label>
-                <br />
-                <label>
-                    Cliente:
-                    <select value={clienteId} onChange={(e) => setClienteId(e.target.value)}>
-                        <option value=''>Seleccione un cliente</option>
-                        {clientes.map(cliente => (
-                            <option key={cliente.id_usuario} value={cliente.id_usuario}>
-                                {cliente.nombre_usuario}
                             </option>
                         ))}
                     </select>
