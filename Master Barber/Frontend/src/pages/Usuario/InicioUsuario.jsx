@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import NavbarUserIndex from '../../Components/NavbarUserIndex';
 import axios from 'axios';
 import Swal from 'sweetalert2';
-import { useNavigate } from 'react-router-dom';
 import Rating from 'react-rating-stars-component';
 import ReservaCliente from './ReservaCliente';
 
@@ -32,18 +31,17 @@ export default function InicioUsuario() {
     comentario: ""
   });
 
-  const navigate = useNavigate();
-  useEffect(() => {
-    const fetchCalificaciones = async () => {
-      try {
-        const res = await axios.get("http://localhost:8081/traerCalificaciones");
-        setCalificaciones(res.data);
-      } catch (err) {
-        console.log("Error al obtener las calificaciones:", err);
-      }
-    };
-    fetchCalificaciones();
-  }, []);
+  // useEffect(() => {
+  //   const fetchCalificaciones = async () => {
+  //     try {
+  //       const res = await axios.get("http://localhost:8081/traerCalificaciones");
+  //       setCalificaciones(res.data);
+  //     } catch (err) {
+  //       console.log("Error al obtener las calificaciones:", err);
+  //     }
+  //   };
+  //   fetchCalificaciones();
+  // }, []);
 
   const handleChange = (e) => {
     setNuevaCalificacion(prev => ({ ...prev, [e.target.name]: e.target.value }));
@@ -68,8 +66,9 @@ export default function InicioUsuario() {
           customClass: {
             popup: "dark-theme-popup bg-dark antonparabackend ",
           },
+          timer: 9000,
         });
-        navigate("/inicioUsuario");
+        window.location.reload(0);
       }
     } catch (error) {
       if (error.response) {
@@ -91,9 +90,7 @@ export default function InicioUsuario() {
   return (
     <div className='Registro'>
       <NavbarUserIndex />
-      {/* <div className="img2 position-fixed top-50 start-50 translate-middle row h-100 col-1 col-sm-12  mt-5 p-5 m-2">
-        <img src="/LOGO.png" alt="" className="" />
-      </div> */}
+     
       <div
         className="container-fluid p-5 nab table-responsive col col-sm-12"
         id="homeuser"
