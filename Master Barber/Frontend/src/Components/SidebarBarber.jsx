@@ -8,6 +8,8 @@ import { GiBleedingEye } from "react-icons/gi";
 export default function SidebarBarber() {
   return (
     <div className="min-vh-100 sidebar2 position-fixed px-1 text-center justify-content-center">
+      <ul className="list-unstyled">
+
       <li className="text-center align-items-center justify-content-center">
         <NavLink
           to="/InicioBarber"
@@ -29,7 +31,9 @@ export default function SidebarBarber() {
           <GiBleedingEye className="me-2" />
           <span className="d-none d-lg-block">Gestion Reservas</span>
         </NavLink>
-      </li>
+        </li>
+      </ul>
+        
     </div>
   );
 }

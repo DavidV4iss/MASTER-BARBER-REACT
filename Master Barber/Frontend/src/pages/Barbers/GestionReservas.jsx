@@ -2,19 +2,20 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import SidebarBarber from '../../Components/SidebarBarber';
 import NavbarBarber from '../../Components/NavbarBarber';
-
+import AlertNotification from '../../components/AlertNotification';
 
 export default function GestionReservas() {
     const [reservas, setReservas] = useState([]);
     const [servicios, setServicios] = useState([]);
     const [clientes, setClientes] = useState([]);
+    const [isLoading, setIsLoading] = useState(false);
 
     const token = localStorage.getItem('token');
     const tokenDecoded = token ? JSON.parse(atob(token.split('.')[1])) : null;
     const id = tokenDecoded.id;
 
     useEffect(() => {
-        axios.get( `http://localhost:8081/GetReservas/barbero/${id}`)
+        axios.get(`http://localhost:8081/GetReservas/barbero/${id}`)
             .then(response => {
                 setReservas(response.data);
             })
@@ -37,11 +38,10 @@ export default function GestionReservas() {
             .catch(error => {
                 console.error('Hubo un error al obtener los clientes:', error);
             });
-
-       
     }, []);
 
     const handleAccept = (id) => {
+            setIsLoading(true)
         axios.patch(`http://localhost:8081/UpdateReservasEstado/${id}`, { estado: 'aceptada' })
             .then(response => {
                 console.log(response.data);
@@ -49,10 +49,14 @@ export default function GestionReservas() {
             })
             .catch(error => {
                 console.error('Hubo un error al aceptar la reserva:', error);
-            });
+            })
+            .finally(() => {
+                setIsLoading(false);
+            })
     };
 
     const handleCancel = (id) => {
+            setIsLoading(true)
         axios.patch(`http://localhost:8081/UpdateReservasEstado/${id}`, { estado: 'cancelada' })
             .then(response => {
                 console.log(response.data);
@@ -60,7 +64,10 @@ export default function GestionReservas() {
             })
             .catch(error => {
                 console.error('Hubo un error al cancelar la reserva:', error);
-            });
+            })
+            .finally(() => {
+                setIsLoading(false);
+            })
     };
 
     const getServiceName = (id) => {
@@ -79,6 +86,13 @@ export default function GestionReservas() {
             <SidebarBarber />
             <div className='text-center mt-5 anton'>
                 <h2>Gestión de Reservas </h2>
+                {
+                    isLoading && (
+                        <div>
+                            CARGANDO...
+                        </div>
+                    )
+                }
                 <ul>
                     {reservas.map((reserva) => (
                         <li key={reserva.id_reserva}>

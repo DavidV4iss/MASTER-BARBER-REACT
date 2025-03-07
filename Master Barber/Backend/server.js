@@ -52,7 +52,7 @@ const transporter = nodemailer.createTransport({
     secure: true,
     auth: {
         user: 'cristianrueda0313@gmail.com',
-        pass: 'ryke ekks cwbx rstg',
+        pass: 'yykl vnja kuss aipw',
     }
 });
 
@@ -853,18 +853,84 @@ app.get('/GetReservasCliente/:id', (req, res) => {
     });
 });
 
-app.patch ('/UpdateReservasEstado/:id', (req, res) => {
+app.patch('/UpdateReservasEstado/:id', (req, res) => {
     const id = req.params.id;
-    const estado = req.body.estado;
+    const nuevoEstado = req.body.estado;
 
-    const q = 'UPDATE reservas SET estado = ? WHERE id_reserva = ?';
-    const values = [estado, id];
+    // Obtener el estado actual de la reserva
+    db.query('SELECT estado FROM reservas WHERE id_reserva = ?', [id], (err, results) => {
+        if (err) {
+            console.error('Error en la consulta:', err);
+            return res.status(500).json({ error: 'Error en el servidor' });
+        }
 
-    db.query(q, values, (err, results) => {
-        if (err) return res.status(500).json({ error: `Error al actualizar la reserva: ${err.message}` });
-        return res.status(200).json({ message: "Reserva actualizada exitosamente" });
-    }
-    );
+        if (results.length === 0) {
+            return res.status(400).json({ error: 'Reserva no encontrada' });
+        }
+
+        const estadoActual = results[0].estado;
+
+        // Verificar si el estado ha cambiado
+        if (estadoActual === nuevoEstado) {
+            return res.status(200).json({ message: 'El estado de la reserva ya es el mismo' });
+        }
+
+        // Actualizar el estado de la reserva
+        const q = 'UPDATE reservas SET estado = ? WHERE id_reserva = ?';
+        const values = [nuevoEstado, id];
+
+        db.query(q, values, (err, results) => {
+            if (err) {
+                console.error('Error al actualizar la reserva:', err);
+                return res.status(500).json({ error: 'Error al actualizar la reserva' });
+            }
+
+            // Enviar notificación por correo electrónico
+            db.query('SELECT r.*, u.email, s.nombre AS servicio_nombre FROM reservas r JOIN usuarios u ON r.cliente_id = u.id_usuario JOIN tipo_servicio s ON r.servicio = s.id_tipo_servicio WHERE r.id_reserva = ?', [id], (err, results) => {
+                if (err) {
+                    console.error('Error en la consulta:', err);
+                    return res.status(500).send('Error en el servidor');
+                }
+
+                if (results.length === 0) {
+                    return res.status(400).send('Reserva no encontrada');
+                }
+
+                const reserva = results[0];
+                const email = reserva.email;
+                const servicioNombre = reserva.servicio_nombre;
+
+                // Configurar el contenido del correo electrónico
+                const mailOptions = {
+                    from: 'cristianrueda0313@gmail.com',
+                    to: email,
+                    subject: 'Actualización del estado de tu reserva',
+                    html: `
+                        <div style="background-color: #f8f9fa; padding: 20px; font-family: Arial, sans-serif;">
+                            <h2 style="color: #343a40;">Actualización de tu Reserva</h2>
+                            <p>Hola,</p>
+                            <p>Te informamos que el estado de tu reserva ha sido actualizado a: <strong>${nuevoEstado}</strong>.</p>
+                            <p>Detalles de la reserva:</p>
+                            <ul>
+                                <li><strong>Servicio:</strong> ${servicioNombre}</li>
+                                <li><strong>Fecha:</strong> ${new Date(reserva.fecha).toLocaleString()}</li>
+                            </ul>
+                            <p>Gracias por confiar en Master Barber.</p>
+                        </div>
+                    `
+                };
+
+                // Enviar el correo electrónico
+                transporter.sendMail(mailOptions, (error) => {
+                    if (error) {
+                        console.error('Error al enviar el correo electrónico:', error);
+                        return res.status(500).json({ message: 'Error al enviar el correo electrónico' });
+                    }
+                    res.status(200).json({ message: 'Reserva actualizada y notificación enviada por correo electrónico' });
+                });
+            });
+        });
+    });
 });
 
 app.get('/GetClientes', (req, res) => {
@@ -873,9 +939,6 @@ app.get('/GetClientes', (req, res) => {
         return res.status(200).json(results);
     });
 });
-
-
-
 
 
 const storageCarrousel = multer.diskStorage({
