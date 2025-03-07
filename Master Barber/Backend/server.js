@@ -968,21 +968,22 @@ app.get('/GetCarrousel', (req, res) => {
 
 app.post('/CreateCarrousel', uploadCarrousel.single('image'), (req, res) => {
     const fotoName = req.file.filename;
+    const nombre_producto = req.body.nombre_producto;
+    const descripcion = req.body.descripcion;
 
-    const q = 'INSERT INTO carrousel_images (Foto) VALUES (?)';
+    const q = 'INSERT INTO carrousel_images (Foto, nombre_producto, descripcion) VALUES (?, ?, ?)';
 
-    const values = [fotoName];
+    const values = [fotoName, nombre_producto, descripcion];
 
     db.query(q, values, (err, results) => {
         if (err) {
             console.log(err);
             return res.status(500).send('Error en el servidor');
+        } else {
+            return res.status(200).send('Producto creado exitosamente');
         }
-        else {
-            return res.status(200).send('Imagen cargada exitosamente');
-        }
-    })
-})
+    });
+});
 
 
 

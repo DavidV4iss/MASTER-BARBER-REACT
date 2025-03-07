@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { Navigation, Pagination, EffectCreative } from 'swiper/modules';
+import { Navigation, Pagination, EffectCreative, Autoplay } from 'swiper/modules';
 import 'swiper/css/bundle';
 import 'swiper/css/pagination';
 import 'swiper/css/scrollbar';
@@ -9,6 +9,7 @@ import axios from 'axios';
 
 export default function CarrouselShop() {
     const [images, setImages] = useState([]);
+    const [selectedImage, setSelectedImage] = useState(null);
 
     useEffect(() => {
         const fetchImages = async () => {
@@ -22,44 +23,77 @@ export default function CarrouselShop() {
         fetchImages();
     }, []);
 
+    const handleShowModal = (image) => {
+        setSelectedImage(image);
+    };
+
+    const handleCloseModal = () => {
+        setSelectedImage(null);
+    };
+
     return (
-        <Swiper
-            grabCursor={true}
-            effect={'creative'}
-            creativeEffect={{
-                prev: {
-                    translate: ['-100%', 0, -500],
-                },
-                next: {
-                    translate: ['100%', 0, -500],
-                },
-            }}
-            centeredSlides={true}
-            modules={[Navigation, Pagination, EffectCreative]}
-            navigation={{ clickable: true }}
-            loop={true}
-            breakpoints={{
-                640: {
-                    slidesPerView: 1
-                },
-                768: {
-                    slidesPerView: 3
-                }
-            }}
-            className="mySwiper2 mt-5 pt-5 "
-        >
-            {images.map((carrousel) => (
-                <SwiperSlide key={carrousel.id}>
-                    <div className="card text-center bg-dark">
-                        <div className="card-body">
-                            <img src={`/images/imagescarrousel/${carrousel.Foto}`} className='img-fluid' alt="" />
-                            <h5 className="card-title text-white"></h5>
-                            <p className="card-text text-white"></p>
-                            <a href="#" className="btn btn-danger">Ver</a>
+        <>
+            <Swiper
+                grabCursor={true}
+                effect={'creative'}
+                creativeEffect={{
+                    prev: {
+                        translate: ['-100%', 0, -500],
+                    },
+                    next: {
+                        translate: ['100%', 0, -500],
+                    },
+                }}
+                centeredSlides={true}
+                modules={[Navigation, Pagination, EffectCreative, Autoplay]}
+                autoplay={{ delay: 2200 }}
+                navigation={{ clickable: true }}
+                loop={true}
+                breakpoints={{
+                    640: {
+                        slidesPerView: 1
+                    },
+                    768: {
+                        slidesPerView: 3
+                    }
+                }}
+                className="mySwiper2 mt-5 pt-5 "
+            >
+                {images.map((carrousel) => (
+                    <SwiperSlide key={carrousel.id}>
+                        <div className="card text-center bg-dark">
+                            <div className="card-body">
+                                <img src={`/images/imagescarrousel/${carrousel.Foto}`} className='img-fluid ' alt="" />
+                                <h5 className="card-title mt-4 antonparabackend text-danger">{carrousel.nombre_producto}</h5>
+                                <p className="card-text text-white mt-4">{carrousel.descripcion}</p>
+                                <button type="button" className="btn btn-danger" onClick={() => handleShowModal(carrousel)}>
+                                    Ver
+                                </button>
+                            </div>
+                        </div>
+                    </SwiperSlide>
+                ))}
+            </Swiper>
+
+            {selectedImage && (
+                <div className="modal fade show bg-black" style={{ display: 'block'  }} tabIndex="-1">
+                    <div className="modal-dialog ">
+                        <div className="modal-content bg-black welcome-2 border border">
+                            <div className="modal-header">
+                                <button type="button" className="btn-close btn-close-white" onClick={handleCloseModal} aria-label="Close"></button>
+                            </div>
+                            <div className="modal-bod y ">
+                                <img src={`/images/imagescarrousel/${selectedImage.Foto}`} className=' w-50 contenido5' alt="" />
+                                <h5 className="card-title mt-4 antonparabackend text-danger text-center">{selectedImage.nombre_producto}</h5>
+                                <p className="card-text text-white mt-4 text-center m-5 ">{selectedImage.descripcion}</p>
+                            </div>
+                            <div className="modal-footer">
+                                <button type="button" className="btn btn-danger" onClick={handleCloseModal}>Close</button>
+                                </div>
                         </div>
                     </div>
-                </SwiperSlide>
-            ))}
-        </Swiper>
+                </div>
+            )}
+        </>
     );
 }

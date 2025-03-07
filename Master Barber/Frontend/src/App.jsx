@@ -10,7 +10,7 @@ import GestionarBarberos from './pages/Admin/GestionarBarberos';
 import Inventario from './pages/Admin/Inventario';
 import HrsBarberos from './pages/Admin/HrsBarberos';
 import InicioAdmin from './pages/Admin/InicioAdmin';
-import Analisisdeventas from './pages/Admin/Analisisdeventas';
+import Shop from './pages/Admin/Shop';
 import Gestiondeinventario from './pages/Admin/Gestiondeinventario';
 import EnvEmail from './pages/default/EnvEmail';
 import Cambiarpasscod from './pages/default/Cambiarpasscod';
@@ -86,9 +86,9 @@ function App() {
             />
             <Route
               exact
-              path="/Analisisdeventas"
+              path="/Shop"
               element={
-                <PrivateRoute roles={["1"]} element={<Analisisdeventas />} />
+                <PrivateRoute roles={["1"]} element={<Shop />} />
               }
             />
             <Route

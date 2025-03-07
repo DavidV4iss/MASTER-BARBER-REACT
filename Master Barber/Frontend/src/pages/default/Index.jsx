@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import NavbarIndex from '../../Components/NavbarIndex'
 import CarrouselShop from '../../Components/CarrouselShop'
-import CarrouselGaleria from '../../Components/CarrouselGaleria'
 import Calificaciones from '../../Components/Calificaciones'
 import Darkandlight from "../../Components/Dark and light";
 import axios from 'axios'
@@ -296,12 +295,6 @@ export default function Index() {
 
 
 
-            <div className="welcome" id='galeria'>
-                <h1 className='text-center text-danger display-1 anton'>GALERIA DE MASTER BARBER</h1>
-                <div className="mt-5 pt-5 col-sm-12 col">
-                    <CarrouselGaleria />
-                </div>
-            </div>
 
             <div className="welcome" id='ubicacion'>
                 <h1 className={`text-center display-1 antonparabackend  ${theme === "light" ? "dark" : "text-white"}`}>Donde Nos Puedes Ubicar</h1>
@@ -313,8 +306,8 @@ export default function Index() {
             
 
             <div className={`antonparabackend text-center pt-5 mt-5 ${theme === "light" ? "dark" : "text-white"}`} id='calificaciones'>
-                <h1 className="display-1">CALIFICACIONES</h1>
-                <div className="mt-5"><Calificaciones /></div> 
+                <h1 className="display-1">LO QUE PIENSAN NUESTRO CLIENTES</h1>
+                <div className="mt-5 pt-5"><Calificaciones /></div> 
             
             </div> 
 
