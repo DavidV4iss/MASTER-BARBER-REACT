@@ -941,6 +941,8 @@ app.get('/GetClientes', (req, res) => {
 });
 
 
+//CARRUSEL DE PRODUCTOS A LA VENTAS
+
 const storageCarrousel = multer.diskStorage({
     destination: function (req, file, cb) {
         cb(null, '../Frontend/public/images/imagescarrousel/')
@@ -984,6 +986,21 @@ app.post('/CreateCarrousel', uploadCarrousel.single('image'), (req, res) => {
         }
     });
 });
+
+app.delete('/DeleteCarrousel/:id', (req, res) => {
+    const id = req.params.id;
+    db.query('DELETE FROM carrousel_images WHERE id = ?', [id], (err, results) => {
+        if (err) {
+            console.log(err);
+            return res.status(500).send('Error en el servidor');
+        } else {
+            return res.status(200).send('Producto eliminado exitosamente');
+        }
+    });
+});
+
+//FIN CARRUSEL DE PRODUCTOS A LA VENTAS
+
 
 
 

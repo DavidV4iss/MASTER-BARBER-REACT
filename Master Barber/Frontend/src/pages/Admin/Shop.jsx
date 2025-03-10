@@ -3,6 +3,7 @@ import axios from 'axios';
 import Swal from 'sweetalert2';
 import NavbarAdmin from '../../Components/NavbarAdmin';
 import SidebarAdmin from '../../Components/SidebarAdmin';
+import CarrouselShopAdmin from '../../Components/CarrouselShopAdmin';
 
 export default function Shop() {
     const [selectedFile, setSelectedFile] = useState(null);
@@ -137,10 +138,9 @@ export default function Shop() {
                         </button>
                     </div>
                 </form>
-                <div className="border border-rounded mt-5 mx-5">
-                    <h5 className='antonparabackend text-danger antonparabackend mt-3'>AQUI PODARAS ELIMNAR LAS IMAGENES DEL CARRUSEL</h5>
-                    <img src={`/images/imagescarrousel/${Carrousel.Foto}`} className=' w-50 contenido5' alt="" />
-
+                <div className="border border-rounded shadow mt-5 m-5">
+                    <h5 className='antonparabackend text-light antonparabackend mt-3'>AQUI PODARAS ELIMNAR LAS IMAGENES QUE TIENES PUBLICADAS ACTUALMENTE</h5>
+                    <CarrouselShopAdmin />
                     
                 </div>
             </div>

@@ -346,3 +346,9 @@ button:hover {
 .margen1 {
   margin-top: 20%;
 }
+
+.card-calificacion:hover {
+  box-shadow: 0 0 30px 5px rgba(255, 255, 255, 0.3);
+  transform: scale(1.05) rotate(4deg);
+  transition: transform 0.2s ease;
+}

@@ -44,7 +44,7 @@ export default function Calificaciones() {
       <div className="row row-cols-1 row-cols-md-5 g-4">
         {calificaciones.map((calificacion) => (
           <div className="col" key={calificacion.id}>
-            <div className="card h-100 bg-dark" onClick={() => handleShow(calificacion)}>
+            <div className="card h-100 bg-dark card-calificacion"  onClick={() => handleShow(calificacion)}>
               <div className="card-body">
                 <img
                   src={`/images/perfil/${usuarios.find((user) => user.id_usuario === calificacion.usuario_id)?.Foto}`}
