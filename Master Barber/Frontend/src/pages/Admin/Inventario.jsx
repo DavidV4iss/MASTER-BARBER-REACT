@@ -13,6 +13,8 @@ export default function Inventario() {
         descripcion_P: '',
         cantidad: '',
         id_categoria_producto: '',
+        fecha_venta: '',
+        Foto: '',
         PrecioUnitario: ''
     });
 
@@ -21,6 +23,8 @@ export default function Inventario() {
         descripcion_P: '',
         cantidad: '',
         id_categoria_producto: '',
+        fecha_venta: '',
+        Foto: '',
         PrecioUnitario: ''
     });
 
@@ -84,6 +88,23 @@ export default function Inventario() {
             });
         }
     };
+
+     const handleFileChange = (e) => {
+        const selectedFile = e.target.files[0];
+        if (selectedFile && selectedFile.type.startsWith('image/')) {
+          setBarbero({ ...producto, [e.target.name]: selectedFile });
+          setImagePreview(URL.createObjectURL(selectedFile));
+        } else {
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Por favor, seleccione un archivo de imagen válido.',
+            customClass: {
+              popup: "dark-theme-popup bg-dark antonparabackend ",
+            },
+          });
+        }
+      };
 
     const handleChangeEdit = (e) => {
         setProductoEditar(prev => ({ ...prev, [e.target.name]: e.target.value }));
@@ -166,7 +187,7 @@ export default function Inventario() {
                 <div className='contenido ' id='Inventario'>
                     <p className='text-center text-white mt-5 display-6 bebas mx-3 '>HOLA, <span className='text-danger'>ADMINISTRADOR</span>| ESTE ES EL INVENTARIO DE LOS PRODUCTOS QUE SALEN DE LA BARBERIA</p>
 
-                    <div className="d-flex justify-content-end mx-5 mt-5">
+                    <div className="d-flex justify-content-end mx-5 mt-5 ">
                         <button type="button" class="btn btn-danger .col-md-4" data-bs-toggle="modal" data-bs-target="#AñadirModal" data-bs-whatever="@mdo" >Añadir</button>
                     </div>
                     <div className='container text-center'>
@@ -179,6 +200,8 @@ export default function Inventario() {
                                         <th >Descripcion</th>
                                         <th >Cantidad</th>
                                         <th >Categoria</th>
+                                        <th>Fecha Y Hora De Venta</th>
+                                        <th>Imagen</th>
                                         <th >Costo de venta</th>
                                         <th >Acciones</th>
                                     </tr>
@@ -191,6 +214,8 @@ export default function Inventario() {
                                             <td>{item.descripcion_P}</td>
                                             <td>{item.cantidad}</td>
                                             <td>{categorias.find(c => c.id_categoria_producto === item.id_categoria_producto).categoria}</td>
+                                            <td>{item.fecha_venta}</td>
+                                            <td>{item.Foto}</td>
                                             <td>{item.PrecioUnitario}</td>
                                             <td>
                                                 <div className="d-flex">
@@ -244,6 +269,14 @@ export default function Inventario() {
                                             </select>
                                         </div>
                                         <div class="mb-3">
+                                            <label for="recipient-name" class="col-form-label text-white">Fecha Y Hora De Venta</label>
+                                            <input type="datetime-local" class="form-control" id="recipient-name" name='fecha_venta' onChange={handleChange} />
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="recipient-name" class="col-form-label text-white">Editar Imagen</label>
+                                            <input type="file" accept='' class="form-control" id="recipient-name" name='Foto' onChange={handleChange} />
+                                        </div>
+                                        <div class="mb-3">
                                             <label for="recipient-name" class="col-form-label text-white">Costo de venta:</label>
                                             <input value={productoEditar.PrecioUnitario} type="text" class="form-control" id="recipient-name" name='PrecioUnitario' onChange={handleChangeEdit} />
                                         </div>
@@ -268,19 +301,19 @@ export default function Inventario() {
                                 <div class="modal-body">
                                     <form>
                                         <div class="mb-3">
-                                            <label for="recipient-name" class="col-form-label text-white">Nombre:</label>
+                                            <label for="recipient-name" class="col-form-label text-white">Nombre</label>
                                             <input type="text" class="form-control" id="recipient-name" name='nombre' onChange={handleChange} />
                                         </div>
                                         <div class="mb-3">
-                                            <label for="recipient-name" class="col-form-label text-white">Descripcion:</label>
+                                            <label for="recipient-name" class="col-form-label text-white">Descripcion</label>
                                             <input type="text" class="form-control" id="recipient-name" name='descripcion_P' onChange={handleChange} />
                                         </div>
                                         <div class="mb-3">
-                                            <label for="recipient-name" class="col-form-label text-white">Cantidad:</label>
+                                            <label for="recipient-name" class="col-form-label text-white">Cantidad</label>
                                             <input type="text" class="form-control" id="recipient-name" name='cantidad' onChange={handleChange} />
                                         </div >
                                         <div class="mb-3">
-                                            <label for="recipient-name" class="col-form-label text-white">Categoria:</label>
+                                            <label for="recipient-name" class="col-form-label text-white">Categoria</label>
                                             <select name="id_categoria_producto" class="form-select" id="" onChange={handleChange}>
                                                 <option selected disabled>Seleccione una categoria</option>
                                                 {categorias.map((item) => (
@@ -289,10 +322,17 @@ export default function Inventario() {
                                             </select>
                                         </div>
                                         <div class="mb-3">
-                                            <label for="recipient-name" class="col-form-label text-white">Costo de venta:</label>
+                                            <label for="recipient-name" class="col-form-label text-white">Fecha Y Hora</label>
+                                            <input type="datetime-local" class="form-control" id="recipient-name" name='fecha_venta' onChange={handleChange} />
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="recipient-name" class="col-form-label text-white">Sube Una Imagen Del Producto</label>
+                                            <input type="file" accept='' class="form-control" id="recipient-name" name='Foto' oonChange={handleFileChange} />
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="recipient-name" class="col-form-label text-white">Costo de venta</label>
                                             <input type="text" class="form-control" id="recipient-name" name='PrecioUnitario' onChange={handleChange} />
                                         </div>
-
                                     </form>
                                 </div>
                                 <div class="modal-footer">

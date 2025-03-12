@@ -8,7 +8,6 @@ import Index from './pages/default/Index';
 import Registro from './pages/default/Registro';
 import GestionarBarberos from './pages/Admin/GestionarBarberos';
 import Inventario from './pages/Admin/Inventario';
-import HrsBarberos from './pages/Admin/HrsBarberos';
 import InicioAdmin from './pages/Admin/InicioAdmin';
 import Shop from './pages/Admin/Shop';
 import Gestiondeinventario from './pages/Admin/Gestiondeinventario';
@@ -78,11 +77,6 @@ function App() {
               exact
               path="/Inventario"
               element={<PrivateRoute roles={["1"]} element={<Inventario />} />}
-            />
-            <Route
-              exact
-              path="/HrsBarberos"
-              element={<PrivateRoute roles={["1"]} element={<HrsBarberos />} />}
             />
             <Route
               exact

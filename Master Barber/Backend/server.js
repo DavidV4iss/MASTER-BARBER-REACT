@@ -253,8 +253,28 @@ app.post('/EnvEmail', (req, res) => {
     });
 });
 
+
+
+
+
+
+
+//INVENTARIO
+
+const storageInventario = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, '../Frontend/public/images/imagescarrousel/')
+    },
+    filename: function (req, file, cb) {
+        cb(null, `inventario_${Date.now()}` + '-' + file.originalname)
+    }
+
+})
+
+const uploadInventario= multer({ storage: storageInventario })
+
 app.get('/GetInventario', (req, res) => {
-    db.query('SELECT * FROM inventario', (err, results) => {
+    db.query('SELECT id_producto, nombre, descripcion_P, cantidad, id_categoria_producto, PrecioUnitario,  DATE_FORMAT(fecha_venta, "%Y-%m-%d %H:%i") AS fecha_venta FROM inventario', (err, results) => {
         if (err) {
             console.log(err);
             return res.status(500).send('Error en el servidor');
@@ -278,20 +298,24 @@ app.get('/GetInventario/:id', (req, res) => {
     })
 })
 
-app.post('/CreateInventario', (req, res) => {
+app.post('/CreateInventario', uploadInventario.single('foto'), (req, res) => {
     const nombre = req.body.nombre
     const descripcion = req.body.descripcion_P
     const cantidad = req.body.cantidad
     const categoria = req.body.id_categoria_producto
-    const precio = req.body.PrecioUnitario
+    const fecha = req.body.fecha_venta
+    const fotoName = req.file;
+     const precio = req.body.PrecioUnitario
 
-    const q = 'INSERT INTO inventario (nombre,descripcion_P,cantidad,id_categoria_producto,PrecioUnitario) VALUES (?,?,?,?,?)'
+    const q = 'INSERT INTO inventario (nombre,descripcion_P,cantidad,id_categoria_producto, fecha_venta, Foto, PrecioUnitario) VALUES (?,?,?,?,?,?,?)'
 
     const values = [
         nombre,
         descripcion,
         cantidad,
         categoria,
+        fecha,
+        fotoName,
         precio
     ]
 
@@ -306,21 +330,25 @@ app.post('/CreateInventario', (req, res) => {
     })
 })
 
-app.put('/UpdateInventario/:id', (req, res) => {
+app.put('/UpdateInventario/:id', uploadInventario.single('foto'),  (req, res) => {
     const id = req.params.id;
     const nombre = req.body.nombre
     const descripcion = req.body.descripcion_P
     const cantidad = req.body.cantidad
     const categoria = req.body.id_categoria_producto
+    const fecha = req.body.fecha_venta
+    const fotoName = req.file ? req.file.filename : ''
     const precio = req.body.PrecioUnitario
 
-    const q = 'UPDATE inventario SET nombre = ?, descripcion_P = ?, cantidad = ?, id_categoria_producto = ?, PrecioUnitario = ? WHERE id_producto = ?'
+    const q = 'UPDATE inventario SET nombre = ?, descripcion_P = ?, cantidad = ?, id_categoria_producto = ?, fecha_venta = ?, Foto = ?, PrecioUnitario = ? WHERE id_producto = ?'
 
     const values = [
         nombre,
         descripcion,
         cantidad,
         categoria,
+        fecha,
+        fotoName,
         precio,
         id
     ]
@@ -348,6 +376,14 @@ app.delete('/DeleteInventario/:id', (req, res) => {
     })
 });
 
+// FIN INVENTARIO
+
+
+
+
+
+
+
 app.get('/categorias', (req, res) => {
     db.query('SELECT * FROM categoria_producto', (err, results) => {
         if (err) {
@@ -359,6 +395,12 @@ app.get('/categorias', (req, res) => {
         }
     })
 })
+
+
+
+
+
+// CAMBIO DE CONTRASEÑA
 
 app.post('/Cambiarpasscod', (req, res) => {
     const verificaCode = req.body.verificaCode;
@@ -394,6 +436,9 @@ app.post('/Cambiarpasscod', (req, res) => {
     });
 
 });
+
+// FIN CAMBIO DE CONTRASEÑA
+
 
 
 
@@ -646,107 +691,7 @@ app.get('/traerUsuario/:email', (req, res) => {
 
 
 
-
-
-
-
-
-app.get('/GetInventarioVendido', (req, res) => {
-    db.query('SELECT * FROM inventario_vendido', (err, results) => {
-        if (err) {
-            res.status(500).send(err);
-        } else {
-            res.json(results);
-        }
-    });
-});
-
-app.get('/GetInventarioVendido/:id', (req, res) => {
-    const id = req.params.id;
-    db.query('SELECT * FROM inventario_vendido WHERE id_producto_vendido = ?', [id], (err, results) => {
-        if (err) {
-            res.status(500).send(err);
-        } else {
-            res.json(results);
-        }
-    });
-});
-
-app.post('/CreateInventarioVendido', (req, res) => {
-    const id_producto_vendido = req.body.id_producto_vendido
-    const id_categoria_producto = req.body.id_categoria_producto
-    const proveedor = req.body.proveedor
-    const cantidad = req.body.cantidad
-    const fecha_venta = req.body.fecha_venta
-    const total_venta = req.body.total_venta
-
-    const q = 'INSERT INTO inventario_vendido (id_producto_vendido,id_categoria_producto,proveedor,cantidad,fecha_venta,total_venta) VALUES (?,?,?,?,?,?)'
-
-    const values = [
-        id_producto_vendido,
-        id_categoria_producto,
-        proveedor,
-        cantidad,
-        fecha_venta,
-        total_venta
-    ]
-
-    db.query(q, values, (err, results) => {
-        if (err) {
-            console.log(err);
-            return res.status(500).send('Error en el servidor');
-        }
-        else {
-            return res.status(200).send('Producto creado exitosamente');
-        }
-    })
-})
-
-app.put('/UpdateInventarioVendido/:id', (req, res) => {
-    const id_producto_vendido = req.params.id_producto_vendido;
-    const id_categoria_producto = req.body.id_categoria_producto
-    const proveedor = req.body.proveedor
-    const cantidad = req.body.cantidad
-    const fecha_venta = req.body.fecha_venta
-    const total_venta = req.body.total_venta
-
-    const q = 'UPDATE inventario_vendido SET id_producto_vendido = ?, id_categoria_producto = ?, proveedor = ?, cantidad = ?, fecha_venta = ?, total_venta = ? WHERE id_producto_vendido = ?'
-
-    const values = [
-        id_producto_vendido,
-        id_categoria_producto,
-        proveedor,
-        cantidad,
-        fecha_venta,
-        total_venta
-    ]
-    db.query(q, values, (err, results) => {
-        if (err) {
-            console.log(err);
-            return res.status(500).send('Error en el servidor');
-        }
-        else {
-            return res.status(200).send('Producto actualizado exitosamente');
-        }
-    })
-})
-
-app.delete('/DeleteInventarioVendido/:id', (req, res) => {
-    const id = req.params.id;
-    db.query('DELETE FROM inventario_vendido WHERE id_producto_vendido = ?', [id], (err, results) => {
-        if (err) {
-            console.log(err);
-            return res.status(500).send('Error en el servidor');
-        }
-        else {
-            return res.status(200).send('Producto eliminado exitosamente');
-        }
-    })
-})
-
-
-
-
+// CALIFICACIONES
 
 app.get('/traerCalificaciones', (req, res) => {
     db.query('SELECT * FROM calificaciones', (err, results) => {
@@ -774,6 +719,13 @@ app.post('/Createcalificaciones', (req, res) => {
     }
     );
 });
+
+// FIN   CALIFICACIONES
+
+
+
+
+// RESERVAS
 
 app.get('/GetServicios', (req, res) => {
     db.query('SELECT * FROM tipo_servicio', (err, results) => {
@@ -940,71 +892,7 @@ app.get('/GetClientes', (req, res) => {
     });
 });
 
-
-//CARRUSEL DE PRODUCTOS A LA VENTAS
-
-const storageCarrousel = multer.diskStorage({
-    destination: function (req, file, cb) {
-        cb(null, '../Frontend/public/images/imagescarrousel/')
-    },
-    filename: function (req, file, cb) {
-        cb(null, `${Date.now()}` + '-' + file.originalname)
-    }
-
-})
-
-const uploadCarrousel = multer({ storage: storageCarrousel })
-
-
-app.get('/GetCarrousel', (req, res) => {
-    db.query('SELECT * FROM carrousel_images', (err, results) => {
-        if (err) {
-            console.log(err);
-            return res.status(500).send('Error en el servidor');
-        }
-        else {
-            return res.status(200).send(results);
-        }
-    })
-})
-
-app.post('/CreateCarrousel', uploadCarrousel.single('image'), (req, res) => {
-    const fotoName = req.file.filename;
-    const nombre_producto = req.body.nombre_producto;
-    const descripcion = req.body.descripcion;
-
-    const q = 'INSERT INTO carrousel_images (Foto, nombre_producto, descripcion) VALUES (?, ?, ?)';
-
-    const values = [fotoName, nombre_producto, descripcion];
-
-    db.query(q, values, (err, results) => {
-        if (err) {
-            console.log(err);
-            return res.status(500).send('Error en el servidor');
-        } else {
-            return res.status(200).send('Producto creado exitosamente');
-        }
-    });
-});
-
-app.delete('/DeleteCarrousel/:id', (req, res) => {
-    const id = req.params.id;
-    db.query('DELETE FROM carrousel_images WHERE id = ?', [id], (err, results) => {
-        if (err) {
-            console.log(err);
-            return res.status(500).send('Error en el servidor');
-        } else {
-            return res.status(200).send('Producto eliminado exitosamente');
-        }
-    });
-});
-
-//FIN CARRUSEL DE PRODUCTOS A LA VENTAS
-
-
-
-
-
+// FIN RESERVAS
 
 
 app.listen(8081, () => {

@@ -16,9 +16,6 @@ export default function SidebarAdmin() {
                               <NavLink to="/GestionarBarberos" exact className='rounded d-inline-block  text-white fw-bold w-100 ' activeClassName='active'><IoPersonAddSharp className='me-2' /> <span className='d-none d-lg-block'>Barberos</span></NavLink>
                         </li>
                         <li>
-                              <NavLink to="/HrsBarberos" exact className='rounded d-inline-block text-white fw-bold w-100' activeClassName='active'><i class="bi bi-clock-fill"></i> <span className='d-none d-lg-block'>Horas Barberos</span></NavLink>
-                        </li>
-                        <li>
                               <NavLink to="/Inventario" exact className='rounded py-2 d-inline-block  text-white fw-bold w-100' activeClassName='active'><BsBasket3Fill className='me-2' /><span className='d-none d-lg-block'>Inventario</span></NavLink>
  
                         </li>
