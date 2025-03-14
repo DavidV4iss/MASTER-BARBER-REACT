@@ -33,24 +33,38 @@ export default function Reserva() {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        const reserva = {
-            cliente_id: id, // Asegúrate de que este valor esté disponible
+
+        // Verificar disponibilidad
+        axios.post('http://localhost:8081/VerificarDisponibilidad', {
             barbero_id: barberoId,
-            servicio: service,
-            fecha: date,
-            estado: 'pendiente'
-        };
+            fecha: date
+        })
+        .then(response => {
+            if (response.data.disponible) {
+                // Crear la reserva si está disponible
+                const reserva = {
+                    cliente_id: id,
+                    barbero_id: barberoId,
+                    servicio: service,
+                    fecha: date,
+                    estado: 'pendiente'
+                };
 
-        console.log(reserva);
-
-        axios.post('http://localhost:8081/CrearReservas', reserva)
-            .then(response => {
-                console.log(response.data);
-                alert('Reserva creada exitosamente');
-            })
-            .catch(error => {
-                console.error('Hubo un error al crear la reserva:', error);
-            });
+                axios.post('http://localhost:8081/CrearReservas', reserva)
+                    .then(response => {
+                        console.log(response.data);
+                        alert('Reserva creada exitosamente');
+                    })
+                    .catch(error => {
+                        console.error('Hubo un error al crear la reserva:', error);
+                    });
+            } else {
+                alert('La hora seleccionada ya está ocupada. Por favor, elige otra hora.');
+            }
+        })
+        .catch(error => {
+            console.error('Hubo un error al verificar la disponibilidad:', error);
+        });
     };
 
     return (

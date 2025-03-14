@@ -885,6 +885,26 @@ app.patch('/UpdateReservasEstado/:id', (req, res) => {
     });
 });
 
+app.post('/VerificarDisponibilidad', (req, res) => {
+    const { barbero_id, fecha } = req.body;
+
+    const q = 'SELECT * FROM reservas WHERE barbero_id = ? AND fecha = ?';
+    const values = [barbero_id, fecha];
+
+    db.query(q, values, (err, results) => {
+        if (err) {
+            console.error('Error en la consulta:', err);
+            return res.status(500).json({ error: 'Error en el servidor' });
+        }
+
+        if (results.length > 0) {
+            return res.status(200).json({ disponible: false });
+        } else {
+            return res.status(200).json({ disponible: true });
+        }
+    });
+});
+
 app.get('/GetClientes', (req, res) => {
     db.query('SELECT * FROM usuarios WHERE id_rol = 3', (err, results) => {
         if (err) return res.status(500).json({ error: "Error en el servidor" });
