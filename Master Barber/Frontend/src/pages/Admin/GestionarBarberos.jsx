@@ -222,9 +222,9 @@ export default function GestionarBarberos() {
               <thead>
                 <tr className='bg-white'>
                   <th scope="col" className='display-6 bebas p-4 text-danger'>Nombre</th>
-                  <th scope="col" className='display-6 bebas p-4 text-'>Email</th>
-                  <th scope="col" className='display-6 bebas p-4 text-'>Descripcion</th>
-                  <th scope="col" className='display-6 bebas p-4 text-'>imagen</th>
+                  <th scope="col" className='display-6 bebas p-4 '>Email</th>
+                  <th scope="col" className='display-6 bebas p-4 '>Descripcion</th>
+                  <th scope="col" className='display-6 bebas p-4'>imagen</th>
                   <th scope="col" className='text-warning display-6 bebas p-4'>Acciones</th>
                 </tr>
               </thead>
@@ -263,7 +263,7 @@ export default function GestionarBarberos() {
                 </div>
                 <div className="modal-body d-flex justify-content-center ">
                   <div className="card bg-dark" style={{ width: '10rem' }}>
-                    <img src={imagePreviewEdit || `/images/imagesBarbero/${barberoEdit.Foto}`} style={{ width: '100%', height: '100%', objectFit: 'cover' }} className='img-fluid text-white rounded' alt="Imagen Barbero" />
+                    <img src={imagePreviewEdit || `/images/imagesBarbero/${barberoEdit.foto}`} style={{ width: '100%', height: '100%', objectFit: 'cover' }} className='img-fluid text-white rounded' alt="Imagen Barbero" />
                   </div>
                 </div>
                 <div className="modal-body">
@@ -330,7 +330,7 @@ export default function GestionarBarberos() {
                     onClick={() => setIsPasswordVisible((prev) => !prev)}
                     className=" bg-dark rounded-end"
                   >
-                    {isPasswordVisible ? " 🙉" : "🙈"} 
+                    {isPasswordVisible ? " 🙉" : "🙈"}
                   </button>
                 </div>
                 <div className="mb-3">

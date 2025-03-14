@@ -263,10 +263,10 @@ app.post('/EnvEmail', (req, res) => {
 
 const storageInventario = multer.diskStorage({
     destination: function (req, file, cb) {
-        cb(null, '../Frontend/public/images/imagescarrousel/')
+        cb(null, '../Frontend/public/images/imagesInventario/')
     },
     filename: function (req, file, cb) {
-        cb(null, `inventario_${Date.now()}` + '-' + file.originalname)
+        cb(null, `invenario_${Date.now()}` + '-' + file.originalname)
     }
 
 })
@@ -274,7 +274,7 @@ const storageInventario = multer.diskStorage({
 const uploadInventario= multer({ storage: storageInventario })
 
 app.get('/GetInventario', (req, res) => {
-    db.query('SELECT id_producto, nombre, descripcion_P, cantidad, id_categoria_producto, PrecioUnitario,  DATE_FORMAT(fecha_venta, "%Y-%m-%d %H:%i") AS fecha_venta FROM inventario', (err, results) => {
+    db.query('SELECT id_producto, nombre, descripcion_P, cantidad, id_categoria_producto, PrecioUnitario, Foto,  DATE_FORMAT(fecha_venta, "%Y-%m-%d %H:%i") AS fecha_venta FROM inventario', (err, results) => {
         if (err) {
             console.log(err);
             return res.status(500).send('Error en el servidor');
@@ -284,6 +284,8 @@ app.get('/GetInventario', (req, res) => {
         }
     })
 })
+
+
 
 app.get('/GetInventario/:id', (req, res) => {
     const id = req.params.id;
@@ -299,15 +301,17 @@ app.get('/GetInventario/:id', (req, res) => {
 })
 
 app.post('/CreateInventario', uploadInventario.single('foto'), (req, res) => {
-    const nombre = req.body.nombre
-    const descripcion = req.body.descripcion_P
-    const cantidad = req.body.cantidad
-    const categoria = req.body.id_categoria_producto
-    const fecha = req.body.fecha_venta
-    const fotoName = req.file;
-     const precio = req.body.PrecioUnitario
+    const nombre = req.body.nombre;
+    const descripcion = req.body.descripcion_P;
+    const cantidad = req.body.cantidad;
+    const categoria = req.body.id_categoria_producto;
+    const fecha = req.body.fecha_venta;
+    const fotoName = req.file.filename;
+    const precio = req.body.PrecioUnitario;
 
-    const q = 'INSERT INTO inventario (nombre,descripcion_P,cantidad,id_categoria_producto, fecha_venta, Foto, PrecioUnitario) VALUES (?,?,?,?,?,?,?)'
+   
+
+    const q = 'INSERT INTO inventario (nombre, descripcion_P, cantidad, id_categoria_producto, fecha_venta, Foto, PrecioUnitario) VALUES (?,?,?,?,?,?,?)';
 
     const values = [
         nombre,
@@ -317,30 +321,31 @@ app.post('/CreateInventario', uploadInventario.single('foto'), (req, res) => {
         fecha,
         fotoName,
         precio
-    ]
+    ];
 
     db.query(q, values, (err, results) => {
         if (err) {
             console.log(err);
             return res.status(500).send('Error en el servidor');
-        }
-        else {
+        } else {
             return res.status(200).send('Producto creado exitosamente');
         }
-    })
-})
+    });
+});
 
-app.put('/UpdateInventario/:id', uploadInventario.single('foto'),  (req, res) => {
+app.put('/UpdateInventario/:id', uploadInventario.single('foto'), (req, res) => {
+
     const id = req.params.id;
-    const nombre = req.body.nombre
-    const descripcion = req.body.descripcion_P
-    const cantidad = req.body.cantidad
-    const categoria = req.body.id_categoria_producto
-    const fecha = req.body.fecha_venta
+    const nombre = req.body.nombre;
+    const descripcion = req.body.descripcion_P;
+    const cantidad = req.body.cantidad;
+    const categoria = req.body.id_categoria_producto;
+    const fecha = req.body.fecha_venta;
     const fotoName = req.file ? req.file.filename : ''
-    const precio = req.body.PrecioUnitario
+    const precio = req.body.PrecioUnitario;
+    
 
-    const q = 'UPDATE inventario SET nombre = ?, descripcion_P = ?, cantidad = ?, id_categoria_producto = ?, fecha_venta = ?, Foto = ?, PrecioUnitario = ? WHERE id_producto = ?'
+    const q = 'UPDATE inventario SET nombre = ?, descripcion_P = ?, cantidad = ?, id_categoria_producto = ?, fecha_venta = ?, Foto = ?, PrecioUnitario = ? WHERE id_producto = ?';
 
     const values = [
         nombre,
@@ -351,17 +356,17 @@ app.put('/UpdateInventario/:id', uploadInventario.single('foto'),  (req, res) =>
         fotoName,
         precio,
         id
-    ]
+    ];
+
     db.query(q, values, (err, results) => {
         if (err) {
             console.log(err);
             return res.status(500).send('Error en el servidor');
-        }
-        else {
+        } else {
             return res.status(200).send('Producto actualizado exitosamente');
         }
-    })
-})
+    });
+});
 
 app.delete('/DeleteInventario/:id', (req, res) => {
     const id = req.params.id;
@@ -473,14 +478,14 @@ app.get('/GetBarberos', (req, res) => {
     })
 })
 
-const borrarFotoBarbero = async (foto) => {
-    try {
-        const filePath = path.resolve(__dirname, `../Frontend/public/images/imagesBarbero/${foto}`);
-        await fs.promises.unlink(filePath);
-    } catch (err) {
-        console.error('Error eliminando imagen:', err);
-    }
-};
+// const borrarFotoBarbero = async (foto) => {
+//     try {
+//         const filePath = path.resolve(__dirname, `../Frontend/public/images/imagesBarbero/${foto}`);
+//         await fs.promises.unlink(filePath);
+//     } catch (err) {
+//         console.error('Error eliminando imagen:', err);
+//     }
+// };
 
 app.get('/GetBarberos/:id', (req, res) => {
     const id = req.params.id;
@@ -564,7 +569,7 @@ app.put('/UpdateBarberos/:id', uploadBarbero.single('foto'), (req, res) => {
                 return res.status(500).send('Error en el servidor');
             }
             else {
-                borrarFotoBarbero(fotoName);
+                // borrarFotoBarbero(fotoName);
                 return res.status(200).send('Barbero actualizado exitosamente');
             }
         })

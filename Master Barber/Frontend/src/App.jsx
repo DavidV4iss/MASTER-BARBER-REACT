@@ -9,7 +9,6 @@ import Registro from './pages/default/Registro';
 import GestionarBarberos from './pages/Admin/GestionarBarberos';
 import Inventario from './pages/Admin/Inventario';
 import InicioAdmin from './pages/Admin/InicioAdmin';
-import Shop from './pages/Admin/Shop';
 import Gestiondeinventario from './pages/Admin/Gestiondeinventario';
 import EnvEmail from './pages/default/EnvEmail';
 import Cambiarpasscod from './pages/default/Cambiarpasscod';
@@ -78,13 +77,7 @@ function App() {
               path="/Inventario"
               element={<PrivateRoute roles={["1"]} element={<Inventario />} />}
             />
-            <Route
-              exact
-              path="/Shop"
-              element={
-                <PrivateRoute roles={["1"]} element={<Shop />} />
-              }
-            />
+          
             <Route
               exact
               path="/Gestiondeinventario"

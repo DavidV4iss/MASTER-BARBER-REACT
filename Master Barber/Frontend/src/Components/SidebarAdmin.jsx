@@ -22,10 +22,6 @@ export default function SidebarAdmin() {
                         <li>
                               <NavLink to="/Gestiondeinventario" exact className='rounded py-2 d-inline-block  text-white fw-bold w-100' activeClassName='active'><i class="bi bi-bar-chart-fill"></i> <span className='d-none d-lg-block'>Gestion De Inventario</span></NavLink>
                         </li>
-                        <li>
-                        <NavLink to="/Shop" exact className='rounded py-2 d-inline-block  text-white fw-bold w-100' activeClassName='active'><i class="bi bi-shop-window"></i><span className='d-none d-lg-block'>Master Shop</span></NavLink>
-                        </li>
-                  
 
                   </div>
                   
