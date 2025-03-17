@@ -608,7 +608,6 @@ app.put('/UpdateBarberos/:id', uploadBarbero.single('foto'), (req, res) => {
                 return res.status(500).send('Error en el servidor');
             }
             else {
-                // borrarFotoBarbero(fotoName);
                 return res.status(200).send('Barbero actualizado exitosamente');
             }
         })

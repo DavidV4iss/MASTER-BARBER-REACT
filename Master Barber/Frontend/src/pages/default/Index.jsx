@@ -300,7 +300,6 @@ export default function Index() {
                 <h1 className={`text-center display-1 antonparabackend  ${theme === "light" ? "dark" : "text-white"}`}>Donde Nos Puedes Ubicar</h1>
                 <div className="container-fluid d-flex mt-5  justify-content-center">
                     <iframe class="map mt-5 mx-5" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3977.224597345888!2d-74.09438192628066!3d4.553574442918059!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8e3f99e5c678c39f%3A0xe8d6bf03bd32ac11!2sMASTER%20BARBER%20VIP!5e0!3m2!1ses!2sco!4v1717791930339!5m2!1ses!2sco" height="560px"  allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-                    {/* <img src="/Ubicacion.JPG" alt="" className=' mx-auto map mt-5 col m-3' height="560px" /> */}
                 </div>
             </div>
             

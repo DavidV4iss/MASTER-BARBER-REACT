@@ -38,7 +38,7 @@ export default function CarrouselShop() {
                 effect={'creative'}
                 creativeEffect={{
                     prev: {
-                        translate: ['-100%', 0, -500],
+                        translate: ['-10%', 0, -50000],
                     },
                     next: {
                         translate: ['100%', 0, -500],
