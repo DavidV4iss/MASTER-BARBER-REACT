@@ -14,6 +14,7 @@ export default function Inventario() {
         descripcion_P: '',
         cantidad: '',
         id_categoria_producto: '',
+        proveedor: '',
         fecha_venta: '',
         foto: null,
         PrecioUnitario: ''
@@ -24,6 +25,7 @@ export default function Inventario() {
         descripcion_P: '',
         cantidad: '',
         id_categoria_producto: '',
+        proveedor: '',
         fecha_venta: '',
         foto: null,
         PrecioUnitario: ''
@@ -43,6 +45,7 @@ export default function Inventario() {
             formData.append('descripcion_P', producto.descripcion_P);
             formData.append('cantidad', producto.cantidad);
             formData.append('id_categoria_producto', producto.id_categoria_producto);
+            formData.append('proveedor', producto.proveedor);
             formData.append('fecha_venta', producto.fecha_venta);
             formData.append('foto', producto.foto);
             formData.append('PrecioUnitario', producto.PrecioUnitario);
@@ -81,6 +84,7 @@ export default function Inventario() {
             formData.append('descripcion_P', productoEditar.descripcion_P);
             formData.append('cantidad', productoEditar.cantidad);
             formData.append('id_categoria_producto', productoEditar.id_categoria_producto);
+            formData.append('proveedor', productoEditar.proveedor);
             formData.append('fecha_venta', productoEditar.fecha_venta);
             formData.append('foto', productoEditar.foto);
             formData.append('PrecioUnitario', productoEditar.PrecioUnitario);
@@ -241,6 +245,7 @@ export default function Inventario() {
                                         <th scope="col" className=' bebas p-4 fs-3'>Descripcion</th>
                                         <th scope="col" className=' bebas p-4 fs-3'>Cantidad</th>
                                         <th scope="col" className=' bebas p-4 fs-3'>Categoria</th>
+                                        <th scope="col" className=' bebas p-4 fs-3'>Proveedor</th>
                                         <th scope="col" className=' bebas p-4  fs-3'>Fecha Y Hora</th>
                                         <th scope="col" className=' bebas p-4 fs-3'>Imagen</th>
                                         <th scope="col" className=' bebas p-4 fs-3'>Costo de venta</th>
@@ -255,6 +260,7 @@ export default function Inventario() {
                                             <td className='text-center'>{item.descripcion_P}</td>
                                             <td className='text-center'>{item.cantidad}</td>
                                             <td className='text-center'>{categorias.find(c => c.id_categoria_producto === item.id_categoria_producto).categoria}</td>
+                                            <td className='text-center'>{item.proveedor}</td>
                                             <td className='text-center'>{item.fecha_venta}</td>
                                             <td className='text-center'><img src={`/images/imagesInventario/${item.Foto}`} className='img-fluid zoomhover2' style={{ width: '150px', height: '150px', objectFit: 'cover' }} /></td>
                                             <td className='text-center'>{item.PrecioUnitario}</td>
@@ -284,7 +290,7 @@ export default function Inventario() {
                             <div class="modal-content bg-dark">
                                 <form onSubmit={handleSubmitEdit}>
                                     <div class="modal-header">
-                                        <h1 class="modal-title fs-5 text-white text-white" id="exampleModalLabel">EDITAR</h1>
+                                        <h1 class="modal-title fs-3 text-white bebas" id="exampleModalLabel">EDITAR</h1>
                                         <button type="button" class="btn-close bg-white" data-bs-dismiss="modal" aria-label="Close"></button>
                                     </div>
                                     <div className="d-flex justify-content-center ">
@@ -294,29 +300,33 @@ export default function Inventario() {
                                     </div>
                                     <div class="modal-body">
                                             <div class="mb-3">
-                                                <label for="recipient-name" class="col-form-label text-white">Nombre:</label>
-                                                <input type="text" value={productoEditar.nombre} class="form-control" id="recipient-name" name='nombre' onChange={handleChangeEdit} />
+                                            <label for="recipient-name" class="col-form-label text-white  antonparabackend ">Nombre:</label>
+                                                <input type="text" value={productoEditar.nombre} class="form-control bg-dark text-white" id="recipient-name" name='nombre' onChange={handleChangeEdit} />
                                             </div>
                                             <div class="mb-3">
-                                                <label for="recipient-name" class="col-form-label text-white">Descripcion:</label>
-                                                <input type="text" value={productoEditar.descripcion_P} class="form-control" id="recipient-name" name='descripcion_P' onChange={handleChangeEdit} />
+                                            <label for="recipient-name" class="col-form-label text-white antonparabackend">Descripcion:</label>
+                                                <input type="text" value={productoEditar.descripcion_P} class="form-control bg-dark text-white" id="recipient-name" name='descripcion_P' onChange={handleChangeEdit} />
                                             </div>
                                             <div class="mb-3">
-                                                <label for="recipient-name" class="col-form-label text-white">Cantidad:</label>
-                                                <input type="text" value={productoEditar.cantidad} class="form-control" id="recipient-name" name='cantidad' onChange={handleChangeEdit} />
+                                            <label for="recipient-name" class="col-form-label text-white  antonparabackend">Cantidad:</label>
+                                                <input type="text" value={productoEditar.cantidad} class="form-control bg-dark text-white" id="recipient-name" name='cantidad' onChange={handleChangeEdit} />
                                             </div >
                                             <div class="mb-3">
-                                                <label for="recipient-name" class="col-form-label text-white">Categoria:</label>
-                                                <select name="id_categoria_producto" value={productoEditar.id_categoria_producto} class="form-select" id="" onChange={handleChangeEdit}>
+                                            <label for="recipient-name" class="col-form-label text-white  antonparabackend">Categoria:</label>
+                                                <select name="id_categoria_producto" value={productoEditar.id_categoria_producto} class="form-select bg-dark text-white" id="" onChange={handleChangeEdit}>
                                                     <option selected disabled>Seleccione una categoria</option>
                                                     {categorias.map((item) => (
                                                         <option key={item.id_categoria} value={item.id_categoria_producto}>{item.categoria}</option>
                                                     ))}
                                                 </select>
-                                            </div>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="recipient-name" class="col-form-label text-white  antonparabackend">Proveedor:</label>
+                                            <input type="text" value={productoEditar.proveedor} class="form-control bg-dark text-white" id="recipient-name" name='proveedor' onChange={handleChangeEdit} />
+                                        </div>
                                             <div class="mb-3">
-                                                <label for="recipient-name" class="col-form-label text-white">Fecha Y Hora De Venta</label>
-                                                <input type="datetime-local" class="form-control" id="recipient-name" name='fecha_venta' onChange={handleChangeEdit} />
+                                            <label for="recipient-name" class="col-form-label text-white antonparabackend">Fecha Y Hora De Venta</label>
+                                                <input type="datetime-local" class="form-control bg-dark text-white" id="recipient-name" name='fecha_venta' onChange={handleChangeEdit} />
                                             </div>
                                             <p className="text-white antonparabackend"> Imagen Del Barbero</p>
                                             <div className="input-group">
@@ -330,13 +340,13 @@ export default function Inventario() {
                                                 />
                                             </div>
                                             <div class="mb-3">
-                                                <label for="recipient-name" class="col-form-label text-white">Costo de venta:</label>
-                                                <input value={productoEditar.PrecioUnitario} type="text" class="form-control" id="recipient-name" name='PrecioUnitario' onChange={handleChangeEdit} />
+                                            <label for="recipient-name" class="col-form-label text-white  antonparabackend">Costo de venta:</label>
+                                                <input value={productoEditar.PrecioUnitario} type="text" class="form-control bg-dark text-white" id="recipient-name" name='PrecioUnitario' onChange={handleChangeEdit} />
                                             </div>
                                         </div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" >Cerrar</button>
-                                        <button type="sumbit" class="btn btn-danger">Editar</button>
+                                        <button type="sumbit" class="btn btn-danger ">Editar</button>
                                     </div>
                                 </form>
                             </div>
@@ -350,7 +360,7 @@ export default function Inventario() {
                             <div class="modal-content bg-dark">
                                 <form onSubmit={handleSubmit}>
                                     <div class="modal-header">
-                                        <h1 class="modal-title fs-5 text-white text-white" id="exampleModalLabel" >AÑADIR</h1>
+                                        <h1 class="modal-title fs-3 text-white text-white bebas" id="exampleModalLabel" >AÑADIR</h1>
                                     </div>
                                     <div className="modal-body d-flex justify-content-center ">
                                         <div className="card bg-dark" style={{ width: '10rem' }}>
@@ -360,20 +370,20 @@ export default function Inventario() {
                                     <div class="modal-body">
                                         <form>
                                             <div class="mb-3">
-                                                <label for="recipient-name" class="col-form-label text-white">Nombre</label>
-                                                <input type="text" class="form-control" id="recipient-name" name='nombre' onChange={handleChange} />
+                                                <label for="recipient-name" class="col-form-label text-white  antonparabackend">Nombre</label>
+                                                <input type="text" class="form-control bg-dark text-white" id="recipient-name" name='nombre' onChange={handleChange} />
                                             </div>
                                             <div class="mb-3">
-                                                <label for="recipient-name" class="col-form-label text-white">Descripcion</label>
-                                                <input type="text" class="form-control" id="recipient-name" name='descripcion_P' onChange={handleChange} />
+                                                <label for="recipient-name" class="col-form-label text-white  antonparabackend">Descripcion</label>
+                                                <input type="text" class="form-control bg-dark text-white" id="recipient-name" name='descripcion_P' onChange={handleChange} />
                                             </div>
                                             <div class="mb-3">
-                                                <label for="recipient-name" class="col-form-label text-white">Cantidad</label>
-                                                <input type="text" class="form-control" id="recipient-name" name='cantidad' onChange={handleChange} />
+                                                <label for="recipient-name" class="col-form-label text-white  antonparabackend">Cantidad</label>
+                                                <input type="text" class="form-control bg-dark text-white" id="recipient-name" name='cantidad' onChange={handleChange} />
                                             </div >
                                             <div class="mb-3">
-                                                <label for="recipient-name" class="col-form-label text-white">Categoria</label>
-                                                <select name="id_categoria_producto" class="form-select" id="" onChange={handleChange}>
+                                                <label for="recipient-name" class="col-form-label text-white  antonparabackend">Categoria</label>
+                                                <select name="id_categoria_producto" class="form-select bg-dark text-white" id="" onChange={handleChange}>
                                                     <option selected disabled>Seleccione una categoria</option>
                                                     {categorias.map((item) => (
                                                         <option key={item.id_categoria} value={item.id_categoria_producto}>{item.categoria}</option>
@@ -381,8 +391,12 @@ export default function Inventario() {
                                                 </select>
                                             </div>
                                             <div class="mb-3">
-                                                <label for="recipient-name" class="col-form-label text-white">Fecha Y Hora</label>
-                                                <input type="datetime-local" class="form-control" id="recipient-name" name='fecha_venta' onChange={handleChange} />
+                                                <label for="recipient-name" class="col-form-label text-white  antonparabackend">Proveedor</label>
+                                                <input type="text" class="form-control bg-dark text-white" id="recipient-name" name='proveedor' onChange={handleChange} />
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="recipient-name" class="col-form-label text-white  antonparabackend">Fecha Y Hora</label>
+                                                <input type="datetime-local" class="form-control bg-dark text-white" id="recipient-name" name='fecha_venta' onChange={handleChange} />
                                             </div>
                                             <p className="text-white antonparabackend"> Imagen Del Barbero</p>
                                             <div className="input-group">
@@ -398,8 +412,8 @@ export default function Inventario() {
                                                 />
                                             </div>
                                             <div class="mb-3">
-                                                <label for="recipient-name" class="col-form-label text-white">Costo de venta</label>
-                                                <input type="text" class="form-control" id="recipient-name" name='PrecioUnitario' onChange={handleChange} />
+                                                <label for="recipient-name" class="col-form-label text-white  antonparabackend">Costo de venta</label>
+                                                <input type="text" class="form-control bg-dark text-white" id="recipient-name" name='PrecioUnitario' onChange={handleChange} />
                                             </div>
                                         </form>
                                     </div>

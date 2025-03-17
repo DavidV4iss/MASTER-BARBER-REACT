@@ -266,7 +266,7 @@ const storageInventario = multer.diskStorage({
         cb(null, '../Frontend/public/images/imagesInventario/')
     },
     filename: function (req, file, cb) {
-        cb(null, `invenario_${Date.now()}` + '-' + file.originalname)
+        cb(null, `inventario_${Date.now()}` + '-' + file.originalname)
     }
 
 })
@@ -274,7 +274,7 @@ const storageInventario = multer.diskStorage({
 const uploadInventario= multer({ storage: storageInventario })
 
 app.get('/GetInventario', (req, res) => {
-    db.query('SELECT id_producto, nombre, descripcion_P, cantidad, id_categoria_producto, PrecioUnitario, Foto,  DATE_FORMAT(fecha_venta, "%Y-%m-%d %H:%i") AS fecha_venta FROM inventario', (err, results) => {
+    db.query('SELECT id_producto, nombre, descripcion_P, cantidad, id_categoria_producto, proveedor, PrecioUnitario, Foto,  DATE_FORMAT(fecha_venta, "%Y-%m-%d %H:%i") AS fecha_venta FROM inventario', (err, results) => {
         if (err) {
             console.log(err);
             return res.status(500).send('Error en el servidor');
@@ -305,19 +305,21 @@ app.post('/CreateInventario', uploadInventario.single('foto'), (req, res) => {
     const descripcion = req.body.descripcion_P;
     const cantidad = req.body.cantidad;
     const categoria = req.body.id_categoria_producto;
+    const proveedor = req.body.proveedor;
     const fecha = req.body.fecha_venta;
     const fotoName = req.file.filename;
     const precio = req.body.PrecioUnitario;
 
    
 
-    const q = 'INSERT INTO inventario (nombre, descripcion_P, cantidad, id_categoria_producto, fecha_venta, Foto, PrecioUnitario) VALUES (?,?,?,?,?,?,?)';
+    const q = 'INSERT INTO inventario (nombre, descripcion_P, cantidad, id_categoria_producto, proveedor, fecha_venta, Foto, PrecioUnitario) VALUES (?,?,?,?,?,?,?,?)';
 
     const values = [
         nombre,
         descripcion,
         cantidad,
         categoria,
+        proveedor,
         fecha,
         fotoName,
         precio
@@ -333,38 +335,62 @@ app.post('/CreateInventario', uploadInventario.single('foto'), (req, res) => {
     });
 });
 
-app.put('/UpdateInventario/:id', uploadInventario.single('foto'), (req, res) => {
+const borrarFotoInventario = async (foto) => {
+    try {
+        const filePath = path.resolve(__dirname, `../Frontend/public/images/imagesInventario/${foto}`);
+        await fs.promises.unlink(filePath);
+    } catch (err) {
+        console.error('Error eliminando imagen:', err);
+    }
+};
 
+app.put('/UpdateInventario/:id', uploadInventario.single('foto'), (req, res) => {
     const id = req.params.id;
     const nombre = req.body.nombre;
     const descripcion = req.body.descripcion_P;
     const cantidad = req.body.cantidad;
     const categoria = req.body.id_categoria_producto;
+    const proveedor = req.body.proveedor;
     const fecha = req.body.fecha_venta;
-    const fotoName = req.file ? req.file.filename : ''
+    const fotoName = req.file ? req.file.filename : '';
     const precio = req.body.PrecioUnitario;
-    
 
-    const q = 'UPDATE inventario SET nombre = ?, descripcion_P = ?, cantidad = ?, id_categoria_producto = ?, fecha_venta = ?, Foto = ?, PrecioUnitario = ? WHERE id_producto = ?';
-
-    const values = [
-        nombre,
-        descripcion,
-        cantidad,
-        categoria,
-        fecha,
-        fotoName,
-        precio,
-        id
-    ];
-
-    db.query(q, values, (err, results) => {
+    // Obtener la imagen actual del inventario
+    db.query('SELECT Foto FROM inventario WHERE id_producto = ?', [id], (err, results) => {
         if (err) {
             console.log(err);
             return res.status(500).send('Error en el servidor');
-        } else {
-            return res.status(200).send('Producto actualizado exitosamente');
         }
+
+        const fotoActual = results[0].Foto;
+
+        // Eliminar la imagen actual si hay una nueva imagen
+        if (req.file && fotoActual) {
+            borrarFotoInventario(fotoActual);
+        }
+
+        const q = 'UPDATE inventario SET nombre = ?, descripcion_P = ?, cantidad = ?, id_categoria_producto = ?, proveedor = ?, fecha_venta = ?, Foto = ?, PrecioUnitario = ? WHERE id_producto = ?';
+
+        const values = [
+            nombre,
+            descripcion,
+            cantidad,
+            categoria,
+            proveedor,
+            fecha,
+            fotoName,
+            precio,
+            id
+        ];
+
+        db.query(q, values, (err, results) => {
+            if (err) {
+                console.log(err);
+                return res.status(500).send('Error en el servidor');
+            } else {
+                return res.status(200).send('Producto actualizado exitosamente');
+            }
+        });
     });
 });
 
@@ -477,15 +503,6 @@ app.get('/GetBarberos', (req, res) => {
         }
     })
 })
-
-// const borrarFotoBarbero = async (foto) => {
-//     try {
-//         const filePath = path.resolve(__dirname, `../Frontend/public/images/imagesBarbero/${foto}`);
-//         await fs.promises.unlink(filePath);
-//     } catch (err) {
-//         console.error('Error eliminando imagen:', err);
-//     }
-// };
 
 app.get('/GetBarberos/:id', (req, res) => {
     const id = req.params.id;
