@@ -1,22 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import DatePicker from 'react-datepicker';
-import 'react-datepicker/dist/react-datepicker.css';
-import styled from 'styled-components';
 
-const StyledDatePicker = styled(DatePicker)`
-  width: 435px;
-  height: 40px;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  font-size: 16px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  &:focus {
-    border-color:rgb(255, 0, 0);
-    box-shadow: 0 0 8px rgba(0, 123, 255, 0.25);
-  }
-`;
+
 
 export default function Reserva() {
     const [service, setService] = useState('');
