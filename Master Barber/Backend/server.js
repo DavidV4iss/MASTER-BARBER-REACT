@@ -364,7 +364,6 @@ app.put('/UpdateInventario/:id', uploadInventario.single('foto'), (req, res) => 
 
         const fotoActual = results[0].Foto;
 
-        // Eliminar la imagen actual si hay una nueva imagen
         if (req.file && fotoActual) {
             borrarFotoInventario(fotoActual);
         }
@@ -551,6 +550,15 @@ app.post('/CreateBarberos', uploadBarbero.single('foto'), (req, res) => {
     });
 });
 
+const borrarFotoBarbero = async (foto) => {
+    try {
+        const filePath = path.resolve(__dirname, `../Frontend/public/images/imagesBarbero/${foto}`);
+        await fs.promises.unlink(filePath);
+    } catch (err) {
+        console.error('Error eliminando imagen:', err);
+    }
+};
+
 app.put('/UpdateBarberos/:id', uploadBarbero.single('foto'), (req, res) => {
 
     const id = req.params.id;
@@ -568,6 +576,20 @@ app.put('/UpdateBarberos/:id', uploadBarbero.single('foto'), (req, res) => {
         const contrasena = req.body.contrasena
         const descripcion = req.body.descripcion
         const fotoName = req.file ? req.file.filename : ''
+
+        // Obtener la imagen actual del inventario
+        db.query('SELECT Foto FROM usuarios WHERE id_usuario = ?', [id], (err, results) => {
+            if (err) {
+                console.log(err);
+                return res.status(500).send('Error en el servidor');
+            }
+
+            const fotoActual = results[0].Foto;
+
+            if (req.file && fotoActual) {
+                borrarFotoBarbero(fotoActual);
+            }
+        });
 
         const q = 'UPDATE usuarios SET nombre_usuario = ?, email = ?, contrasena = ?, descripcion = ?, Foto = ? WHERE id_usuario = ? AND id_rol = 2'
        
