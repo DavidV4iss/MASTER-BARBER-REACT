@@ -3,6 +3,7 @@ import NavbarAdmin from '../../Components/NavbarAdmin'
 import SidebarAdmin from '../../Components/SidebarAdmin'
 import axios from 'axios'
 import { Link } from 'react-router-dom';
+import Swal from 'sweetalert2';
 
 export default function Gestiondeinventario() {
     const [inventario, setInventario] = useState([]);
@@ -23,19 +24,73 @@ export default function Gestiondeinventario() {
 
     function agregarProducto(producto) {
         const productoExistente = venta.find(item => item.id_producto === producto.id_producto);
-        if (productoExistente) {
-            setVenta(venta.map(item =>
+        const productoInventario = inventario.find(item => item.id_producto === producto.id_producto);
+
+        if (productoInventario && productoInventario.cantidad > 0) {
+            if (productoExistente) {
+                setVenta(venta.map(item =>
+                    item.id_producto === producto.id_producto
+                        ? { ...item, cantidad: item.cantidad + 1 }
+                        : item
+                ));
+            } else {
+                setVenta([...venta, { ...producto, cantidad: 1 }]);
+            }
+
+            setInventario(inventario.map(item =>
                 item.id_producto === producto.id_producto
-                    ? { ...item, cantidad: item.cantidad + 1 }
+                    ? { ...item, cantidad: item.cantidad - 1 }
                     : item
             ));
         } else {
-            setVenta([...venta, { ...producto, cantidad: 1 }]);
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: `Has superado la cantidad de productos del inventario, no hay mas ${producto.nombre} en stock `,
+                confirmButtonColor: "#DC3545",
+                customClass: {
+                    popup: "dark-theme-popup bg-dark antonparabackend ",
+                },
+
+            });
         }
     }
 
+
     const calcularTotal = () => {
         return venta.reduce((total, item) => total + (item.PrecioUnitario * item.cantidad), 0);
+    }
+
+    const handleSubmit = async () => {
+        try {
+            for (const producto of venta) {
+                const res = await axios.put(`http://localhost:8081/RestarInventario/${producto.id_producto}`, {
+                    cantidad: producto.cantidad,
+                });
+            }
+            Swal.fire({
+                icon: 'success',
+                title: 'Venta Exitosa',
+                html: `El Producto <span style="color: yellow">${venta[0].nombre}</span> Fue Restado Del Inventario Correctamente, Realizaste Una Venta Por Un Valor De: <span style="color: yellow">${calcularTotal()}</span>`,
+                confirmButtonColor: "#DC3545",
+                customClass: {
+                    popup: "dark-theme-popup bg-dark antonparabackend",
+                },
+            }).then(() => {
+                setVenta([]);
+            });
+        } catch (err) {
+            console.log("Error al restar del inventario:", err);
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Error Al Restar Del Inventario, No Se Selecciono Ningun Producto A Vender',
+                confirmButtonColor: "#DC3545",
+                customClass: {
+                    popup: "dark-theme-popup bg-dark antonparabackend ",
+                },
+            });
+        }
     }
 
     return (
@@ -55,6 +110,7 @@ export default function Gestiondeinventario() {
                                         <div className="card-body">
                                             <h5 className="card-title text-danger bebas text-center">{item.nombre}</h5>
                                             <p className="card-text text-white text-center">{item.PrecioUnitario}</p>
+                                            <p className="card-text text-warning bebas text-center">{item.cantidad} Unidades</p>
                                         </div>
                                     </div>
                                 </div>
@@ -62,7 +118,7 @@ export default function Gestiondeinventario() {
                         ))}
                     </div>
                     <div class="col">
-                        <table class="table-responsive table table-dark table-striped mt-5 contenido4">
+                        <table class="table-responsive table table-dark table-striped mt-5 mx-5">
                             <thead>
                                 <tr>
                                     <th scope="col" className='text-center text-warning'>Cantidad</th>
@@ -87,24 +143,21 @@ export default function Gestiondeinventario() {
                                             <td colSpan="4" >No hay productos</td>
                                         </tr>
                                 }
-                              
+
                             </tbody>
-                           
-
                         </table>
-
-                        <div className="mt-5 text-center">
-                            <button className="btn btn-warning">
-                                Total: ${calcularTotal().toFixed(2)}
-
-                            </button>
-                        </div> 
-                        <div className="mt-5 text-center">
-                            <button className="btn btn-warning">
-                                Total: ${calcularTotal().toFixed(2)}
-
-                            </button>
-                        </div> 
+                        <div className="container row mx-5 mt-4">
+                            <div className="col">
+                                <button className="btn btn-warning bebas">
+                                    Total: ${calcularTotal().toFixed(2)}
+                                </button>
+                            </div>
+                            <div className="col row">
+                                <button onClick={handleSubmit} className="btn btn-warning bebas">
+                                    Restar Del Inventario
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

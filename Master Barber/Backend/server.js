@@ -271,7 +271,7 @@ const storageInventario = multer.diskStorage({
 
 })
 
-const uploadInventario= multer({ storage: storageInventario })
+const uploadInventario = multer({ storage: storageInventario })
 
 app.get('/GetInventario', (req, res) => {
     db.query('SELECT id_producto, nombre, descripcion_P, cantidad, id_categoria_producto, proveedor, PrecioUnitario, Foto,  DATE_FORMAT(fecha_venta, "%Y-%m-%d %H:%i") AS fecha_venta FROM inventario', (err, results) => {
@@ -310,7 +310,7 @@ app.post('/CreateInventario', uploadInventario.single('foto'), (req, res) => {
     const fotoName = req.file.filename;
     const precio = req.body.PrecioUnitario;
 
-   
+
 
     const q = 'INSERT INTO inventario (nombre, descripcion_P, cantidad, id_categoria_producto, proveedor, fecha_venta, Foto, PrecioUnitario) VALUES (?,?,?,?,?,?,?,?)';
 
@@ -406,6 +406,23 @@ app.delete('/DeleteInventario/:id', (req, res) => {
     })
 });
 
+
+app.put('/RestarInventario/:id', (req, res) => {
+    const id = req.params.id;
+    const cantidad = req.body.cantidad;
+
+    db.query('UPDATE inventario SET cantidad = cantidad - ? WHERE id_producto = ?', [cantidad, id], (err, results) => {
+        if (err) {
+            console.log(err);
+            return res.status(500).send('Error en el servidor');
+        }
+        else {
+            return res.status(200).send('Inventario actualizado exitosamente');
+
+        }
+    }
+    );
+});
 // FIN INVENTARIO
 
 
@@ -592,7 +609,7 @@ app.put('/UpdateBarberos/:id', uploadBarbero.single('foto'), (req, res) => {
         });
 
         const q = 'UPDATE usuarios SET nombre_usuario = ?, email = ?, contrasena = ?, descripcion = ?, Foto = ? WHERE id_usuario = ? AND id_rol = 2'
-       
+
         const values = [
             nombre,
             email,
@@ -747,7 +764,7 @@ app.get('/traerCalificaciones', (req, res) => {
 
 
 app.post('/Createcalificaciones', (req, res) => {
-    
+
     const comentario = req.body.comentario;
     const puntuacion = req.body.puntuacion;
     const id_usuario = req.body.id;

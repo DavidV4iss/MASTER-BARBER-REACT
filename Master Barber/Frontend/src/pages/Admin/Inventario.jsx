@@ -328,7 +328,7 @@ export default function Inventario() {
                                             <label for="recipient-name" class="col-form-label text-white antonparabackend">Fecha Y Hora De Venta</label>
                                                 <input type="datetime-local" class="form-control bg-dark text-white" id="recipient-name" name='fecha_venta' onChange={handleChangeEdit} />
                                             </div>
-                                            <p className="text-white antonparabackend"> Imagen Del Barbero</p>
+                                            <p className="text-white antonparabackend">Editar Imagen</p>
                                             <div className="input-group">
                                                 <input
                                                     name="foto"
@@ -398,7 +398,7 @@ export default function Inventario() {
                                                 <label for="recipient-name" class="col-form-label text-white  antonparabackend">Fecha Y Hora</label>
                                                 <input type="datetime-local" class="form-control bg-dark text-white" id="recipient-name" name='fecha_venta' onChange={handleChange} />
                                             </div>
-                                            <p className="text-white antonparabackend"> Imagen Del Barbero</p>
+                                            <p className="text-white antonparabackend">Imagen Del Producto</p>
                                             <div className="input-group">
                                                 <input
                                                     required

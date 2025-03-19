@@ -38,7 +38,7 @@ export default function CarrouselShop() {
                 effect={'creative'}
                 creativeEffect={{
                     prev: {
-                        translate: ['-10%', 0, -50000],
+                        translate: ['-100%', 0, -500],
                     },
                     next: {
                         translate: ['100%', 0, -500],
@@ -66,6 +66,7 @@ export default function CarrouselShop() {
                                 <img src={`/images/imagesInventario/${carrousel.Foto}`} className='img-fluid ' alt="" />
                                 <h5 className="card-title mt-4 antonparabackend text-danger">{carrousel.nombre}</h5>
                                 <p className="card-text text-white mt-4">{carrousel.descripcion_P}</p>
+                                <p className="card-text text-white mt-2">Quedan {carrousel.cantidad} Unidades De Este Producto</p>
                                 <button type="button" className="btn btn-danger" onClick={() => handleShowModal(carrousel)}>
                                     Ver
                                 </button>
@@ -86,6 +87,7 @@ export default function CarrouselShop() {
                                 <img src={`/images/imagesInventario/${selectedImage.Foto}`} className=' w-25 contenido4 mt-5' alt="" />
                                 <h5 className="card-title mt-4 antonparabackend text-danger text-center">{selectedImage.nombre}</h5>
                                 <p className="card-text text-white mt-4 text-center m-5 ">{selectedImage.descripcion_P}</p>
+                                <p className="card-text text-white text-center m-5 ">Quedan {selectedImage.cantidad} Unidades De Este Producto</p>
                             </div>
                             <div className="modal-footer">
                                 <button type="button" className="btn btn-danger" onClick={handleCloseModal}>Close</button>
