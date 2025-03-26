@@ -3,6 +3,7 @@ import NavbarUserIndex from '../../Components/NavbarUserIndex';
 import axios from 'axios';
 import Swal from 'sweetalert2';
 import Rating from 'react-rating-stars-component';
+import ReservaCliente from './ReservaCliente';
 
 
 export default function InicioUsuario() {
@@ -86,7 +87,7 @@ export default function InicioUsuario() {
           Hola, {user.nombre_usuario}
         </h1>
 
-
+    <ReservaCliente />
         <h1 className='text-white text-center mt-5 pt-5 antonparabackend'>¡ Ten en cuenta nuestros dos servicios de corte para poder hacer tu reserva !</h1>
 
         <div class="row row-cols-1 row-cols-md-2 g-5 mt-4 justify-content-center ">

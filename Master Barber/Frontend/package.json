@@ -38,7 +38,7 @@
     "sass": "^1.77.8",
     "sass-loader": "^16.0.1",
     "socket.io-client": "^4.8.1",
-    "styled-components": "^6.1.15",
+    "styled-components": "^6.1.16",
     "sweetalert2": "^11.12.4",
     "swiper": "^11.1.10",
     "uninstall": "^0.0.0",
