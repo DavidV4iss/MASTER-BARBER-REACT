@@ -3,6 +3,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Anton+SC&family=Roboto&display=swap');
 @import "../node_modules/bootstrap/scss/bootstrap";
+@import url('https://fonts.googleapis.com/css2?family=UnifrakturMaguntia&display=swap');
 
 
 
@@ -102,6 +103,10 @@ body {
 
 .texto {
   margin-bottom: -3px;
+}
+
+.UnifrakturMaguntia {
+  font-family: 'UnifrakturMaguntia', cursive;
 }
 
 // FIN TEXTOS
