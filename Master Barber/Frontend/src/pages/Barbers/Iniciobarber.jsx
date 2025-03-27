@@ -10,8 +10,8 @@ const Iniciobarber = () => {
     <div>
       <NavBarber />
       <SidebarBarber />
-      <div className="container text-white">
-        <p className="text-center text-white display-3 bebas mx-3 mt-5">
+      <div className=" text-white contenido">
+        <p className="text-center text-white display-2 bebas mt-5">
           INFORMACION <span className="text-danger">BARBERO</span>|HOME{""}
         </p>
 
