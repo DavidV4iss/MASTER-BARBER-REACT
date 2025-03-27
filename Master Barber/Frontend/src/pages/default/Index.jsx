@@ -100,51 +100,52 @@ export default function Index() {
                     dolorem laborum corrupti est officiis magni,
                     soluta nemo nobis eligendi repellat id!
                 </p>
-                <div className="row justify-content-center mt-5 pt-5">
+                <div className="row justify-content-center mt-5 pt-5 p-2 contenidol">
                     <div class="row">
-                        <div class="col w-50">
-                            <div class="card h-100 bg-dark">
+                        <div class="col">
+                            <div class="card bg-dark border border-end-0">
                                 <div class="card-body">
                                     <div className="text-center">
-                                        <img src="/LOGO.png" class="w-50" alt="..." />
+                                        <img src="/corteBasico.jpg" class="img-fluid w-50 mt-4 rounded-3" alt="..." />
                                     </div>
-                                    <h5 class="card-title text-danger text-center bebas mt-2">Servicio 1</h5>
-                                    <p class="card-text text-center text-white mt-3">Lorem ipsum dolor sit amet consectetur adipisicing elit. Dicta at reprehenderit saepe debitis dolorum doloremque eligendi eveniet quis fuga nam, eos minima consequatur culpa ex, excepturi accusantium, doloribus illo laborum.</p>
-                                    <div className="text-start">
-                                        <button type="button" class="btn btn-outline-danger mt-5" data-bs-toggle="offcanvas" data-bs-target="#staticBackdrop" aria-controls="staticBackdrop">Ver</button>
+                                    <h4 class="card-title text-danger text-center bebas mt-3">Corte Basico</h4>
+                         
+                                    <div className="text-center row mx-3">
+                                        <button type="button" class="btn btn-outline-warning mt-5" data-bs-toggle="offcanvas" data-bs-target="#staticBackdrop" aria-controls="staticBackdrop">Ver</button>
                                     </div>
+                                </div>
+                                <div class="card-footer">
+                                    <small class="text-body-white text-white">Last updated 3 mins ago</small>
                                 </div>
                                 <div class="offcanvas offcanvas-start bg-dark" data-bs-backdrop="static" tabindex="-1" id="staticBackdrop" aria-labelledby="staticBackdropLabel">
                                     <div class="offcanvas-header">
-                                        <h5 class=" mt-5 pt-5 text-warning anton" id="staticBackdropLabel">Servicio 1</h5>
+                                        <h5 class=" mt-5 pt-5 text-warning anton" id="staticBackdropLabel">Corte Basico</h5>
                                         <button type="button" class="btn-close mb-5 bg-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
                                     </div>
                                     <div class="offcanvas-body text-white">
                                         <div>
                                             Lorem ipsum dolor sit, amet consectetur adipisicing elit. Amet ex eos pariatur voluptatibus porro nemo harum ducimus excepturi placeat sed illum, iusto dolore expedita minima, eaque nostrum. Rerum, architecto culpa.
                                         </div>
+                                        
                                     </div>
-                                </div>
-                                <div class="card-footer">
-                                    <small class="text-body-white text-white">Last updated 3 mins ago</small>
                                 </div>
                             </div>
                         </div>
-                        <div class="col w-50">
-                            <div class="card h-100 bg-dark">
+                        <div class="col w-50 mx-5">
+                            <div class="card h-100 bg-dark border border-start-0">
                                 <div className="text-center">
-                                    <img src="/LOGO.png" class="w-50" alt="..." />
+                                    <img src="/cortePremium.jpg" class="img-fluid w-50 mt-4 rounded-3" alt="..." />
                                 </div>
                                 <div class="card-body">
-                                    <h5 class="card-title text-danger text-center bebas">Servicio 2</h5>
-                                    <p class="card-text text-white text-center">Lorem ipsum dolor sit amet consectetur adipisicing elit. Ut aspernatur excepturi quas qui sint recusandae! Doloribus, maiores cumque debitis at deserunt ullam corporis, veniam nesciunt sequi cupiditate delectus autem qui.</p>
-                                    <div className="text-end">
-                                        <button type="button" class="btn btn-outline-danger mt-5" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="staticBackdrop">Ver</button>
+                                    <h4 class="card-title text-danger text-center bebas">Corte Premium</h4>
+                                   
+                                    <div className="text-center row mx-3">
+                                        <button type="button" class="btn btn-outline-warning  mt-5" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="staticBackdrop">Ver</button>
                                     </div>
                                 </div>
                                 <div class="offcanvas offcanvas-end bg-dark" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
                                     <div class="offcanvas-header">
-                                        <h5 class="offcanvas-title text-warning anton mt-5 pt-5" id="offcanvasRightLabel">Servicio 2</h5>
+                                        <h5 class="offcanvas-title text-warning anton mt-5 pt-5" id="offcanvasRightLabel">Corte Premium</h5>
                                         <button type="button" class="btn-close mb-5 bg-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
                                     </div>
                                     <div class="offcanvas-body text-white">
@@ -152,7 +153,7 @@ export default function Index() {
                                     </div>
                                 </div>
                                 <div class="card-footer">
-                                    <small class="text-body-white text-white">Last updated 3 mins ago</small>
+                                    <small class="text-white ">Last updated 3 mins ago</small>
                                 </div>
                             </div>
                         </div>

@@ -972,6 +972,19 @@ app.get('/GetClientes', (req, res) => {
     });
 });
 
+app.delete('/DeleteReserva/:id', (req, res) => {
+    const { id } = req.params;
+    // Lógica para eliminar la reserva de la base de datos
+    db.query('DELETE FROM reservas WHERE id_reserva = ?', [id], (err, result) => {
+        if (err) {
+            console.error(err);
+            res.status(500).send('Error al eliminar la reserva');
+        } else {
+            res.send('Reserva eliminada correctamente');
+        }
+    });
+});
+
 // FIN RESERVAS
 
 

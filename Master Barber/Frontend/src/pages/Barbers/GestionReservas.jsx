@@ -9,10 +9,19 @@ export default function GestionReservas() {
     const [servicios, setServicios] = useState([]);
     const [clientes, setClientes] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
+    const [isLoadingFinal, setIsLoadingFinal] = useState(false);
+    const [isLoadingCancel, setIsLoadingCancel] = useState(false);
+    const [isLoadingAccept, setIsLoadingAccept] = useState(false);
+    const [finalizedReservations, setFinalizedReservations] = useState([]); // Estado para reservas finalizadas
+
+    const [Barber, setBarber] = useState({});
 
     const token = localStorage.getItem('token');
     const tokenDecoded = token ? JSON.parse(atob(token.split('.')[1])) : null;
     const id = tokenDecoded.id;
+
+    const usuario = JSON.parse(atob(token.split(".")[1]));
+    const email = usuario.email;
 
     useEffect(() => {
         axios.get(`http://localhost:8081/GetReservas/barbero/${id}`)
@@ -23,6 +32,13 @@ export default function GestionReservas() {
                 console.error('Hubo un error al obtener las reservas:', error);
             });
 
+        axios.get(`http://localhost:8081/traerUsuario/${email}`)
+            .then(response => {
+                setBarber(response.data[0]);
+            })
+            .catch(error => {
+                console.error('Hubo un error al obtener los datos del barbero:', error);
+            });
         axios.get('http://localhost:8081/GetServicios')
             .then(response => {
                 setServicios(response.data);
@@ -41,33 +57,60 @@ export default function GestionReservas() {
     }, []);
 
     const handleAccept = (id) => {
-            setIsLoading(true)
-        axios.patch(`http://localhost:8081/UpdateReservasEstado/${id}`, { estado: 'aceptada' })
+        setIsLoadingAccept(true);
+        axios.patch(`http://localhost:8081/UpdateReservasEstado/${id}`, { estado: 'Aceptada' })
             .then(response => {
                 console.log(response.data);
-                setReservas(reservas.map(reserva => reserva.id_reserva === id ? { ...reserva, estado: 'aceptada' } : reserva));
+                setReservas(reservas.map(reserva => reserva.id_reserva === id ? { ...reserva, estado: 'Aceptada' } : reserva));
             })
             .catch(error => {
-                console.error('Hubo un error al aceptar la reserva:', error);
+                console.error('Hubo un error al finalizar la reserva:', error);
             })
             .finally(() => {
-                setIsLoading(false);
-            })
+                setIsLoadingAccept(false);
+            });
     };
 
     const handleCancel = (id) => {
-            setIsLoading(true)
-        axios.patch(`http://localhost:8081/UpdateReservasEstado/${id}`, { estado: 'cancelada' })
+        setIsLoadingCancel(true);
+        axios.patch(`http://localhost:8081/UpdateReservasEstado/${id}`, { estado: 'Cancelada' })
             .then(response => {
                 console.log(response.data);
                 setReservas(reservas.map(reserva => reserva.id_reserva === id ? { ...reserva, estado: 'cancelada' } : reserva));
             })
             .catch(error => {
-                console.error('Hubo un error al cancelar la reserva:', error);
+                console.error('Hubo un error al finalizar la reserva:', error);
             })
             .finally(() => {
-                setIsLoading(false);
+                setIsLoadingCancel(false);
+            });
+    };
+
+    const handleFinalize = (id) => {
+        setIsLoadingFinal(true);
+        axios.patch(`http://localhost:8081/UpdateReservasEstado/${id}`, { estado: 'finalizada' })
+            .then(response => {
+                console.log(response.data);
+                setReservas(reservas.map(reserva => reserva.id_reserva === id ? { ...reserva, estado: 'finalizada' } : reserva));
+                setFinalizedReservations([...finalizedReservations, id]); // Agregar la reserva finalizada
             })
+            .catch(error => {
+                console.error('Hubo un error al finalizar la reserva:', error);
+            })
+            .finally(() => {
+                setIsLoadingFinal(false);
+            });
+    };
+
+    const handleDelete = (id) => {
+        axios.delete(`http://localhost:8081/DeleteReserva/${id}`)
+            .then(response => {
+                console.log(response.data);
+                setReservas(reservas.filter(reserva => reserva.id_reserva !== id)); // Eliminar la reserva del estado
+            })
+            .catch(error => {
+                console.error('Hubo un error al eliminar la reserva:', error);
+            });
     };
 
     const getServiceName = (id) => {
@@ -77,31 +120,71 @@ export default function GestionReservas() {
 
     const getClientName = (id) => {
         const cliente = clientes.find(cliente => cliente.id_usuario === id);
-        return cliente ? cliente.nombre_usuario : 'Desconocido';
+        return [{nombre: cliente ? cliente.nombre_usuario : 'Desconocido',
+             IMG: cliente ? <img src={`/images/perfil/${cliente.Foto}`} alt="Foto de Perfil" style={{ width: '100px', height: '100px', borderRadius: '50%', marginRight: '10px' }} /> : 'Desconocido'}]
     };
 
     return (
-        <div className='text-white'>
+        <div className='text-white mb-5'>
             <NavbarBarber />
             <SidebarBarber />
-            <div className='text-center mt-5 anton'>
-                <h2>Gestión de Reservas </h2>
-                {
-                    isLoading && (
-                        <div>
-                            CARGANDO...
-                        </div>
-                    )
-                }
-                <ul>
+            <div className='text-center mt-5 pt-5 contenido'>
+                <h2 className='fw-bold text-warning  display-5 anton'>Hola <span className="text-danger">{Barber.nombre_usuario}</span>, Tienes Las Siguientes Reservas Pendientes</h2>
+
+                {isLoading && (<div>Cargando...</div>)}
+                {isLoadingFinal && (<div>Finalizando...</div>)}
+                {isLoadingCancel && (<div>Cancelando...</div>)}
+                {isLoadingAccept && (<div>Aceptando...</div>)}
+
+                <div className="row container row-cols-1 row-cols-md-12 g-4 mt-5 contenido6">
                     {reservas.map((reserva) => (
-                        <li key={reserva.id_reserva}>
-                            {getClientName(reserva.cliente_id)} - {getServiceName(reserva.servicio)} - {new Date(reserva.fecha).toLocaleString()} - {reserva.estado}
-                            <button onClick={() => handleAccept(reserva.id_reserva)}>Aceptar</button>
-                            <button onClick={() => handleCancel(reserva.id_reserva)}>Cancelar</button>
-                        </li>
+                        <div className="col mb-5" key={reserva.id_reserva}>
+                            <div className="card bg-black text-white w-75 container">
+                                <div className="card-body mb-5">
+                                    <div className="mt-5">
+                                        <h5 className="card-title text-warning">{getClientName(reserva.cliente_id)[0].nombre}</h5>
+                                        {getClientName(reserva.cliente_id)[0].IMG}
+                                        <strong className='text-warning'>Servicio:</strong> {getServiceName(reserva.servicio)} <br />
+                                        <strong className='text-warning'>Fecha Y Hora:</strong> {new Date(reserva.fecha).toLocaleString()} <br />
+                                        <strong className='text-warning'>Estado:</strong> {reserva.estado}
+                                    </div>
+
+                                    <div className="mt-5">
+                                        {finalizedReservations.includes(reserva.id_reserva) ? (
+                                            <button
+                                                className="btn btn-danger"
+                                                onClick={() => handleDelete(reserva.id_reserva)}
+                                            >
+                                                Eliminar
+                                            </button>
+                                        ) : (
+                                            <>
+                                                <button
+                                                    className="btn btn-success mx-3"
+                                                    onClick={() => handleAccept(reserva.id_reserva)}
+                                                >
+                                                    Aceptar
+                                                </button>
+                                                <button
+                                                    className="btn btn-danger"
+                                                    onClick={() => handleFinalize(reserva.id_reserva)}
+                                                >
+                                                    {isLoadingFinal ? 'Finalizando...' : 'Finalizar'}
+                                                </button>
+                                                <button
+                                                    className="btn btn-warning mx-3"
+                                                    onClick={() => handleCancel(reserva.id_reserva)}
+                                                >
+                                                    Cancelar
+                                                </button>
+                                            </>
+                                        )}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     ))}
-                </ul>
+                </div>
             </div>
         </div>
     );
