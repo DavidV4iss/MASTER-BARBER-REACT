@@ -948,7 +948,7 @@ app.patch('/UpdateReservasEstado/:id', (req, res) => {
 app.post('/VerificarDisponibilidad', (req, res) => {
     const { barbero_id, fecha } = req.body;
 
-    const q = 'SELECT * FROM reservas WHERE barbero_id = ? AND DATE_FORMAT(fecha_venta, "%Y-%m-%d %H:%i") AS fecha = ?';
+    const q = 'SELECT * FROM reservas WHERE barbero_id = ? AND fecha = ?';
     const values = [barbero_id, fecha];
 
     db.query(q, values, (err, results) => {
