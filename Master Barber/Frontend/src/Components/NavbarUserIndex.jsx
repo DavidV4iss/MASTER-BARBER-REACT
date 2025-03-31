@@ -95,16 +95,14 @@ export default function NavbarUserIndex() {
       const notificationList = notificaciones
         .map(
           (notificacion) =>
-            `${notificacion.mensaje} <br/><small>${new Date(
-              notificacion.fecha
-            ).toLocaleString()}</small>`
+            `${notificacion.mensaje}`
         )
         .join("");
 
       Swal.fire({
         position: "top-end",
         title: "TUS NOTIFICACIONES",
-        html: `<ul style="text-align: center; padding-left: 100px;">${notificationList}</ul>`,
+        html: `<ul style="text-align: center;">${notificationList}</ul>`,
         confirmButtonColor: "#DC3545",
         customClass: {
           popup: "dark-theme-popup bg-dark antonparabackend ",
