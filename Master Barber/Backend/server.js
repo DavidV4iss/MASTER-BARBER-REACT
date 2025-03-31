@@ -906,7 +906,7 @@ app.patch('/UpdateReservasEstado/:id', (req, res) => {
             }
 
             // Enviar notificación por correo electrónico
-            db.query('SELECT r.*, u.email, s.nombre AS servicio_nombre FROM reservas r JOIN usuarios u ON r.cliente_id = u.id_usuario JOIN tipo_servicio s ON r.servicio = s.id_tipo_servicio WHERE r.id_reserva = ?', [id], (err, results) => {
+            db.query('SELECT r.*, u.email, u.id_usuario AS cliente_id, s.nombre AS servicio_nombre FROM reservas r JOIN usuarios u ON r.cliente_id = u.id_usuario JOIN tipo_servicio s ON r.servicio = s.id_tipo_servicio WHERE r.id_reserva = ?', [id], (err, results) => {
                 if (err) {
                     console.error('Error en la consulta:', err);
                     return res.status(500).send('Error en el servidor');
@@ -918,6 +918,7 @@ app.patch('/UpdateReservasEstado/:id', (req, res) => {
 
                 const reserva = results[0];
                 const email = reserva.email;
+                const clienteId = reserva.cliente_id;
                 const servicioNombre = reserva.servicio_nombre;
 
                 // Configurar el contenido del correo electrónico
@@ -946,6 +947,19 @@ app.patch('/UpdateReservasEstado/:id', (req, res) => {
                         console.error('Error al enviar el correo electrónico:', error);
                         return res.status(500).json({ message: 'Error al enviar el correo electrónico' });
                     }
+
+                    // Guardar la notificación en la base de datos
+                    const mensaje = `El estado de tu reserva ha sido actualizado a: ${nuevoEstado}. Servicio: ${servicioNombre}, Fecha: ${new Date(reserva.fecha).toLocaleString()}`;
+                    db.query(
+                        'INSERT INTO notificaciones (cliente_id, mensaje) VALUES (?, ?)',
+                        [clienteId, mensaje],
+                        (err) => {
+                            if (err) {
+                                console.error('Error al guardar la notificación:', err);
+                            }
+                        }
+                    );
+
                     res.status(200).json({ message: 'Reserva actualizada y notificación enviada por correo electrónico' });
                 });
             });
@@ -991,6 +1005,23 @@ app.delete('/DeleteReserva/:id', (req, res) => {
             res.send('Reserva eliminada correctamente');
         }
     });
+});
+
+
+app.get('/GetNotificaciones/:cliente_id', (req, res) => {
+    const cliente_id = req.params.cliente_id;
+
+    db.query(
+        'SELECT * FROM notificaciones WHERE cliente_id = ? ORDER BY fecha DESC',
+        [cliente_id],
+        (err, results) => {
+            if (err) {
+                console.error('Error al obtener notificaciones:', err);
+                return res.status(500).json({ error: 'Error en el servidor' });
+            }
+            res.status(200).json(results);
+        }
+    );
 });
 
 // FIN RESERVAS

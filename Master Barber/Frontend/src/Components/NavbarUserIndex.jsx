@@ -8,6 +8,22 @@ export default function NavbarUserIndex() {
 
   const [user, setUser] = useState({});
   const [imagePreview, setImagePreview] = useState("");
+  const [notificaciones, setNotificaciones] = useState([]);
+
+  const fetchNotificaciones = async () => {
+    try {
+      const res = await axios.get(`http://localhost:8081/GetNotificaciones/${user.id_usuario}`);
+      setNotificaciones(res.data);
+    } catch (err) {
+      console.error("Error al obtener las notificaciones:", err);
+    }
+  };
+
+  useEffect(() => {
+    if (user.id_usuario) {
+      fetchNotificaciones();
+    }
+  }, [user.id_usuario]);
 
   const token = localStorage.getItem("token");
 
@@ -65,14 +81,36 @@ export default function NavbarUserIndex() {
   };
 
   const handleNotification = () => {
-    Swal.fire({
-      position: "top-end",
-      title: "TUS NOTIFICACIONES",
-      confirmButtonColor: "#DC3545",
-      customClass: {
-        popup: "dark-theme-popup bg-dark antonparabackend ",
-      },
-    });
+    if (notificaciones.length === 0) {
+      Swal.fire({
+        position: "top-end",
+        title: "TUS NOTIFICACIONES",
+        text: "No tienes notificaciones nuevas.",
+        confirmButtonColor: "#DC3545",
+        customClass: {
+          popup: "dark-theme-popup bg-dark antonparabackend ",
+        },
+      });
+    } else {
+      const notificationList = notificaciones
+        .map(
+          (notificacion) =>
+            `${notificacion.mensaje} <br/><small>${new Date(
+              notificacion.fecha
+            ).toLocaleString()}</small>`
+        )
+        .join("");
+
+      Swal.fire({
+        position: "top-end",
+        title: "TUS NOTIFICACIONES",
+        html: `<ul style="text-align: center; padding-left: 100px;">${notificationList}</ul>`,
+        confirmButtonColor: "#DC3545",
+        customClass: {
+          popup: "dark-theme-popup bg-dark antonparabackend ",
+        },
+      });
+    }
   };
 
 
@@ -93,12 +131,15 @@ export default function NavbarUserIndex() {
         <p className='position-absolute top-0 start-50 translate-middle-x  fw-bold mt-4 anton fs-5 text-uppercase text-danger'>¡Bienvenido!</p>
         <div className="collapse navbar-collapse" id="menu">
        
-          <button className='btn btn-dark mt-3 position-fixed top-0 end-0 translate-middle-x' onClick={handleNotification}>
-            <i class="bi bi-alarm-fill"></i>
-            <span class="position-absolute top-0 start-100 translate-middle badge border border-light rounded-circle bg-danger p-2">
-               {/* <span class="visually-hidde"></span>  */}
+          <button
+            className="btn btn-dark mt-3 position-fixed top-0 end-0 translate-middle-x"
+            onClick={handleNotification}
+          >
+            <i className="bi bi-alarm-fill"></i>
+            <span className="position-absolute top-0 start-100 translate-middle badge border border-light rounded-circle bg-danger p-2">
+              {notificaciones.length > 0 ? notificaciones.length : ""}
             </span>
-          </button>
+          </button> 
 
           <div class="dropdown me-2 pe-5">
             <button
