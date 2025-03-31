@@ -4,6 +4,9 @@ import Swal from 'sweetalert2';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import styled from 'styled-components';
+import moment from 'moment';
+
+const formattedDate = moment().format('YYYY-MM-DD HH:mm:ss');
 
 const StyledDatePicker = styled(DatePicker)`
   width: 435px;
@@ -23,7 +26,6 @@ export default function Reserva() {
     const [service, setService] = useState('');
     const [date, setDate] = useState(new Date());
     const [barberoId, setBarberoId] = useState('');
-    const [clienteId, setClienteId] = useState(''); // Asume que tienes el ID del cliente de alguna manera
     const [barberos, setBarberos] = useState([]);
     const [servicios, setServicios] = useState([]);
     const [currentStep, setCurrentStep] = useState(1); // 1: Servicio, 2: Barbero, 3: Fecha
@@ -106,21 +108,30 @@ export default function Reserva() {
             return;
         }
 
-        // Si todo está completo, realiza la reserva
-        axios.post('http://localhost:8081/CrearReservas', {
-            cliente_id: clienteId, // Asegúrate de tener este valor
+        console.log('Reserva:', {
+            cliente_id: id,
             barbero_id: barberoId,
             servicio: service,
-            fecha: date,
+            fecha: formattedDate,
             estado: 'Pendiente',
+        });
+
+        // Si todo está completo, realiza la reserva
+        axios.post('http://localhost:8081/CrearReservas', {
+            cliente_id: id,
+            barbero_id: barberoId,
+            servicio: service,
+            fecha: formattedDate,
+            estado: 'Pendiente',
+
         })
+            
             .then((response) => {
                 Swal.fire({
                     icon: 'success',
                     title: 'Reserva creada',
                     text: 'Tu reserva ha sido creada exitosamente.',
                 });
-                // Reinicia los pasos o redirige al usuario
                 setCurrentStep(1);
                 setService(null);
                 setBarberoId(null);
@@ -132,7 +143,7 @@ export default function Reserva() {
                     title: 'Error al crear la reserva',
                     text: 'Hubo un problema al crear tu reserva. Inténtalo nuevamente.',
                 });
-                console.error(error);
+                console.error('Error al crear la reserva:', error);
             });
     };
 
@@ -255,7 +266,7 @@ export default function Reserva() {
                         <button type="button" className="btn btn-danger me-3" onClick={prevStep}>
                             Anterior
                         </button>
-                        <button type="submit" className="btn btn-warning text-white">
+                        <button type="submit" className="btn btn-warning text-white" onClick={handleSubmit}>
                             Reservar
                         </button>
                     </div>
