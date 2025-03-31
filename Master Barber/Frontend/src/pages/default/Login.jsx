@@ -37,7 +37,7 @@ export default function Login() {
             navigate('/InicioAdmin');
             break;
           case 2: // Barbero
-            navigate('/Iniciobarber');  // Cambia a la ruta correspondiente de barberos
+            navigate('/GestionReservas');  // Cambia a la ruta correspondiente de barberos
             break;
           case 3: // Cliente
             navigate('/InicioUsuario');

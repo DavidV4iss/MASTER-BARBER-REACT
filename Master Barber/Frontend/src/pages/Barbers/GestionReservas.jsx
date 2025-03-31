@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import SidebarBarber from '../../Components/SidebarBarber';
 import NavbarBarber from '../../Components/NavbarBarber';
 import AlertNotification from '../../components/AlertNotification';
 
@@ -12,7 +11,8 @@ export default function GestionReservas() {
     const [isLoadingFinal, setIsLoadingFinal] = useState(false);
     const [isLoadingCancel, setIsLoadingCancel] = useState(false);
     const [isLoadingAccept, setIsLoadingAccept] = useState(false);
-    const [finalizedReservations, setFinalizedReservations] = useState([]); // Estado para reservas finalizadas
+    const [finalizedReservations, setFinalizedReservations] = useState([]);
+    const [cancelTimers, setCancelTimers] = useState({}); // Estado para manejar temporizadores
 
     const [Barber, setBarber] = useState({});
 
@@ -62,9 +62,18 @@ export default function GestionReservas() {
             .then(response => {
                 console.log(response.data);
                 setReservas(reservas.map(reserva => reserva.id_reserva === id ? { ...reserva, estado: 'Aceptada' } : reserva));
+                // Limpiar temporizador si existe
+                if (cancelTimers[id]) {
+                    clearTimeout(cancelTimers[id]);
+                    setCancelTimers(prev => {
+                        const updatedTimers = { ...prev };
+                        delete updatedTimers[id];
+                        return updatedTimers;
+                    });
+                }
             })
             .catch(error => {
-                console.error('Hubo un error al finalizar la reserva:', error);
+                console.error('Hubo un error al aceptar la reserva:', error);
             })
             .finally(() => {
                 setIsLoadingAccept(false);
@@ -76,10 +85,17 @@ export default function GestionReservas() {
         axios.patch(`http://localhost:8081/UpdateReservasEstado/${id}`, { estado: 'Cancelada' })
             .then(response => {
                 console.log(response.data);
-                setReservas(reservas.map(reserva => reserva.id_reserva === id ? { ...reserva, estado: 'cancelada' } : reserva));
+                setReservas(reservas.map(reserva => reserva.id_reserva === id ? { ...reserva, estado: 'Cancelada' } : reserva));
+
+                // Iniciar temporizador de 1 hora
+                const timer = setTimeout(() => {
+                    handleDelete(id); // Eliminar reserva automáticamente después de 1 hora
+                }, 3600000); // 1 hora en milisegundos
+
+                setCancelTimers(prev => ({ ...prev, [id]: timer }));
             })
             .catch(error => {
-                console.error('Hubo un error al finalizar la reserva:', error);
+                console.error('Hubo un error al cancelar la reserva:', error);
             })
             .finally(() => {
                 setIsLoadingCancel(false);
@@ -92,7 +108,7 @@ export default function GestionReservas() {
             .then(response => {
                 console.log(response.data);
                 setReservas(reservas.map(reserva => reserva.id_reserva === id ? { ...reserva, estado: 'finalizada' } : reserva));
-                setFinalizedReservations([...finalizedReservations, id]); // Agregar la reserva finalizada
+                setFinalizedReservations([...finalizedReservations, id]);
             })
             .catch(error => {
                 console.error('Hubo un error al finalizar la reserva:', error);
@@ -106,7 +122,16 @@ export default function GestionReservas() {
         axios.delete(`http://localhost:8081/DeleteReserva/${id}`)
             .then(response => {
                 console.log(response.data);
-                setReservas(reservas.filter(reserva => reserva.id_reserva !== id)); // Eliminar la reserva del estado
+                setReservas(reservas.filter(reserva => reserva.id_reserva !== id));
+                // Limpiar temporizador si existe
+                if (cancelTimers[id]) {
+                    clearTimeout(cancelTimers[id]);
+                    setCancelTimers(prev => {
+                        const updatedTimers = { ...prev };
+                        delete updatedTimers[id];
+                        return updatedTimers;
+                    });
+                }
             })
             .catch(error => {
                 console.error('Hubo un error al eliminar la reserva:', error);
@@ -120,33 +145,35 @@ export default function GestionReservas() {
 
     const getClientName = (id) => {
         const cliente = clientes.find(cliente => cliente.id_usuario === id);
-        return [{nombre: cliente ? cliente.nombre_usuario : 'Desconocido',
-             IMG: cliente ? <img src={`/images/perfil/${cliente.Foto}`} alt="Foto de Perfil" style={{ width: '100px', height: '100px', borderRadius: '50%', marginRight: '10px' }} /> : 'Desconocido'}]
+        return [{
+            nombre: cliente ? cliente.nombre_usuario : 'Desconocido',
+            IMG: cliente ? <img src={`/images/perfil/${cliente.Foto}`} alt="Foto de Perfil" style={{ width: '100px', height: '100px', borderRadius: '50%', marginRight: '10px' }} /> : 'Desconocido'
+        }];
     };
 
     return (
         <div className='text-white mb-5'>
             <NavbarBarber />
-            <SidebarBarber />
             <div className='text-center mt-5 pt-5 contenido'>
                 <h2 className='fw-bold text-warning  display-5 anton'>Hola <span className="text-danger">{Barber.nombre_usuario}</span>, Tienes Las Siguientes Reservas Pendientes</h2>
 
-                {isLoading && (<div>Cargando...</div>)}
-                {isLoadingFinal && (<div>Finalizando...</div>)}
-                {isLoadingCancel && (<div>Cancelando...</div>)}
-                {isLoadingAccept && (<div>Aceptando...</div>)}
+                {isLoadingFinal && (<div className='text-center mt-5 fs-4 UnifrakturMaguntia text-danger'>Finalizando...</div>)}
+                {isLoadingCancel && (<div className='text-center mt-5 fs-4 UnifrakturMaguntia text-warning'>Cancelando...</div>)}
+                {isLoadingAccept && (<div className='text-center mt-5 fs-4UnifrakturMaguntia text-success'>Aceptando...</div>)}
 
-                <div className="row container row-cols-1 row-cols-md-12 g-4 mt-5 contenido6">
+                <div className="row container row-cols-1 row-cols-md-2 g-4 mt-5 pt-5 contenido6">
                     {reservas.map((reserva) => (
                         <div className="col mb-5" key={reserva.id_reserva}>
-                            <div className="card bg-black text-white w-75 container">
+                            <div className="card bg-dark border border text-white w-75 container">
                                 <div className="card-body mb-5">
                                     <div className="mt-5">
-                                        <h5 className="card-title text-warning">{getClientName(reserva.cliente_id)[0].nombre}</h5>
-                                        {getClientName(reserva.cliente_id)[0].IMG}
-                                        <strong className='text-warning'>Servicio:</strong> {getServiceName(reserva.servicio)} <br />
-                                        <strong className='text-warning'>Fecha Y Hora:</strong> {new Date(reserva.fecha).toLocaleString()} <br />
-                                        <strong className='text-warning'>Estado:</strong> {reserva.estado}
+                                        <div className=" align-items-center">{getClientName(reserva.cliente_id)[0].IMG} </div>
+                                        <div className="mt-5">
+                                            <strong className='text-warning '>Cliente:</strong> {getClientName(reserva.cliente_id)[0].nombre}<br />
+                                            <strong className='text-warning'>Servicio:</strong> {getServiceName(reserva.servicio)} <br />
+                                            <strong className='text-warning'>Fecha Y Hora:</strong> {new Date(reserva.fecha).toLocaleString()} <br />
+                                            <strong className='text-warning'>Estado De La Reserva:</strong><strong className="text-primary mx-2">{reserva.estado}</strong>
+                                        </div>
                                     </div>
 
                                     <div className="mt-5">

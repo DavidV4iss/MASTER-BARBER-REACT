@@ -15,7 +15,6 @@ import Cambiarpasscod from './pages/default/Cambiarpasscod';
 import InicioUsuario from './pages/Usuario/InicioUsuario';
 import PerfilAdmin from './pages/Admin/PerfilAdmin';
 import ConfiguracionAdmin from './pages/Admin/ConfiguracionAdmin';
-import Iniciobarber from "./pages/Barbers/Iniciobarber";
 import PerfilBarber from "./pages/Barbers/PerfilBarber";
 import PerfilUser from "./pages/Usuario/PerfilUser";
 import GestionReservas from './pages/Barbers/GestionReservas';
@@ -111,13 +110,6 @@ function App() {
 
             {/* RUTAS PRIVADAS BARBEROS */}
 
-            <Route
-              exact
-              path="/Iniciobarber"
-              element={
-                <PrivateRoute roles={["2"]} element={<Iniciobarber />} />
-              }
-            />
             <Route
               exact
               path="/PerfilBarber"

@@ -99,7 +99,7 @@ export default function PerfilBarber() {
           popup: "dark-theme-popup bg-dark antonparabackend ",
         },
       });
-      navigate("/Iniciobarber");
+      navigate("/GestionReservas");
     } catch (err) {
       Swal.fire({
         title: "Error",
