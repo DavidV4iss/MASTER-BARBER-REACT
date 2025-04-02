@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import NavbarBarber from '../../Components/NavbarBarber';
-import AlertNotification from '../../components/AlertNotification';
 
 export default function GestionReservas() {
     const [reservas, setReservas] = useState([]);
@@ -89,8 +88,8 @@ export default function GestionReservas() {
 
                 // Iniciar temporizador de 1 hora
                 const timer = setTimeout(() => {
-                    handleDelete(id); // Eliminar reserva automáticamente después de 1 hora
-                }, 3600000); // 1 hora en milisegundos
+                    handleDelete(id);
+                }, 60 * 60 * 1000); s
 
                 setCancelTimers(prev => ({ ...prev, [id]: timer }));
             })

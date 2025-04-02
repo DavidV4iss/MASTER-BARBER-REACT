@@ -92,17 +92,60 @@ export default function NavbarUserIndex() {
         },
       });
     } else {
-      const notificationList = notificaciones
-        .map(
-          (notificacion) =>
-            `<li style="text-align: left; margin-bottom: 100px; margin-top: 20px;">${notificacion.mensaje} <br/><small style="color: gray;"></small></li>`
-        )
-        .join("");
-
       Swal.fire({
         position: "top-end",
         title: "TUS NOTIFICACIONES",
-        html: `<ul style="text-align: left; padding-left: 20px;">${notificationList}</ul>`,
+        html: `<ul id="notification-list" style="text-align-center; padding-left: 20px;"></ul>`,
+        confirmButtonColor: "#DC3545",
+        customClass: {
+          popup: "dark-theme-popup bg-dark antonparabackend ",
+        },
+        didOpen: () => {
+          const notificationList = document.getElementById("notification-list");
+          notificaciones.forEach((notificacion) => {
+            const li = document.createElement("li");
+            li.style.marginBottom = "10px";
+            li.style.marginTop = "10px";
+            li.innerHTML = `
+            ${notificacion.mensaje} 
+            <i 
+              class="bi bi-trash3-fill" 
+              style="margin-left: 10px; color: red; cursor: pointer; border: none; background: none;"
+              data-id="${notificacion.id_notificacion}">
+              Eliminar
+            </i>
+          `;
+            li.querySelector("i").addEventListener("click", () => {
+              deleteNotification(notificacion.id_notificacion);
+            });
+            notificationList.appendChild(li);
+          });
+        },
+      });
+    }
+  };
+
+  const deleteNotification = async (id) => {
+    try {
+      await axios.delete(`http://localhost:8081/DeleteNotificacion/${id}`);
+      Swal.fire({
+        title: "Notificación eliminada",
+        text: "La notificación ha sido eliminada correctamente.",
+        icon: "success",
+        timer: 1500,
+        showConfirmButton: false,
+        customClass: {
+          popup: "dark-theme-popup bg-dark antonparabackend ",
+        },
+      });
+      // Actualizar la lista de notificaciones después de eliminar
+      fetchNotificaciones();
+    } catch (err) {
+      console.error("Error al eliminar la notificación:", err);
+      Swal.fire({
+        title: "Error",
+        text: "No se pudo eliminar la notificación.",
+        icon: "error",
         confirmButtonColor: "#DC3545",
         customClass: {
           popup: "dark-theme-popup bg-dark antonparabackend ",
@@ -110,6 +153,9 @@ export default function NavbarUserIndex() {
       });
     }
   };
+
+
+
 
 
   return (
@@ -128,7 +174,7 @@ export default function NavbarUserIndex() {
         </button>
         <p className='position-absolute top-0 start-50 translate-middle-x  fw-bold mt-4 anton fs-5 text-uppercase text-danger'>¡Bienvenido!</p>
         <div className="collapse navbar-collapse" id="menu">
-       
+
           <button
             className="btn btn-dark mt-3 position-fixed top-0 end-0 translate-middle-x"
             onClick={handleNotification}
@@ -137,7 +183,8 @@ export default function NavbarUserIndex() {
             <span className="position-absolute top-0 start-100 translate-middle badge border border-light rounded-circle bg-danger p-2">
               {notificaciones.length > 0 ? notificaciones.length : ""}
             </span>
-          </button> 
+
+          </button>
 
           <div class="dropdown me-2 pe-5">
             <button
@@ -146,7 +193,7 @@ export default function NavbarUserIndex() {
               data-bs-toggle="dropdown"
               aria-expanded="false"
             >
-            
+
               <img
                 src={imagePreview || "default-avatar.png"}
                 alt="Imagen de perfil"
