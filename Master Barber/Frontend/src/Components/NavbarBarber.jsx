@@ -99,14 +99,6 @@ export default function NavbarBarber() {
                   Perfil
                 </a>
               </li>
-              <li>
-                <a
-                  class="dropdown-item bebas text-danger"
-                  href="/ConfiguracionBarber"
-                >
-                  Configuración
-                </a>
-              </li>
               <li onClick={handleLogout}>
                 <div class="box-2">
                   <div class="btn btn-two text-white">

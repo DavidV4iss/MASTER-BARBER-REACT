@@ -98,9 +98,6 @@ export default function NavbarAdmin() {
                 <li>
                   <a className="dropdown-item bebas text-danger" href="/PerfilAdmin">Perfil</a>
                 </li>
-                <li>
-                  <a className="dropdown-item bebas text-danger" href="/ConfiguracionAdmin">Configuración</a>
-                </li>
                 <li onClick={handleLogout}>
                   <div className="box-2">
                     <div className="btn btn-two text-white">

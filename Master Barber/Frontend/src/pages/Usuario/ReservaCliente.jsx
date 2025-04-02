@@ -40,6 +40,9 @@ export default function Reserva() {
                 icon: 'warning',
                 title: 'Servicio no seleccionado',
                 text: 'Por favor, selecciona un servicio antes de continuar.',
+                customClass: {
+                    popup: "dark-theme-popup bg-dark antonparabackend ",
+                }
             });
             return;
         }
@@ -49,6 +52,9 @@ export default function Reserva() {
                 icon: 'warning',
                 title: 'Barbero no seleccionado',
                 text: 'Por favor, selecciona un barbero antes de continuar.',
+                customClass: {
+                    popup: "dark-theme-popup bg-dark antonparabackend ",
+                }
             });
             return;
         }
@@ -86,6 +92,9 @@ export default function Reserva() {
                 icon: 'error',
                 title: 'Falta seleccionar el servicio',
                 text: 'Por favor, selecciona un servicio antes de reservar.',
+                customClass: {
+                    popup: "dark-theme-popup bg-dark antonparabackend ",
+                }
             });
             return;
         }
@@ -95,6 +104,9 @@ export default function Reserva() {
                 icon: 'error',
                 title: 'Falta seleccionar el barbero',
                 text: 'Por favor, selecciona un barbero antes de reservar.',
+                customClass: {
+                    popup: "dark-theme-popup bg-dark antonparabackend ",
+                }
             });
             return;
         }
@@ -104,6 +116,9 @@ export default function Reserva() {
                 icon: 'error',
                 title: 'Falta seleccionar la fecha y hora',
                 text: 'Por favor, selecciona una fecha y hora antes de reservar.',
+                customClass: {
+                    popup: "dark-theme-popup bg-dark antonparabackend ",
+                }
             });
             return;
         }
@@ -132,6 +147,9 @@ export default function Reserva() {
                     icon: 'success',
                     title: 'Reserva creada',
                     text: 'Tu reserva ha sido creada exitosamente.',
+                    customClass: {
+                        popup: "dark-theme-popup bg-dark antonparabackend ",
+                    }
                 });
                 setCurrentStep(1);
                 setService(null);
@@ -143,6 +161,9 @@ export default function Reserva() {
                     icon: 'error',
                     title: 'Error al crear la reserva',
                     text: 'Hubo un problema al crear tu reserva. Inténtalo nuevamente.',
+                    customClass: {
+                        popup: "dark-theme-popup bg-dark antonparabackend ",
+                    }
                 });
                 console.error('Error al crear la reserva:', error);
             });

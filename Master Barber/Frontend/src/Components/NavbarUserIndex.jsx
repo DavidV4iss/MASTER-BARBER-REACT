@@ -210,11 +210,6 @@ export default function NavbarUserIndex() {
                   Perfil
                 </a>
               </li>
-              <li>
-                <a class="dropdown-item bebas text-warning" href="#">
-                  Configuración
-                </a>
-              </li>
               <li onClick={handleLogout}>
                 <div class="box-2">
                   <div class="btn btn-two text-white">
