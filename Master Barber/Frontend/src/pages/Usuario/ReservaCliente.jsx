@@ -108,11 +108,14 @@ export default function Reserva() {
             return;
         }
 
+        // Formatea la fecha seleccionada
+        const formattedSelectedDate = moment(date).format('YYYY-MM-DD HH:mm:ss');
+
         console.log('Reserva:', {
             cliente_id: id,
             barbero_id: barberoId,
             servicio: service,
-            fecha: formattedDate,
+            fecha: formattedSelectedDate,
             estado: 'Pendiente',
         });
 
@@ -121,11 +124,9 @@ export default function Reserva() {
             cliente_id: id,
             barbero_id: barberoId,
             servicio: service,
-            fecha: formattedDate,
+            fecha: formattedSelectedDate, // Usa la fecha seleccionada formateada
             estado: 'Pendiente',
-
         })
-            
             .then((response) => {
                 Swal.fire({
                     icon: 'success',
@@ -252,14 +253,26 @@ export default function Reserva() {
                 {/* Paso 3: Seleccionar fecha y hora */}
                 {currentStep === 3 && (
                     <div>
-                        <h3 className='antonparabackend mt-5 text-white'>Selecciona la fecha y hora</h3>
-                        <div>
+                        <h3 className='antonparabackend mt-3 text-white'>Selecciona la fecha y hora</h3>
+                        <div className="calendar-container mt-5 mb-5">
                             <StyledDatePicker
                                 selected={date}
                                 onChange={(date) => setDate(date)}
                                 showTimeSelect
-                                dateFormat="Pp"
+                                timeFormat="HH:mm"
+                                timeIntervals={30}
+                                dateFormat="MMMM d, yyyy h:mm aa"
+                                minDate={new Date()}
+                                filterTime={(time) => {
+                                    const currentDate = new Date();
+                                    const selectedTime = new Date(time);
+                                    return (
+                                        selectedTime.getTime() > currentDate.getTime() ||
+                                        selectedTime.getDate() !== currentDate.getDate()
+                                    );
+                                }}
                                 placeholderText="Selecciona una fecha y hora"
+                                inline
                             />
                         </div>
                         <br />
