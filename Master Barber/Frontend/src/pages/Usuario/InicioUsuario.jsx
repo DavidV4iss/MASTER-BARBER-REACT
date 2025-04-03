@@ -4,6 +4,7 @@ import axios from 'axios';
 import Swal from 'sweetalert2';
 import Rating from 'react-rating-stars-component';
 import ReservaCliente from './ReservaCliente';
+import CalificacionesUserD from '../../Components/CalificacionUserD';
 
 
 export default function InicioUsuario() {
@@ -120,6 +121,12 @@ export default function InicioUsuario() {
               </div>
               <button type="submit" className='btn btn-danger mt-3 '>Enviar Calificación</button>
             </form>
+            <div className='mt-5 pt-5'>
+              <h5 className='fw-bold fs-3 bebas text-warning'>Mis calificaciones</h5>
+              <div className="mt-5">
+                <CalificacionesUserD />
+              </div>
+            </div>
           </div>
         </div>
       </div>

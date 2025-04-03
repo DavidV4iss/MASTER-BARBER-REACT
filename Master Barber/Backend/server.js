@@ -780,7 +780,19 @@ app.post('/Createcalificaciones', (req, res) => {
     );
 });
 
+app.delete('/DeleteCalificaciones/:id', (req, res) => {
+    const id = req.params.id;
+    const q = 'DELETE FROM calificaciones WHERE id = ?';
+    db.query(q, [id], (err, results) => {
+        if (err) return res.status(500).json({ error: `Error al eliminar la calificación: ${err.message}` });
+        return res.status(200).json({ message: "Calificación eliminada exitosamente" });
+    });
+})
+
 // FIN   CALIFICACIONES
+
+
+
 
 
 
