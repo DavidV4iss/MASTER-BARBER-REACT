@@ -21,10 +21,13 @@
     "nodemailer": "^6.9.14",
     "pdfkit": "^0.16.0",
     "pdfkit-table": "^0.1.99",
-    "socket.io": "^4.8.1"
+    "socket.io": "^4.8.1",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.1"
   },
   "devDependencies": {
-    "nodemon": "^3.1.7"
+    "nodemon": "^3.1.7",
+    "swagger-autogen": "^2.23.7"
   },
   "description": "\"\"",
   "keywords": []
