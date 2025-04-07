@@ -6,6 +6,7 @@ import 'react-datepicker/dist/react-datepicker.css';
 import styled from 'styled-components';
 import moment from 'moment';
 
+
 const formattedDate = moment().format('YYYY-MM-DD HH:mm:ss');
 
 const StyledDatePicker = styled(DatePicker)`
@@ -194,7 +195,7 @@ export default function Reserva() {
 
     return (
         <div className='text-white text-center mt-5 rounded-4 container'>
-            <h1 className='text-warning text-center mt-5 mb-5 p-5 antonparabackend'>¡Haz tu reserva ahora!</h1>
+            <h1 className='text-warning text-center mt-5 mb-5 p-5 antonparabackend'>¡Crea tu reserva ahora!</h1>
 
             <form onSubmit={handleSubmit}>
                 {/* Paso 1: Seleccionar servicio */}
@@ -303,20 +304,48 @@ export default function Reserva() {
                                 selected={date}
                                 onChange={(date) => setDate(date)}
                                 showTimeSelect
-                                timeFormat="hh:mm aa" // Formato de 12 horas con AM/PM
-                                timeIntervals={60} // Intervalos de 30 minutos
-                                dateFormat="MMMM d, yyyy hh:mm aa" // Incluye AM/PM en la fecha y hora
-                                minDate={new Date()} // No permite seleccionar fechas pasadas
+                                timeFormat="hh:mm aa"
+                                timeIntervals={60}
+                                dateFormat="d 'de' MMMM 'de' yyyy hh:mm" // Formato en español
+                                minDate={new Date()}
                                 filterTime={(time) => {
                                     const selectedTime = new Date(time);
                                     const hours = selectedTime.getHours();
                                     const isOcupada = horasOcupadas.some(
                                         (hora) => hora.getTime() === selectedTime.getTime()
                                     );
-                                    return hours >= 8 && hours <= 22 && !isOcupada; // Permite solo horas disponibles
+                                    return hours >= 8 && hours <= 22 && !isOcupada;
                                 }}
                                 placeholderText="Selecciona una fecha y hora"
                                 inline
+                                timeCaption="Hora"
+                                renderCustomHeader={({
+                                    date,
+                                    decreaseMonth,
+                                    increaseMonth,
+                                    prevMonthButtonDisabled,
+                                    nextMonthButtonDisabled,
+                                }) => (
+                                    <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "10px" }}>
+                                        <button
+                                            type="button"
+                                            onClick={decreaseMonth}
+                                            disabled={prevMonthButtonDisabled}
+                                        >
+                                            {"<"}
+                                        </button>
+                                        <span>
+                                            {date.toLocaleString('es-ES', { month: 'long', year: 'numeric' }).replace(/^\w/, (c) => c.toUpperCase())}
+                                        </span>
+                                        <button
+                                            type="button"
+                                            onClick={increaseMonth}
+                                            disabled={nextMonthButtonDisabled}
+                                        >
+                                            {">"}
+                                        </button>
+                                    </div>
+                                )}
                             />
                         </div>
                         <br />

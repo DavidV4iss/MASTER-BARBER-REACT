@@ -361,10 +361,11 @@ button:hover {
   font-family: 'Arial', sans-serif;
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  background-color: #343a40;
-  color: #fff;
+  background-color: #4b4b4b;
+  color: #535353;
   border: none;
   width: 50%;
+  font-weight: bold;
 }
 
 .react-datepicker__month-container {
@@ -382,11 +383,19 @@ button:hover {
 
 /* Encabezado del calendario */
 .react-datepicker__header {
-  background-color: #ffc107;
+  background-color: #10c0ec;
   border-bottom: 1px solid #ccc;
   color: #000;
   font-size: 16px;
-  padding: 10px;
+  padding: 20px;
+  border-radius: 8px 8px 0 0;
+}
+
+.react-datepicker__header--custom {
+  background-color: #10c0ec;
+  color: #000000;
+  font-size: 16px;
+  padding: 16.5px;
   border-radius: 8px 8px 0 0;
 }
 
@@ -401,9 +410,11 @@ button:hover {
 }
 
 .react-datepicker__day-name {
+  display: none;
   color: #ffffff;
   font-size: 16px;
-  margin: 10px;
+  margin: 0 30px; /* Aumenta el margen horizontal */
+  padding: 5px 0; /* Opcional: agrega espacio interno */
   border-radius: 100%;
   transition: background-color 0.5s ease;
   justify-content: space-between;
@@ -412,8 +423,8 @@ button:hover {
 /* Día seleccionado */
 .react-datepicker__day--selected,
 .react-datepicker__day--keyboard-selected {
-  background-color: #ffc107;
-  color: #000;
+  background-color: #10c0ec;
+  color: #ffffff;
   font-weight: bold;
 }
 
@@ -428,11 +439,31 @@ button:hover {
   top: 15px;
   line-height: 1.7rem;
   border: none;
-  background-color: transparent;
+  background-color:none;
+  /* Cambia el color de fondo */
+  border-radius: 50%;
+  /* Hace los botones redondos */
+  width: 30px;
+  height: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: none;
 }
 
+.react-datepicker__navigation:hover {
+  background-color: transparent;
+  /* Asegúrate de que no cambie el fondo */
+  color: inherit;
+  /* Mantén el color actual */
+  cursor: default;
+  /* Opcional: evita que el cursor cambie */
+}
+
+
+
 .react-datepicker__navigation-icon::before {
-  border-color: #fff;
+  border-color: #ffffff;
 }
 
 /* Selector de tiempo */
@@ -446,7 +477,8 @@ button:hover {
 
 /* Lista de tiempo */
 .react-datepicker__time-list {
-  background-color: #343a40;
+  background-color: #535353;
+  color: #FFF;
   /* Cambia el color de fondo de la lista de tiempo */
 }
 
@@ -466,6 +498,7 @@ button:hover {
   color: #000;
   font-weight: bold;
 }
+
 
 
 
