@@ -167,8 +167,8 @@ app.post('/registrar', (req, res) => {
         else if (nombreusuario.length < 3) {
             return res.status(400).send('El nombre debe tener al menos 3 caracteres');
         }
-        else if (nit.length !== 10) {
-            return res.status(400).send('Tu número de documento debe tener 10 caracteres');
+        else if (nit.length < 8 || nit.length > 10) {
+            return res.status(400).send('Tu número de documento debe tener como minimo 8 y máximo 10 caracteres');
         }
         else if (telefono.length !== 10) {
             return res.status(400).send('Tu número de teléfono debe tener 10 caracteres');
@@ -806,22 +806,28 @@ app.get('/GetServicios', (req, res) => {
     });
 });
 
-app.post('/CrearReservas', (req, res) => {
-    const { cliente_id, barbero_id, servicio, fecha, estado } = req.body;
+// Ejemplo en Node.js/Express
+app.post('/CrearReservas', async (req, res) => {
+    const { barbero_id, fecha } = req.body;
 
-    const query = `
-        INSERT INTO reservas (cliente_id, barbero_id, servicio, fecha, estado)
-        VALUES (?, ?, ?, ?, ?)
-    `;
-    const values = [cliente_id, barbero_id, servicio, fecha, estado];
+    try {
+        // Verifica si ya existe una reserva para el barbero en la misma fecha y hora
+        const reservaExistente = await db.query(
+            'SELECT * FROM reservas WHERE barbero_id = ? AND fecha = ?',
+            [barbero_id, fecha]
+        );
 
-    db.query(query, values, (err, results) => {
-        if (err) {
-            console.error('Error al crear la reserva:', err);
-            return res.status(500).json({ error: 'Error al crear la reserva' });
+        if (reservaExistente.length > 0) {
+            return res.status(400).json({ message: 'La hora seleccionada ya está ocupada. Por favor, elige otra hora.' });
         }
-        res.status(200).json({ message: 'Reserva creada exitosamente' });
-    });
+
+        // Si no hay conflicto, crea la reserva
+        await db.query('INSERT INTO reservas SET ?', req.body);
+        res.status(201).json({ message: 'Reserva creada exitosamente.' });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Error al crear la reserva.' });
+    }
 });
 
 app.get('/GetReservas', (req, res) => {

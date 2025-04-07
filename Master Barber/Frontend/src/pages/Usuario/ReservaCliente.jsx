@@ -29,6 +29,7 @@ export default function Reserva() {
     const [barberos, setBarberos] = useState([]);
     const [servicios, setServicios] = useState([]);
     const [currentStep, setCurrentStep] = useState(1); // 1: Servicio, 2: Barbero, 3: Fecha
+    const [horasOcupadas, setHorasOcupadas] = useState([]);
 
     const token = localStorage.getItem('token');
     const tokenDecoded = token ? JSON.parse(atob(token.split('.')[1])) : null;
@@ -74,6 +75,18 @@ export default function Reserva() {
             .catch(error => {
                 console.error('Hubo un error al obtener los barberos:', error);
             });
+        if (barberoId) {
+            // Obtener las reservas existentes para el barbero seleccionado
+            axios.get(`http://localhost:8081/GetReservas/barbero/${barberoId}`)
+                .then(response => {
+                    const horasOcupadas = response.data.map(reserva => new Date(reserva.fecha));
+                    setHorasOcupadas(horasOcupadas);
+                })
+                .catch(error => {
+                    console.error('Error al obtener las reservas:', error);
+                });
+        }
+        
 
         axios.get('http://localhost:8081/GetServicios')
             .then(response => {
@@ -84,7 +97,7 @@ export default function Reserva() {
             });
     }, []);
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
 
         if (!service) {
@@ -123,51 +136,61 @@ export default function Reserva() {
             return;
         }
 
-        // Formatea la fecha seleccionada
         const formattedSelectedDate = moment(date).format('YYYY-MM-DD HH:mm:ss');
 
-        console.log('Reserva:', {
-            cliente_id: id,
-            barbero_id: barberoId,
-            servicio: service,
-            fecha: formattedSelectedDate,
-            estado: 'Pendiente',
-        });
+        try {
+            // Verificar si la hora está ocupada
+            const response = await axios.get(`http://localhost:8081/GetReservas/barbero/${barberoId}`);
+            const horasOcupadas = response.data.map(reserva => moment(reserva.fecha).format('YYYY-MM-DD HH:mm:ss'));
 
-        // Si todo está completo, realiza la reserva
-        axios.post('http://localhost:8081/CrearReservas', {
-            cliente_id: id,
-            barbero_id: barberoId,
-            servicio: service,
-            fecha: formattedSelectedDate, // Usa la fecha seleccionada formateada
-            estado: 'Pendiente',
-        })
-            .then((response) => {
+            if (horasOcupadas.includes(formattedSelectedDate)) {
                 Swal.fire({
-                    icon: 'success',
-                    title: 'Reserva creada',
-                    text: 'Tu reserva ha sido creada exitosamente.',
+                    icon: 'warning',
+                    title: 'Hora ocupada',
+                    text: 'La hora seleccionada ya está ocupada. Por favor, elige otra hora.',
+                    confirmButtonText: 'Aceptar',
+                    confirmButtonColor: '#DC3545',
                     customClass: {
                         popup: "dark-theme-popup bg-dark antonparabackend ",
+
                     }
                 });
-                setCurrentStep(1);
-                setService(null);
-                setBarberoId(null);
-                setDate(null);
-            })
-            .catch((error) => {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error al crear la reserva',
-                    text: 'Hubo un problema al crear tu reserva. Inténtalo nuevamente.',
-                    customClass: {
-                        popup: "dark-theme-popup bg-dark antonparabackend ",
-                    }
-                });
-                console.error('Error al crear la reserva:', error);
+                return;
+            }
+
+            // Crear la reserva si la hora no está ocupada
+            await axios.post('http://localhost:8081/CrearReservas', {
+                cliente_id: id,
+                barbero_id: barberoId,
+                servicio: service,
+                fecha: formattedSelectedDate,
+                estado: 'Pendiente',
             });
-    };
+
+            Swal.fire({
+                icon: 'success',
+                title: 'Reserva creada',
+                text: 'Tu reserva ha sido creada exitosamente.',
+                customClass: {
+                    popup: "dark-theme-popup bg-dark antonparabackend ",
+                }
+            });
+
+            setCurrentStep(1);
+            setService(null);
+            setBarberoId(null);
+            setDate(null);
+        } catch (error) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error al crear la reserva',
+                text: 'Hubo un problema al crear tu reserva. Inténtalo nuevamente.',
+                customClass: {
+                    popup: "dark-theme-popup bg-dark antonparabackend ",
+                }
+            });
+        }
+    };  
 
     return (
         <div className='text-white text-center mt-5 rounded-4 container'>
@@ -281,13 +304,16 @@ export default function Reserva() {
                                 onChange={(date) => setDate(date)}
                                 showTimeSelect
                                 timeFormat="hh:mm aa" // Formato de 12 horas con AM/PM
-                                timeIntervals={30} // Intervalos de 30 minutos
+                                timeIntervals={60} // Intervalos de 30 minutos
                                 dateFormat="MMMM d, yyyy hh:mm aa" // Incluye AM/PM en la fecha y hora
                                 minDate={new Date()} // No permite seleccionar fechas pasadas
                                 filterTime={(time) => {
                                     const selectedTime = new Date(time);
                                     const hours = selectedTime.getHours();
-                                    return hours >= 8 && hours <= 22; // Permite solo horas entre las 8:00 AM y las 10:00 PM
+                                    const isOcupada = horasOcupadas.some(
+                                        (hora) => hora.getTime() === selectedTime.getTime()
+                                    );
+                                    return hours >= 8 && hours <= 22 && !isOcupada; // Permite solo horas disponibles
                                 }}
                                 placeholderText="Selecciona una fecha y hora"
                                 inline
