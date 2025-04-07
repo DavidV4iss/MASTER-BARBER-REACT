@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 31-03-2025 a las 16:58:32
+-- Tiempo de generación: 07-04-2025 a las 17:03:49
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -39,11 +39,16 @@ CREATE TABLE `calificaciones` (
 --
 
 INSERT INTO `calificaciones` (`id`, `usuario_id`, `puntuacion`, `comentario`) VALUES
-(25, 5, 3, 'ffffffffffffffffffffff'),
-(26, 5, 3, 'ffffffffffffffffffffff'),
-(27, 5, 3, 'ssssssssss'),
-(28, 5, 3, 'ddddddddddddddddddddd'),
-(29, 5, 5, 'ssssssssssssssssssss');
+(42, 5, 5, 'C'),
+(43, 5, 5, 'U'),
+(44, 5, 5, 'L'),
+(45, 5, 5, 'O'),
+(46, 5, 5, 'Y'),
+(47, 5, 5, 'T'),
+(48, 5, 5, 'E'),
+(49, 5, 5, 'T'),
+(50, 5, 5, 'A'),
+(51, 5, 5, 'S');
 
 -- --------------------------------------------------------
 
@@ -88,12 +93,12 @@ CREATE TABLE `inventario` (
 --
 
 INSERT INTO `inventario` (`id_producto`, `nombre`, `descripcion_P`, `cantidad`, `id_categoria_producto`, `proveedor`, `PrecioUnitario`, `fecha_venta`, `Foto`) VALUES
-(57, 'Maquina Para Barberia', 'Corte Fino', 8, 3, 'CocaCola', 150000, '2025-03-14 09:48:00', 'inventario_1742395538261-Maquina.jpg'),
-(58, 'Porta Cuchillas', 'Corte Fino', 0, 3, 'CocaCola', 50000, '2025-03-14 09:50:00', 'inventario_1742395550506-Porta Navajas.jpg'),
-(59, 'polvos Texturizantes', 'Un Corte Texturizado', 8, 3, 'CocaCola', 300000, '2025-03-14 09:50:00', 'inventario_1742395574960-texturizante.jpg'),
-(60, 'Locion Desinfectante', 'Desinfecta', 8, 3, 'CocaCola', 400000, '2025-03-19 09:16:00', 'inventario_1742393809510-LOCION-REFRESCANTEjpg.jpg'),
-(61, 'Atomizador', 'Atomizador', 10, 3, 'CocaCola', 700000, '2025-03-19 09:17:00', 'inventario_1742393858813-Atomizadorjpg.jpg'),
-(62, 'Gel Para Afeitar', 'Afeitar', 9, 3, 'CocaCola', 800000, '2025-03-19 09:18:00', 'inventario_1742393927581-GEL_PARA_AFEITAR.jpg');
+(57, 'Maquina Para Barberia', 'Corte Fino', 53, 3, 'CocaCola', 150000, '2025-03-14 09:48:00', 'inventario_1744031854302-Maquina.jpg'),
+(58, 'Porta Cuchillas', 'Corte Fino', 58, 3, 'CocaCola', 50000, '2025-03-14 09:50:00', 'inventario_1744031870121-Porta Navajas.jpg'),
+(59, 'polvos Texturizantes', 'Un Corte Texturizado', 83, 3, 'CocaCola', 300000, '2025-03-14 09:50:00', 'inventario_1744031884175-texturizante.jpg'),
+(60, 'Locion Desinfectante', 'Desinfecta', 84, 3, 'CocaCola', 400000, '2025-03-19 09:16:00', 'inventario_1744031903343-LOCION-REFRESCANTEjpg.jpg'),
+(61, 'Atomizador', 'Atomizador', 81, 3, 'CocaCola', 700000, '2025-03-19 09:17:00', 'inventario_1744031925680-Atomizadorjpg.jpg'),
+(62, 'Gel Para Afeitar', 'Afeitar', 85, 3, 'CocaCola', 800000, '2025-03-19 09:18:00', 'inventario_1744031938175-GEL_PARA_AFEITAR.jpg');
 
 -- --------------------------------------------------------
 
@@ -114,7 +119,8 @@ CREATE TABLE `notificaciones` (
 --
 
 INSERT INTO `notificaciones` (`id_notificacion`, `cliente_id`, `mensaje`, `leido`, `fecha`) VALUES
-(4, 5, 'El estado de tu reserva ha sido actualizado a: Aceptada. Servicio: Corte premium, Fecha: 31/3/2025, 9:47:53 a. m.', 0, '2025-03-31 14:48:11');
+(33, 5, 'El estado de tu reserva ha sido actualizado a: Aceptada. Servicio: Corte basico, Fecha: 3/4/2025, 9:11:12 a. m.', 0, '2025-04-07 13:27:10'),
+(34, 5, 'El estado de tu reserva ha sido actualizado a: Aceptada. Servicio: Corte premium, Fecha: 7/4/2025, 10:00:00 a. m.', 0, '2025-04-07 13:33:58');
 
 -- --------------------------------------------------------
 
@@ -136,7 +142,9 @@ CREATE TABLE `reservas` (
 --
 
 INSERT INTO `reservas` (`id_reserva`, `cliente_id`, `barbero_id`, `servicio`, `fecha`, `estado`) VALUES
-(86, 5, 56, 2, '2025-03-31 09:47:53', 'Aceptada');
+(105, 5, 56, 1, '2025-04-03 09:11:12', 'Aceptada'),
+(106, 5, 56, 2, '2025-04-07 09:00:00', 'Pendiente'),
+(107, 5, 56, 2, '2025-04-07 10:00:00', 'Aceptada');
 
 -- --------------------------------------------------------
 
@@ -168,6 +176,14 @@ CREATE TABLE `servicio_adicional` (
   `id_servicio` int(11) NOT NULL,
   `nombre_servicio` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `servicio_adicional`
+--
+
+INSERT INTO `servicio_adicional` (`id_servicio`, `nombre_servicio`) VALUES
+(1, 'Cejas'),
+(2, 'Barba');
 
 -- --------------------------------------------------------
 
@@ -221,6 +237,41 @@ INSERT INTO `usuarios` (`id_usuario`, `nombre_usuario`, `email`, `nit`, `telefon
 (49, 'Nixxon', 'nixon30@gmail.com', 0, '', '$2a$10$G3pPqsEHK2eAkGhtDQQdUupZcu/6G1T1sp4PA3prWSfK2c3H310JC', 2, NULL, NULL, 'barbero_1742999236348-B3.JPG', 'Cortes Perfilados , Accesoria En Imagen Buen Uso De Las Maquinas Y El Ambinte'),
 (54, 'Jeisson', 'jeisson30@gmail.com', 0, '', '$2a$10$Fq4Rb1.iRUSeg/gfDl0vEe95CHlW4vyi37RrtJzu9SmcVeKtCl7cG', 2, NULL, NULL, 'barbero_1743001106896-B2.JPG', 'Cortes Perfilados , Accesoria En Imagen Buen Uso De Las Maquinas Y El Ambinte'),
 (56, 'Deiby', 'Deiby30@gmail.com', 0, '', '$2a$10$82W7loJVyJCr52RSdEv5ae198dvCeu.PiTC6K8cLeGJ5UyFl0EcK6', 2, NULL, NULL, 'barbero_1743429955092-B1.JPG', 'Cortes Perfilados , Accesoria En Imagen Buen Uso De Las Maquinas Y El Ambinte');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `ventas`
+--
+
+CREATE TABLE `ventas` (
+  `id` int(11) NOT NULL,
+  `id_producto` int(11) NOT NULL,
+  `cantidad` int(11) NOT NULL,
+  `fecha` datetime NOT NULL,
+  `PrecioUnitario` decimal(10,2) NOT NULL,
+  `nombre` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `ventas`
+--
+
+INSERT INTO `ventas` (`id`, `id_producto`, `cantidad`, `fecha`, `PrecioUnitario`, `nombre`) VALUES
+(22, 57, 1, '2025-04-07 14:21:15', 150000.00, 'Maquina Para Barberia'),
+(23, 58, 1, '2025-04-07 14:21:15', 50000.00, 'Porta Cuchillas'),
+(24, 59, 1, '2025-04-07 14:21:15', 300000.00, 'polvos Texturizantes'),
+(25, 60, 1, '2025-04-07 14:21:15', 400000.00, 'Locion Desinfectante'),
+(26, 61, 1, '2025-04-07 14:21:15', 700000.00, 'Atomizador'),
+(27, 62, 1, '2025-04-07 14:21:15', 800000.00, 'Gel Para Afeitar'),
+(28, 57, 1, '2025-04-07 14:21:40', 150000.00, 'Maquina Para Barberia'),
+(29, 58, 1, '2025-04-07 14:21:40', 50000.00, 'Porta Cuchillas'),
+(30, 59, 1, '2025-04-07 14:21:40', 300000.00, 'polvos Texturizantes'),
+(31, 60, 1, '2025-04-07 14:21:40', 400000.00, 'Locion Desinfectante'),
+(32, 61, 1, '2025-04-07 14:21:40', 700000.00, 'Atomizador'),
+(33, 62, 1, '2025-04-07 14:21:40', 800000.00, 'Gel Para Afeitar'),
+(34, 58, 12, '2025-04-07 14:21:57', 50000.00, 'Porta Cuchillas'),
+(35, 57, 15, '2025-04-07 14:47:53', 150000.00, 'Maquina Para Barberia');
 
 --
 -- Índices para tablas volcadas
@@ -288,6 +339,12 @@ ALTER TABLE `usuarios`
   ADD KEY `id_rol` (`id_rol`);
 
 --
+-- Indices de la tabla `ventas`
+--
+ALTER TABLE `ventas`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- AUTO_INCREMENT de las tablas volcadas
 --
 
@@ -295,7 +352,7 @@ ALTER TABLE `usuarios`
 -- AUTO_INCREMENT de la tabla `calificaciones`
 --
 ALTER TABLE `calificaciones`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=54;
 
 --
 -- AUTO_INCREMENT de la tabla `categoria_producto`
@@ -313,25 +370,31 @@ ALTER TABLE `inventario`
 -- AUTO_INCREMENT de la tabla `notificaciones`
 --
 ALTER TABLE `notificaciones`
-  MODIFY `id_notificacion` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id_notificacion` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
 
 --
 -- AUTO_INCREMENT de la tabla `reservas`
 --
 ALTER TABLE `reservas`
-  MODIFY `id_reserva` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=87;
+  MODIFY `id_reserva` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=108;
 
 --
 -- AUTO_INCREMENT de la tabla `servicio_adicional`
 --
 ALTER TABLE `servicio_adicional`
-  MODIFY `id_servicio` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_servicio` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT de la tabla `usuarios`
 --
 ALTER TABLE `usuarios`
   MODIFY `id_usuario` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=57;
+
+--
+-- AUTO_INCREMENT de la tabla `ventas`
+--
+ALTER TABLE `ventas`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
 
 --
 -- Restricciones para tablas volcadas

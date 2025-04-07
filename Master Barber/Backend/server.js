@@ -1069,6 +1069,58 @@ app.delete('/DeleteNotificacionReserva/:id', (req, res) => {
 // FIN RESERVAS
 
 
+
+
+
+app.get('/GetVentas', (req, res) => {
+    const { rango } = req.query; // Rango puede ser 'diario', 'semanal', 'mensual', 'anual'
+
+    let q = 'SELECT * FROM ventas';
+    const ahora = new Date();
+
+    if (rango === 'diario') {
+        q += ` WHERE DATE(fecha) = CURDATE()`;
+    } else if (rango === 'semanal') {
+        q += ` WHERE YEARWEEK(fecha, 1) = YEARWEEK(CURDATE(), 1)`;
+    } else if (rango === 'mensual') {
+        q += ` WHERE MONTH(fecha) = MONTH(CURDATE()) AND YEAR(fecha) = YEAR(CURDATE())`;
+    } else if (rango === 'anual') {
+        q += ` WHERE YEAR(fecha) = YEAR(CURDATE())`;
+    }
+
+    db.query(q, (err, results) => {
+        if (err) {
+            console.error('Error al obtener las ventas:', err);
+            return res.status(500).json({ error: 'Error al obtener las ventas' });
+        }
+        res.status(200).json(results);
+    });
+});
+
+app.post('/GuardarVentas', (req, res) => {
+    const ventas = req.body; // Las ventas deben ser un array de objetos
+
+    const q = 'INSERT INTO ventas (id_producto, cantidad, fecha, PrecioUnitario, nombre) VALUES ?';
+
+    // Convertir las ventas en un formato adecuado para la consulta
+    const values = ventas.map((venta) => [
+        venta.id_producto,
+        venta.cantidad,
+        venta.fecha,
+        venta.PrecioUnitario,
+        venta.nombre,
+    ]);
+
+    db.query(q, [values], (err, results) => {
+        if (err) {
+            console.error('Error al guardar las ventas:', err);
+            return res.status(500).json({ error: 'Error al guardar las ventas' });
+        }
+        res.status(200).json({ message: 'Ventas guardadas exitosamente' });
+    });
+});
+
+
 app.listen(8081, () => {
     console.log("Conexion exitosa:)")
 });
