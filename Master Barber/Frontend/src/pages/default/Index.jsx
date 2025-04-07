@@ -111,11 +111,8 @@ export default function Index() {
                                     <h4 class="card-title text-danger text-center bebas mt-3">Corte Basico</h4>
                          
                                     <div className="text-center row mx-3">
-                                        <button type="button" class="btn btn-outline-warning mt-5" data-bs-toggle="offcanvas" data-bs-target="#staticBackdrop" aria-controls="staticBackdrop">Ver</button>
+                                        <button type="button" class="btn btn-outline-danger mt-5 border border text-white" data-bs-toggle="offcanvas" data-bs-target="#staticBackdrop" aria-controls="staticBackdrop">Ver</button>
                                     </div>
-                                </div>
-                                <div class="card-footer">
-                                    <small class="text-body-white text-white">Last updated 3 mins ago</small>
                                 </div>
                                 <div class="offcanvas offcanvas-start bg-dark" data-bs-backdrop="static" tabindex="-1" id="staticBackdrop" aria-labelledby="staticBackdropLabel">
                                     <div class="offcanvas-header">
@@ -140,7 +137,7 @@ export default function Index() {
                                     <h4 class="card-title text-danger text-center bebas">Corte Premium</h4>
                                    
                                     <div className="text-center row mx-3">
-                                        <button type="button" class="btn btn-outline-warning  mt-5" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="staticBackdrop">Ver</button>
+                                        <button type="button" class="btn btn-outline-danger mt-5 border border text-white" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="staticBackdrop">Ver</button>
                                     </div>
                                 </div>
                                 <div class="offcanvas offcanvas-end bg-dark" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
@@ -151,9 +148,6 @@ export default function Index() {
                                     <div class="offcanvas-body text-white">
                                         <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Consequuntur ratione itaque dicta, amet dolorem, ea repellat aut asperiores accusantium quasi explicabo eum ipsam inventore quia ullam culpa. Ad, ab culpa!</p>
                                     </div>
-                                </div>
-                                <div class="card-footer">
-                                    <small class="text-white ">Last updated 3 mins ago</small>
                                 </div>
                             </div>
                         </div>

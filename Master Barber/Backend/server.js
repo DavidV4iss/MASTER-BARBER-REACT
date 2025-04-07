@@ -933,47 +933,51 @@ app.patch('/UpdateReservasEstado/:id', (req, res) => {
                 }
 
                 const reserva = results[0];
+                const email = reserva.email;
                 const clienteId = reserva.cliente_id;
                 const servicioNombre = reserva.servicio_nombre;
 
-                // Actualizar la notificación existente o crear una nueva si no existe
-                const mensaje = `El estado de tu reserva ha sido actualizado a: ${nuevoEstado}. Servicio: ${servicioNombre}, Fecha: ${new Date(reserva.fecha).toLocaleString()}`;
-                db.query(
-                    'SELECT * FROM notificaciones WHERE cliente_id = ? AND mensaje LIKE ?',
-                    [clienteId, `%${servicioNombre}%`],
-                    (err, notificaciones) => {
-                        if (err) {
-                            console.error('Error al buscar notificación:', err);
-                            return res.status(500).json({ error: 'Error en el servidor' });
-                        }
+                // Configurar el contenido del correo electrónico
+                const mailOptions = {
+                    from: 'cristianrueda0313@gmail.com',
+                    to: email,
+                    subject: 'Actualización del estado de tu reserva',
+                    html: `
+                        <div style="background-color: #f8f9fa; padding: 20px; font-family: Arial, sans-serif;">
+                            <h2 style="color: #343a40;">Actualización de tu Reserva</h2>
+                            <p>Hola,</p>
+                            <p>Te informamos que el estado de tu reserva ha sido actualizado a: <strong>${nuevoEstado}</strong>.</p>
+                            <p>Detalles de la reserva:</p>
+                            <ul>
+                                <li><strong>Servicio:</strong> ${servicioNombre}</li>
+                                <li><strong>Fecha:</strong> ${new Date(reserva.fecha).toLocaleString()}</li>
+                            </ul>
+                            <p>Gracias por confiar en Master Barber.</p>
+                        </div>
+                    `
+                };
 
-                        if (notificaciones.length > 0) {
-                            // Actualizar la notificación existente
-                            db.query(
-                                'UPDATE notificaciones SET mensaje = ?, fecha = NOW() WHERE id_notificacion = ?',
-                                [mensaje, notificaciones[0].id_notificacion],
-                                (err) => {
-                                    if (err) {
-                                        console.error('Error al actualizar la notificación:', err);
-                                    }
-                                }
-                            );
-                        } else {
-                            // Crear una nueva notificación si no existe
-                            db.query(
-                                'INSERT INTO notificaciones (cliente_id, mensaje) VALUES (?, ?)',
-                                [clienteId, mensaje],
-                                (err) => {
-                                    if (err) {
-                                        console.error('Error al guardar la notificación:', err);
-                                    }
-                                }
-                            );
-                        }
+                // Enviar el correo electrónico
+                transporter.sendMail(mailOptions, (error) => {
+                    if (error) {
+                        console.error('Error al enviar el correo electrónico:', error);
+                        return res.status(500).json({ message: 'Error al enviar el correo electrónico' });
                     }
-                );
 
-                res.status(200).json({ message: 'Reserva actualizada y notificación gestionada correctamente' });
+                    // Guardar la notificación en la base de datos
+                    const mensaje = `El estado de tu reserva ha sido actualizado a: ${nuevoEstado}. Servicio: ${servicioNombre}, Fecha: ${new Date(reserva.fecha).toLocaleString()}`;
+                    db.query(
+                        'INSERT INTO notificaciones (cliente_id, mensaje) VALUES (?, ?)',
+                        [clienteId, mensaje],
+                        (err) => {
+                            if (err) {
+                                console.error('Error al guardar la notificación:', err);
+                            }
+                        }
+                    );
+
+                    res.status(200).json({ message: 'Reserva actualizada y notificación enviada por correo electrónico' });
+                });
             });
         });
     });

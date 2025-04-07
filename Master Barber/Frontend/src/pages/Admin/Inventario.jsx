@@ -230,7 +230,7 @@ export default function Inventario() {
             <SidebarAdmin />
             <div className='mt-5'>
                 <div className='contenido ' id='Inventario'>
-                    <p className='text-center text-white mt-5 display-6 bebas mx-3 '>HOLA, <span className='text-danger'>ADMINISTRADOR</span>| ESTE ES EL INVENTARIO DE LOS PRODUCTOS QUE SALEN DE LA BARBERIA</p>
+                    <p className='text-center text-white mt-5 display-6 bebas mx-3 '>HOLA, <span className='text-danger'>ADMINISTRADOR</span>| ESTE ES EL INVENTARIO DE LOS PRODUCTOS QUE ENTRAN A LA BARBERIA</p>
 
                     <div className="d-flex justify-content-end mx-5 mt-5 ">
                         <button type="button" class="btn btn-danger .col-md-4" data-bs-toggle="modal" data-bs-target="#AñadirModal" data-bs-whatever="@mdo" >Añadir</button>
