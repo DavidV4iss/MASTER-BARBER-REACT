@@ -5,6 +5,7 @@ import axios from 'axios';
 import { Link } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import jsPDF from 'jspdf';
+import GraficaVenta from '../../Components/GraficaVenta';
 
 export default function Gestiondeinventario() {
     const [inventario, setInventario] = useState([]);
@@ -61,6 +62,7 @@ export default function Gestiondeinventario() {
         return venta.reduce((total, item) => total + (item.PrecioUnitario * item.cantidad), 0);
     };
 
+
     const handleSubmit = async () => {
         try {
             // Agregar la fecha actual a cada venta
@@ -76,40 +78,55 @@ export default function Gestiondeinventario() {
                 });
             }
 
-            // Actualizar el estado de las ventas procesadas
-            setVentasProcesadas((prevVentas) => [...prevVentas, ...ventasConFecha]);
+            // Guardar las ventas en el backend
+            await axios.post('http://localhost:8081/GuardarVentas', ventasConFecha);
+
+            // Recuperar las ventas actualizadas desde el backend
+            const res = await axios.get(`http://localhost:8081/GetVentas?rango=${rango}`);
+            setVentasProcesadas(res.data);
 
             Swal.fire({
                 icon: 'success',
                 title: 'Venta Exitosa',
                 html: `El Producto <span style="color: yellow">${ventasConFecha[0].nombre}</span> Fue Restado Del Inventario Correctamente, Realizaste Una Venta Por Un Valor De: <span style="color: yellow">${calcularTotal()}</span>`,
-                confirmButtonColor: "#DC3545",
+                confirmButtonColor: '#DC3545',
                 customClass: {
-                    popup: "dark-theme-popup bg-dark antonparabackend",
+                    popup: 'dark-theme-popup bg-dark antonparabackend',
                 },
             }).then(() => {
                 setVenta([]); // Limpiar las ventas después de procesarlas
             });
         } catch (err) {
-            console.log("Error al restar del inventario:", err);
+            console.error('Error al procesar la venta:', err);
             Swal.fire({
                 icon: 'error',
                 title: 'Oops...',
-                text: 'Error Al Restar Del Inventario, No Se Seleccionó Ningún Producto A Vender',
-                confirmButtonColor: "#DC3545",
+                text: 'Error al procesar la venta',
+                confirmButtonColor: '#DC3545',
                 customClass: {
-                    popup: "dark-theme-popup bg-dark antonparabackend",
+                    popup: 'dark-theme-popup bg-dark antonparabackend',
                 },
             });
         }
     };
 
+    useEffect(() => {
+        const getVentas = async () => {
+            try {
+                const res = await axios.get(`http://localhost:8081/GetVentas?rango=${rango}`);
+                setVentasProcesadas(res.data);
+            } catch (err) {
+                console.error('Error al obtener las ventas:', err);
+            }
+        };
+        getVentas();
+    }, [rango]); // Recuperar las ventas cada vez que cambie el rango
+
+
     const filtrarVentasPorRango = () => {
         const ahora = new Date();
-        console.log("Ventas procesadas:", ventasProcesadas); // Depuración: Verifica las ventas procesadas
         return ventasProcesadas.filter((item) => {
             const fechaVenta = new Date(item.fecha); // Asegúrate de que sea un objeto Date
-            console.log("Fecha de la venta:", fechaVenta); // Depuración: Verifica la fecha de cada venta
             if (rango === 'diario') {
                 return (
                     fechaVenta.getDate() === ahora.getDate() &&
@@ -133,30 +150,55 @@ export default function Gestiondeinventario() {
         });
     };
 
+    const ventasFiltradas = filtrarVentasPorRango(); // Ventas filtradas según el rango seleccionado
+
+
     const generarPDF = () => {
         const doc = new jsPDF();
-        const ventasFiltradas = filtrarVentasPorRango();
-        console.log("Ventas filtradas para el PDF:", ventasFiltradas); // Depuración: Verifica las ventas filtradas
 
+        // Agrupar las ventas por producto
+        const ventasAgrupadas = ventasFiltradas.reduce((acc, venta) => {
+            const key = venta.id_producto; // Agrupar por id_producto
+            if (!acc[key]) {
+                acc[key] = { ...venta, cantidad: 0 }; // Inicializar el producto en el acumulador
+            }
+            acc[key].cantidad += venta.cantidad; // Sumar la cantidad vendida
+            return acc;
+        }, {});
+
+        const ventasAgrupadasArray = Object.values(ventasAgrupadas); // Convertir el objeto en un array
+
+        // Configuración del PDF
         doc.setFontSize(18);
-        doc.text('Reporte de Ventas', 10, 10);
+        doc.text('Reporte De Ventas' , 10, 10 );
         doc.setFontSize(12);
         doc.text(`Rango: ${rango.charAt(0).toUpperCase() + rango.slice(1)}`, 10, 20);
 
         let y = 30;
-        if (ventasFiltradas.length === 0) {
+        if (ventasAgrupadasArray.length === 0) {
             doc.text("No hay ventas en este rango.", 10, y);
         } else {
-            ventasFiltradas.forEach((venta, index) => {
-                doc.text(`${index + 1}. Producto: ${venta.nombre}, Cantidad: ${venta.cantidad}, Total: $${(venta.PrecioUnitario * venta.cantidad).toFixed(2)}`, 10, y);
+            ventasAgrupadasArray.forEach((venta, index) => {
+                doc.text(
+                    `${index + 1}. Producto: ${venta.nombre}, Cantidad: ${venta.cantidad}, Total: $${(venta.PrecioUnitario * venta.cantidad).toFixed(2)}`,
+                    10,
+                    y
+                );
                 y += 10;
             });
 
-            doc.text(`Total General: $${ventasFiltradas.reduce((total, item) => total + (item.PrecioUnitario * item.cantidad), 0).toFixed(2)}`, 10, y + 10);
+            const totalGeneral = ventasAgrupadasArray.reduce(
+                (total, item) => total + item.PrecioUnitario * item.cantidad,
+                0
+            );
+            doc.text(`Total General: $${totalGeneral.toFixed(2)}`, 10, y + 10);
         }
 
         doc.save(`Reporte_Ventas_${rango}.pdf`);
     };
+
+
+
 
     return (
         <div>
@@ -164,7 +206,24 @@ export default function Gestiondeinventario() {
             <SidebarAdmin />
             <div className='mt-5 container mb-5'>
                 <p className='text-center text-white mt-5 display-6 bebas contenido '>HOLA, <span className='text-danger'>ADMINISTRADOR</span>| ESTE ES EL INVENTARIO DE LOS PRODUCTOS QUE SALEN DE LA BARBERIA</p>
-
+                <div className="col container d-flex justify-content-end mx-5 mt-5 pt-5">    
+                    <select
+                        className="form-select bg-dark text-white mx-5"
+                        value={rango}
+                        onChange={(e) => setRango(e.target.value)}
+                    >
+                        <option value="diario">Diario</option>
+                        <option value="mensual">Mensual</option>
+                        <option value="semanal">Semanal</option>
+                        <option value="anual">Anual</option>
+                    </select>
+                </div>
+                <div className="container d-flex justify-content-end mx-1 mt-2">
+                    
+                    <button onClick={generarPDF} className="btn btn-success bebas mt-3">
+                        Generar PDF
+                    </button>
+                </div>
                 <div className="row row-cols-1 row-cols-md-2 g-4 mt-5 contenido">
                     <div className="col row row-cols-1 row-cols-md-2 g-3">
                         {inventario.map((item) => (
@@ -182,6 +241,7 @@ export default function Gestiondeinventario() {
                             </Link>
                         ))}
                     </div>
+                    
                     <div className="col">
                         <table className="table-responsive table table-dark table-striped mt-5 mx-5">
                             <thead>
@@ -211,23 +271,7 @@ export default function Gestiondeinventario() {
                             </tbody>
                         </table>
                         <div className="container row mx-5 mt-4">
-                            <div className="col">
-                                <select
-                                    className="form-select"
-                                    value={rango}
-                                    onChange={(e) => setRango(e.target.value)}
-                                >
-                                    <option value="diario">Diario</option>
-                                    <option value="mensual">Mensual</option>
-                                    <option value="semanal">Semanal</option>
-                                    <option value="anual">Anual</option>
-                                </select>
-                            </div>
-                            <div className="col">
-                                <button onClick={generarPDF} className="btn btn-success bebas">
-                                    Generar PDF
-                                </button>
-                            </div>
+                          
                             <div className="col">
                                 <button className="btn btn-warning bebas">
                                     Total: ${calcularTotal().toFixed(2)}
@@ -239,7 +283,12 @@ export default function Gestiondeinventario() {
                                 </button>
                             </div>
                         </div>
+                        
                     </div>
+                </div>
+                {/* Gráfica de ventas */}
+                <div className="mt-5 pt-5 container d-flex">
+                    <GraficaVenta ventas={ventasFiltradas} />
                 </div>
             </div>
         </div>
