@@ -806,6 +806,34 @@ app.get('/GetServicios', (req, res) => {
     });
 });
 
+// Ruta para obtener los servicios adicionales
+app.get('/GetServiciosAdicionales', (req, res) => {
+    const query = 'SELECT * FROM servicios_adicionales';
+    db.query(query, (err, results) => {
+        if (err) {
+            console.error('Error al obtener los servicios adicionales:', err);
+            return res.status(500).json({ error: 'Error en el servidor' });
+        }
+        res.status(200).json(results);
+    });
+});
+
+// Ruta para crear un nuevo servicio adicional
+app.post('/CreateServicioAdicional', (req, res) => {
+    const { nombre_servicio, descripcion_servicio, precio } = req.body;
+
+    const query = 'INSERT INTO servicios_adicionales (nombre_servicio, descripcion_servicio, precio) VALUES (?, ?, ?)';
+    const values = [nombre_servicio, descripcion_servicio, precio];
+
+    db.query(query, values, (err, results) => {
+        if (err) {
+            console.error('Error al crear el servicio adicional:', err);
+            return res.status(500).json({ error: 'Error en el servidor' });
+        }
+        res.status(201).json({ message: 'Servicio adicional creado exitosamente' });
+    });
+});
+
 // Ejemplo en Node.js/Express
 app.post('/CrearReservas', async (req, res) => {
     const { barbero_id, fecha } = req.body;

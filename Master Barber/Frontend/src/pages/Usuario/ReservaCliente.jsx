@@ -31,10 +31,25 @@ export default function Reserva() {
     const [servicios, setServicios] = useState([]);
     const [currentStep, setCurrentStep] = useState(1); // 1: Servicio, 2: Barbero, 3: Fecha
     const [horasOcupadas, setHorasOcupadas] = useState([]);
+    const [serviciosAdicionales, setServiciosAdicionales] = useState([]);
+    const [serviciosAdicionalesSeleccionados, setServiciosAdicionalesSeleccionados] = useState([]);
+    const [showServiciosAdicionales, setShowServiciosAdicionales] = useState(false); // Estado para controlar el modal
 
     const token = localStorage.getItem('token');
     const tokenDecoded = token ? JSON.parse(atob(token.split('.')[1])) : null;
     const id = tokenDecoded.id;
+
+    const handleServicioAdicionalChange = (e, servicio) => {
+        if (e.target.checked) {
+            setServiciosAdicionalesSeleccionados((prev) => [...prev, servicio]);
+            console.log('Servicio adicional agregado:', servicio);
+        } else {
+            setServiciosAdicionalesSeleccionados((prev) =>
+                prev.filter((item) => item.id_servicio !== servicio.id_servicio)
+            );
+            console.log('Servicio adicional eliminado:', servicio);
+        }
+    };
 
     const nextStep = () => {
         if (currentStep === 1 && !service) {
@@ -85,6 +100,16 @@ export default function Reserva() {
                 })
                 .catch(error => {
                     console.error('Error al obtener las reservas:', error);
+                });
+            
+            // Obtener los servicios adicionales para el barbero seleccionado
+            axios.get('http://localhost:8081/GetServiciosAdicionales')
+                .then(response => {
+                    setServiciosAdicionales(response.data);
+                    console.log('Servicios adicionales:', response.data); // Verifica los datos
+                })
+                .catch(error => {
+                    console.error('Error al obtener los servicios adicionales:', error);
                 });
         }
         
@@ -166,6 +191,7 @@ export default function Reserva() {
                 servicio: service,
                 fecha: formattedSelectedDate,
                 estado: 'Pendiente',
+                servicios_adicionales: serviciosAdicionalesSeleccionados.map((s) => s.id_servicio),
             });
 
             Swal.fire({
@@ -236,6 +262,19 @@ export default function Reserva() {
                                                 <div className="text-center mt-5">
                                                     <p className="text-white bebas fs-5">{servicio.descripcion_S}</p>
                                                 </div>
+                                                {/* Botón para agregar servicios adicionales solo en "Corte Básico" */}
+                                                {servicio.nombre === 'Corte Basico' && (
+                                                    <button
+                                                        type="button"
+                                                        className="btn btn-outline-warning mt-3"
+                                                        onClick={() => {
+                                                            console.log('Abriendo modal de servicios adicionales');
+                                                            setShowServiciosAdicionales(true);
+                                                        }}
+                                                    >
+                                                        Agregar Servicios Adicionales
+                                                    </button>
+                                                )}
                                             </div>
                                         </div>
                                     </div>
@@ -247,6 +286,58 @@ export default function Reserva() {
                         </button>
                     </div>
                 )}
+
+                {/* Modal para seleccionar servicios adicionales */}
+                {showServiciosAdicionales && (
+                    <div className="modal fade show d-block" tabIndex="-1" role="dialog">
+                        <div className="modal-dialog" role="document">
+                            <div className="modal-content bg-dark text-white">
+                                <div className="modal-header">
+                                    <h5 className="modal-title">Selecciona Servicios Adicionales</h5>
+                                    <button
+                                        type="button"
+                                        className="btn-close btn-close-white"
+                                        onClick={() => setShowServiciosAdicionales(false)}
+                                    ></button>
+                                </div>
+                                <div className="modal-body">
+                                    {serviciosAdicionales.length > 0 ? (
+                                        serviciosAdicionales.map((servicio) => (
+                                            <div key={servicio.id_servicio} className="form-check">
+                                                <input
+                                                    className="form-check-input"
+                                                    type="checkbox"
+                                                    value={servicio.id_servicio}
+                                                    id={`servicio-${servicio.id_servicio}`}
+                                                    onChange={(e) => handleServicioAdicionalChange(e, servicio)}
+                                                />
+                                                <label
+                                                    className="form-check-label"
+                                                    htmlFor={`servicio-${servicio.id_servicio}`}
+                                                >
+                                                    {servicio.nombre_servicio}
+                                                </label>
+                                            </div>
+                                        ))
+                                    ) : (
+                                        <p>No hay servicios adicionales disponibles.</p>
+                                    )}
+                                </div>
+                                <div className="modal-footer">
+                                    <button
+                                        type="button"
+                                        className="btn btn-secondary"
+                                        onClick={() => setShowServiciosAdicionales(false)}
+                                    >
+                                        Cerrar
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                )}
+
+                
 
                 {/* Paso 2: Seleccionar barbero */}
                 {currentStep === 2 && (
