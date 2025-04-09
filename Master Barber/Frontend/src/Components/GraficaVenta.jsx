@@ -1,12 +1,14 @@
 import React from 'react';
-import { Bar} from 'react-chartjs-2';
-import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
+import { Line } from 'react-chartjs-2';
+import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from 'chart.js';
 
-// Registrar los componentes de Chart.js
-ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
+ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
 export default function GraficaVentas({ ventas }) {
-    // Función para agrupar las ventas por producto
+    if (!Array.isArray(ventas) || ventas.length === 0) {
+        return <p>No hay datos para mostrar</p>;
+    }
+
     const agruparVentasPorProducto = (ventas) => {
         return ventas.reduce((acc, venta) => {
             acc[venta.nombre] = (acc[venta.nombre] || 0) + venta.cantidad;
@@ -17,14 +19,17 @@ export default function GraficaVentas({ ventas }) {
     // Función para preparar los datos de la gráfica
     const prepararDatosGrafica = (productos) => {
         return {
-            labels: Object.keys(productos), // Nombres de los productos
+            labels: Object.keys(productos),
             datasets: [
                 {
                     label: 'Cantidad Vendida',
-                    data: Object.values(productos), // Cantidades vendidas
-                    backgroundColor: 'rgba(75, 192, 192, 0.5)',
-                    borderColor: 'rgba(75, 192, 192, 1)',
-                    borderWidth: 1,
+                    data: Object.values(productos),
+                    borderColor: 'yellow', 
+                    backgroundColor: 'rgb(255, 255, 255)', 
+                    borderWidth: 2,
+                    pointBackgroundColor: 'yellow',
+                    pointBorderColor: 'white',
+                    tension: 0.9,
                 },
             ],
         };
@@ -40,7 +45,29 @@ export default function GraficaVentas({ ventas }) {
                 },
                 title: {
                     display: true,
-                    text: 'Ventas por Producto',
+                    text: 'Ventas Por Producto',
+                    font: {
+                        size: 50,
+                        weight: 'bold',
+                        family: 'antonparabanckend',
+                    },
+                    color: 'yellow', 
+                    padding: {
+                        top: 10,
+                        bottom: 50,
+                    },
+                },
+            },
+            scales: {
+                x: {
+                    grid: {
+                        display: true,
+                    },
+                },
+                y: {
+                    grid: {
+                        color: 'rgba(200, 200, 200, 0.5)',
+                    },
                 },
             },
         };
@@ -52,5 +79,7 @@ export default function GraficaVentas({ ventas }) {
     const options = configurarOpcionesGrafica();
 
     // Renderizar la gráfica
-    return <Bar data={data} options={options} />;
+    return (
+            <Line data={data} options={options} />
+    );
 }

@@ -270,6 +270,7 @@ export default function Gestiondeinventario() {
                                 }
                             </tbody>
                         </table>
+                        
                         <div className="container row mx-5 mt-4">
                           
                             <div className="col">
@@ -286,9 +287,11 @@ export default function Gestiondeinventario() {
                         
                     </div>
                 </div>
-                {/* Gráfica de ventas */}
-                <div className="mt-5 pt-5 container d-flex">
-                    <GraficaVenta ventas={ventasFiltradas} />
+                <div className="mt-5 pt-5 row container mx-5 justify-content-center mx-5">
+                    <div className="col col-10 col-sm-10 col-md-10 mx-5">
+                        <GraficaVenta ventas={ventasFiltradas} />
+
+                    </div>
                 </div>
             </div>
         </div>
