@@ -383,7 +383,7 @@ button:hover {
 
 /* Encabezado del calendario */
 .react-datepicker__header {
-  background-color: #10c0ec;
+  background-color: #ffd000;
   border-bottom: 1px solid #ccc;
   color: #000;
   font-size: 16px;
@@ -392,7 +392,7 @@ button:hover {
 }
 
 .react-datepicker__header--custom {
-  background-color: #10c0ec;
+  background-color: #ffd000;
   color: #000000;
   font-size: 16px;
   padding: 16.5px;
@@ -413,8 +413,8 @@ button:hover {
   display: none;
   color: #ffffff;
   font-size: 16px;
-  margin: 0 30px; /* Aumenta el margen horizontal */
-  padding: 5px 0; /* Opcional: agrega espacio interno */
+  margin: 0 30px;
+  padding: 5px 0; 
   border-radius: 100%;
   transition: background-color 0.5s ease;
   justify-content: space-between;
@@ -423,7 +423,7 @@ button:hover {
 /* Día seleccionado */
 .react-datepicker__day--selected,
 .react-datepicker__day--keyboard-selected {
-  background-color: #10c0ec;
+  background-color: #ffd000;
   color: #ffffff;
   font-weight: bold;
 }
@@ -440,9 +440,7 @@ button:hover {
   line-height: 1.7rem;
   border: none;
   background-color:none;
-  /* Cambia el color de fondo */
   border-radius: 50%;
-  /* Hace los botones redondos */
   width: 30px;
   height: 30px;
   display: flex;
@@ -453,11 +451,8 @@ button:hover {
 
 .react-datepicker__navigation:hover {
   background-color: transparent;
-  /* Asegúrate de que no cambie el fondo */
   color: inherit;
-  /* Mantén el color actual */
   cursor: default;
-  /* Opcional: evita que el cursor cambie */
 }
 
 
@@ -470,16 +465,13 @@ button:hover {
 .react-datepicker__time-container {
   width: 13.1%;
   background-color: #1a1a1a;
-  /* Cambia el color de fondo del selector de tiempo */
   border-left: 1px solid #ccc;
-  /* Mantén o ajusta el borde si es necesario */
 }
 
 /* Lista de tiempo */
 .react-datepicker__time-list {
   background-color: #535353;
   color: #FFF;
-  /* Cambia el color de fondo de la lista de tiempo */
 }
 
 .react-datepicker__time-list-item {

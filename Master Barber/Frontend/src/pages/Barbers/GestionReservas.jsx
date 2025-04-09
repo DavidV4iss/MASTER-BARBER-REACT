@@ -154,7 +154,7 @@ export default function GestionReservas() {
         <div className='text-white mb-5'>
             <NavbarBarber />
             <div className='text-center mt-5 pt-5 contenido'>
-                <h2 className='fw-bold text-warning  display-5 anton'>Hola <span className="text-danger">{Barber.nombre_usuario}</span>, Tienes Las Siguientes Reservas Pendientes</h2>
+                <h2 className='fw-bold text-light  display-5 anton'>HOLA <span className="text-warning">{Barber.nombre_usuario}</span>, TIENES LAS SIGUIENTES RESERVAS PENDIENTES</h2>
 
                 {isLoadingFinal && (<div className='text-center mt-5 fs-4 UnifrakturMaguntia text-danger'>Finalizando...</div>)}
                 {isLoadingCancel && (<div className='text-center mt-5 fs-4 UnifrakturMaguntia text-warning'>Cancelando...</div>)}
