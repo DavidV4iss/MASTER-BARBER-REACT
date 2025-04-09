@@ -306,7 +306,7 @@ export default function Reserva() {
                                 showTimeSelect
                                 timeFormat="hh:mm aa"
                                 timeIntervals={60}
-                                dateFormat="d 'de' MMMM 'de' yyyy hh:mm" // Formato en español
+                                dateFormat="d 'de' MMMM 'de' yyyy hh:mm"
                                 minDate={new Date()}
                                 filterTime={(time) => {
                                     const selectedTime = new Date(time);
