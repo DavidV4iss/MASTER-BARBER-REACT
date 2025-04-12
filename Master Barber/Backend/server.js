@@ -807,7 +807,7 @@ app.get('/GetServicios', (req, res) => {
 });
 
 app.post('/CrearReservas', async (req, res) => {
-    const { barbero_id, fecha } = req.body;
+    const { cliente_id, barbero_id, fecha, estado, servicio } = req.body;
 
     try {
         // Verifica si ya existe una reserva para el barbero en la misma fecha y hora
@@ -820,9 +820,18 @@ app.post('/CrearReservas', async (req, res) => {
             return res.status(400).json({ message: 'La hora seleccionada ya está ocupada. Por favor, elige otra hora.' });
         }
 
-        // Si no hay conflicto, crea la reserva
-        await db.query('INSERT INTO reservas SET ?', req.body);
+      
+        const reserva = {
+            cliente_id,
+            barbero_id,
+            servicio,
+            fecha,
+            estado,
+        };
+
+        await db.query('INSERT INTO reservas SET ?', reserva);
         res.status(201).json({ message: 'Reserva creada exitosamente.' });
+
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: 'Error al crear la reserva.' });
@@ -842,8 +851,7 @@ app.get('/GetReservas/barbero/:id', (req, res) => {
         if (err) return res.status(500).json({ error: "Error en el servidor" });
         return res.status(200).json(results);
     });
-}
-);
+});
 
 app.get('/GetReservas/:id', (req, res) => {
     const id = req.params.id;
@@ -851,16 +859,11 @@ app.get('/GetReservas/:id', (req, res) => {
         if (err) return res.status(500).json({ error: "Error en el servidor" });
         return res.status(200).json(results);
     });
-}
-);
+});
 
 app.put('/UpdateReservas/:id', (req, res) => {
     const id = req.params.id;
-    const cliente_id = req.body.cliente_id;
-    const barbero_id = req.body.barbero_id;
-    const servicio = req.body.servicio;
-    const fecha = req.body.fecha;
-    const estado = req.body.estado;
+    const { cliente_id, barbero_id, servicio, fecha, estado } = req.body;
 
     const q = 'UPDATE reservas SET cliente_id = ?, barbero_id = ?, servicio = ?, fecha = ?, estado = ? WHERE id_reserva = ?';
     const values = [cliente_id, barbero_id, servicio, fecha, estado, id];
@@ -868,8 +871,7 @@ app.put('/UpdateReservas/:id', (req, res) => {
     db.query(q, values, (err, results) => {
         if (err) return res.status(500).json({ error: `Error al actualizar la reserva: ${err.message}` });
         return res.status(200).json({ message: "Reserva actualizada exitosamente" });
-    }
-    );
+    });
 });
 
 app.delete('/DeleteReservas/:id', (req, res) => {
@@ -982,7 +984,6 @@ app.patch('/UpdateReservasEstado/:id', (req, res) => {
     });
 });
 
-
 app.post('/VerificarDisponibilidad', (req, res) => {
     const { barbero_id, fecha } = req.body;
 
@@ -1012,7 +1013,6 @@ app.get('/GetClientes', (req, res) => {
 
 app.delete('/DeleteReserva/:id', (req, res) => {
     const { id } = req.params;
-    // Lógica para eliminar la reserva de la base de datos
     db.query('DELETE FROM reservas WHERE id_reserva = ?', [id], (err, result) => {
         if (err) {
             console.error(err);
@@ -1022,7 +1022,6 @@ app.delete('/DeleteReserva/:id', (req, res) => {
         }
     });
 });
-
 
 app.get('/GetNotificaciones/:cliente_id', (req, res) => {
     const cliente_id = req.params.cliente_id;
@@ -1040,7 +1039,6 @@ app.get('/GetNotificaciones/:cliente_id', (req, res) => {
     );
 });
 
-
 app.delete('/DeleteNotificacion/:id', async (req, res) => {
     const id = req.params.id;
     db.query('DELETE FROM  notificaciones WHERE id_notificacion = ?', [id], (err, results) => {
@@ -1048,11 +1046,10 @@ app.delete('/DeleteNotificacion/:id', async (req, res) => {
             console.log(err);
             return res.status(500).send('Error en el servidor');
         } else {
-            return res.status(200).send('Barbero eliminado exitosamente');
+            return res.status(200).send('Notificación eliminada exitosamente');
         }
     })
 });
-
 
 app.delete('/DeleteNotificacionReserva/:id', (req, res) => {
     const reservaId = req.params.id;
@@ -1065,7 +1062,6 @@ app.delete('/DeleteNotificacionReserva/:id', (req, res) => {
     });
 });
 
-// FIN RESERVAS
 
 
 

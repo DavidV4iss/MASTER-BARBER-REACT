@@ -6,7 +6,6 @@ import 'react-datepicker/dist/react-datepicker.css';
 import styled from 'styled-components';
 import moment from 'moment';
 
-
 const formattedDate = moment().format('YYYY-MM-DD HH:mm:ss');
 
 const StyledDatePicker = styled(DatePicker)`
@@ -29,13 +28,12 @@ export default function Reserva() {
     const [barberoId, setBarberoId] = useState('');
     const [barberos, setBarberos] = useState([]);
     const [servicios, setServicios] = useState([]);
-    const [currentStep, setCurrentStep] = useState(1); // 1: Servicio, 2: Barbero, 3: Fecha
+    const [currentStep, setCurrentStep] = useState(1);
     const [horasOcupadas, setHorasOcupadas] = useState([]);
 
     const token = localStorage.getItem('token');
     const tokenDecoded = token ? JSON.parse(atob(token.split('.')[1])) : null;
-    const id = tokenDecoded.id;
-
+    const id = tokenDecoded?.id || null;
 
     const nextStep = () => {
         if (currentStep === 1 && !service) {
@@ -77,8 +75,8 @@ export default function Reserva() {
             .catch(error => {
                 console.error('Hubo un error al obtener los barberos:', error);
             });
+
         if (barberoId) {
-            // Obtener las reservas existentes para el barbero seleccionado
             axios.get(`http://localhost:8081/GetReservas/barbero/${barberoId}`)
                 .then(response => {
                     const horasOcupadas = response.data.map(reserva => new Date(reserva.fecha));
@@ -96,40 +94,16 @@ export default function Reserva() {
             .catch(error => {
                 console.error('Hubo un error al obtener los servicios:', error);
             });
-    }, []);
+    }, [barberoId]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        if (!service) {
+        if (!service || !barberoId || !date) {
             Swal.fire({
                 icon: 'error',
-                title: 'Falta seleccionar el servicio',
-                text: 'Por favor, selecciona un servicio antes de reservar.',
-                customClass: {
-                    popup: "dark-theme-popup bg-dark antonparabackend ",
-                }
-            });
-            return;
-        }
-
-        if (!barberoId) {
-            Swal.fire({
-                icon: 'error',
-                title: 'Falta seleccionar el barbero',
-                text: 'Por favor, selecciona un barbero antes de reservar.',
-                customClass: {
-                    popup: "dark-theme-popup bg-dark antonparabackend ",
-                }
-            });
-            return;
-        }
-
-        if (!date) {
-            Swal.fire({
-                icon: 'error',
-                title: 'Falta seleccionar la fecha y hora',
-                text: 'Por favor, selecciona una fecha y hora antes de reservar.',
+                title: 'Campos incompletos',
+                text: 'Por favor, selecciona el servicio, barbero y fecha antes de continuar.',
                 customClass: {
                     popup: "dark-theme-popup bg-dark antonparabackend ",
                 }
@@ -140,7 +114,6 @@ export default function Reserva() {
         const formattedSelectedDate = moment(date).format('YYYY-MM-DD HH:mm:ss');
 
         try {
-            // Verificar si la hora está ocupada
             const response = await axios.get(`http://localhost:8081/GetReservas/barbero/${barberoId}`);
             const horasOcupadas = response.data.map(reserva => moment(reserva.fecha).format('YYYY-MM-DD HH:mm:ss'));
 
@@ -153,20 +126,17 @@ export default function Reserva() {
                     confirmButtonColor: '#DC3545',
                     customClass: {
                         popup: "dark-theme-popup bg-dark antonparabackend ",
-
                     }
                 });
                 return;
             }
 
-            // Crear la reserva si la hora no está ocupada
             await axios.post('http://localhost:8081/CrearReservas', {
                 cliente_id: id,
                 barbero_id: barberoId,
                 servicio: service,
                 fecha: formattedSelectedDate,
                 estado: 'Pendiente',
-                servicios_adicionales: serviciosAdicionalesSeleccionados.map((s) => s.id_servicio),
             });
 
             Swal.fire({
@@ -179,9 +149,9 @@ export default function Reserva() {
             });
 
             setCurrentStep(1);
-            setService(null);
-            setBarberoId(null);
-            setDate(null);
+            setService('');
+            setBarberoId('');
+            setDate(new Date());
         } catch (error) {
             Swal.fire({
                 icon: 'error',
@@ -192,7 +162,7 @@ export default function Reserva() {
                 }
             });
         }
-    };  
+    };
 
     return (
         <div className='text-white text-center mt-5 rounded-4 container'>
@@ -213,10 +183,9 @@ export default function Reserva() {
                                         style={{ cursor: 'pointer' }}
                                     >
                                         <div
-                                            className={
-                                                service === servicio.id_tipo_servicio
-                                                    ? 'card bg-dark border-warning border-danger rounded-3 border-success p-3 shadow'
-                                                    : 'card bg-black border-warning border-start-0 rounded-3 border-success p-3 mx-5'
+                                            className={service === servicio.id_tipo_servicio
+                                                ? 'card bg-dark border-warning border-danger rounded-3 border-success p-3 shadow'
+                                                : 'card bg-black border-warning border-start-0 rounded-3 border-success p-3 mx-5'
                                             }
                                         >
                                             <h5 className="card-title text-danger text-center UnifrakturMaguntia fs-3 mt-4">
@@ -225,11 +194,7 @@ export default function Reserva() {
                                             <div className="card-body">
                                                 <div className="text-center">
                                                     <img
-                                                        src={
-                                                            index === 1
-                                                                ? '/cortePremium.jpg'
-                                                                : '/corteBasico.jpg'
-                                                        }
+                                                        src={index === 1 ? '/cortePremium.jpg' : '/corteBasico.jpg'}
                                                         className="card-img-top rounded-2 w-75 mt-2"
                                                         alt={servicio.nombre}
                                                     />
@@ -249,8 +214,6 @@ export default function Reserva() {
                     </div>
                 )}
 
-                
-
                 {/* Paso 2: Seleccionar barbero */}
                 {currentStep === 2 && (
                     <div>
@@ -264,10 +227,9 @@ export default function Reserva() {
                                     style={{ cursor: 'pointer' }}
                                 >
                                     <div
-                                        className={
-                                            barberoId === barbero.id_usuario
-                                                ? 'card bg-dark border-warning border-danger rounded-3 border-success p-3 shadow'
-                                                : 'card bg-black border-warning border-start-0 rounded-3 border-success p-3 mx-5'
+                                        className={barberoId === barbero.id_usuario
+                                            ? 'card bg-dark border-warning border-danger rounded-3 border-success p-3 shadow'
+                                            : 'card bg-black border-warning border-start-0 rounded-3 border-success p-3 mx-5'
                                         }
                                     >
                                         <h5 className="card-title text-danger text-center bebas fs-3 mt-4">

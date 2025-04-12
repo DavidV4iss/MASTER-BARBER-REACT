@@ -158,7 +158,7 @@ export default function GestionReservas() {
 
                 {isLoadingFinal && (<div className='text-center mt-5 fs-4 UnifrakturMaguntia text-danger'>Finalizando...</div>)}
                 {isLoadingCancel && (<div className='text-center mt-5 fs-4 UnifrakturMaguntia text-warning'>Cancelando...</div>)}
-                {isLoadingAccept && (<div className='text-center mt-5 fs-4UnifrakturMaguntia text-success'>Aceptando...</div>)}
+                {isLoadingAccept && (<div className='text-center mt-5 fs-4 UnifrakturMaguntia text-success'>Aceptando...</div>)}
 
                 <div className="row container row-cols-1 row-cols-md-2 g-4 mt-5 pt-5 contenido6">
                     {reservas.map((reserva) => (
