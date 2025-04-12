@@ -174,19 +174,19 @@ export default function Reserva() {
                     <div>
                         <h3 className='antonparabackend mt-5'>Selecciona el servicio que deseas</h3>
                         <div className='container-fluid w-75'>
-                            <div className='row mt-5 mb-5'>
+                            <div className='row mt-5 mb-5 justify-content-center'>
                                 {servicios.map((servicio, index) => (
                                     <div
-                                        className="col text-decoration-none"
+                                        className="col-12 col-sm-6 col-md-4 col-lg-3 mb-4 text-decoration-none d-flex justify-content-center"
                                         key={servicio.id_tipo_servicio}
                                         onClick={() => setService(servicio.id_tipo_servicio)}
                                         style={{ cursor: 'pointer' }}
                                     >
                                         <div
-                                            className={service === servicio.id_tipo_servicio
+                                            className={`w-100 ${service === servicio.id_tipo_servicio
                                                 ? 'card bg-dark border-warning border-danger rounded-3 border-success p-3 shadow'
-                                                : 'card bg-black border-warning border-start-0 rounded-3 border-success p-3 mx-5'
-                                            }
+                                                : 'card bg-black border-warning border-start-0 rounded-3 border-success p-3'
+                                                }`}
                                         >
                                             <h5 className="card-title text-danger text-center UnifrakturMaguntia fs-3 mt-4">
                                                 {servicio.nombre}
@@ -221,16 +221,16 @@ export default function Reserva() {
                         <div className='row mt-5 mb-5'>
                             {barberos.map((barbero, index) => (
                                 <div
-                                    className="col text-decoration-none w-50"
+                                    className="col-12 col-sm-6 col-md-4 col-lg-3 mb-4 text-decoration-none d-flex justify-content-center"
                                     key={barbero.id_barbero}
                                     onClick={() => setBarberoId(barbero.id_usuario)}
                                     style={{ cursor: 'pointer' }}
                                 >
                                     <div
-                                        className={barberoId === barbero.id_usuario
+                                        className={`w-100 ${barberoId === barbero.id_usuario
                                             ? 'card bg-dark border-warning border-danger rounded-3 border-success p-3 shadow'
-                                            : 'card bg-black border-warning border-start-0 rounded-3 border-success p-3 mx-5'
-                                        }
+                                            : 'card bg-black border-warning border-start-0 rounded-3 border-success p-3'
+                                            }`}
                                     >
                                         <h5 className="card-title text-danger text-center bebas fs-3 mt-4">
                                             {barbero.nombre_usuario}
@@ -325,4 +325,4 @@ export default function Reserva() {
             </form>
         </div>
     );
-}
+};
