@@ -22,7 +22,6 @@ export default function Login() {
         onChangeText={setEmail}
         keyboardType="email-address"
         autoCapitalize="none"
-        padding={10}
       />
       <TextInput
         style={styles.input}

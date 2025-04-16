@@ -2,7 +2,7 @@
   "name": "master_barber",
   "license": "0BSD",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "index.tsx",
   "scripts": {
     "start": "expo start",
     "android": "expo start --android",
@@ -10,8 +10,11 @@
     "web": "expo start --web"
   },
   "dependencies": {
+    "@expo-google-fonts/bebas-neue": "^0.3.0",
     "@expo/metro-runtime": "~4.0.1",
     "expo": "~52.0.43",
+    "expo-app-loading": "^2.1.1",
+    "expo-font": "^13.0.4",
     "expo-status-bar": "~2.0.1",
     "react": "18.3.1",
     "react-dom": "18.3.1",
@@ -21,8 +24,9 @@
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
-    "typescript": "^5.3.3",
-    "@types/react": "~18.3.12"
+    "@types/react": "~18.3.12",
+    "@types/react-native": "^0.72.8",
+    "typescript": "^5.3.3"
   },
   "private": true
 }
