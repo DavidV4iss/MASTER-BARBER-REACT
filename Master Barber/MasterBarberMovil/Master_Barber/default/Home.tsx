@@ -1,10 +1,13 @@
+import React, { useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, ScrollView, Image } from 'react-native';
+import { StyleSheet, Text, View, ScrollView, Image, Button } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { useFonts as useBebas, BebasNeue_400Regular } from '@expo-google-fonts/bebas-neue';
 import { Dimensions } from 'react-native';
+import Login from './Login';
 
 export default function Home() {
+  const [currentScreen, setCurrentScreen] = useState('Home');
 
   const [fontsLoaded] = useBebas({
     BebasNeue_400Regular,
@@ -14,30 +17,34 @@ export default function Home() {
     return null;
   }
 
+  if (currentScreen === 'Login') {
+    return <Login />;
+  }
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <View style={styles.contenedorIMG}>
+      </View>
+
+
+      <ScrollView contentContainerStyle={{ alignItems: 'center', marginTop: 40 }}>
+        <View>
           <View>
             <Image
               source={require('../assets/LOGO.png')}
               style={styles.logo}
             />
           </View>
-          <Text style={{ ...styles.title, fontFamily: 'BebasNeue_400Regular' }}>¡¡BIENVENIDO A LA APP!!</Text>
         </View>
+        <Text style={{ ...styles.title, fontFamily: 'BebasNeue_400Regular' }}>¡¡BIENVENIDO A LA APP!!</Text>
 
-      </View>
-
-
-      <ScrollView contentContainerStyle={{ alignItems: 'center', marginTop: 40 }}>
         <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', marginTop: 40 }}>
           <Image
             source={require('../assets/barbero.jpg')}
             style={{
-              width: Dimensions.get('window').width * 0.4, // 30% del ancho de la pantalla
-              height: Dimensions.get('window').width * 0.4, // Mantiene proporción cuadrada
-              marginRight: Dimensions.get('window').width * 0.04, // 5% del ancho de la pantalla como margen
+              width: Dimensions.get('window').width * 0.4,
+              height: Dimensions.get('window').width * 0.4,
+              marginRight: Dimensions.get('window').width * 0.04,
             }}
           />
           <View style={{ alignItems: 'center', maxWidth: Dimensions.get('window').width * 0.5 }}>
@@ -49,10 +56,10 @@ export default function Home() {
             </Text>
           </View>
         </View>
-     
+
         <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', marginTop: 160 }}>
           <Text style={styles.title2}>NUESTROS SERVICIOS</Text>
-       
+
         </View>
         <View style={styles.card}>
           <Image
@@ -60,29 +67,29 @@ export default function Home() {
             style={styles.cardImage}
           />
           <View style={styles.cardContent}>
-            <Text style={{ ...styles.cardTitle }}>Corte Basico</Text>
-            <Text style={styles.cardText}> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</Text>
+            <Text style={{ ...styles.cardTitle, }}>Corte Basico</Text>
+            <View style={{ marginTop: 10, borderRadius: 5, overflow: 'hidden', maxHeight: 50, width: '50%', alignSelf: 'center' }}>
+              <Button
+                title="VER"
+                color="#dc3545"
+                onPress={() => {/* Add your onPress logic here */ }}
+              />
+            </View>
           </View>
         </View>
       </ScrollView>
-
-
-      <Footer />
+      <Footer navigateTo={setCurrentScreen} />
     </View>
   );
 }
 
-
-
-export function Footer() {
+function Footer({ navigateTo }) {
   return (
     <View style={styles.footer}>
       <View style={styles.footerLine} />
-
       <View style={styles.iconContainer}>
-        <Icon name="user-circle" size={30} color="#ffffff" />
+        <Icon name="user-circle" size={30} color="#ffffff" onPress={() => navigateTo('Login')} />
         <Icon name="calendar" size={30} color="#ffffff" />
-
         <Icon name="bars" size={30} color="#ffffff" />
       </View>
     </View>
@@ -97,20 +104,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
 
-  contenedorIMG: {
-    backgroundColor: '#000000',
-    width: Dimensions.get('window').width * 1.9,
-    height: 230,
-    borderBottomWidth: 1,
-    borderColor: '#ffffff',
-    borderRadius: 10,
-  },
 
   header: {
-    paddingTop: 50,
+    paddingTop: 60,
     alignItems: 'center',
     marginBottom: 20,
-    backgroundColor: '#000000',
+    backgroundColor: '#212529',
   },
 
   title: {
@@ -157,9 +156,8 @@ const styles = StyleSheet.create({
     position: 'absolute',
     alignSelf: 'center',
     resizeMode: 'contain',
-    width: 150,
-    height: 150,
-    left: 275,
+    width: 50,
+    height: 50,
   },
 
   card: {
@@ -171,9 +169,9 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#6c757d',
     marginTop: 65,
-    width: Dimensions.get('window').width * 0.9, 
-    height: Dimensions.get('window').width * 0.6, 
-    
+    width: Dimensions.get('window').width * 0.9,
+    height: Dimensions.get('window').width * 0.6,
+
   },
 
   cardImageContainer: {
@@ -181,30 +179,21 @@ const styles = StyleSheet.create({
   },
 
   cardImage: {
-    width: '100%', 
-    height: '60%', 
+    width: '100%',
+    height: '60%',
     resizeMode: 'cover',
   },
 
   cardContent: {
-    marginTop: Dimensions.get('window').height * 0.02,
     justifyContent: 'center',
   },
 
   cardTitle: {
+    marginTop: 10,
     fontSize: 20,
     fontWeight: 'bold',
     color: '#dc3545',
-    marginTop: Dimensions.get('window').height * 0, 
     textAlign: 'center',
   },
 
-  cardText: {
-    fontSize: Dimensions.get('window').width * 0.031, 
-    color: '#ffffff',
-    textAlign: 'center',
-    width: Dimensions.get('window').width * 0.7, 
-    height: Dimensions.get('window').height * 0.2, 
-    marginLeft: Dimensions.get('window').width * 0.09, 
-  },
 });
