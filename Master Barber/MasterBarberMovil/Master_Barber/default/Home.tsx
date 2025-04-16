@@ -24,16 +24,57 @@ export default function Home() {
               style={styles.logo}
             />
           </View>
-          <Text style={styles.title}>¡¡BIENVENIDO!!</Text>
+          <Text style={{ ...styles.title, fontFamily: 'BebasNeue_400Regular' }}>¡¡BIENVENIDO A LA APP!!</Text>
         </View>
 
       </View>
+
+      <ScrollView>
+        <View style={{ flexDirection: 'row', justifyContent: 'space-around', marginTop: 20 }}>
+
+        </View>
+        <View style={{ marginTop: 20, alignItems: 'center', marginBottom: 120 }}>
+          <Text style={{ color: '#dc3545', fontSize: 40, fontFamily: 'BebasNeue_400Regular' }}>SOBRE NOSOTROS</Text>
+          <Image
+            source={require('../assets/LOGO.png')}
+            style={{
+              width: 150,
+              height: 150,
+              borderRadius: 75,
+              marginTop: 20,}}
+          />
+          <Text style={{ color: '#ffc107', fontSize: 20 }}>¡Disfruta de nuestros servicios!</Text>
+          <Text style={{ color: '#ffc107', fontSize: 20 }}>¡Disfruta de nuestros servicios!</Text>
+          <Text style={{ color: '#ffc107', fontSize: 20 }}>¡Disfruta de nuestros servicios!</Text>
+          <Text style={{ color: '#ffc107', fontSize: 20 }}>¡Disfruta de nuestros servicios!</Text>
+          <Text style={{ color: '#ffc107', fontSize: 20 }}>¡Disfruta de nuestros servicios!</Text>
+          <Text style={{ color: '#ffc107', fontSize: 20 }}>¡Disfruta de nuestros servicios!</Text>
+          <Text style={{ color: '#ffc107', fontSize: 20 }}>¡Disfruta de nuestros servicios!</Text>
+          <Text style={{ color: '#ffc107', fontSize: 20 }}>¡Disfruta de nuestros servicios!</Text>
+          <Text style={{ color: '#ffc107', fontSize: 20 }}>¡Disfruta de nuestros servicios!</Text>
+          <Text style={{ color: '#ffc107', fontSize: 20 }}>¡Disfruta de nuestros servicios!</Text>
+          <Text style={{ color: '#ffc107', fontSize: 20 }}>¡Disfruta de nuestros servicios!</Text>
+          <Text style={{ color: '#ffc107', fontSize: 20 }}>¡Disfruta de nuestros servicios!</Text>
+          <Text style={{ color: '#ffc107', fontSize: 20 }}>¡Disfruta de nuestros servicios!</Text>
+          <Text style={{ color: '#ffc107', fontSize: 20 }}>¡Disfruta de nuestros servicios!</Text>
+          <Text style={{ color: '#ffc107', fontSize: 20 }}>¡Disfruta de nuestros servicios!</Text>
+          <Text style={{ color: '#ffc107', fontSize: 20 }}>¡Disfruta de nuestros servicios!</Text>
+          <Text style={{ color: '#ffc107', fontSize: 20 }}>¡Disfruta de nuestros servicios!</Text>
+          <Text style={{ color: '#ffc107', fontSize: 20 }}>¡Disfruta de nuestros servicios!</Text>
+          <Text style={{ color: '#ffc107', fontSize: 20 }}>¡Disfruta de nuestros servicios!</Text>
+          <Text style={{ color: '#ffc107', fontSize: 20 }}>¡Disfruta de nuestros servicios!</Text>
+          <Text style={{ color: '#ffc107', fontSize: 20 }}>¡Disfruta de nuestros servicios!</Text>
+          <Text style={{ color: '#ffc107', fontSize: 20 }}>¡Disfruta de nuestros servicios!</Text>
+
+        </View>
+      </ScrollView>
 
 
       <Footer />
     </View>
   );
 }
+
 
 export function Footer() {
   return (
@@ -58,22 +99,22 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   contenedorIMG: {
-    marginTop: 30,
+    backgroundColor: '#000000',
     width: Dimensions.get('window').width * 1.9,
-    height: 290,
+    height: 230,
     borderBottomWidth: 1,
     borderColor: '#6c757d',
     borderRadius: 10,
   },
   header: {
-    paddingTop: 40,
+    paddingTop: 50,
     alignItems: 'center',
     marginBottom: 20,
+    backgroundColor: '#000000',
   },
   title: {
     textAlign: 'center',
-    marginTop: 230,
-    fontFamily: 'BebasNeue_400Regular',
+    marginTop: 160,
     letterSpacing: 1,
     fontSize: 28,
     color: '#ffc107',
@@ -105,9 +146,9 @@ const styles = StyleSheet.create({
     position: 'absolute',
     alignSelf: 'center',
     resizeMode: 'contain',
-    width: 200,
-    height: 200,
-    marginTop: 20,
+    width: 150,
+    height: 150,
+    left: 275,
   },
 
 });

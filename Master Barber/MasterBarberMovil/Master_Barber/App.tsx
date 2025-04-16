@@ -9,7 +9,6 @@ export default function App() {
   const [fontsLoaded] = useBebas({
     BebasNeue_400Regular,
   });
-
   if (!fontsLoaded) {
     return null;
   }
