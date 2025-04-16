@@ -29,43 +29,40 @@ export default function Home() {
 
       </View>
 
-      <ScrollView>
-        <View style={{ flexDirection: 'row', justifyContent: 'space-around', marginTop: 20 }}>
 
-        </View>
-        <View style={{ marginTop: 20, alignItems: 'center', marginBottom: 120 }}>
-          <Text style={{ color: '#dc3545', fontSize: 40, fontFamily: 'BebasNeue_400Regular' }}>SOBRE NOSOTROS</Text>
+      <ScrollView contentContainerStyle={{ alignItems: 'center', marginTop: 40 }}>
+        <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', marginTop: 40 }}>
           <Image
-            source={require('../assets/LOGO.png')}
+            source={require('../assets/barbero.jpg')}
             style={{
-              width: 150,
-              height: 150,
-              borderRadius: 75,
-              marginTop: 20,}}
+              width: Dimensions.get('window').width * 0.4, // 30% del ancho de la pantalla
+              height: Dimensions.get('window').width * 0.4, // Mantiene proporción cuadrada
+              marginRight: Dimensions.get('window').width * 0.04, // 5% del ancho de la pantalla como margen
+            }}
           />
-          <Text style={{ color: '#ffc107', fontSize: 20 }}>¡Disfruta de nuestros servicios!</Text>
-          <Text style={{ color: '#ffc107', fontSize: 20 }}>¡Disfruta de nuestros servicios!</Text>
-          <Text style={{ color: '#ffc107', fontSize: 20 }}>¡Disfruta de nuestros servicios!</Text>
-          <Text style={{ color: '#ffc107', fontSize: 20 }}>¡Disfruta de nuestros servicios!</Text>
-          <Text style={{ color: '#ffc107', fontSize: 20 }}>¡Disfruta de nuestros servicios!</Text>
-          <Text style={{ color: '#ffc107', fontSize: 20 }}>¡Disfruta de nuestros servicios!</Text>
-          <Text style={{ color: '#ffc107', fontSize: 20 }}>¡Disfruta de nuestros servicios!</Text>
-          <Text style={{ color: '#ffc107', fontSize: 20 }}>¡Disfruta de nuestros servicios!</Text>
-          <Text style={{ color: '#ffc107', fontSize: 20 }}>¡Disfruta de nuestros servicios!</Text>
-          <Text style={{ color: '#ffc107', fontSize: 20 }}>¡Disfruta de nuestros servicios!</Text>
-          <Text style={{ color: '#ffc107', fontSize: 20 }}>¡Disfruta de nuestros servicios!</Text>
-          <Text style={{ color: '#ffc107', fontSize: 20 }}>¡Disfruta de nuestros servicios!</Text>
-          <Text style={{ color: '#ffc107', fontSize: 20 }}>¡Disfruta de nuestros servicios!</Text>
-          <Text style={{ color: '#ffc107', fontSize: 20 }}>¡Disfruta de nuestros servicios!</Text>
-          <Text style={{ color: '#ffc107', fontSize: 20 }}>¡Disfruta de nuestros servicios!</Text>
-          <Text style={{ color: '#ffc107', fontSize: 20 }}>¡Disfruta de nuestros servicios!</Text>
-          <Text style={{ color: '#ffc107', fontSize: 20 }}>¡Disfruta de nuestros servicios!</Text>
-          <Text style={{ color: '#ffc107', fontSize: 20 }}>¡Disfruta de nuestros servicios!</Text>
-          <Text style={{ color: '#ffc107', fontSize: 20 }}>¡Disfruta de nuestros servicios!</Text>
-          <Text style={{ color: '#ffc107', fontSize: 20 }}>¡Disfruta de nuestros servicios!</Text>
-          <Text style={{ color: '#ffc107', fontSize: 20 }}>¡Disfruta de nuestros servicios!</Text>
-          <Text style={{ color: '#ffc107', fontSize: 20 }}>¡Disfruta de nuestros servicios!</Text>
-
+          <View style={{ alignItems: 'center', maxWidth: Dimensions.get('window').width * 0.5 }}>
+            <Text style={styles.title2}>
+              SOBRE NOSOTROS
+            </Text>
+            <Text style={{ color: '#ffffff', fontSize: Dimensions.get('window').width * 0.04, textAlign: 'center', marginTop: 10 }}>
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+            </Text>
+          </View>
+        </View>
+     
+        <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', marginTop: 160 }}>
+          <Text style={styles.title2}>NUESTROS SERVICIOS</Text>
+       
+        </View>
+        <View style={styles.card}>
+          <Image
+            source={require('../assets/barbero.jpg')}
+            style={styles.cardImage}
+          />
+          <View style={styles.cardContent}>
+            <Text style={{ ...styles.cardTitle }}>Corte Basico</Text>
+            <Text style={styles.cardText}> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</Text>
+          </View>
         </View>
       </ScrollView>
 
@@ -74,6 +71,7 @@ export default function Home() {
     </View>
   );
 }
+
 
 
 export function Footer() {
@@ -98,20 +96,23 @@ const styles = StyleSheet.create({
     backgroundColor: '#212529',
     alignItems: 'center',
   },
+
   contenedorIMG: {
     backgroundColor: '#000000',
     width: Dimensions.get('window').width * 1.9,
     height: 230,
     borderBottomWidth: 1,
-    borderColor: '#6c757d',
+    borderColor: '#ffffff',
     borderRadius: 10,
   },
+
   header: {
     paddingTop: 50,
     alignItems: 'center',
     marginBottom: 20,
     backgroundColor: '#000000',
   },
+
   title: {
     textAlign: 'center',
     marginTop: 160,
@@ -121,12 +122,20 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     opacity: 0.8,
   },
+
+  title2: {
+    color: '#dc3545',
+    fontSize: 30,
+    fontFamily: 'BebasNeue_400Regular',
+  },
+
   footerLine: {
     height: 1,
     backgroundColor: '#6c757d',
     width: '100%',
     marginBottom: 10,
   },
+
   footer: {
     backgroundColor: '#212529',
     width: '100%',
@@ -135,12 +144,14 @@ const styles = StyleSheet.create({
     bottom: 0,
     alignItems: 'center',
   },
+
   iconContainer: {
     flexDirection: 'row',
     justifyContent: 'space-around',
     alignItems: 'center',
     width: '100%',
   },
+
   logo: {
     opacity: 0.6,
     position: 'absolute',
@@ -151,4 +162,49 @@ const styles = StyleSheet.create({
     left: 275,
   },
 
+  card: {
+    borderRadius: 9,
+    margin: 10,
+    overflow: 'hidden',
+    marginBottom: 150,
+    backgroundColor: '#212529',
+    borderWidth: 1,
+    borderColor: '#6c757d',
+    marginTop: 65,
+    width: Dimensions.get('window').width * 0.9, 
+    height: Dimensions.get('window').width * 0.6, 
+    
+  },
+
+  cardImageContainer: {
+    overflow: 'hidden',
+  },
+
+  cardImage: {
+    width: '100%', 
+    height: '60%', 
+    resizeMode: 'cover',
+  },
+
+  cardContent: {
+    marginTop: Dimensions.get('window').height * 0.02,
+    justifyContent: 'center',
+  },
+
+  cardTitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#dc3545',
+    marginTop: Dimensions.get('window').height * 0, 
+    textAlign: 'center',
+  },
+
+  cardText: {
+    fontSize: Dimensions.get('window').width * 0.031, 
+    color: '#ffffff',
+    textAlign: 'center',
+    width: Dimensions.get('window').width * 0.7, 
+    height: Dimensions.get('window').height * 0.2, 
+    marginLeft: Dimensions.get('window').width * 0.09, 
+  },
 });
