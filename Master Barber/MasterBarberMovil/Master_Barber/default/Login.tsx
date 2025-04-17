@@ -1,10 +1,20 @@
-import React, { useState } from "react"; // Importa React y useState
-import { StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native"; // Importa los componentes necesarios
-import Icon from "react-native-vector-icons/FontAwesome"; // Importa los íconos si los necesitas
+import React, { useState } from "react";
+import { StyleSheet, Text, TextInput, TouchableOpacity, View, Image } from "react-native";
+import { useFonts } from "expo-font"; // Importa useFonts
+import { Anton_400Regular } from "@expo-google-fonts/anton"; // Importa la fuente Anton
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
+  // Cargar la fuente
+  const [fontsLoaded] = useFonts({
+    Anton: Anton_400Regular,
+  });
+
+  if (!fontsLoaded) {
+    return null; // Muestra un loader o nada mientras se carga la fuente
+  }
 
   const handleLogin = () => {
     console.log("Email:", email);
@@ -13,11 +23,16 @@ export default function Login() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Iniciar Sesión</Text>
+      <Image
+        source={require("../assets/LOGO.png")}
+        style={styles.logo}
+      />
+      <Text style={styles.title}>¡ Bienvenido ! </Text>
+      <Text style={styles.subtitle}>Inicia Sesión</Text>
       <TextInput
         style={styles.input}
         placeholder="Correo electrónico"
-        placeholderTextColor="#aaa"
+        placeholderTextColor="#fff"
         value={email}
         onChangeText={setEmail}
         keyboardType="email-address"
@@ -26,11 +41,18 @@ export default function Login() {
       <TextInput
         style={styles.input}
         placeholder="Contraseña"
-        placeholderTextColor="#aaa"
+        placeholderTextColor="#fff"
         value={password}
         onChangeText={setPassword}
         secureTextEntry
       />
+      <Text style={styles.registrate}>
+      ¿No tienes una cuenta?{" "}
+      <Text style={styles.link} onPress={() => console.log("Navegar a registro")}>
+      Regístrate
+      </Text>
+      </Text>
+      <Text style={styles.olvidopassword} onPress={() => console.log("Navegar a recuperar contraseña")} >¿Olvidaste tu contraseña?</Text>
       <TouchableOpacity style={styles.button} onPress={handleLogin}>
         <Text style={styles.buttonText}>Ingresar</Text>
       </TouchableOpacity>
@@ -40,40 +62,77 @@ export default function Login() {
 
 const styles = StyleSheet.create({
   container: {
-    textAlign: "center",
-    height: 200,
-    width : 300,
     flex: 1,
-    backgroundColor: "#000",
+    backgroundColor: "#212529",
     alignItems: "center",
-    marginTop: 150,
-    padding: 5,
+    justifyContent: "center",
+    paddingHorizontal: 20,
   },
   title: {
-    fontSize: 24,
+    fontSize: 38,
+    fontFamily: "Anton",
     color: "#fff",
-    marginBottom: 20,
+    marginBottom: 10,
+  },
+  subtitle: {
+    fontSize: 18,
+    color: "#fff",
+    marginBottom: 50,
+    fontFamily: "BebasNeue_400Regular",
+  },
+
+  logo: {
+    width: 150,
+    height: 150,
+    marginBottom: 40,
+    borderRadius: 300,
+    boxShadow: "px   5px 5px  rgba(255, 255, 255, 0.3)",
   },
   input: {
-    width: "100%",
-    height: 40,
+    width: 300,
+    height: 50,
     backgroundColor: "#333",
     borderRadius: 8,
     paddingHorizontal: 10,
     color: "#fff",
-    marginBottom: 15,
+    marginBottom: 10,
+    borderWidth: 2,
+    borderColor: "white",
+  },
+  registrate: {
+    color: "#fff",
+    fontSize: 12,
+    fontFamily: "Anton",
+  },
+  link: {
+    color: "#5495ff",
+    textDecorationLine: "underline", 
+    fontFamily: "Anton", 
+  },
+  olvidopassword: {
+    color: "#5495FF",
+    fontSize: 12,
+    fontFamily: "Anton",
+    marginBottom: 10,
+    textDecorationLine: "underline",
+    
   },
   button: {
-    width: "100%",
+    width: 150,
     height: 50,
-    backgroundColor: "#1e90ff",
-    borderRadius: 8,
+    backgroundColor: "#ffc107",
+    borderRadius: 10,
     alignItems: "center",
     justifyContent: "center",
-    marginTop: 10,
+    marginTop: 50,
+    marginBottom: 10,
+    
   },
   buttonText: {
-    color: "#fff",
-    fontSize: 18,
+    color: "#FDFAF6",
+    fontSize: 16,
+    fontFamily: "Anton",
+    marginBottom: 5,
   },
+  
 });
