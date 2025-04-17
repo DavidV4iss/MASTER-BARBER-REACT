@@ -4,10 +4,15 @@ import AsyncStorage from "@react-native-async-storage/async-storage"; // Correcc
 import { useFonts } from "expo-font";
 import { Anton_400Regular } from "@expo-google-fonts/anton";
 import axios from "axios";
+import Register from "./Registro"; // Asegúrate de que la ruta sea correcta
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [currentScreen, setCurrentScreen] = useState("login");
+  const navigateTo = (screen: string) => {
+    setCurrentScreen(screen);
+  };
 
   const [fontsLoaded] = useFonts({
     Anton: Anton_400Regular,
@@ -16,6 +21,10 @@ export default function Login() {
   if (!fontsLoaded) {
     return null;
   }
+  if (currentScreen === 'register') {
+    return <Register />;
+  }
+
 
   const handleLogin = async () => {
     try {
@@ -57,9 +66,9 @@ export default function Login() {
         onChangeText={setPassword}
         secureTextEntry
       />
-      <Text style={styles.registrate}>
+      <Text style={styles.registrate} >
         ¿No tienes una cuenta?{" "}
-        <Text style={styles.link} onPress={() => console.log("Navegar a registro")}>
+        <Text style={styles.link} onPress={() => navigateTo('register')}>
           Regístrate
         </Text>
       </Text>
