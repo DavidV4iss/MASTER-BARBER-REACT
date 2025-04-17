@@ -10,6 +10,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import { useFonts as useBebas, BebasNeue_400Regular } from '@expo-google-fonts/bebas-neue';
 import { Dimensions } from 'react-native';
 import Login from './Login';
+import Register from './Register';
 
 export default function Home() {
   const [currentScreen, setCurrentScreen] = useState('Home');
@@ -24,6 +25,9 @@ export default function Home() {
 
   if (currentScreen === 'Login') {
     return <Login />;
+  }
+  if (currentScreen === 'register') {
+    return <Register />;
   }
 
   return (
@@ -321,7 +325,7 @@ function Footer({ navigateTo }) {
       <View style={styles.iconContainer}>
         <Icon name="user-circle" size={Dimensions.get('window').width * 0.08} color="#ffffff" onPress={() => navigateTo('Login')} />
         <Icon name="calendar" size={Dimensions.get('window').width * 0.08} color="#ffffff" />
-        <Icon name="bars" size={Dimensions.get('window').width * 0.08} color="#ffffff" />
+        <Icon name="bars" size={Dimensions.get('window').width * 0.08} color="#ffffff" onPress={() => navigateTo('register')} />
       </View>
     </View>
   );

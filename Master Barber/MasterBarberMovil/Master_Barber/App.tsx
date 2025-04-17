@@ -4,6 +4,7 @@ import { useFonts as useBebas, BebasNeue_400Regular } from '@expo-google-fonts/b
 import Icon from 'react-native-vector-icons/FontAwesome'; // Importa la biblioteca de íconos
 import Login from './default/Login'; // Importa el componente Login
 import Home from './default/Home'; // Importa el componente Home
+import Register from './default/Register'; // Importa el componente Register
 
 export default function App() {
   const [fontsLoaded] = useBebas({
@@ -17,7 +18,7 @@ export default function App() {
     <View style={styles.container}>
       <Login />
       <Home />
-
+      <Register />
     </View>
   );
 }

@@ -1,24 +1,35 @@
 import React, { useState } from "react";
-import { StyleSheet, Text, TextInput, TouchableOpacity, View, Image } from "react-native";
-import { useFonts } from "expo-font"; // Importa useFonts
-import { Anton_400Regular } from "@expo-google-fonts/anton"; // Importa la fuente Anton
+import { StyleSheet, Text, TextInput, TouchableOpacity, View, Image, Alert } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage"; // Corrección de importación
+import { useFonts } from "expo-font";
+import { Anton_400Regular } from "@expo-google-fonts/anton";
+import axios from "axios";
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  // Cargar la fuente
   const [fontsLoaded] = useFonts({
     Anton: Anton_400Regular,
   });
 
   if (!fontsLoaded) {
-    return null; // Muestra un loader o nada mientras se carga la fuente
+    return null;
   }
 
-  const handleLogin = () => {
-    console.log("Email:", email);
-    console.log("Password:", password);
+  const handleLogin = async () => {
+    try {
+      const response = await axios.post("http://localhost:8080/login", { email, password });
+      const { token, user } = response.data;
+
+      // Guardar el token en el almacenamiento local
+      await AsyncStorage.setItem("authToken", token);
+      Alert.alert("Inicio de sesión exitoso", `Bienvenido, ${user.email}`);
+      console.log("Token:", token);
+    } catch (err: any) {
+      const errorMessage = err.response?.data?.error || "Error al iniciar sesión";
+      Alert.alert("Error", errorMessage);
+    }
   };
 
   return (
@@ -47,10 +58,10 @@ export default function Login() {
         secureTextEntry
       />
       <Text style={styles.registrate}>
-      ¿No tienes una cuenta?{" "}
-      <Text style={styles.link} onPress={() => console.log("Navegar a registro")}>
-      Regístrate
-      </Text>
+        ¿No tienes una cuenta?{" "}
+        <Text style={styles.link} onPress={() => console.log("Navegar a registro")}>
+          Regístrate
+        </Text>
       </Text>
       <Text style={styles.olvidopassword} onPress={() => console.log("Navegar a recuperar contraseña")} >¿Olvidaste tu contraseña?</Text>
       <TouchableOpacity style={styles.button} onPress={handleLogin}>
@@ -106,8 +117,8 @@ const styles = StyleSheet.create({
   },
   link: {
     color: "#5495ff",
-    textDecorationLine: "underline", 
-    fontFamily: "Anton", 
+    textDecorationLine: "underline",
+    fontFamily: "Anton",
   },
   olvidopassword: {
     color: "#5495FF",
@@ -115,7 +126,7 @@ const styles = StyleSheet.create({
     fontFamily: "Anton",
     marginBottom: 10,
     textDecorationLine: "underline",
-    
+
   },
   button: {
     width: 150,
@@ -126,7 +137,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     marginTop: 50,
     marginBottom: 10,
-    
+
   },
   buttonText: {
     color: "#FDFAF6",
@@ -134,5 +145,5 @@ const styles = StyleSheet.create({
     fontFamily: "Anton",
     marginBottom: 5,
   },
-  
+
 });
