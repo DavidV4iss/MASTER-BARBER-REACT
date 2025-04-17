@@ -527,5 +527,4 @@ const styles = StyleSheet.create({
     marginVertical: 10,
   },
   // FIN DE CSS PARA EL CARRUSEL DE PRODUCTOS
-
-});
+}); // Cierra correctamente el objeto styles
