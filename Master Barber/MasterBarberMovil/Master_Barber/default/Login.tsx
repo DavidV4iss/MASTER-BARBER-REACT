@@ -43,11 +43,11 @@ export default function Login() {
 
   return (
     <View style={styles.container}>
+      <Text style={styles.title}>¡ Bienvenido ! </Text>
       <Image
         source={require("../assets/LOGO.png")}
         style={styles.logo}
       />
-      <Text style={styles.title}>¡ Bienvenido ! </Text>
       <Text style={styles.subtitle}>Inicia Sesión</Text>
       <TextInput
         style={styles.input}
@@ -97,14 +97,14 @@ const styles = StyleSheet.create({
   subtitle: {
     fontSize: 18,
     color: "#fff",
-    marginBottom: 50,
+    marginBottom: 15,
     fontFamily: "BebasNeue_400Regular",
   },
 
   logo: {
     width: 150,
     height: 150,
-    marginBottom: 40,
+    marginBottom: 25,
     borderRadius: 300,
     boxShadow: "px   5px 5px  rgba(255, 255, 255, 0.3)",
   },
@@ -123,6 +123,7 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontSize: 12,
     fontFamily: "Anton",
+    marginTop: 10,
   },
   link: {
     color: "#5495ff",
@@ -144,7 +145,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     alignItems: "center",
     justifyContent: "center",
-    marginTop: 50,
+    marginTop: 30,
     marginBottom: 10,
 
   },

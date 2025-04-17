@@ -3,6 +3,8 @@ import { StyleSheet, Text, TextInput, TouchableOpacity, View, Image, Alert, Dime
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Login from "./Login";
 import Home from "./Home";
+import { useFonts } from "expo-font";
+import { Anton_400Regular } from "@expo-google-fonts/anton";
 
 const { width, height } = Dimensions.get("window");
 
@@ -11,6 +13,10 @@ export default function Register({ navigation }: any) {
     const navigateTo = (screen: string) => {
         setCurrentScreen(screen);
     };
+    const [fontsLoaded] = useFonts({
+        Anton: Anton_400Regular,
+      });
+      
     if (currentScreen === 'login') {
         return <Login />;
     }
@@ -31,7 +37,7 @@ export default function Register({ navigation }: any) {
                 source={require("../assets/LOGO.png")}
                 style={styles.logo}
             />
-            <Text style={styles.title}>Registro de Usuario</Text>
+            <Text style={styles.subtitle}>Registro de Usuario</Text>
             <TextInput
                 style={styles.input}
                 placeholder="Nombre de Usuario"
@@ -68,15 +74,15 @@ export default function Register({ navigation }: any) {
                 placeholderTextColor="#fff"
                 secureTextEntry
             />
-            <TouchableOpacity style={styles.button} >
-                <Text style={styles.buttonText}>Registrar</Text>
-            </TouchableOpacity>
             <Text style={styles.footerText}>
                 ¿Ya tienes cuenta?{" "}
                 <Text style={styles.link} onPress={() => navigateTo('login')} >
                     Inicia sesión
                 </Text>
             </Text>
+            <TouchableOpacity style={styles.button} >
+                <Text style={styles.buttonText}>Registrar</Text>
+            </TouchableOpacity>
         </View>
     );
 }
@@ -90,48 +96,61 @@ const styles = StyleSheet.create({
         paddingHorizontal: width * 0.05,
     },
     logo: {
-        width: width * 0.4,
-        height: width * 0.4,
-        marginBottom: height * 0.02,
-        borderRadius: (width * 0.4) / 2,
+        width: 150,
+        height: 150,
+        marginBottom: 20,
+        borderRadius: 300,
+        boxShadow: "px   5px 5px  rgba(255, 255, 255, 0.3)",
     },
     title: {
-        fontSize: width * 0.06,
-        color: "#ffc107",
-        marginBottom: height * 0.02,
-        fontWeight: "bold",
+        fontSize: width * 0.08,
+        fontFamily: "Anton",
+        color: "#fff",
+        marginBottom: height * 0.01,
     },
+    subtitle: {
+        fontSize: 18,
+        marginBottom: 15,
+        fontFamily: "BebasNeue_400Regular",
+        color: "#fff",
+    },
+
     input: {
-        width: "100%",
-        height: height * 0.06,
+        width: 300,
+        height: 50,
         backgroundColor: "#333",
         borderRadius: 8,
         paddingHorizontal: 10,
         color: "#fff",
         marginBottom: height * 0.015,
-        borderWidth: 1,
+        borderWidth: 2,
         borderColor: "#fff",
     },
     button: {
-        width: "100%",
-        height: height * 0.06,
+        width: 150,
+        height: 50,
         backgroundColor: "#ffc107",
-        borderRadius: 8,
+        borderRadius: 10,
         alignItems: "center",
         justifyContent: "center",
-        marginTop: height * 0.02,
+        marginTop: 10,
+        marginBottom: 10,
     },
     buttonText: {
-        color: "#212529",
-        fontSize: width * 0.045,
-        fontWeight: "bold",
+        color: "#FDFAF6",
+        fontSize: 16,
+        fontFamily: "Anton",
+        marginBottom: 5,
     },
     footerText: {
         color: "#fff",
-        marginTop: height * 0.02,
+        fontSize: 12,
+        fontFamily: "Anton",
+        marginBottom: 10,
     },
     link: {
-        color: "#ffc107",
-        fontWeight: "bold",
+        color: "#5495ff",
+        textDecorationLine: "underline",
+        fontFamily: "Anton",
     },
 });
