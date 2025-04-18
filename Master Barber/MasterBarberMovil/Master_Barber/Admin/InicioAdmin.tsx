@@ -42,7 +42,7 @@ export default function InicioAdmin() {
                             <Text style={styles.sidebarButtonText}>Barberos</Text>
                         </View>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.sidebarButton}>
+                    <TouchableOpacity style={styles.sidebarButton} onPress={() => setCurrentScreen('Inventario')}>
                         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                             <Icon name="archive" size={20} color="#ffffff" style={{ marginRight: 10 }} />
                             <Text style={styles.sidebarButtonText}>Inventario</Text>
@@ -233,6 +233,17 @@ export default function InicioAdmin() {
                             </View>
                         </View>
                     </ScrollView>
+                </View>
+            )}
+            {currentScreen === 'Inventario' && (
+                <View style={{ flex: 1, backgroundColor: '#212529', padding: 20 }}>
+                    <View style={styles.header2}>
+                        <TouchableOpacity onPress={() => setSidebarVisible(true)}>
+                            <Icon name="bars" size={Dimensions.get('window').width * 0.08} color="#ffffff" style={styles.iconBars} />
+                        </TouchableOpacity>
+                        <Text style={styles.welcomeText}>¡¡BIENVENIDO!!</Text>
+                        <Icon name="user-circle" size={Dimensions.get('window').width * 0.08} color="#ffffff" style={styles.iconUser} />
+                    </View>
                 </View>
             )}
         </View>
