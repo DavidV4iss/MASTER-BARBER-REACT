@@ -25,12 +25,13 @@ const GestionReservas = () => {
         <ScrollView contentContainerStyle={styles.scrollContainer}>
             <View style={styles.container}>
                 <View style={styles.welcome}>
+                <Text style={styles.welcomeText}>Master Barber</Text>
                 <Icon style={styles.icon} name="user-circle" onPress={() => setSidebarVisible(true)}/>
+                </View>
                 <Text style={styles.welcomeText}>
                     BIENVENIDO BARBERO
                     <Text style={styles.welcomeName}> "Nixxon"</Text>
                 </Text>
-                </View>
                 <Text style={styles.textInfo}>
                     Desde este apartado, podras revisar todos los turnos agendados, aceptarlos, cancelarlos o finalizarlos según sea necesario. Manten tu agenda organizada y asegurate de brindar un mejor servicio a tus clientes
                 </Text>
@@ -121,23 +122,23 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: '#343a40',
         width: '100%',
         height: 80,
         marginTop: 40,
-        marginBottom: 10,
+        marginBottom: 50,
         borderRadius: 0,
         overflow: 'hidden',
     },
     icon: {
         fontSize: 32,
         color: '#ffff',
-        marginRight: 18, 
+        marginLeft: 100, 
     },
     welcomeText: {
         fontSize: 28,
         fontFamily: 'BebasNeue',
         color: '#ffc107',
+        textAlign: 'center',
     },
     welcomeName: {
         fontSize: 28,
