@@ -4,7 +4,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import { useFonts as useBebas, BebasNeue_400Regular } from '@expo-google-fonts/bebas-neue';
 import { Dimensions } from 'react-native';
 import Register from './Registro';
-import InicioAdmin from '../Admin/InicioAdmin';
+import InicioAdmin from '../src/Views/Admin/InicioAdmin';
 import GestionReservas from '../src/Views/barberos/GestionReservas';
 
 export default function Home() {
