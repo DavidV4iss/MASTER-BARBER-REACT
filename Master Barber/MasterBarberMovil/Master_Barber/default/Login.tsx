@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { StyleSheet, Text, TextInput, TouchableOpacity, View, Image, Alert } from "react-native";
+import Icon from "react-native-vector-icons/FontAwesome"; // Import Icon from the appropriate library
+import { StyleSheet, Text, TextInput, TouchableOpacity, View, Image, Alert, Dimensions } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage"; // Corrección de importación
 import { useFonts } from "expo-font";
 import { Anton_400Regular } from "@expo-google-fonts/anton";
@@ -52,6 +53,11 @@ export default function Login() {
 
   return (
     <View style={styles.container}>
+      <Icon name="arrow-left" size={Dimensions.get('window').width * 0.05} color="#ffffff" onPress={() => navigateTo('register')} style={{
+                      marginTop: Dimensions.get('window').height * 0,
+                      marginRight: Dimensions.get('window').width * 0.8,
+                      marginBottom: Dimensions.get('window').height * 0.1
+                  }} />
       <Text style={styles.title}>¡ Bienvenido ! </Text>
       <Image
         source={require("../assets/LOGO.png")}
