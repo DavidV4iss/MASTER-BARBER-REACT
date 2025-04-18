@@ -4,6 +4,7 @@ import { useFonts } from "expo-font";
 import { Anton_400Regular } from "@expo-google-fonts/anton";
 import { BebasNeue_400Regular } from "@expo-google-fonts/bebas-neue";
 import Login from './Login';
+import RestablecerContraseña from "./RestablecerContraseña";
 
 
 const OlvidoContraseña = () => {
@@ -21,6 +22,9 @@ const OlvidoContraseña = () => {
 
     if (currentScreen === 'login') {
       return <Login />;
+    }
+    if (currentScreen === 'RestablecerContraseña') {
+      return <RestablecerContraseña />;
     }
 
 
@@ -88,7 +92,7 @@ const styles = StyleSheet.create({
     tittle:{
         marginTop: 90,
         textAlign: 'center',
-        fontSize:32,
+        fontSize:34,
         fontFamily: 'BebasNeue_400Regular',
         color: '#ffc107',
 

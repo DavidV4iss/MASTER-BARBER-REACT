@@ -5,6 +5,8 @@ import Icon from 'react-native-vector-icons/FontAwesome'; // Importa la bibliote
 import Login from './default/Login'; // Importa el componente Login
 import Home from './default/Home'; // Importa el componente Home
 import Register from './default/Registro'; // Importa el componente Register
+import OlvidoContraseña from './default/OlvidoContraseña';
+import RestablecerContraseña from './default/RestablecerContraseña';
 
 export default function App() {
   const [fontsLoaded] = useBebas({
@@ -19,6 +21,8 @@ export default function App() {
       <Login />
       <Home />
       <Register />
+      <OlvidoContraseña />
+      <RestablecerContraseña />
     </View>
   );
 }
