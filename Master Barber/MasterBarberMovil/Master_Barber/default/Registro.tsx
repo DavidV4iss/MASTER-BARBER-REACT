@@ -8,15 +8,15 @@ import { Anton_400Regular } from "@expo-google-fonts/anton";
 
 const { width, height } = Dimensions.get("window");
 
-export default function Register({ navigation }: any) {
+export default function Register() {
     const [currentScreen, setCurrentScreen] = useState("register");
     const navigateTo = (screen: string) => {
         setCurrentScreen(screen);
     };
     const [fontsLoaded] = useFonts({
         Anton: Anton_400Regular,
-      });
-      
+    });
+
     if (currentScreen === 'login') {
         return <Login />;
     }
@@ -32,7 +32,6 @@ export default function Register({ navigation }: any) {
                 marginTop: Dimensions.get('window').height * 0.05,
                 marginRight: Dimensions.get('window').width * 0.8,
             }} />
-            <Text style={styles.title}>¡ Bienvenido ! </Text>
             <Image
                 source={require("../assets/LOGO.png")}
                 style={styles.logo}
@@ -112,7 +111,7 @@ const styles = StyleSheet.create({
         fontSize: 18,
         marginBottom: 15,
         fontFamily: "BebasNeue_400Regular",
-        color: "#fff",
+        color: "#FDFAF6",
     },
 
     input: {
@@ -121,7 +120,7 @@ const styles = StyleSheet.create({
         backgroundColor: "#333",
         borderRadius: 8,
         paddingHorizontal: 10,
-        color: "#fff",
+        color: "#ffc107",
         marginBottom: height * 0.015,
         borderWidth: 2,
         borderColor: "#fff",
@@ -154,3 +153,5 @@ const styles = StyleSheet.create({
         fontFamily: "Anton",
     },
 });
+
+

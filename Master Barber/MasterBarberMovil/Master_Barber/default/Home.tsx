@@ -4,6 +4,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import { useFonts as useBebas, BebasNeue_400Regular } from '@expo-google-fonts/bebas-neue';
 import { Dimensions } from 'react-native';
 import Register from './Registro';
+import InicioAdmin from '../Admin/InicioAdmin';
 
 export default function Home() {
   const [currentScreen, setCurrentScreen] = useState('Home');
@@ -19,6 +20,10 @@ export default function Home() {
 
   if (currentScreen === 'register') {
     return <Register />;
+  }
+
+  if (currentScreen === 'admin') {
+    return <InicioAdmin />;
   }
 
   return (
@@ -233,7 +238,7 @@ export default function Home() {
             <Text style={styles.productTitle}>PORTA CUCHILLAS</Text>
             <Text style={styles.productDescription}>Corte Fino</Text>
             <Text style={styles.productStock}>Quedan 58 Unidades De Este Producto</Text>
-            <Button title="Ver" color="#dc3545" onPress={() => {/* Add your onPress logic here */ }} />
+            <Button title="Ver" color="#dc3545" onPress={() => { }} />
           </View>
           <View style={styles.productCard}>
             <Image
@@ -243,7 +248,7 @@ export default function Home() {
             <Text style={styles.productTitle}>POLVOS TEXTURIZANTES</Text>
             <Text style={styles.productDescription}>Un Corte Texturizado</Text>
             <Text style={styles.productStock}>Quedan 34 Unidades De Este Producto</Text>
-            <Button title="Ver" color="#dc3545" onPress={() => {/* Add your onPress logic here */ }} />
+            <Button title="Ver" color="#dc3545" onPress={() => { }} />
           </View>
           <View style={styles.productCard}>
             <Image
@@ -253,7 +258,7 @@ export default function Home() {
             <Text style={styles.productTitle}>LOCION DESINFECTANTE</Text>
             <Text style={styles.productDescription}>Desinfecta</Text>
             <Text style={styles.productStock}>Quedan 84 Unidades De Este Producto</Text>
-            <Button title="Ver" color="#dc3545" onPress={() => {/* Add your onPress logic here */ }} />
+            <Button title="Ver" color="#dc3545" onPress={() => { }} />
           </View>
           <View style={styles.productCard}>
             <Image
@@ -263,7 +268,7 @@ export default function Home() {
             <Text style={styles.productTitle}>LOCION DESINFECTANTE</Text>
             <Text style={styles.productDescription}>Desinfecta</Text>
             <Text style={styles.productStock}>Quedan 84 Unidades De Este Producto</Text>
-            <Button title="Ver" color="#dc3545" onPress={() => {/* Add your onPress logic here */ }} />
+            <Button title="Ver" color="#dc3545" onPress={() => { }} />
           </View>
           <View style={styles.productCard}>
             <Image
@@ -273,7 +278,7 @@ export default function Home() {
             <Text style={styles.productTitle}>LOCION DESINFECTANTE</Text>
             <Text style={styles.productDescription}>Desinfecta</Text>
             <Text style={styles.productStock}>Quedan 84 Unidades De Este Producto</Text>
-            <Button title="Ver" color="#dc3545" onPress={() => {/* Add your onPress logic here */ }} />
+            <Button title="Ver" color="#dc3545" onPress={() => { }} />
           </View>
           <View style={styles.productCard}>
             <Image
@@ -283,7 +288,7 @@ export default function Home() {
             <Text style={styles.productTitle}>LOCION DESINFECTANTE</Text>
             <Text style={styles.productDescription}>Desinfecta</Text>
             <Text style={styles.productStock}>Quedan 84 Unidades De Este Producto</Text>
-            <Button title="Ver" color="#dc3545" onPress={() => {/* Add your onPress logic here */ }} />
+            <Button title="Ver" color="#dc3545" onPress={() => { }} />
           </View>
           <View style={styles.productCard}>
             <Image
@@ -293,7 +298,7 @@ export default function Home() {
             <Text style={styles.productTitle}>LOCION DESINFECTANTE</Text>
             <Text style={styles.productDescription}>Desinfecta</Text>
             <Text style={styles.productStock}>Quedan 84 Unidades De Este Producto</Text>
-            <Button title="Ver" color="#dc3545" onPress={() => {/* Add your onPress logic here */ }} />
+            <Button title="Ver" color="#dc3545" onPress={() => { }} />
           </View>
         </ScrollView>
 
@@ -368,7 +373,7 @@ function Footer({ navigateTo }) {
       <View style={styles.iconContainer}>
         <Icon name="user-circle" size={Dimensions.get('window').width * 0.08} color="#ffffff" onPress={() => navigateTo('register')} />
         <Icon name="calendar" size={Dimensions.get('window').width * 0.08} color="#ffffff" />
-        <Icon name="bars" size={Dimensions.get('window').width * 0.08} color="#ffffff" />
+        <Icon name="bars" size={Dimensions.get('window').width * 0.08} color="#ffffff" onPress={() => navigateTo('admin')} />
       </View>
     </View>
   );
