@@ -3,8 +3,13 @@ import { StyleSheet, Text, TextInput, TouchableOpacity, View, Image, Alert } fro
 import AsyncStorage from "@react-native-async-storage/async-storage"; // Corrección de importación
 import { useFonts } from "expo-font";
 import { Anton_400Regular } from "@expo-google-fonts/anton";
+import { BebasNeue_400Regular } from "@expo-google-fonts/bebas-neue";
 import axios from "axios";
 import Register from "./Registro"; // Asegúrate de que la ruta sea correcta
+import OlvidoContraseña from "./OlvidoContraseña";
+
+
+
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -16,6 +21,7 @@ export default function Login() {
 
   const [fontsLoaded] = useFonts({
     Anton: Anton_400Regular,
+    BebasNeue_400Regular,
   });
 
   if (!fontsLoaded) {
@@ -23,6 +29,9 @@ export default function Login() {
   }
   if (currentScreen === 'register') {
     return <Register />;
+  }
+  if (currentScreen === 'OlvidoContraseña') {
+    return <OlvidoContraseña />;
   }
 
 
@@ -72,7 +81,12 @@ export default function Login() {
           Regístrate
         </Text>
       </Text>
-      <Text style={styles.olvidopassword} onPress={() => console.log("Navegar a recuperar contraseña")} >¿Olvidaste tu contraseña?</Text>
+      <Text
+        style={styles.olvidopassword}
+        onPress={() => navigateTo("OlvidoContraseña")}
+      >
+        ¿Olvidaste tu contraseña?
+      </Text>
       <TouchableOpacity style={styles.button} onPress={handleLogin}>
         <Text style={styles.buttonText}>Ingresar</Text>
       </TouchableOpacity>
@@ -123,7 +137,7 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontSize: 12,
     fontFamily: "Anton",
-    marginTop: 10,
+    marginTop: 5,
   },
   link: {
     color: "#5495ff",
@@ -145,7 +159,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     alignItems: "center",
     justifyContent: "center",
-    marginTop: 30,
+    marginTop: 20,
     marginBottom: 10,
 
   },
