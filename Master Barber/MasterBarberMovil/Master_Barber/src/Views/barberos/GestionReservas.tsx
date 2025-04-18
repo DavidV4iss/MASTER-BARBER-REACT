@@ -1,0 +1,224 @@
+import { Anton_400Regular } from '@expo-google-fonts/anton';
+import { BebasNeue_400Regular } from '@expo-google-fonts/bebas-neue';
+import { useFonts } from 'expo-font';
+import React from 'react';
+import { View, Text, StyleSheet, Image, ActivityIndicator, TouchableOpacity, ScrollView, Dimensions } from 'react-native';
+import Icon from 'react-native-vector-icons/FontAwesome';
+
+const GestionReservas = () => {
+    const [sidebarVisible, setSidebarVisible] = React.useState(false);
+    const [fontsLoaded] = useFonts({
+        Anton: Anton_400Regular,
+        BebasNeue: BebasNeue_400Regular,
+    });
+    
+    if (!fontsLoaded) {
+        return (
+            <View style={styles.container}>
+                <ActivityIndicator size="large" color="#ffffff" />
+                <Text style={{ color: '#ffffff', marginTop: 10 }}>Cargando fuentes...</Text>
+            </View>
+        );
+    }
+
+    return (
+        <ScrollView contentContainerStyle={styles.scrollContainer}>
+            <View style={styles.container}>
+                <View style={styles.welcome}>
+                <Icon style={styles.icon} name="user-circle" onPress={() => setSidebarVisible(true)}/>
+                <Text style={styles.welcomeText}>
+                    BIENVENIDO BARBERO
+                    <Text style={styles.welcomeName}> "Nixxon"</Text>
+                </Text>
+                </View>
+                <Text style={styles.textInfo}>
+                    Desde este apartado, podras revisar todos los turnos agendados, aceptarlos, cancelarlos o finalizarlos según sea necesario. Manten tu agenda organizada y asegurate de brindar un mejor servicio a tus clientes
+                </Text>
+                <Text style={styles.title}>Gestiona tus reservas</Text>
+                <View style={styles.card}>
+                    <Image source={require('../../../assets/deiby.jpg')} style={styles.image} />
+                    <View style={styles.cardText}>
+                        <Text style={styles.cardClientServiceFhReserva}>
+                            Cliente:
+                            <Text style={styles.cardText2}> "David Vaiss"</Text>
+                        </Text>
+                        <Text style={styles.cardClientServiceFhReserva}>
+                            Servicio:
+                            <Text style={styles.cardText2}> "Corte Premium"</Text>
+                        </Text>
+                        <Text style={styles.cardClientServiceFhReserva}>
+                            Fecha y hora:
+                            <Text style={styles.cardText2}> "2023-08-15, 14:00 pm"</Text>
+                        </Text>
+                        <Text style={styles.cardClientServiceFhReserva}>
+                            Estado de la reserva:
+                            <Text style={styles.cardText2}> "Pendiente"</Text>
+                        </Text>
+                    </View>
+                    <View style={styles.botones}>
+                        <TouchableOpacity style={styles.button1}>
+                            <Text style={styles.styleBtext}>Aceptar</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={styles.button2}>
+                            <Text style={styles.styleBtext}>Finalizar</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={styles.button3}>
+                            <Text style={styles.styleBtext}>Cancelar</Text>
+                        </TouchableOpacity>
+                    </View>
+                </View>
+
+
+                <View style={styles.card}>
+                    <Image source={require('../../../assets/nixon.jpg')} style={styles.image} />
+                    <View style={styles.cardText}>
+                        <Text style={styles.cardClientServiceFhReserva}>
+                            Cliente:
+                            <Text style={styles.cardText2}> "Fide"</Text>
+                        </Text>
+                        <Text style={styles.cardClientServiceFhReserva}>
+                            Servicio:
+                            <Text style={styles.cardText2}> "Corte Premium"</Text>
+                        </Text>
+                        <Text style={styles.cardClientServiceFhReserva}>
+                            Fecha y hora:
+                            <Text style={styles.cardText2}> "2023-08-15, 20:00 pm"</Text>
+                        </Text>
+                        <Text style={styles.cardClientServiceFhReserva}>
+                            Estado de la reserva:
+                            <Text style={styles.cardText2}> "Aceptado"</Text>
+                        </Text>
+                    </View>
+                    <View style={styles.botones}>
+                        <TouchableOpacity style={styles.button1}>
+                            <Text style={styles.styleBtext}>Aceptar</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={styles.button2}>
+                            <Text style={styles.styleBtext}>Finalizar</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={styles.button3}>
+                            <Text style={styles.styleBtext}>Cancelar</Text>
+                        </TouchableOpacity>
+                    </View>
+                </View>
+            </View>
+        </ScrollView>
+    );
+};
+
+const styles = StyleSheet.create({
+    scrollContainer: {
+        flexGrow: 1,
+    },
+    container: {
+        alignItems: 'center',
+        flex: 1,
+        justifyContent: 'center',
+        backgroundColor: '#212529',
+        paddingBottom: 20,
+    },
+    welcome: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: '#343a40',
+        width: '100%',
+        height: 80,
+        marginTop: 40,
+        marginBottom: 10,
+        borderRadius: 0,
+        overflow: 'hidden',
+    },
+    icon: {
+        fontSize: 32,
+        color: '#ffff',
+        marginRight: 18, 
+    },
+    welcomeText: {
+        fontSize: 28,
+        fontFamily: 'BebasNeue',
+        color: '#ffc107',
+    },
+    welcomeName: {
+        fontSize: 28,
+        fontFamily: 'BebasNeue',
+        color: '#dc3545',
+    },
+    textInfo: {
+        margin: 30,
+        fontSize: 15,
+        color: '#ffffff',
+        marginBottom: 25,
+        fontFamily: 'BebasNeue',
+    },
+    title: {
+        textAlign: 'center',
+        fontSize: 30,
+        fontFamily: 'BebasNeue',
+        color: '#ffffff',
+        marginTop: 40,
+    },
+    card: {
+        width: 320,
+        height: 400,
+        borderRadius: 20,
+        margin: 30,
+        justifyContent: 'center',
+        overflow: 'hidden',
+        backgroundColor: '#212529',
+        borderWidth: 2,
+        borderColor: '#ffffff',
+    },
+    image: {
+        width: 120,
+        height: 120,
+        marginBottom: 10,
+        alignSelf: 'center',
+        borderRadius: 50,
+        borderWidth: 2,
+        borderColor: '#6c757d',
+    },
+    cardText: {
+        marginTop: 20,
+    },
+    cardClientServiceFhReserva: {
+        fontSize: 18,
+        color: '#ffc107',
+        marginLeft: 45,
+        fontFamily: 'BebasNeue',
+    },
+    cardText2: {
+        fontSize: 18,
+        color: '#ffffff',
+    },
+    botones: {
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginTop: 50,
+    },
+    button1: {
+        backgroundColor: '#28a745',
+        padding: 10,
+        borderRadius: 5,
+        marginRight: 10,
+    },
+    button2: {
+        backgroundColor: '#dc3545',
+        padding: 10,
+        borderRadius: 5,
+        marginRight: 10,
+    },
+    button3: {
+        backgroundColor: '#ffc107',
+        padding: 10,
+        borderRadius: 5,
+        marginRight: 10,
+    },
+    styleBtext: {
+        color: '#ffffff',
+        fontWeight: 'bold',
+    },
+});
+
+export default GestionReservas;

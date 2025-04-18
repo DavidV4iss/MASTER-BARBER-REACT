@@ -5,6 +5,7 @@ import { useFonts as useBebas, BebasNeue_400Regular } from '@expo-google-fonts/b
 import { Dimensions } from 'react-native';
 import Register from './Registro';
 import InicioAdmin from '../Admin/InicioAdmin';
+import GestionReservas from '../src/Views/barberos/GestionReservas';
 
 export default function Home() {
   const [currentScreen, setCurrentScreen] = useState('Home');
@@ -24,6 +25,9 @@ export default function Home() {
 
   if (currentScreen === 'admin') {
     return <InicioAdmin />;
+  }
+  if (currentScreen === 'gestionReservas') {
+    return <GestionReservas />;
   }
 
   return (
@@ -372,7 +376,7 @@ function Footer({ navigateTo }) {
       }} />
       <View style={styles.iconContainer}>
         <Icon name="user-circle" size={Dimensions.get('window').width * 0.08} color="#ffffff" onPress={() => navigateTo('register')} />
-        <Icon name="calendar" size={Dimensions.get('window').width * 0.08} color="#ffffff" />
+        <Icon name="calendar" size={Dimensions.get('window').width * 0.08} color="#ffffff" onPress={() => navigateTo('gestionReservas')} />
         <Icon name="bars" size={Dimensions.get('window').width * 0.08} color="#ffffff" onPress={() => navigateTo('admin')} />
       </View>
     </View>
