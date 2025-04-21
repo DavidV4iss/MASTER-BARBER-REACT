@@ -35,9 +35,7 @@ export default function NavbarIndex() {
                                 <li class="nav-item">
                                     <a class="nav-link active mt-3" href="#turno"><i class="bi bi-calendar mx-3"></i>¿Por Que Reservar Con Nosotros?</a>
                                 </li>
-                                <li class="nav-item">
-                                    <a class="nav-link active mt-3" href="#galeria"><i class="bi bi-image mx-3"></i>Nuestra Galeria</a>
-                                </li>
+                               
                                 <li class="nav-item">
                                     <a class="nav-link active mt-3" href="#ubicacion"><i class="bi bi-geo-alt mx-3"></i>Ubicacion</a>
                                 </li>

@@ -6,7 +6,6 @@ import { View, Text, StyleSheet, Image, ActivityIndicator, TouchableOpacity, Scr
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 const GestionReservas = () => {
-    const [sidebarVisible, setSidebarVisible] = React.useState(false);
     const [fontsLoaded] = useFonts({
         Anton: Anton_400Regular,
         BebasNeue: BebasNeue_400Regular,
@@ -25,8 +24,8 @@ const GestionReservas = () => {
         <ScrollView contentContainerStyle={styles.scrollContainer}>
             <View style={styles.container}>
                 <View style={styles.welcome}>
-                <Text style={styles.welcomeText}>Master Barber</Text>
-                <Icon style={styles.icon} name="user-circle" onPress={() => setSidebarVisible(true)}/>
+                <Text style={styles.MB}>Master Barber</Text>
+                <Icon style={styles.icon} name="user-circle" onPress={() => {}} />
                 </View>
                 <Text style={styles.welcomeText}>
                     BIENVENIDO BARBERO
@@ -125,25 +124,31 @@ const styles = StyleSheet.create({
         width: '100%',
         height: 80,
         marginTop: 40,
-        marginBottom: 50,
+        marginBottom: 30,
         borderRadius: 0,
         overflow: 'hidden',
     },
-    icon: {
-        fontSize: 32,
-        color: '#ffff',
-        marginLeft: 100, 
-    },
-    welcomeText: {
+    MB: {
         fontSize: 28,
         fontFamily: 'BebasNeue',
         color: '#ffc107',
         textAlign: 'center',
     },
+    icon: {
+        fontSize: 32,
+        color: '#ffff',
+        marginLeft: 140, 
+    },
+    welcomeText: {
+        fontSize: 32,
+        fontFamily: 'BebasNeue',
+        color: '#dc3545',
+        textAlign: 'center',
+    },
     welcomeName: {
         fontSize: 28,
         fontFamily: 'BebasNeue',
-        color: '#dc3545',
+        color: '#ffc107',
     },
     textInfo: {
         margin: 30,
