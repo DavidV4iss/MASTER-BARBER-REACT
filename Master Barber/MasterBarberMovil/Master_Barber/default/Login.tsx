@@ -6,7 +6,7 @@ import { useFonts } from "expo-font";
 import { Anton_400Regular } from "@expo-google-fonts/anton";
 import { BebasNeue_400Regular } from "@expo-google-fonts/bebas-neue";
 import axios from "axios";
-import Register from "./Registro"; // Asegúrate de que la ruta sea correcta
+import Register from "./Registro";
 import OlvidoContraseña from "./OlvidoContraseña";
 
 
@@ -38,7 +38,7 @@ export default function Login() {
 
   const handleLogin = async () => {
     try {
-      const response = await axios.post("http://localhost:8080/login", { email, password });
+      const response = await axios.post("http://192.168.20.15:8080/login", { email, password });
       const { token, user } = response.data;
 
       // Guardar el token en el almacenamiento local
@@ -54,10 +54,10 @@ export default function Login() {
   return (
     <View style={styles.container}>
       <Icon name="arrow-left" size={Dimensions.get('window').width * 0.05} color="#ffffff" onPress={() => navigateTo('register')} style={{
-                      marginTop: Dimensions.get('window').height * 0,
-                      marginRight: Dimensions.get('window').width * 0.8,
-                      marginBottom: Dimensions.get('window').height * 0.1
-                  }} />
+        marginTop: Dimensions.get('window').height * 0,
+        marginRight: Dimensions.get('window').width * 0.8,
+        marginBottom: Dimensions.get('window').height * 0.1
+      }} />
       <Text style={styles.title}>¡ Bienvenido ! </Text>
       <Image
         source={require("../assets/LOGO.png")}
