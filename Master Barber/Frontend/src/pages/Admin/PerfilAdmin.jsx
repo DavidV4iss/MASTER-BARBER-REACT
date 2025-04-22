@@ -21,7 +21,7 @@ export default function PerfilAdmin() {
   useEffect(() => {
     const fetchAdmin = async () => {
       try {
-        const res = await axios.get(`http://localhost:8081/traerUsuario/${email}`);
+        const res = await axios.get(`http://localhost:8080/traerUsuario/${email}`);
         setAdmin(res.data[0]);
         if (res.data[0].Foto) {
           setImagePreview(`/images/perfil/${res.data[0].Foto}`);
@@ -84,7 +84,7 @@ export default function PerfilAdmin() {
     setIsUpdating(true);
 
     try {
-      await axios.put(`http://localhost:8081/actualizarUsuario/${email}`, formData);
+      await axios.put(`http://localhost:8080/actualizarUsuario/${email}`, formData);
       Swal.fire({
         position: 'top-end',
         icon: 'success',
@@ -119,14 +119,14 @@ export default function PerfilAdmin() {
           </a>
           <div className="row justify-content-center align-items-center">
             <div className="col col-lg-6 bi-text-lg-center">
-            <img
-                  src={imagePreview || 'default-avatar.png'}
-                  alt="Imagen de perfil"
-                  className="img-fluid rounded-circle contenido3 mt-5 zoomhover2"
-                  style={{ width: '250px', height: '250px', objectFit: 'cover' }}
-                />
+              <img
+                src={imagePreview || 'default-avatar.png'}
+                alt="Imagen de perfil"
+                className="img-fluid rounded-circle contenido3 mt-5 zoomhover2"
+                style={{ width: '250px', height: '250px', objectFit: 'cover' }}
+              />
               <div className="mt-5">
-            
+
               </div>
             </div>
             <div className="col-12 col-lg-6 container">
@@ -139,7 +139,7 @@ export default function PerfilAdmin() {
                     className="col-sm-2 col-form-label text-white antonparabackend"
                   >
                     Nombre:
-                  </label> 
+                  </label>
                   <div className="col-sm-10">
                     <input
                       type="text"

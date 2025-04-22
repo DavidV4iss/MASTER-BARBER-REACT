@@ -68,7 +68,7 @@ export default function Reserva() {
     };
 
     useEffect(() => {
-        axios.get('http://localhost:8081/GetBarberos')
+        axios.get('http://localhost:8080/GetBarberos')
             .then(response => {
                 setBarberos(response.data);
             })
@@ -77,7 +77,7 @@ export default function Reserva() {
             });
 
         if (barberoId) {
-            axios.get(`http://localhost:8081/GetReservas/barbero/${barberoId}`)
+            axios.get(`http://localhost:8080/GetReservas/barbero/${barberoId}`)
                 .then(response => {
                     const horasOcupadas = response.data.map(reserva => new Date(reserva.fecha));
                     setHorasOcupadas(horasOcupadas);
@@ -87,7 +87,7 @@ export default function Reserva() {
                 });
         }
 
-        axios.get('http://localhost:8081/GetServicios')
+        axios.get('http://localhost:8080/GetServicios')
             .then(response => {
                 setServicios(response.data);
             })
@@ -114,7 +114,7 @@ export default function Reserva() {
         const formattedSelectedDate = moment(date).format('YYYY-MM-DD HH:mm:ss');
 
         try {
-            const response = await axios.get(`http://localhost:8081/GetReservas/barbero/${barberoId}`);
+            const response = await axios.get(`http://localhost:8080/GetReservas/barbero/${barberoId}`);
             const horasOcupadas = response.data.map(reserva => moment(reserva.fecha).format('YYYY-MM-DD HH:mm:ss'));
 
             if (horasOcupadas.includes(formattedSelectedDate)) {
@@ -131,7 +131,7 @@ export default function Reserva() {
                 return;
             }
 
-            await axios.post('http://localhost:8081/CrearReservas', {
+            await axios.post('http://localhost:8080/CrearReservas', {
                 cliente_id: id,
                 barbero_id: barberoId,
                 servicio: service,

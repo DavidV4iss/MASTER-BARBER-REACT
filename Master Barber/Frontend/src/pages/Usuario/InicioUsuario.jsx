@@ -17,7 +17,7 @@ export default function InicioUsuario() {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const res = await axios.get(`http://localhost:8081/traerUsuario/${email}`);
+        const res = await axios.get(`http://localhost:8080/traerUsuario/${email}`);
         setUser(res.data[0]);
       } catch (err) {
         console.log("Error al obtener los datos:", err);
@@ -43,7 +43,7 @@ export default function InicioUsuario() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post("http://localhost:8081/Createcalificaciones", nuevaCalificacion);
+      const res = await axios.post("http://localhost:8080/Createcalificaciones", nuevaCalificacion);
       if (res.status === 200) {
         Swal.fire({
           title: "Calificación enviada",
@@ -88,8 +88,8 @@ export default function InicioUsuario() {
           Hola, {user.nombre_usuario}
         </h1>
 
-    <ReservaCliente />
-        
+        <ReservaCliente />
+
 
         <div className="container text-white text-center">
           <div className="container-fluid  p-5 mt-5 ">

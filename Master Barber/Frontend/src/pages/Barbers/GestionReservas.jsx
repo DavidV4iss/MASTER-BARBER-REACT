@@ -23,7 +23,7 @@ export default function GestionReservas() {
     const email = usuario.email;
 
     useEffect(() => {
-        axios.get(`http://localhost:8081/GetReservas/barbero/${id}`)
+        axios.get(`http://localhost:8080/GetReservas/barbero/${id}`)
             .then(response => {
                 setReservas(response.data);
             })
@@ -31,14 +31,14 @@ export default function GestionReservas() {
                 console.error('Hubo un error al obtener las reservas:', error);
             });
 
-        axios.get(`http://localhost:8081/traerUsuario/${email}`)
+        axios.get(`http://localhost:8080/traerUsuario/${email}`)
             .then(response => {
                 setBarber(response.data[0]);
             })
             .catch(error => {
                 console.error('Hubo un error al obtener los datos del barbero:', error);
             });
-        axios.get('http://localhost:8081/GetServicios')
+        axios.get('http://localhost:8080/GetServicios')
             .then(response => {
                 setServicios(response.data);
             })
@@ -46,7 +46,7 @@ export default function GestionReservas() {
                 console.error('Hubo un error al obtener los servicios:', error);
             });
 
-        axios.get('http://localhost:8081/GetClientes')
+        axios.get('http://localhost:8080/GetClientes')
             .then(response => {
                 setClientes(response.data);
             })
@@ -57,7 +57,7 @@ export default function GestionReservas() {
 
     const handleAccept = (id) => {
         setIsLoadingAccept(true);
-        axios.patch(`http://localhost:8081/UpdateReservasEstado/${id}`, { estado: 'Aceptada' })
+        axios.patch(`http://localhost:8080/UpdateReservasEstado/${id}`, { estado: 'Aceptada' })
             .then(response => {
                 console.log(response.data);
                 setReservas(reservas.map(reserva => reserva.id_reserva === id ? { ...reserva, estado: 'Aceptada' } : reserva));
@@ -81,7 +81,7 @@ export default function GestionReservas() {
 
     const handleCancel = (id) => {
         setIsLoadingCancel(true);
-        axios.patch(`http://localhost:8081/UpdateReservasEstado/${id}`, { estado: 'Cancelada' })
+        axios.patch(`http://localhost:8080/UpdateReservasEstado/${id}`, { estado: 'Cancelada' })
             .then(response => {
                 console.log(response.data);
                 setReservas(reservas.map(reserva => reserva.id_reserva === id ? { ...reserva, estado: 'Cancelada' } : reserva));
@@ -103,7 +103,7 @@ export default function GestionReservas() {
 
     const handleFinalize = (id) => {
         setIsLoadingFinal(true);
-        axios.patch(`http://localhost:8081/UpdateReservasEstado/${id}`, { estado: 'finalizada' })
+        axios.patch(`http://localhost:8080/UpdateReservasEstado/${id}`, { estado: 'finalizada' })
             .then(response => {
                 console.log(response.data);
                 setReservas(reservas.map(reserva => reserva.id_reserva === id ? { ...reserva, estado: 'finalizada' } : reserva));
@@ -118,7 +118,7 @@ export default function GestionReservas() {
     };
 
     const handleDelete = (id) => {
-        axios.delete(`http://localhost:8081/DeleteReserva/${id}`)
+        axios.delete(`http://localhost:8080/DeleteReserva/${id}`)
             .then(response => {
                 console.log(response.data);
                 setReservas(reservas.filter(reserva => reserva.id_reserva !== id));

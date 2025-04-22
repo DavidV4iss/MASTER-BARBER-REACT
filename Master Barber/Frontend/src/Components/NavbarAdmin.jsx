@@ -22,7 +22,7 @@ export default function NavbarAdmin() {
   useEffect(() => {
     const fetchAdmin = async () => {
       try {
-        const res = await axios.get(`http://localhost:8081/traerUsuario/${email}`);
+        const res = await axios.get(`http://localhost:8080/traerUsuario/${email}`);
         setAdmin(res.data[0]);
         if (res.data[0].Foto) {
           setImagePreview(`/images/perfil/${res.data[0].Foto}`);

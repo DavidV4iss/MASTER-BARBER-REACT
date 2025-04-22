@@ -14,7 +14,6 @@ import EnvEmail from './pages/default/EnvEmail';
 import Cambiarpasscod from './pages/default/Cambiarpasscod';
 import InicioUsuario from './pages/Usuario/InicioUsuario';
 import PerfilAdmin from './pages/Admin/PerfilAdmin';
-import ConfiguracionAdmin from './pages/Admin/ConfiguracionAdmin';
 import PerfilBarber from "./pages/Barbers/PerfilBarber";
 import PerfilUser from "./pages/Usuario/PerfilUser";
 import GestionReservas from './pages/Barbers/GestionReservas';
@@ -76,7 +75,7 @@ function App() {
               path="/Inventario"
               element={<PrivateRoute roles={["1"]} element={<Inventario />} />}
             />
-          
+
             <Route
               exact
               path="/Gestiondeinventario"
@@ -88,13 +87,6 @@ function App() {
               exact
               path="/PerfilAdmin"
               element={<PrivateRoute roles={["1"]} element={<PerfilAdmin />} />}
-            />
-            <Route
-              exact
-              path="/ConfiguracionAdmin"
-              element={
-                <PrivateRoute roles={["1"]} element={<ConfiguracionAdmin />} />
-              }
             />
             {/* FIN RUTAS PRIVDAS ADMINISTRADOR*/}
 
@@ -121,7 +113,7 @@ function App() {
               element={<PrivateRoute roles={["2"]} element={<GestionReservas />} />}
             />
 
-          
+
             {/* FIN RUTAS PRIVADAS BARBEROS */}
 
 

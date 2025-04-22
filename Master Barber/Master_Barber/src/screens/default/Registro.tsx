@@ -29,9 +29,7 @@ export default function Register() {
     }
     const handleSubmit = async () => {
         try {
-            console.log(user);
             const response = await AuthService.registrar(user);
-            console.log(response);
             if (response.status == 200) {
                 alert("El usuario se ha registrado correctamente.");
                 navigation.navigate("LoginScreen");

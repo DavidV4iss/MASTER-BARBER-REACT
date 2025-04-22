@@ -1,15 +1,17 @@
 import React, { useState } from "react";
 import { StyleSheet, Text, TextInput, TouchableOpacity, View, Image, Alert, Dimensions } from "react-native";
-import AsyncStorage from "@react-native-async-storage/async-storage"; // Corrección de importación
 import { useFonts } from "expo-font";
 import { Anton_400Regular } from "@expo-google-fonts/anton";
 import { BebasNeue_400Regular } from "@expo-google-fonts/bebas-neue";
-import axios from "axios";
 import { useNavigation } from "@react-navigation/native";
 import DefaultLayout from "../../Layouts/DefaultLayout";
+import useAuth from "../../hooks/useAuth";
+import { showMessage } from "react-native-flash-message";
 
 export default function Login() {
-  
+
+  const { login } = useAuth()
+
   const navigation = useNavigation();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -23,63 +25,65 @@ export default function Login() {
     return null;
   }
 
-
   const handleLogin = async () => {
-    try {
-      const response = await axios.post("http://localhost:8080/login", { email, password });
-      const { token, user } = response.data;
-
-      // Guardar el token en el almacenamiento local
-      await AsyncStorage.setItem("authToken", token);
-      Alert.alert("Inicio de sesión exitoso", `Bienvenido, ${user.email}`);
-      console.log("Token:", token);
-    } catch (err: any) {
-      const errorMessage = err.response?.data?.error || "Error al iniciar sesión";
-      Alert.alert("Error", errorMessage);
+    if (!email || !password) {
+      const msg = "Todos los campos son obligatorios";
+      showMessage({
+        message: "Error",
+        description: msg,
+        type: "warning",
+        icon: "warning",
+      });
+      return;
     }
+    const user = {
+      email,
+      password,
+    }
+    await login(user);
   };
 
   return (
     <DefaultLayout>
-    <View style={styles.container}>
-      <Text style={styles.title}>¡ Bienvenido ! </Text>
-      <Image
-        source={require("../../assets/logo.png")}
-        style={styles.logo}
-      />
-      <Text style={styles.subtitle}>Inicia Sesión</Text>
-      <TextInput
-        style={styles.input}
-        placeholder="Correo electrónico"
-        placeholderTextColor="#fff"
-        value={email}
-        onChangeText={setEmail}
-        keyboardType="email-address"
-        autoCapitalize="none"
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Contraseña"
-        placeholderTextColor="#fff"
-        value={password}
-        onChangeText={setPassword}
-        secureTextEntry
-      />
-      <Text style={styles.registrate} >
-        ¿No tienes una cuenta?{" "}
-        <Text style={styles.link} onPress={() => navigation.navigate('RegistrarScreen')}>
-          Regístrate
+      <View style={styles.container}>
+        <Text style={styles.title}>¡ Bienvenido ! </Text>
+        <Image
+          source={require("../../assets/logo.png")}
+          style={styles.logo}
+        />
+        <Text style={styles.subtitle}>Inicia Sesión</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="Correo electrónico"
+          placeholderTextColor="#fff"
+          value={email}
+          onChangeText={setEmail}
+          keyboardType="email-address"
+          autoCapitalize="none"
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="Contraseña"
+          placeholderTextColor="#fff"
+          value={password}
+          onChangeText={setPassword}
+          secureTextEntry
+        />
+        <Text style={styles.registrate} >
+          ¿No tienes una cuenta?{" "}
+          <Text style={styles.link} onPress={() => navigation.navigate('RegistrarScreen')}>
+            Regístrate
+          </Text>
         </Text>
-      </Text>
-      <Text
-        style={styles.olvidopassword}
-        onPress={() => navigation.navigate('OlvidoContraseñaScreen')}
-      >
-        ¿Olvidaste tu contraseña?
-      </Text>
-      <TouchableOpacity style={styles.button} onPress={handleLogin}>
-        <Text style={styles.buttonText}>Ingresar</Text>
-      </TouchableOpacity>
+        <Text
+          style={styles.olvidopassword}
+          onPress={() => navigation.navigate('OlvidoContraseñaScreen')}
+        >
+          ¿Olvidaste tu contraseña?
+        </Text>
+        <TouchableOpacity style={styles.button} onPress={handleLogin}>
+          <Text style={styles.buttonText}>Ingresar</Text>
+        </TouchableOpacity>
       </View>
     </DefaultLayout>
   );

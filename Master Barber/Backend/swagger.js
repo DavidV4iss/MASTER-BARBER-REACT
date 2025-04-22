@@ -9,9 +9,9 @@ const doc = {
         title: 'Master Barber VIP',
         description: 'HELLO WORLD',
     },
-    host: 'localhost:8081',
+    host: 'localhost:8080',
     schemes: ['http'],
-        
+
 };
 
 swaggerAutogen()(outputFile, endpointsFiles, doc);

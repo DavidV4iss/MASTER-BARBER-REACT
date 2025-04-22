@@ -11,7 +11,7 @@ export default function CalificacionesUserD() {
     useEffect(() => {
         const fetchCalificaciones = async () => {
             try {
-                const res = await axios.get("http://localhost:8081/traerCalificaciones");
+                const res = await axios.get("http://localhost:8080/traerCalificaciones");
                 setCalificaciones(res.data);
             } catch (err) {
                 console.log("Error al obtener las calificaciones:", err);
@@ -23,7 +23,7 @@ export default function CalificacionesUserD() {
     useEffect(() => {
         const fetchUsuarios = async () => {
             try {
-                const res = await axios.get("http://localhost:8081/traerUsuarios");
+                const res = await axios.get("http://localhost:8080/traerUsuarios");
                 setUsuarios(res.data);
             } catch (err) {
                 console.log("Error al obtener los usuarios:", err);
@@ -54,7 +54,7 @@ export default function CalificacionesUserD() {
             if (!confirm.isConfirmed) {
                 return;
             }
-            const res = await axios.delete(`http://localhost:8081/DeleteCalificaciones/${id}`);
+            const res = await axios.delete(`http://localhost:8080/DeleteCalificaciones/${id}`);
             console.log(res);
             if (res.status === 200) {
                 Swal.fire({

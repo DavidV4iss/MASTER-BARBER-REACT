@@ -2,7 +2,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export const storeToken = async (token) => {
     try {
-        await AsyncStorage.setItem('Token', token);
+        await AsyncStorage.setItem('token', token);
     } catch (error) {
         console.error('Error al guardar el token:', error);
     }
@@ -10,7 +10,7 @@ export const storeToken = async (token) => {
 
 export const getToken = async () => {
     try {
-        return await AsyncStorage.getItem('Token');
+        return await AsyncStorage.getItem('token');
     } catch (error) {
         console.error('Error al obtener el token:', error);
         return null;
@@ -19,7 +19,7 @@ export const getToken = async () => {
 
 export const removeToken = async () => {
     try {
-        await AsyncStorage.removeItem('Token');
+        await AsyncStorage.removeItem('token');
     } catch (error) {
         console.error('Error al eliminar el token:', error);
     }

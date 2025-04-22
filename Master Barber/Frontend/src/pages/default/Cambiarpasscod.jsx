@@ -47,7 +47,7 @@ export default function Cambiarpasscod() {
         e.preventDefault();
         const verificaCode = iNPU.join('');
         try {
-            const res = await axios.post(`http://localhost:8081/cambiarpasscod`, {...user,verificaCode});
+            const res = await axios.post(`http://localhost:8080/cambiarpasscod`, { ...user, verificaCode });
             if (res.status === 200) {
                 Swal.fire({
                     title: 'Se a restablecido la contraseña exitosamente',

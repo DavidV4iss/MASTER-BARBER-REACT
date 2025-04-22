@@ -11,7 +11,7 @@ export default function InicioAdmin() {
     useEffect(() => {
         const fetchBarberos = async () => {
             try {
-                const res = await axios.get("http://localhost:8081/GetBarberos");
+                const res = await axios.get("http://localhost:8080/GetBarberos");
                 setBarberos(res.data);
             } catch (err) {
                 console.log("Error al obtener los datos:", err);

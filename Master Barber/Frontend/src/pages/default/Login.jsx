@@ -13,7 +13,7 @@ export default function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post('http://localhost:8081/login', { email, password });
+      const res = await axios.post('http://localhost:8080/login', { email, password });
 
       if (res.status === 200) {
         const { token, user } = res.data; // Extraer el token y el usuario de la respuesta
@@ -142,7 +142,7 @@ export default function Login() {
                     className=" bg-white border rounded-end"
                   >
                     {isPasswordVisible ? " 🙉" : "🙈"} {/* Iconos o texto */}
-                  </button>                  
+                  </button>
                 </div>
 
                 <div className=" text-center">

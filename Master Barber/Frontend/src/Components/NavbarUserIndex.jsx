@@ -12,7 +12,7 @@ export default function NavbarUserIndex() {
 
   const fetchNotificaciones = async () => {
     try {
-      const res = await axios.get(`http://localhost:8081/GetNotificaciones/${user.id_usuario}`);
+      const res = await axios.get(`http://localhost:8080/GetNotificaciones/${user.id_usuario}`);
       setNotificaciones(res.data);
     } catch (err) {
       console.error("Error al obtener las notificaciones:", err);
@@ -33,7 +33,7 @@ export default function NavbarUserIndex() {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const res = await axios.get(`http://localhost:8081/traerUsuario/${email}`);
+        const res = await axios.get(`http://localhost:8080/traerUsuario/${email}`);
         setUser(res.data[0]);
         if (res.data[0].Foto) {
           setImagePreview(`/images/perfil/${res.data[0].Foto}`);
@@ -127,7 +127,7 @@ export default function NavbarUserIndex() {
 
   const deleteNotification = async (id) => {
     try {
-      await axios.delete(`http://localhost:8081/DeleteNotificacion/${id}`);
+      await axios.delete(`http://localhost:8080/DeleteNotificacion/${id}`);
       Swal.fire({
         title: "Notificación eliminada",
         text: "La notificación ha sido eliminada correctamente.",

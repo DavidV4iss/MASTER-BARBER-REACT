@@ -1,4 +1,4 @@
-import React , { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
@@ -6,33 +6,33 @@ import { useNavigate } from "react-router-dom";
 
 export default function NavbarBarber() {
 
-   const navigate = useNavigate();
+  const navigate = useNavigate();
 
-   const [barber, setBarber] = useState({});
-   const [imagePreview, setImagePreview] = useState("");
-
-
-   const token = localStorage.getItem("token");
- 
+  const [barber, setBarber] = useState({});
+  const [imagePreview, setImagePreview] = useState("");
 
 
-   const usuario = JSON.parse(atob(token.split(".")[1]));
-   const email = usuario.email;
- 
-   useEffect(() => {
-     const fetchBarber = async () => {
-       try {
-         const res = await axios.get(`http://localhost:8081/traerUsuario/${email}`);
-         setBarber(res.data[0]);
-         if (res.data[0].Foto) {
-           setImagePreview(`/images/perfil/${res.data[0].Foto}`);
-         }
-       } catch (err) {
-         console.log("Error al obtener los datos:", err);
-       }
-     };
-     fetchBarber();
-   }, [email]);
+  const token = localStorage.getItem("token");
+
+
+
+  const usuario = JSON.parse(atob(token.split(".")[1]));
+  const email = usuario.email;
+
+  useEffect(() => {
+    const fetchBarber = async () => {
+      try {
+        const res = await axios.get(`http://localhost:8080/traerUsuario/${email}`);
+        setBarber(res.data[0]);
+        if (res.data[0].Foto) {
+          setImagePreview(`/images/perfil/${res.data[0].Foto}`);
+        }
+      } catch (err) {
+        console.log("Error al obtener los datos:", err);
+      }
+    };
+    fetchBarber();
+  }, [email]);
 
 
   const handleLogout = () => {

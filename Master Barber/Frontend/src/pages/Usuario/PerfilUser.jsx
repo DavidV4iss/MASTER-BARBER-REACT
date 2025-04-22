@@ -1,4 +1,4 @@
-import React , { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import axios from 'axios';
 import Swal from 'sweetalert2';
@@ -21,7 +21,7 @@ export default function PerfilUser() {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const res = await axios.get(`http://localhost:8081/traerUsuario/${email}`);
+        const res = await axios.get(`http://localhost:8080/traerUsuario/${email}`);
         setUser(res.data[0]);
         if (res.data[0].Foto) {
           setImagePreview(`/images/perfil/${res.data[0].Foto}`);
@@ -85,13 +85,13 @@ export default function PerfilUser() {
 
     try {
       await axios.put(
-        `http://localhost:8081/actualizarUsuario/${email}`,
+        `http://localhost:8080/actualizarUsuario/${email}`,
         formData
       );
       Swal.fire({
         position: "top-end",
         icon: "success",
-        iconColor: "#1bf30b", 
+        iconColor: "#1bf30b",
         title: "Perfil actualizado exitosamente.",
         showConfirmButton: false,
         timer: 2000,
@@ -186,7 +186,7 @@ export default function PerfilUser() {
                       id="inputGroupFileAddon04"
                       disabled={isUpdating}
                     >
-                      {isUpdating ? "Actualizando..." : "Actualizar"} 
+                      {isUpdating ? "Actualizando..." : "Actualizar"}
                     </button>
                   </div>
                 </div>

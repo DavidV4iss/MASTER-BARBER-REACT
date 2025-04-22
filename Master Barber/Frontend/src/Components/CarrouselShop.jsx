@@ -14,7 +14,7 @@ export default function CarrouselShop() {
     useEffect(() => {
         const fetchImages = async () => {
             try {
-                const res = await axios.get("http://localhost:8081/GetInventario");
+                const res = await axios.get("http://localhost:8080/GetInventario");
                 setImages(res.data);
             } catch (err) {
                 console.log("Error al obtener las calificaciones:", err);
@@ -77,7 +77,7 @@ export default function CarrouselShop() {
             </Swiper>
 
             {selectedImage && (
-                <div className="modal fade show bg-black" style={{ display: 'block'  }} tabIndex="-1">
+                <div className="modal fade show bg-black" style={{ display: 'block' }} tabIndex="-1">
                     <div className="modal-dialog ">
                         <div className="modal-content bg-black welcome-2 border border">
                             <div className="modal-header">
@@ -91,7 +91,7 @@ export default function CarrouselShop() {
                             </div>
                             <div className="modal-footer">
                                 <button type="button" className="btn btn-danger" onClick={handleCloseModal}>Close</button>
-                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

@@ -16,7 +16,7 @@ export default function Gestiondeinventario() {
     useEffect(() => {
         const getInventario = async () => {
             try {
-                const res = await axios.get("http://localhost:8081/GetInventario");
+                const res = await axios.get("http://localhost:8080/GetInventario");
                 setInventario(res.data);
             } catch (err) {
                 console.log("Error al obtener los datos:", err);
@@ -73,16 +73,16 @@ export default function Gestiondeinventario() {
 
             // Actualizar el inventario en el backend
             for (const producto of ventasConFecha) {
-                await axios.put(`http://localhost:8081/RestarInventario/${producto.id_producto}`, {
+                await axios.put(`http://localhost:8080/RestarInventario/${producto.id_producto}`, {
                     cantidad: producto.cantidad,
                 });
             }
 
             // Guardar las ventas en el backend
-            await axios.post('http://localhost:8081/GuardarVentas', ventasConFecha);
+            await axios.post('http://localhost:8080/GuardarVentas', ventasConFecha);
 
             // Recuperar las ventas actualizadas desde el backend
-            const res = await axios.get(`http://localhost:8081/GetVentas?rango=${rango}`);
+            const res = await axios.get(`http://localhost:8080/GetVentas?rango=${rango}`);
             setVentasProcesadas(res.data);
 
             Swal.fire({
@@ -113,7 +113,7 @@ export default function Gestiondeinventario() {
     useEffect(() => {
         const getVentas = async () => {
             try {
-                const res = await axios.get(`http://localhost:8081/GetVentas?rango=${rango}`);
+                const res = await axios.get(`http://localhost:8080/GetVentas?rango=${rango}`);
                 setVentasProcesadas(res.data);
             } catch (err) {
                 console.error('Error al obtener las ventas:', err);
@@ -170,7 +170,7 @@ export default function Gestiondeinventario() {
 
         // Configuración del PDF
         doc.setFontSize(18);
-        doc.text('Reporte De Ventas' , 10, 10 );
+        doc.text('Reporte De Ventas', 10, 10);
         doc.setFontSize(12);
         doc.text(`Rango: ${rango.charAt(0).toUpperCase() + rango.slice(1)}`, 10, 20);
 
@@ -206,7 +206,7 @@ export default function Gestiondeinventario() {
             <SidebarAdmin />
             <div className='mt-5 container mb-5'>
                 <p className='text-center text-white mt-5 display-6 bebas contenido '>HOLA, <span className='text-danger'>ADMINISTRADOR</span>| ESTE ES EL INVENTARIO DE LOS PRODUCTOS QUE SALEN DE LA BARBERIA</p>
-                <div className="col container d-flex justify-content-end mx-5 mt-5 pt-5">    
+                <div className="col container d-flex justify-content-end mx-5 mt-5 pt-5">
                     <select
                         className="form-select bg-dark text-white mx-5"
                         value={rango}
@@ -219,7 +219,7 @@ export default function Gestiondeinventario() {
                     </select>
                 </div>
                 <div className="container d-flex justify-content-end mx-1 mt-2">
-                    
+
                     <button onClick={generarPDF} className="btn btn-success bebas mt-3">
                         Generar PDF
                     </button>
@@ -241,7 +241,7 @@ export default function Gestiondeinventario() {
                             </Link>
                         ))}
                     </div>
-                    
+
                     <div className="col">
                         <table className="table-responsive table table-dark table-striped mt-5 mx-5">
                             <thead>
@@ -270,9 +270,9 @@ export default function Gestiondeinventario() {
                                 }
                             </tbody>
                         </table>
-                        
+
                         <div className="container row mx-5 mt-4">
-                          
+
                             <div className="col">
                                 <button className="btn btn-warning bebas">
                                     Total: ${calcularTotal().toFixed(2)}
@@ -284,7 +284,7 @@ export default function Gestiondeinventario() {
                                 </button>
                             </div>
                         </div>
-                        
+
                     </div>
                 </div>
                 <div className="mt-5 pt-5 row container mx-5 justify-content-center mx-5">

@@ -28,7 +28,7 @@ export default function Registro() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const res = await axios.post("http://localhost:8081/registrar", user);
+            const res = await axios.post("http://localhost:8080/registrar", user);
             if (res.status === 200) {
                 Swal.fire({
                     title: 'Cuenta creada',

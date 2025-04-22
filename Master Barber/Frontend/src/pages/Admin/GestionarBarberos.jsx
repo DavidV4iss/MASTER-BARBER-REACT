@@ -37,7 +37,7 @@ export default function GestionarBarberos() {
       formData.append('descripcion', barbero.descripcion);
       formData.append('foto', barbero.foto);
 
-      const res = await axios.post(`http://localhost:8081/CreateBarberos`, formData);
+      const res = await axios.post(`http://localhost:8080/CreateBarberos`, formData);
       if (res.status === 200) {
         Swal.fire({
           icon: 'success',
@@ -72,7 +72,7 @@ export default function GestionarBarberos() {
       formData.append('email', barberoEdit.email);
       formData.append('descripcion', barberoEdit.descripcion);
       formData.append('foto', barberoEdit.foto);
-      const res = await axios.put(`http://localhost:8081/UpdateBarberos/${barberoEdit.id_usuario}`, formData);
+      const res = await axios.put(`http://localhost:8080/UpdateBarberos/${barberoEdit.id_usuario}`, formData);
       if (res.status === 200) {
         Swal.fire({
           icon: 'success',
@@ -161,7 +161,7 @@ export default function GestionarBarberos() {
       if (!confirm.isConfirmed) {
         return;
       }
-      const res = await axios.delete(`http://localhost:8081/DeleteBarberos/${id}`);
+      const res = await axios.delete(`http://localhost:8080/DeleteBarberos/${id}`);
       console.log(res);
       if (res.status === 200) {
         Swal.fire({
@@ -190,7 +190,7 @@ export default function GestionarBarberos() {
 
   const fetchBarberos = async () => {
     try {
-      const res = await axios.get("http://localhost:8081/GetBarberos");
+      const res = await axios.get("http://localhost:8080/GetBarberos");
       setBarberos(res.data);
     } catch (err) {
       console.log("Error al obtener los datos:", err);

@@ -21,7 +21,7 @@ export default function EnvEmail() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const res = await axios.post("http://localhost:8081/EnvEmail", user);
+            const res = await axios.post("http://localhost:8080/EnvEmail", user);
             if (res.status === 200) {
                 Swal.fire({
                     title: 'El Codigo Fue Enviado A Tu Correo',

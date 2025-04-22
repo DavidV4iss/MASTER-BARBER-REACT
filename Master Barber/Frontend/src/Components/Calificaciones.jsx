@@ -11,7 +11,7 @@ export default function Calificaciones() {
   useEffect(() => {
     const fetchCalificaciones = async () => {
       try {
-        const res = await axios.get("http://localhost:8081/traerCalificaciones");
+        const res = await axios.get("http://localhost:8080/traerCalificaciones");
         setCalificaciones(res.data);
       } catch (err) {
         console.log("Error al obtener las calificaciones:", err);
@@ -23,7 +23,7 @@ export default function Calificaciones() {
   useEffect(() => {
     const fetchUsuarios = async () => {
       try {
-        const res = await axios.get("http://localhost:8081/traerUsuarios");
+        const res = await axios.get("http://localhost:8080/traerUsuarios");
         setUsuarios(res.data);
       } catch (err) {
         console.log("Error al obtener los usuarios:", err);
@@ -44,7 +44,7 @@ export default function Calificaciones() {
       <div className="row row-cols-1 row-cols-md-5 g-4">
         {calificaciones.map((calificacion) => (
           <div className="col" key={calificacion.id}>
-            <div className="card h-100 bg-dark card-calificacion"  onClick={() => handleShow(calificacion)}>
+            <div className="card h-100 bg-dark card-calificacion" onClick={() => handleShow(calificacion)}>
               <div className="card-body">
                 <img
                   src={`/images/perfil/${usuarios.find((user) => user.id_usuario === calificacion.usuario_id)?.Foto}`}
@@ -71,13 +71,13 @@ export default function Calificaciones() {
             <img
               src={`/images/perfil/${usuarios.find((user) => user.id_usuario === selectedCalificacion.usuario_id)?.Foto}`}
               className="img-fluid rounded-circle mx-auto d-block mt-3"
-              style={{ width: "70px", height: "70px", objectFit: "cover" }} 
+              style={{ width: "70px", height: "70px", objectFit: "cover" }}
             />
             <p className='text-center mt-3'>{selectedCalificacion.comentario}</p>
-            <p className='text-center'>{"⭐".repeat(selectedCalificacion.puntuacion)}</p> 
+            <p className='text-center'>{"⭐".repeat(selectedCalificacion.puntuacion)}</p>
           </Modal.Body>
           <Modal.Footer className='bg-dark'>
-            <Button variant="danger"  className='bebas' onClick={handleClose}>
+            <Button variant="danger" className='bebas' onClick={handleClose}>
               Cerrar
             </Button>
           </Modal.Footer>

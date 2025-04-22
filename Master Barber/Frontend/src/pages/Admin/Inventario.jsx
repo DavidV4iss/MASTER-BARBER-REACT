@@ -50,7 +50,7 @@ export default function Inventario() {
             formData.append('foto', producto.foto);
             formData.append('PrecioUnitario', producto.PrecioUnitario);
 
-            const res = await axios.post(`http://localhost:8081/CreateInventario`, formData);
+            const res = await axios.post(`http://localhost:8080/CreateInventario`, formData);
             if (res.status === 200) {
                 Swal.fire({
                     icon: 'success',
@@ -89,7 +89,7 @@ export default function Inventario() {
             formData.append('foto', productoEditar.foto);
             formData.append('PrecioUnitario', productoEditar.PrecioUnitario);
 
-            const res = await axios.put(`http://localhost:8081/UpdateInventario/${productoEditar.id_producto}`, formData);
+            const res = await axios.put(`http://localhost:8080/UpdateInventario/${productoEditar.id_producto}`, formData);
             if (res.status === 200) {
                 Swal.fire({
                     icon: 'success',
@@ -177,7 +177,7 @@ export default function Inventario() {
             if (!confirm.isConfirmed) {
                 return;
             }
-            const res = await axios.delete(`http://localhost:8081/DeleteInventario/${id}`);
+            const res = await axios.delete(`http://localhost:8080/DeleteInventario/${id}`);
             console.log(res);
             if (res.status === 200) {
                 Swal.fire({
@@ -207,8 +207,8 @@ export default function Inventario() {
         const fetchData = async () => {
             try {
                 const [inventarioRes, categoriasRes] = await Promise.all([
-                    axios.get(`http://localhost:8081/GetInventario`),
-                    axios.get(`http://localhost:8081/categorias`),
+                    axios.get(`http://localhost:8080/GetInventario`),
+                    axios.get(`http://localhost:8080/categorias`),
                 ]);
                 setInventario(inventarioRes.data);
                 setCategorias(categoriasRes.data);
@@ -237,7 +237,7 @@ export default function Inventario() {
                     </div>
                     <div className='container text-center'>
                         <div className="table-responsive">
-                            <table class="table  table-bordered table-responsive table-dark table-hover mt-4 container p-5"> 
+                            <table class="table  table-bordered table-responsive table-dark table-hover mt-4 container p-5">
                                 <thead>
                                     <tr>
                                         <th scope="col" className=' bebas p-4 text-danger'>ID Producto</th>
@@ -249,7 +249,7 @@ export default function Inventario() {
                                         <th scope="col" className=' bebas p-4  fs-3'>Fecha Y Hora</th>
                                         <th scope="col" className=' bebas p-4 fs-3'>Imagen</th>
                                         <th scope="col" className=' bebas p-4 fs-3'>Costo de venta</th>
-                                        <th  scope="col" className=' bebas p-4 text-warning fs-3'>Acciones</th>
+                                        <th scope="col" className=' bebas p-4 text-warning fs-3'>Acciones</th>
                                     </tr>
                                 </thead>
                                 <tbody className='p-5'>
@@ -299,51 +299,51 @@ export default function Inventario() {
                                         </div>
                                     </div>
                                     <div class="modal-body">
-                                            <div class="mb-3">
+                                        <div class="mb-3">
                                             <label for="recipient-name" class="col-form-label text-white  antonparabackend ">Nombre:</label>
-                                                <input type="text" value={productoEditar.nombre} class="form-control bg-dark text-white" id="recipient-name" name='nombre' onChange={handleChangeEdit} />
-                                            </div>
-                                            <div class="mb-3">
+                                            <input type="text" value={productoEditar.nombre} class="form-control bg-dark text-white" id="recipient-name" name='nombre' onChange={handleChangeEdit} />
+                                        </div>
+                                        <div class="mb-3">
                                             <label for="recipient-name" class="col-form-label text-white antonparabackend">Descripcion:</label>
-                                                <input type="text" value={productoEditar.descripcion_P} class="form-control bg-dark text-white" id="recipient-name" name='descripcion_P' onChange={handleChangeEdit} />
-                                            </div>
-                                            <div class="mb-3">
+                                            <input type="text" value={productoEditar.descripcion_P} class="form-control bg-dark text-white" id="recipient-name" name='descripcion_P' onChange={handleChangeEdit} />
+                                        </div>
+                                        <div class="mb-3">
                                             <label for="recipient-name" class="col-form-label text-white  antonparabackend">Cantidad:</label>
-                                                <input type="text" value={productoEditar.cantidad} class="form-control bg-dark text-white" id="recipient-name" name='cantidad' onChange={handleChangeEdit} />
-                                            </div >
-                                            <div class="mb-3">
+                                            <input type="text" value={productoEditar.cantidad} class="form-control bg-dark text-white" id="recipient-name" name='cantidad' onChange={handleChangeEdit} />
+                                        </div >
+                                        <div class="mb-3">
                                             <label for="recipient-name" class="col-form-label text-white  antonparabackend">Categoria:</label>
-                                                <select name="id_categoria_producto" value={productoEditar.id_categoria_producto} class="form-select bg-dark text-white" id="" onChange={handleChangeEdit}>
-                                                    <option selected disabled>Seleccione una categoria</option>
-                                                    {categorias.map((item) => (
-                                                        <option key={item.id_categoria} value={item.id_categoria_producto}>{item.categoria}</option>
-                                                    ))}
-                                                </select>
+                                            <select name="id_categoria_producto" value={productoEditar.id_categoria_producto} class="form-select bg-dark text-white" id="" onChange={handleChangeEdit}>
+                                                <option selected disabled>Seleccione una categoria</option>
+                                                {categorias.map((item) => (
+                                                    <option key={item.id_categoria} value={item.id_categoria_producto}>{item.categoria}</option>
+                                                ))}
+                                            </select>
                                         </div>
                                         <div class="mb-3">
                                             <label for="recipient-name" class="col-form-label text-white  antonparabackend">Proveedor:</label>
                                             <input type="text" value={productoEditar.proveedor} class="form-control bg-dark text-white" id="recipient-name" name='proveedor' onChange={handleChangeEdit} />
                                         </div>
-                                            <div class="mb-3">
+                                        <div class="mb-3">
                                             <label for="recipient-name" class="col-form-label text-white antonparabackend">Fecha Y Hora De Venta</label>
-                                                <input type="datetime-local" class="form-control bg-dark text-white" id="recipient-name" name='fecha_venta' onChange={handleChangeEdit} />
-                                            </div>
-                                            <p className="text-white antonparabackend">Editar Imagen</p>
-                                            <div className="input-group">
-                                                <input
-                                                    name="foto"
-                                                    accept="image/*"
-                                                    type="file"
-                                                    className="form-control bg-dark text-white"
-                                                    id="inputGroupFile04"
-                                                    onChange={handleFileChangeEdit}
-                                                />
-                                            </div>
-                                            <div class="mb-3">
-                                            <label for="recipient-name" class="col-form-label text-white  antonparabackend">Costo de venta:</label>
-                                                <input value={productoEditar.PrecioUnitario} type="text" class="form-control bg-dark text-white" id="recipient-name" name='PrecioUnitario' onChange={handleChangeEdit} />
-                                            </div>
+                                            <input type="datetime-local" class="form-control bg-dark text-white" id="recipient-name" name='fecha_venta' onChange={handleChangeEdit} />
                                         </div>
+                                        <p className="text-white antonparabackend">Editar Imagen</p>
+                                        <div className="input-group">
+                                            <input
+                                                name="foto"
+                                                accept="image/*"
+                                                type="file"
+                                                className="form-control bg-dark text-white"
+                                                id="inputGroupFile04"
+                                                onChange={handleFileChangeEdit}
+                                            />
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="recipient-name" class="col-form-label text-white  antonparabackend">Costo de venta:</label>
+                                            <input value={productoEditar.PrecioUnitario} type="text" class="form-control bg-dark text-white" id="recipient-name" name='PrecioUnitario' onChange={handleChangeEdit} />
+                                        </div>
+                                    </div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" >Cerrar</button>
                                         <button type="sumbit" class="btn btn-danger ">Editar</button>

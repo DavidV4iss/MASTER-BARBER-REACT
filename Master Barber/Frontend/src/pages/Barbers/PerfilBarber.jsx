@@ -1,4 +1,4 @@
-import React , { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import axios from 'axios';
 import Swal from 'sweetalert2';
@@ -8,7 +8,7 @@ import { useNavigate } from 'react-router-dom';
 export default function PerfilBarber() {
 
   const navigate = useNavigate();
-  
+
   const [barber, setBarber] = useState({});
   const [file, setFile] = useState(null);
   const [imagePreview, setImagePreview] = useState("");
@@ -21,7 +21,7 @@ export default function PerfilBarber() {
   useEffect(() => {
     const fetchBarber = async () => {
       try {
-        const res = await axios.get(`http://localhost:8081/traerUsuario/${email}`);
+        const res = await axios.get(`http://localhost:8080/traerUsuario/${email}`);
         setBarber(res.data[0]);
         if (res.data[0].Foto) {
           setImagePreview(`/images/perfil/${res.data[0].Foto}`);
@@ -85,7 +85,7 @@ export default function PerfilBarber() {
 
     try {
       await axios.put(
-        `http://localhost:8081/actualizarUsuario/${email}`,
+        `http://localhost:8080/actualizarUsuario/${email}`,
         formData
       );
       Swal.fire({
