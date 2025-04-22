@@ -4,6 +4,7 @@ import { Dimensions } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { Anton_400Regular } from "@expo-google-fonts/anton";
 import { StyleSheet, Text, View, ScrollView, Image, TouchableOpacity } from 'react-native';
+import DefaultLayout from '../../Layouts/DefaultLayout';
 
 
 export default function InicioAdmin() {
@@ -20,6 +21,7 @@ export default function InicioAdmin() {
     }
 
     return (
+        <DefaultLayout>
         <View style={{ flex: 1, backgroundColor: '#212529' }}>
             {sidebarVisible && (
                 <View style={styles.sidebar}>
@@ -246,7 +248,8 @@ export default function InicioAdmin() {
                     </View>
                 </View>
             )}
-        </View>
+            </View>
+        </DefaultLayout>
     );
 }
 

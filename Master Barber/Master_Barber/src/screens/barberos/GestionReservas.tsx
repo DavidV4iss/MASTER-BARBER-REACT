@@ -4,6 +4,7 @@ import { useFonts } from 'expo-font';
 import React from 'react';
 import { View, Text, StyleSheet, Image, ActivityIndicator, TouchableOpacity, ScrollView, Dimensions } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import DefaultLayout from '../../Layouts/DefaultLayout';
 
 const GestionReservas = () => {
     const [fontsLoaded] = useFonts({
@@ -21,6 +22,7 @@ const GestionReservas = () => {
     }
 
     return (
+        <DefaultLayout>
         <ScrollView contentContainerStyle={styles.scrollContainer}>
             <View style={styles.container}>
                 <View style={styles.welcome}>
@@ -102,7 +104,8 @@ const GestionReservas = () => {
                     </View>
                 </View>
             </View>
-        </ScrollView>
+            </ScrollView>
+        </DefaultLayout>
     );
 };
 

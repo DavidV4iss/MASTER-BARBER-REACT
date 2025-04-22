@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import Icon from "react-native-vector-icons/FontAwesome"; // Import Icon from the appropriate library
 import { StyleSheet, Text, TextInput, TouchableOpacity, View, Image, Alert, Dimensions } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage"; // Corrección de importación
 import { useFonts } from "expo-font";
@@ -10,7 +9,7 @@ import { useNavigation } from "@react-navigation/native";
 import DefaultLayout from "../../Layouts/DefaultLayout";
 
 export default function Login() {
-
+  
   const navigation = useNavigation();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");

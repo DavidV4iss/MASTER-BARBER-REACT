@@ -22,26 +22,26 @@ const AuthStack = () => (
 export default function DefaultNavigator() {
     return (
         <Tab.Navigator
-        screenOptions={({ route }) => ({
-            headerShown: false,
-            tabBarStyle: {
-                backgroundColor: "#2B3035",
-                height: 60,
-                paddingBottom: 5,
-                borderTopColor: "#444",
-            },
-            tabBarIcon: ({ color, size, focused }) => {
-                let iconName;
-                if (route.name === "Inicio") {
-                    iconName = focused ? "home-sharp" : "home-outline";
-                } else if (route.name === "Auth") {
-                    iconName = focused ? "person-circle" : "person-circle-outline";
-                }
-                return <Ionicons name={iconName} size={size} color={color} />;
-            },
-            tabBarActiveTintColor: "white",
-            tabBarInactiveTintColor: "#B0B0B0",
-        })}
+            screenOptions={({ route }) => ({
+                headerShown: false,
+                tabBarStyle: {
+                    backgroundColor: "#2B3035",
+                    height: 60,
+                    paddingBottom: 5,
+                    borderTopColor: "#444",
+                },
+                tabBarIcon: ({ color, size, focused }) => {
+                    let iconName;
+                    if (route.name === "Inicio") {
+                        iconName = focused ? "home-sharp" : "home-outline";
+                    } else if (route.name === "Auth") {
+                        iconName = focused ? "person-circle" : "person-circle-outline";
+                    }
+                    return <Ionicons name={iconName} size={size} color={color} />;
+                },
+                tabBarActiveTintColor: "white",
+                tabBarInactiveTintColor: "#B0B0B0",
+            })}
         >
             <Tab.Screen name="Inicio" component={HomeScreen} />
             <Tab.Screen name="Auth" component={AuthStack} />

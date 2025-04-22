@@ -4,7 +4,6 @@ import { useFonts } from "expo-font";
 import { Anton_400Regular } from "@expo-google-fonts/anton";
 import { useNavigation } from "@react-navigation/native";
 import AuthService from "../../services/AuthService";
-import { showMessage } from "react-native-flash-message";
 import DefaultLayout from "../../Layouts/DefaultLayout";
 
 const { width, height } = Dimensions.get("window");
@@ -49,69 +48,69 @@ export default function Register() {
 
     return (
         <DefaultLayout>
-        <View style={styles.container}>
-            <Image
-                source={require("../../assets/logo.png")}
-                style={styles.logo}
-            />
-            <Text style={styles.subtitle}>Registro de Usuario</Text>
-            <TextInput
-                style={styles.input}
-                placeholder="Nombre de Usuario"
-                placeholderTextColor="#fff"
-                onChangeText={handleChange('nombre_usuario')}
-                value={user.nombre_usuario}
-            />
-            <TextInput
-                style={styles.input}
-                placeholder="Email"
-                placeholderTextColor="#fff"
-                keyboardType="email-address"
-                autoCapitalize="none"
-                onChangeText={handleChange('email')}
-                value={user.email}
-            />
-            <TextInput
-                style={styles.input}
-                placeholder="NIT"
-                placeholderTextColor="#fff"
-                keyboardType="numeric"
-                onChangeText={handleChange('nit')}
-                value={user.nit}
-            />
-            <TextInput
-                style={styles.input}
-                placeholder="Teléfono"
-                placeholderTextColor="#fff"
-                keyboardType="phone-pad"
-                onChangeText={handleChange('telefono')}
-                value={user.telefono}
-            />
-            <TextInput
-                style={styles.input}
-                placeholder="Contraseña"
-                placeholderTextColor="#fff"
-                secureTextEntry
-                onChangeText={handleChange('contraseña')}
-                value={user.contraseña}
-            />
-            <TextInput
-                style={styles.input}
-                placeholder="Confirmar Contraseña"
-                placeholderTextColor="#fff"
-                secureTextEntry
-                onChangeText={handleChange('confirmar_contraseña')}
-                value={user.confirmar_contraseña}
-            />
-            <Text style={styles.footerText}>
-                ¿Ya tienes cuenta?{" "}
-                <Text style={styles.link} onPress={() => navigation.navigate("LoginScreen")} >
-                    Inicia sesión
+            <View style={styles.container}>
+                <Image
+                    source={require("../../assets/logo.png")}
+                    style={styles.logo}
+                />
+                <Text style={styles.subtitle}>Registro de Usuario</Text>
+                <TextInput
+                    style={styles.input}
+                    placeholder="Nombre de Usuario"
+                    placeholderTextColor="#fff"
+                    onChangeText={handleChange('nombre_usuario')}
+                    value={user.nombre_usuario}
+                />
+                <TextInput
+                    style={styles.input}
+                    placeholder="Email"
+                    placeholderTextColor="#fff"
+                    keyboardType="email-address"
+                    autoCapitalize="none"
+                    onChangeText={handleChange('email')}
+                    value={user.email}
+                />
+                <TextInput
+                    style={styles.input}
+                    placeholder="NIT"
+                    placeholderTextColor="#fff"
+                    keyboardType="numeric"
+                    onChangeText={handleChange('nit')}
+                    value={user.nit}
+                />
+                <TextInput
+                    style={styles.input}
+                    placeholder="Teléfono"
+                    placeholderTextColor="#fff"
+                    keyboardType="phone-pad"
+                    onChangeText={handleChange('telefono')}
+                    value={user.telefono}
+                />
+                <TextInput
+                    style={styles.input}
+                    placeholder="Contraseña"
+                    placeholderTextColor="#fff"
+                    secureTextEntry
+                    onChangeText={handleChange('contraseña')}
+                    value={user.contraseña}
+                />
+                <TextInput
+                    style={styles.input}
+                    placeholder="Confirmar Contraseña"
+                    placeholderTextColor="#fff"
+                    secureTextEntry
+                    onChangeText={handleChange('confirmar_contraseña')}
+                    value={user.confirmar_contraseña}
+                />
+                <Text style={styles.footerText}>
+                    ¿Ya tienes cuenta?{" "}
+                    <Text style={styles.link} onPress={() => navigation.navigate("LoginScreen")} >
+                        Inicia sesión
+                    </Text>
                 </Text>
-            </Text>
-            <TouchableOpacity onPress={handleSubmit} style={styles.button} >
-                <Text style={styles.buttonText}>Registrar</Text>
-            </TouchableOpacity>
+                <TouchableOpacity onPress={handleSubmit} style={styles.button} >
+                    <Text style={styles.buttonText}>Registrar</Text>
+                </TouchableOpacity>
             </View>
         </DefaultLayout>
     );

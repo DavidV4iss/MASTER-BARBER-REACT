@@ -4,6 +4,7 @@ import { BebasNeue_400Regular } from '@expo-google-fonts/bebas-neue';
 import { useFonts } from 'expo-font';
 import Login from './Login';
 import { View, Text, StyleSheet, TextInput, TouchableOpacity, Image } from 'react-native';
+import DefaultLayout from '../../Layouts/DefaultLayout';
 
 const RestablecerContraseña = () => {
   const [newPassword, setNewPassword] = useState('');
@@ -41,6 +42,7 @@ const RestablecerContraseña = () => {
   };
 
   return (
+    <DefaultLayout>
     <View style={styles.container}>
       <Text style={styles.title}>Restablecer Contraseña</Text>
       <Image style={styles.image} source={require("../../assets/restablecer.png")} />
@@ -64,7 +66,8 @@ const RestablecerContraseña = () => {
       <TouchableOpacity style={styles.button} onPress={handlePasswordReset}>
         <Text style={styles.buttonText}>Restablecer Contraseña</Text>
       </TouchableOpacity>
-    </View>
+      </View>
+    </DefaultLayout>
   );
 };
 

@@ -10,6 +10,8 @@ class AuthService {
             throw new Error(errorMessage);
         }
     }
+
+    
 }
 
 export default AuthService

@@ -33,9 +33,9 @@ export default function Home() {
 
   return (
     <DefaultLayout>
-    <View style={styles.container}>
-      <View style={styles.header}>
-      </View>
+      <View style={styles.container}>
+        <View style={styles.header}>
+        </View>
         <View>
           <Image
             source={require('../../assets/logo.png')}
@@ -356,7 +356,7 @@ export default function Home() {
             </View>
           </View>
         </View>
-    </View>
+      </View>
     </DefaultLayout>
   );
 }

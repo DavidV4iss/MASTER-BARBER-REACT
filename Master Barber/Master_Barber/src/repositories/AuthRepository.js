@@ -3,6 +3,7 @@ class AuthRepository {
     static async registrar(user) {
         try {
             const response = await axios.post("http://localhost:8080/registrar", user);
+            console.log(`Respuesta: ${JSON.stringify(response)}`);
             return response;
         } catch (error) {
             const errorMessage = error?.response?.data?.message || "Error al registrar el usuario.";

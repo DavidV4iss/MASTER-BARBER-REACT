@@ -5,6 +5,7 @@ import { Anton_400Regular } from "@expo-google-fonts/anton";
 import { BebasNeue_400Regular } from "@expo-google-fonts/bebas-neue";
 import Login from './Login';
 import RestablecerContraseña from "./RestablecerContraseña";
+import DefaultLayout from "../../Layouts/DefaultLayout";
 
 
 const OlvidoContraseña = () => {
@@ -31,7 +32,7 @@ const OlvidoContraseña = () => {
 
 
   return (
-
+    <DefaultLayout>
     <View style={styles.container}>
       <Text style={styles.tittle}>¿Olvidaste tu contraseña?</Text>
       <Image style={styles.image} source={require("../../assets/recuperar.png")} /> 
@@ -66,7 +67,8 @@ const OlvidoContraseña = () => {
        <TouchableOpacity style={styles.button2} onPress={() => navigateTo('RestablecerContraseña')}>
         <Text style={styles.buttonText2}>Continuar</Text>
       </TouchableOpacity>
-    </View>
+      </View>
+    </DefaultLayout>
 
 
   )
