@@ -4,8 +4,9 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import { useFonts as useBebas, BebasNeue_400Regular } from '@expo-google-fonts/bebas-neue';
 import { Dimensions } from 'react-native';
 import Register from './Registro';
-import InicioAdmin from '../src/Views/Admin/InicioAdmin';
-import GestionReservas from '../src/Views/barberos/GestionReservas';
+import InicioAdmin from '../Admin/InicioAdmin';
+import GestionReservas from '../barberos/GestionReservas';
+import DefaultLayout from '../../Layouts/DefaultLayout';
 
 export default function Home() {
   const [currentScreen, setCurrentScreen] = useState('Home');
@@ -31,15 +32,13 @@ export default function Home() {
   }
 
   return (
+    <DefaultLayout>
     <View style={styles.container}>
       <View style={styles.header}>
       </View>
-
-      <ScrollView contentContainerStyle={{ alignItems: 'center', marginTop: Dimensions.get('window').height * 0.05 }}>
-
         <View>
           <Image
-            source={require('../assets/LOGO.png')}
+            source={require('../../assets/logo.png')}
             style={{
               ...styles.logo,
               width: Dimensions.get('window').width * 0.40,
@@ -53,7 +52,7 @@ export default function Home() {
 
         <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', marginTop: Dimensions.get('window').height * 0.2 }}>
           <Image
-            source={require('../assets/barbero.jpg')}
+            source={require('../../assets/barbero.jpg')}
             style={{
               width: Dimensions.get('window').width * 0.4,
               height: Dimensions.get('window').width * 0.4,
@@ -83,7 +82,7 @@ export default function Home() {
             alignItems: 'center',
           }}>
             <Image
-              source={require('../assets/cortepremium.jpg')}
+              source={require('../../assets/cortepremium.jpg')}
               style={{
                 ...styles.cardImage,
               }}
@@ -113,7 +112,7 @@ export default function Home() {
             alignItems: 'center',
           }}>
             <Image
-              source={require('../assets/cortepremium.jpg')}
+              source={require('../../assets/cortepremium.jpg')}
               style={{
                 ...styles.cardImage,
               }}
@@ -185,7 +184,7 @@ export default function Home() {
         <View style={{ flexDirection: 'row', justifyContent: 'center', flexWrap: 'wrap', marginTop: Dimensions.get('window').height * 0.07, marginBottom: Dimensions.get('window').height * 0.2 }}>
           <View style={styles.stylistCard}>
             <Image
-              source={require('../assets/deiby.jpg')}
+              source={require('../../assets/deiby.jpg')}
               style={styles.stylistImage}
             />
             <Text style={styles.stylistName}>DEIBY</Text>
@@ -195,7 +194,7 @@ export default function Home() {
           </View>
           <View style={styles.stylistCard}>
             <Image
-              source={require('../assets/nixon.jpg')}
+              source={require('../../assets/nixon.jpg')}
               style={styles.stylistImage}
             />
             <Text style={styles.stylistName}>NIXXON</Text>
@@ -205,7 +204,7 @@ export default function Home() {
           </View>
           <View style={styles.stylistCard}>
             <Image
-              source={require('../assets/jeisson.jpg')}
+              source={require('../../assets/jeisson.jpg')}
               style={styles.stylistImage}
             />
             <Text style={styles.stylistName}>JEISSON</Text>
@@ -215,7 +214,7 @@ export default function Home() {
           </View>
           <View style={styles.stylistCard}>
             <Image
-              source={require('../assets/jeisson.jpg')}
+              source={require('../../assets/jeisson.jpg')}
               style={styles.stylistImage}
             />
             <Text style={styles.stylistName}>JEISSON</Text>
@@ -236,7 +235,7 @@ export default function Home() {
         >
           <View style={styles.productCard}>
             <Image
-              source={require('../assets/cortepremium.jpg')}
+              source={require('../../assets/cortepremium.jpg')}
               style={styles.productImage}
             />
             <Text style={styles.productTitle}>PORTA CUCHILLAS</Text>
@@ -246,7 +245,7 @@ export default function Home() {
           </View>
           <View style={styles.productCard}>
             <Image
-              source={require('../assets/cortepremium.jpg')}
+              source={require('../../assets/cortepremium.jpg')}
               style={styles.productImage}
             />
             <Text style={styles.productTitle}>POLVOS TEXTURIZANTES</Text>
@@ -256,7 +255,7 @@ export default function Home() {
           </View>
           <View style={styles.productCard}>
             <Image
-              source={require('../assets/cortepremium.jpg')}
+              source={require('../../assets/cortepremium.jpg')}
               style={styles.productImage}
             />
             <Text style={styles.productTitle}>LOCION DESINFECTANTE</Text>
@@ -266,7 +265,7 @@ export default function Home() {
           </View>
           <View style={styles.productCard}>
             <Image
-              source={require('../assets/cortepremium.jpg')}
+              source={require('../../assets/cortepremium.jpg')}
               style={styles.productImage}
             />
             <Text style={styles.productTitle}>LOCION DESINFECTANTE</Text>
@@ -276,7 +275,7 @@ export default function Home() {
           </View>
           <View style={styles.productCard}>
             <Image
-              source={require('../assets/cortepremium.jpg')}
+              source={require('../../assets/cortepremium.jpg')}
               style={styles.productImage}
             />
             <Text style={styles.productTitle}>LOCION DESINFECTANTE</Text>
@@ -286,7 +285,7 @@ export default function Home() {
           </View>
           <View style={styles.productCard}>
             <Image
-              source={require('../assets/cortepremium.jpg')}
+              source={require('../../assets/cortepremium.jpg')}
               style={styles.productImage}
             />
             <Text style={styles.productTitle}>LOCION DESINFECTANTE</Text>
@@ -296,7 +295,7 @@ export default function Home() {
           </View>
           <View style={styles.productCard}>
             <Image
-              source={require('../assets/cortepremium.jpg')}
+              source={require('../../assets/cortepremium.jpg')}
               style={styles.productImage}
             />
             <Text style={styles.productTitle}>LOCION DESINFECTANTE</Text>
@@ -313,7 +312,7 @@ export default function Home() {
         <View style={{ flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center', marginTop: Dimensions.get('window').height * 0.05, marginBottom: Dimensions.get('window').height * 0.2 }}>
           <View style={styles.reviewCard}>
             <Image
-              source={require('../assets/deiby.jpg')}
+              source={require('../../assets/deiby.jpg')}
               style={styles.reviewImage}
             />
             <Text style={styles.reviewName}>FIDEL ESPITIA</Text>
@@ -328,7 +327,7 @@ export default function Home() {
           </View>
           <View style={styles.reviewCard}>
             <Image
-              source={require('../assets/nixon.jpg')}
+              source={require('../../assets/nixon.jpg')}
               style={styles.reviewImage}
             />
             <Text style={styles.reviewName}>MARÍA PÉREZ</Text>
@@ -343,7 +342,7 @@ export default function Home() {
           </View>
           <View style={styles.reviewCard}>
             <Image
-              source={require('../assets/jeisson.jpg')}
+              source={require('../../assets/jeisson.jpg')}
               style={styles.reviewImage}
             />
             <Text style={styles.reviewName}>JUAN LÓPEZ</Text>
@@ -357,34 +356,12 @@ export default function Home() {
             </View>
           </View>
         </View>
-
-      </ScrollView>
-      <Footer navigateTo={setCurrentScreen} />
     </View>
-  );
-}
-
-function Footer({ navigateTo }) {
-  return (
-    <View style={{
-      ...styles.footer,
-      paddingBottom: Dimensions.get('window').height * 0.03,
-    }}>
-      <View style={{
-        ...styles.footerLine,
-        height: Dimensions.get('window').height * 0.002,
-      }} />
-      <View style={styles.iconContainer}>
-        <Icon name="user-circle" size={Dimensions.get('window').width * 0.08} color="#ffffff" onPress={() => navigateTo('register')} />
-        <Icon name="calendar" size={Dimensions.get('window').width * 0.08} color="#ffffff" onPress={() => navigateTo('gestionReservas')} />
-        <Icon name="bars" size={Dimensions.get('window').width * 0.08} color="#ffffff" onPress={() => navigateTo('admin')} />
-      </View>
-    </View>
+    </DefaultLayout>
   );
 }
 
 const styles = StyleSheet.create({
-
   container: {
     flex: 1,
     backgroundColor: '#212529',

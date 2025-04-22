@@ -43,7 +43,7 @@ const RestablecerContraseña = () => {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Restablecer Contraseña</Text>
-      <Image style={styles.image} source={require("../assets/restablecer.png")} />
+      <Image style={styles.image} source={require("../../assets/restablecer.png")} />
       <Text style={styles.textinfo}>Asegurate de que tu contraseña sea segura y facil de recordar si deseas agrega caracteres especiales</Text>
       <TextInput
         style={styles.input}

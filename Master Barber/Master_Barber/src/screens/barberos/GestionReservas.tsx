@@ -36,7 +36,7 @@ const GestionReservas = () => {
                 </Text>
                 <Text style={styles.title}>Gestiona tus reservas</Text>
                 <View style={styles.card}>
-                    <Image source={require('../../../assets/deiby.jpg')} style={styles.image} />
+                    <Image source={require('../../assets/deiby.jpg')} style={styles.image} />
                     <View style={styles.cardText}>
                         <Text style={styles.cardClientServiceFhReserva}>
                             Cliente:
@@ -70,7 +70,7 @@ const GestionReservas = () => {
 
 
                 <View style={styles.card}>
-                    <Image source={require('../../../assets/nixon.jpg')} style={styles.image} />
+                    <Image source={require('../../assets/nixon.jpg')} style={styles.image} />
                     <View style={styles.cardText}>
                         <Text style={styles.cardClientServiceFhReserva}>
                             Cliente:

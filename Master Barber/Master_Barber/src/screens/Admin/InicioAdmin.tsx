@@ -100,7 +100,7 @@ export default function InicioAdmin() {
                                     onTouchStart={() => setIsHovered(true)}
                                     onTouchEnd={() => setIsHovered(false)}
                                 >
-                                    <Image source={require('../../../assets/LOGO.png')} style={styles.logo} />
+                                    <Image source={require('../../assets/logo.png')} style={styles.logo} />
                                 </View>
                             </View>
                         </View>
@@ -145,7 +145,7 @@ export default function InicioAdmin() {
                             {/* Tarjeta 1 */}
                             <View style={styles.card}>
                                 <Image
-                                    source={require('../../../assets/deiby.jpg')}
+                                    source={require('../../assets/deiby.jpg')}
                                     style={styles.cardImage}
                                     resizeMode="cover"
                                 />
@@ -175,7 +175,7 @@ export default function InicioAdmin() {
                             {/* Tarjeta 2 */}
                             <View style={styles.card}>
                                 <Image
-                                    source={require('../../../assets/nixon.jpg')}
+                                    source={require('../../assets/nixon.jpg')}
                                     style={styles.cardImage}
                                     resizeMode="cover"
                                 />
@@ -205,7 +205,7 @@ export default function InicioAdmin() {
                             {/* Tarjeta 3 */}
                             <View style={styles.card}>
                                 <Image
-                                    source={require('../../../assets/jeisson.jpg')}
+                                    source={require('../../assets/jeisson.jpg')}
                                     style={styles.cardImage}
                                     resizeMode="cover"
                                 />

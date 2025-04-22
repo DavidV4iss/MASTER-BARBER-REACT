@@ -1,39 +1,57 @@
 import React, { useState } from "react";
-import { StyleSheet, Text, TextInput, TouchableOpacity, View, Image, Alert, Dimensions, Platform, Button } from "react-native";
-import Icon from 'react-native-vector-icons/FontAwesome';
-import Login from "./Login";
-import Home from "./Home";
+import { StyleSheet, Text, TextInput, TouchableOpacity, View, Image, Dimensions, Platform, Button, Alert } from "react-native";
 import { useFonts } from "expo-font";
 import { Anton_400Regular } from "@expo-google-fonts/anton";
+import { useNavigation } from "@react-navigation/native";
+import AuthService from "../../services/AuthService";
+import { showMessage } from "react-native-flash-message";
+import DefaultLayout from "../../Layouts/DefaultLayout";
 
 const { width, height } = Dimensions.get("window");
 
 export default function Register() {
-    const [currentScreen, setCurrentScreen] = useState("register");
-    const navigateTo = (screen: string) => {
-        setCurrentScreen(screen);
-    };
+    const navigation = useNavigation();
     const [fontsLoaded] = useFonts({
         Anton: Anton_400Regular,
     });
 
-    if (currentScreen === 'login') {
-        return <Login />;
-    }
-    if (currentScreen === 'Home') {
-        return <Home />;
-    }
+    const [user, setUser] = useState({
+        nombre_usuario: '',
+        email: '',
+        nit: '',
+        telefono: '',
+        contraseña: '',
+        confirmar_contraseña: ''
 
+    })
+
+    const handleChange = (data) => (value) => {
+        setUser({ ...user, [data]: value })
+    }
+    const handleSubmit = async () => {
+        try {
+            console.log(user);
+            const response = await AuthService.registrar(user);
+            console.log(response);
+            if (response.status == 200) {
+                alert("El usuario se ha registrado correctamente.");
+                navigation.navigate("LoginScreen");
+            }
+            else {
+                alert(`El usuario no se ha registrado correctamente. ${response.data.message}`)
+            }
+        } catch (error) {
+            const errorMessage = error?.response?.data?.message || "Error al registrar el usuario.";
+            alert(errorMessage);
+        }
+    }
 
 
     return (
+        <DefaultLayout>
         <View style={styles.container}>
-            <Icon name="arrow-left" size={Dimensions.get('window').width * 0.05} color="#ffffff" onPress={() => navigateTo('Home')} style={{
-                marginTop: Dimensions.get('window').height * 0.05,
-                marginRight: Dimensions.get('window').width * 0.8,
-            }} />
             <Image
-                source={require("../assets/LOGO.png")}
+                source={require("../../assets/logo.png")}
                 style={styles.logo}
             />
             <Text style={styles.subtitle}>Registro de Usuario</Text>
@@ -41,6 +59,8 @@ export default function Register() {
                 style={styles.input}
                 placeholder="Nombre de Usuario"
                 placeholderTextColor="#fff"
+                onChangeText={handleChange('nombre_usuario')}
+                value={user.nombre_usuario}
             />
             <TextInput
                 style={styles.input}
@@ -48,41 +68,52 @@ export default function Register() {
                 placeholderTextColor="#fff"
                 keyboardType="email-address"
                 autoCapitalize="none"
+                onChangeText={handleChange('email')}
+                value={user.email}
             />
             <TextInput
                 style={styles.input}
                 placeholder="NIT"
                 placeholderTextColor="#fff"
                 keyboardType="numeric"
+                onChangeText={handleChange('nit')}
+                value={user.nit}
             />
             <TextInput
                 style={styles.input}
                 placeholder="Teléfono"
                 placeholderTextColor="#fff"
                 keyboardType="phone-pad"
+                onChangeText={handleChange('telefono')}
+                value={user.telefono}
             />
             <TextInput
                 style={styles.input}
                 placeholder="Contraseña"
                 placeholderTextColor="#fff"
                 secureTextEntry
+                onChangeText={handleChange('contraseña')}
+                value={user.contraseña}
             />
             <TextInput
                 style={styles.input}
                 placeholder="Confirmar Contraseña"
                 placeholderTextColor="#fff"
                 secureTextEntry
+                onChangeText={handleChange('confirmar_contraseña')}
+                value={user.confirmar_contraseña}
             />
             <Text style={styles.footerText}>
                 ¿Ya tienes cuenta?{" "}
-                <Text style={styles.link} onPress={() => navigateTo('login')} >
+                <Text style={styles.link} onPress={() => navigation.navigate("LoginScreen")} >
                     Inicia sesión
                 </Text>
             </Text>
-            <TouchableOpacity style={styles.button} >
+            <TouchableOpacity onPress={handleSubmit} style={styles.button} >
                 <Text style={styles.buttonText}>Registrar</Text>
             </TouchableOpacity>
-        </View>
+            </View>
+        </DefaultLayout>
     );
 }
 

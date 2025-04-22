@@ -131,7 +131,7 @@ const verificarToken = (req, res, next) => {
 
 
 app.post('/registrar', (req, res) => {
-
+    console.log(req.body);
     const nombreusuario = req.body.nombre_usuario;
     const email = req.body.email;
     const nit = req.body.nit;
@@ -820,7 +820,7 @@ app.post('/CrearReservas', async (req, res) => {
             return res.status(400).json({ message: 'La hora seleccionada ya está ocupada. Por favor, elige otra hora.' });
         }
 
-      
+
         const reserva = {
             cliente_id,
             barbero_id,
@@ -1116,9 +1116,11 @@ app.post('/GuardarVentas', (req, res) => {
 });
 
 
-app.listen(8081, () => {
+app.listen(8080, () => {
     console.log("Conexion exitosa:)")
 });
-
+app.get('/', (req, res) => {
+    res.send("Api de master barber:)")
+})
 
 

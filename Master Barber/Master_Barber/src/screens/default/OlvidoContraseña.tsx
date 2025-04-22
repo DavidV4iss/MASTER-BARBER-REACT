@@ -34,7 +34,7 @@ const OlvidoContraseña = () => {
 
     <View style={styles.container}>
       <Text style={styles.tittle}>¿Olvidaste tu contraseña?</Text>
-      <Image style={styles.image} source={require("../assets/recuperar.png")} /> 
+      <Image style={styles.image} source={require("../../assets/recuperar.png")} /> 
       <Text style={styles.textinfo}>Ingrese su correo electronico para poder enviar un codigo de recuperacion de contraseña</Text>
       <Text style={styles.textinput}>Correo electronico</Text>
       <TextInput
