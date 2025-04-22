@@ -138,7 +138,6 @@ export default function NavbarUserIndex() {
           popup: "dark-theme-popup bg-dark antonparabackend ",
         },
       });
-      // Actualizar la lista de notificaciones después de eliminar
       fetchNotificaciones();
     } catch (err) {
       console.error("Error al eliminar la notificación:", err);

@@ -10,8 +10,8 @@ import GraficaVenta from '../../Components/GraficaVenta';
 export default function Gestiondeinventario() {
     const [inventario, setInventario] = useState([]);
     const [venta, setVenta] = useState([]);
-    const [ventasProcesadas, setVentasProcesadas] = useState([]); // Estado para almacenar todas las ventas procesadas
-    const [rango, setRango] = useState('mensual'); // Estado para el rango de tiempo
+    const [ventasProcesadas, setVentasProcesadas] = useState([]);
+    const [rango, setRango] = useState('Diario');
 
     useEffect(() => {
         const getInventario = async () => {
@@ -65,23 +65,23 @@ export default function Gestiondeinventario() {
 
     const handleSubmit = async () => {
         try {
-            // Agregar la fecha actual a cada venta
+
             const ventasConFecha = venta.map((producto) => ({
                 ...producto,
                 fecha: new Date(), // Asignar la fecha actual
             }));
 
-            // Actualizar el inventario en el backend
+
             for (const producto of ventasConFecha) {
                 await axios.put(`http://localhost:8080/RestarInventario/${producto.id_producto}`, {
                     cantidad: producto.cantidad,
                 });
             }
 
-            // Guardar las ventas en el backend
+
             await axios.post('http://localhost:8080/GuardarVentas', ventasConFecha);
 
-            // Recuperar las ventas actualizadas desde el backend
+
             const res = await axios.get(`http://localhost:8080/GetVentas?rango=${rango}`);
             setVentasProcesadas(res.data);
 
@@ -94,7 +94,7 @@ export default function Gestiondeinventario() {
                     popup: 'dark-theme-popup bg-dark antonparabackend',
                 },
             }).then(() => {
-                setVenta([]); // Limpiar las ventas después de procesarlas
+                setVenta([]);
             });
         } catch (err) {
             console.error('Error al procesar la venta:', err);
@@ -120,13 +120,13 @@ export default function Gestiondeinventario() {
             }
         };
         getVentas();
-    }, [rango]); // Recuperar las ventas cada vez que cambie el rango
+    }, [rango]);
 
 
     const filtrarVentasPorRango = () => {
         const ahora = new Date();
         return ventasProcesadas.filter((item) => {
-            const fechaVenta = new Date(item.fecha); // Asegúrate de que sea un objeto Date
+            const fechaVenta = new Date(item.fecha);
             if (rango === 'diario') {
                 return (
                     fechaVenta.getDate() === ahora.getDate() &&
@@ -150,23 +150,37 @@ export default function Gestiondeinventario() {
         });
     };
 
-    const ventasFiltradas = filtrarVentasPorRango(); // Ventas filtradas según el rango seleccionado
+    const ventasFiltradas = filtrarVentasPorRango();
 
 
-    const generarPDF = () => {
+    const generarPDF = async () => {
         const doc = new jsPDF();
 
-        // Agrupar las ventas por producto
-        const ventasAgrupadas = ventasFiltradas.reduce((acc, venta) => {
-            const key = venta.id_producto; // Agrupar por id_producto
+        // Asegurarse de obtener las ventas actualizadas antes de generar el PDF
+        try {
+            const res = await axios.get(`http://localhost:8080/GetVentas?rango=${rango}`);
+            setVentasProcesadas(res.data);
+        } catch (err) {
+            console.error('Error al obtener las ventas para el PDF:', err);
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Error al obtener las ventas para generar el PDF',
+                confirmButtonColor: '#DC3545',
+            });
+            return;
+        }
+
+        const ventasAgrupadas = ventasProcesadas.reduce((acc, venta) => {
+            const key = venta.id_producto;
             if (!acc[key]) {
-                acc[key] = { ...venta, cantidad: 0 }; // Inicializar el producto en el acumulador
+                acc[key] = { ...venta, cantidad: 0 };
             }
-            acc[key].cantidad += venta.cantidad; // Sumar la cantidad vendida
+            acc[key].cantidad += venta.cantidad;
             return acc;
         }, {});
 
-        const ventasAgrupadasArray = Object.values(ventasAgrupadas); // Convertir el objeto en un array
+        const ventasAgrupadasArray = Object.values(ventasAgrupadas);
 
         // Configuración del PDF
         doc.setFontSize(18);
@@ -196,7 +210,6 @@ export default function Gestiondeinventario() {
 
         doc.save(`Reporte_Ventas_${rango}.pdf`);
     };
-
 
 
 

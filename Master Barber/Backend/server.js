@@ -52,7 +52,7 @@ const transporter = nodemailer.createTransport({
     secure: true,
     auth: {
         user: 'cristianrueda0313@gmail.com',
-        pass: 'yykl vnja kuss aipw',
+        pass: 'vvln hqsw dfnj isgw',
     }
 });
 
