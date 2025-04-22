@@ -218,10 +218,10 @@ export default function Reserva() {
                 {currentStep === 2 && (
                     <div>
                         <h3 className='antonparabackend mt-5 text-white'>Selecciona tu barbero preferido</h3>
-                        <div className='row mt-5 mb-5'>
+                        <div className="row mt-5 mb-5 justify-content-center align-items-center">
                             {barberos.map((barbero, index) => (
                                 <div
-                                    className="col-12 col-sm-6 col-md-4 col-lg-3 mb-4 text-decoration-none d-flex "
+                                    className="col-12 col-sm-6 col-md-2 col-lg-3 mb-4 text-decoration-none d-flex justify-content-center"
                                     key={barbero.id_barbero}
                                     onClick={() => setBarberoId(barbero.id_usuario)}
                                     style={{ cursor: 'pointer' }}
