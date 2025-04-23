@@ -6,9 +6,11 @@ ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, T
 
 export default function GraficaVentas({ ventas }) {
     if (!Array.isArray(ventas) || ventas.length === 0) {
-        return <p>No hay datos para mostrar</p>;
+        return <p className='text-danger text-center mt-5 pt-5 my-5'>No hay datos para mostrar</p>;
     }
-
+    if (!ventas.every(venta => venta.nombre && venta.cantidad >= 0)) {
+        return <p className='text-danger text-center mt-5 pt-5 my-5'>Datos inválidos para mostrar la gráfica</p>;
+    }
     const agruparVentasPorProducto = (ventas) => {
         return ventas.reduce((acc, venta) => {
             acc[venta.nombre] = (acc[venta.nombre] || 0) + venta.cantidad;
@@ -24,8 +26,8 @@ export default function GraficaVentas({ ventas }) {
                 {
                     label: 'Cantidad Vendida',
                     data: Object.values(productos),
-                    borderColor: 'yellow', 
-                    backgroundColor: 'rgb(255, 255, 255)', 
+                    borderColor: 'yellow',
+                    backgroundColor: 'rgb(255, 255, 255)',
                     borderWidth: 2,
                     pointBackgroundColor: 'yellow',
                     pointBorderColor: 'white',
@@ -51,7 +53,7 @@ export default function GraficaVentas({ ventas }) {
                         weight: 'bold',
                         family: 'antonparabanckend',
                     },
-                    color: 'yellow', 
+                    color: 'yellow',
                     padding: {
                         top: 10,
                         bottom: 50,
@@ -80,6 +82,6 @@ export default function GraficaVentas({ ventas }) {
 
     // Renderizar la gráfica
     return (
-            <Line data={data} options={options} />
+        <Line data={data} options={options} />
     );
 }
