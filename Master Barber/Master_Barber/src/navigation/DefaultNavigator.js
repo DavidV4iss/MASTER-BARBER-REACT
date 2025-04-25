@@ -34,7 +34,7 @@ export default function DefaultNavigator() {
                     let iconName;
                     if (route.name === "Inicio") {
                         iconName = focused ? "home-sharp" : "home-outline";
-                    } else if (route.name === "Auth") {
+                    } else if (route.name === "Iniciar Sesion") {
                         iconName = focused ? "person-circle" : "person-circle-outline";
                     }
                     return <Ionicons name={iconName} size={size} color={color} />;
@@ -44,7 +44,7 @@ export default function DefaultNavigator() {
             })}
         >
             <Tab.Screen name="Inicio" component={HomeScreen} />
-            <Tab.Screen name="Auth" component={AuthStack} />
+            <Tab.Screen name="Iniciar Sesion" component={AuthStack} />
         </Tab.Navigator>
     )
 };

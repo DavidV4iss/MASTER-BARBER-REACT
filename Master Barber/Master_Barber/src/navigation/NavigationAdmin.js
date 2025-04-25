@@ -1,44 +1,28 @@
 import React from 'react';
-import InicioAdmin from '../screens/Admin/InicioAdmin';
-import { Ionicons } from '@expo/vector-icons';
+import InicioAdminScreen from '../screens/Admin/InicioAdmin';
 import { createStackNavigator } from '@react-navigation/stack';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-
-const Tab = createBottomTabNavigator();
+import GestionarBarberosScreen from '../screens/Admin/GestionarBarberos';
+import { createDrawerNavigator } from '@react-navigation/drawer';
+import InventarioScreen from '../screens/Admin/Inventario';
+import GestionDeInventarioScreen from '../screens/Admin/GestionDeInventario';
 const Stack = createStackNavigator();
+const Drawer = createDrawerNavigator();
 
 // const AuthStack = () => (
-//     <Stack.Navigator screenOptions={{ headerShown: false }}>
-//         <Stack.Screen name="RegistrarScreen" component={RegistroScreen} />
-//         <Stack.Screen name="LoginScreen" component={LoginScreen} />
-//         <Stack.Screen name="OlvidoContraseñaScreen" component={OlvidoContraseñaScreen} />
-//         <Stack.Screen name="RestablecerContraseñaScreen" component={RestablecerContraseñaScreen} />
-//     </Stack.Navigator>
-// );
+//   <Stack.Navigator screenOptions={{ headerShown: false }}>
+//       <Stack.Screen name="LoginScreen" component={LoginScreen} />
+//       <Stack.Screen name="OlvidoContraseñaScreen" component={OlvidoContraseñaScreen} />
+//       <Stack.Screen name="RestablecerContraseñaScreen" component={RestablecerContraseñaScreen} />
+//    </Stack.Navigator>
+//);
 export default function NavigationAdmin() {
     return (
-        <Tab.Navigator
-            screenOptions={({ route }) => ({
-                headerShown: false,
-                tabBarStyle: {
-                    backgroundColor: "#2B3035",
-                    height: 60,
-                    paddingBottom: 5,
-                    borderTopColor: "#444",
-                },
-                tabBarIcon: ({ color, size, focused }) => {
-                    let iconName;
-                    if (route.name === "Inicio") {
-                        iconName = focused ? "home-sharp" : "home-outline";
-                    }
-                    return <Ionicons name={iconName} size={size} color={color} />;
-                },
-                tabBarActiveTintColor: "white",
-                tabBarInactiveTintColor: "#B0B0B0",
-            })}
-        >
+        <Drawer.Navigator screenOptions={{ headerShown: false }}>
+            <Drawer.Screen name="Inicio" component={InicioAdminScreen} />
+            <Drawer.Screen name="Gestionar Barberos" component={GestionarBarberosScreen} />
+            <Drawer.Screen name="Inventario" component={InventarioScreen} />
+            <Drawer.Screen name="Gestion De Inventario" component={GestionDeInventarioScreen} />
+        </Drawer.Navigator>
 
-            <Tab.Screen name="Inicio" component={InicioAdmin} />
-        </Tab.Navigator>
     )
 };
