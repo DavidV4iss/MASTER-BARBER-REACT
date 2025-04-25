@@ -1,15 +1,17 @@
 import React from 'react'
-import { StyleSheet, Text, View, ScrollView, Image, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, ScrollView, Image, TouchableOpacity, Modal, TextInput } from 'react-native';
 import { Dimensions } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import DefaultLayout from "../../Layouts/DefaultLayout";
 import { useNavigation } from '@react-navigation/native';
+import { useState } from 'react';
 
 
 
 export default function GestionarBarberos() {
 
     const navigation = useNavigation();
+    const [modalVisible, setModalVisible] = useState(false);
 
     return (
         <DefaultLayout>
@@ -33,12 +35,12 @@ export default function GestionarBarberos() {
                             alignSelf: 'flex-end',
                             marginBottom: 20,
                         }}
-                        onPress={() => alert('Añadir nuevo barbero')}
+                        onPress={() => setModalVisible(true)}
                     >
                         <Text style={{ color: '#ffffff', fontWeight: 'bold' }}>Añadir</Text>
                     </TouchableOpacity>
+
                     <View>
-                        {/* Tarjeta 1 */}
                         <View style={styles.card}>
                             <Image
                                 source={require('../../assets/deiby.jpg')}
@@ -68,7 +70,6 @@ export default function GestionarBarberos() {
                             </View>
                         </View>
 
-                        {/* Tarjeta 2 */}
                         <View style={styles.card}>
                             <Image
                                 source={require('../../assets/nixon.jpg')}
@@ -98,7 +99,6 @@ export default function GestionarBarberos() {
                             </View>
                         </View>
 
-                        {/* Tarjeta 3 */}
                         <View style={styles.card}>
                             <Image
                                 source={require('../../assets/jeisson.jpg')}
@@ -130,6 +130,60 @@ export default function GestionarBarberos() {
                     </View>
                 </ScrollView>
             </View>
+            {/* ModalAñadir */}
+            <Modal
+                animationType="slide"
+                transparent={true}
+                visible={modalVisible}
+                onRequestClose={() => setModalVisible(false)}
+            >
+                <View style={styles.modalContainer}>
+                    <View style={styles.modalContent}>
+                        <Text style={styles.modalTitle}>Añadir Nuevo Barbero</Text>
+                        <TextInput
+                            style={styles.input}
+                            placeholder="Nombre Del Barbero"
+                            placeholderTextColor="#ccc"
+                        />
+                        <TextInput
+                            style={styles.input}
+                            placeholder="Email"
+                            placeholderTextColor="#ccc"
+                        />
+                        <TextInput
+                            style={styles.input}
+                            placeholder="Contraseña"
+                            placeholderTextColor="#ccc"
+                        />
+                        <TextInput
+                            style={styles.input}
+                            placeholder="Descripción"
+                            placeholderTextColor="#ccc"
+                        />
+                        <TextInput
+                            style={styles.input}
+                            placeholder="Imagen Del Barbero"
+                            placeholderTextColor="#ccc"
+                        />
+
+                        <View style={styles.modalActions}>
+                            <TouchableOpacity
+                                style={styles.cancelButton}
+                                onPress={() => setModalVisible(false)}
+                            >
+                                <Text style={{ color: '#ffffff' }}>Cancelar</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity
+                                style={styles.saveButton}
+                            >
+                                <Text style={{ color: '#ffffff' }}>Guardar</Text>
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+                </View>
+            </Modal>
+            {/* FIN MODAL AÑADIR */}
+
         </DefaultLayout>
     )
 }
@@ -202,5 +256,53 @@ const styles = StyleSheet.create({
         backgroundColor: '#dc3545',
         padding: 10,
         borderRadius: 5,
+    },
+    modalContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    },
+    modalContent: {
+        width: '80%',
+        backgroundColor: '#343a40',
+        borderRadius: 10,
+        padding: 20,
+        alignItems: 'center',
+    },
+    modalTitle: {
+        color: '#ffffff',
+        fontSize: 18,
+        fontWeight: 'bold',
+        marginBottom: 20,
+    },
+    input: {
+        width: '100%',
+        backgroundColor: '#212529',
+        color: '#ffffff',
+        padding: 10,
+        borderRadius: 5,
+        marginBottom: 15,
+    },
+    modalActions: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        width: '100%',
+    },
+    cancelButton: {
+        backgroundColor: '#dc3545',
+        padding: 10,
+        borderRadius: 5,
+        flex: 1,
+        marginRight: 10,
+        alignItems: 'center',
+    },
+    saveButton: {
+        backgroundColor: '#28a745',
+        padding: 10,
+        borderRadius: 5,
+        flex: 1,
+        marginLeft: 10,
+        alignItems: 'center',
     },
 })
