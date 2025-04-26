@@ -33,7 +33,7 @@ class BarberosRepository {
     }
     static async DeleteBarberos(id) {
         try {
-            const response = await axios.get(`http://localhost:8080/DeleteBarberos/${id}`);
+            const response = await axios.delete(`http://localhost:8080/DeleteBarberos/${id}`);
             return response;
         } catch (error) {
             const errorMessage = error?.response?.data?.message || "Error al obtener los barberos.";

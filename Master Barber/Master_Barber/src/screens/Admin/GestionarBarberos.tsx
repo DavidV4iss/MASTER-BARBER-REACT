@@ -8,7 +8,6 @@ import { Anton_400Regular } from "@expo-google-fonts/anton";
 import { BebasNeue_400Regular } from "@expo-google-fonts/bebas-neue";
 import { useState } from 'react';
 import { useFonts } from "expo-font";
-
 import BarberosRepository from '../../repositories/BarberosRepository';
 
 
@@ -65,6 +64,20 @@ export default function GestionarBarberos() {
         fetchBarberos();
     }, []);
 
+    const DeleteBarberos = async (id) => {
+        try {
+            const response = await BarberosRepository.DeleteBarberos(id);
+            console.log(response);
+            navigation.reset({
+                index: 0,
+                routes: [{ name: 'Gestionar Barberos' }],
+            });
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+
 
 
 
@@ -112,7 +125,7 @@ export default function GestionarBarberos() {
                                         </TouchableOpacity>
                                         <TouchableOpacity
                                             style={styles.deleteButton}
-                                            onPress={() => alert(`Eliminar `)}
+                                            onPress={() => DeleteBarberos(barbero.id_usuario)}
                                         >
                                             <Icon name="trash" size={16} color="#ffffff" />
                                         </TouchableOpacity>
@@ -303,3 +316,4 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
 })
+
