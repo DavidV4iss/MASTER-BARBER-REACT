@@ -20,6 +20,7 @@ export default function GestionarBarberos() {
     });
 
     if (!fontsLoaded) return null;
+
     const navigation = useNavigation();
     const [modalVisible, setModalVisible] = useState(false);
     const [barberos, setBarberos] = useState([]);
