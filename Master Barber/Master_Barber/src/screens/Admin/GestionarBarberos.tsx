@@ -37,6 +37,8 @@ export default function GestionarBarberos() {
         descripcion: "",
     });
 
+
+
     const handlesubmit = async () => {
         try {
             const response = await BarberosRepository.CreateBarberos(barbero);
