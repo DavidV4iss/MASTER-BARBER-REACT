@@ -7,6 +7,8 @@ import { StyleSheet, Text, View, ScrollView, Image, TouchableOpacity } from 'rea
 import DefaultLayout from '../../Layouts/DefaultLayout';
 import { useNavigation } from "@react-navigation/native";
 import { BebasNeue_400Regular } from "@expo-google-fonts/bebas-neue";
+import useAuth from "../../hooks/useAuth";
+
 
 
 
@@ -14,7 +16,9 @@ import { BebasNeue_400Regular } from "@expo-google-fonts/bebas-neue";
 export default function InicioAdmin() {
     const [isHovered, setIsHovered] = useState(false);
     const navigation = useNavigation();
+    const [isDropdownVisible, setIsDropdownVisible] = useState(false);
 
+    const { logout } = useAuth()
 
     const [fontsLoaded] = useFonts({
         Anton: Anton_400Regular,
@@ -22,6 +26,11 @@ export default function InicioAdmin() {
     });
 
     if (!fontsLoaded) return null;
+
+    const handleLogout = () => {
+        logout();
+    }
+
 
     return (
         <DefaultLayout>
@@ -32,7 +41,19 @@ export default function InicioAdmin() {
                         <Icon name="bars" size={Dimensions.get('window').width * 0.08} color="#ffffff" style={styles.iconBars} />
                     </TouchableOpacity>
                     <Text style={styles.welcomeText}>¡¡BIENVENIDO!!</Text>
-                    <Icon name="user-circle" size={Dimensions.get('window').width * 0.08} color="#ffffff" style={styles.iconUser} />
+                    <TouchableOpacity onPress={() => setIsDropdownVisible(!isDropdownVisible)}>
+                        <Icon name="user-circle" size={Dimensions.get('window').width * 0.08} color="#ffffff" style={styles.iconUser} />
+                    </TouchableOpacity>
+                    {isDropdownVisible && (
+                        <View style={styles.dropdownMenu}>
+                            <TouchableOpacity >
+                                <Text style={styles.dropdownItem}>Perfil</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity onPress={handleLogout}>
+                                <Text style={styles.dropdownItem}>Cerrar Sesión</Text>
+                            </TouchableOpacity>
+                        </View>
+                    )}
                 </View>
 
                 <ScrollView>
@@ -74,6 +95,9 @@ export default function InicioAdmin() {
                         <Text style={styles.barberItem}>• Nixxon - Cortes Perfilados, Accesoria En Imagen Buen Uso De Las Maquinas Y El Ambiente</Text>
                         <Text style={styles.barberItem}>• Jeisson - Cortes Perfilados, Accesoria En Imagen Buen Uso De Las Maquinas Y El Ambiente</Text>
                     </View>
+                    <TouchableOpacity style={styles.closeSidebarButton} onPress={handleLogout}>
+                        <Text style={styles.closeSidebarButtonText}>CERRAR SESION</Text>
+                    </TouchableOpacity>
                 </ScrollView>
             </View>
         </DefaultLayout>
@@ -221,7 +245,22 @@ const styles = StyleSheet.create({
         marginRight: Dimensions.get('window').width * 0.07,
         marginTop: Dimensions.get('window').height * 0.02,
     },
-});
+    dropdownMenu: {
+        position: 'absolute',
+        top: Dimensions.get('window').height * 0.1,
+        right: Dimensions.get('window').width * 0.05,
+        backgroundColor: '#343a40',
+        padding: 10,
+        borderRadius: 5,
+        zIndex: 20,
+    },
+    dropdownItem: {
+        color: '#ffffff',
+        fontSize: Dimensions.get('window').width * 0.04,
+        paddingVertical: 5,
+    },
+},
+);
 
 
 

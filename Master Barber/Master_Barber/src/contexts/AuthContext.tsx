@@ -69,7 +69,6 @@ export function AuthProvider({ children }) {
             description: "Hasta pronto",
             type: "success",
         })
-        alert("Hasta pronto");
         setUser(null);
         setIsLoading(false);
     };
