@@ -4,10 +4,11 @@ import { Dimensions } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { Anton_400Regular } from "@expo-google-fonts/anton";
 import { StyleSheet, Text, View, ScrollView, Image, TouchableOpacity } from 'react-native';
-import DefaultLayout from '../../Layouts/DefaultLayout';
 import { useNavigation } from "@react-navigation/native";
 import { BebasNeue_400Regular } from "@expo-google-fonts/bebas-neue";
 import useAuth from "../../hooks/useAuth";
+import BarberosRepository from '../../repositories/BarberosRepository';
+
 
 
 
@@ -17,90 +18,101 @@ export default function InicioAdmin() {
     const [isHovered, setIsHovered] = useState(false);
     const navigation = useNavigation();
     const [isDropdownVisible, setIsDropdownVisible] = useState(false);
+    const [barberos, setBarberos] = useState([]);
 
     const { logout } = useAuth()
 
     const [fontsLoaded] = useFonts({
-        Anton: Anton_400Regular,
         BebasNeue_400Regular,
+        Anton_400Regular
     });
 
-    if (!fontsLoaded) return null;
+    React.useEffect(() => {
+        const fetchBarberos = async () => {
+            try {
+                const response = await BarberosRepository.GetBarberos();
+                setBarberos(response.data);
+            } catch (err) {
+                console.log("Error al obtener los datos:", err);
+            }
+        };
+
+        fetchBarberos();
+    }, []);
+
+    if (!fontsLoaded) {
+        return null;
+    }
 
     const handleLogout = () => {
         logout();
     }
 
-
     return (
-        <DefaultLayout>
-            <View style={{ flex: 1, backgroundColor: '#212529' }}>
+        <View style={{ flex: 1, backgroundColor: '#212529' }}>
 
-                <View style={styles.header}>
-                    <TouchableOpacity onPress={() => navigation.openDrawer()}>
-                        <Icon name="bars" size={Dimensions.get('window').width * 0.08} color="#ffffff" style={styles.iconBars} />
-                    </TouchableOpacity>
-                    <Text style={styles.welcomeText}>¡¡BIENVENIDO!!</Text>
-                    <TouchableOpacity onPress={() => setIsDropdownVisible(!isDropdownVisible)}>
-                        <Icon name="user-circle" size={Dimensions.get('window').width * 0.08} color="#ffffff" style={styles.iconUser} />
-                    </TouchableOpacity>
-                    {isDropdownVisible && (
-                        <View style={styles.dropdownMenu}>
-                            <TouchableOpacity >
-                                <Text style={styles.dropdownItem}>Perfil</Text>
-                            </TouchableOpacity>
-                            <TouchableOpacity onPress={handleLogout}>
-                                <Text style={styles.dropdownItem}>Cerrar Sesión</Text>
-                            </TouchableOpacity>
-                        </View>
-                    )}
+            <View style={styles.header}>
+                <TouchableOpacity onPress={() => navigation.openDrawer()}>
+                    <Icon name="bars" size={Dimensions.get('window').width * 0.08} color="#ffffff" style={styles.iconBars} />
+                </TouchableOpacity>
+                <TouchableOpacity onPress={() => setIsDropdownVisible(!isDropdownVisible)}>
+                    <Icon name="user-circle" size={Dimensions.get('window').width * 0.08} color="#ffffff" style={styles.iconUser} />
+                </TouchableOpacity >
+                {isDropdownVisible && (
+                    <View style={styles.dropdownMenu} >
+                        <TouchableOpacity>
+                            <Text style={{ ...styles.dropdownItem, marginBottom: 5, fontFamily: 'BebasNeue_400Regular', color: '#ffc107' }}>Perfil</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress={handleLogout}>
+                            <Text style={{ ...styles.dropdownItem, padding: 10, backgroundColor: '#dc3545', fontFamily: 'BebasNeue_400Regular' }}>Cerrar Sesión</Text>
+                        </TouchableOpacity>
+
+                    </View>
+                )}
+            </View>
+
+            <ScrollView>
+
+                <View style={styles.titleContainer}>
+                    <Text style={styles.titleText}>
+                        MASTER <Text style={{ color: '#dc3545' }}>BARBER</Text> | INICIO
+                    </Text>
                 </View>
 
-                <ScrollView>
-                    <Text style={styles.adminText}>Admin</Text>
-
-                    <View style={styles.titleContainer}>
-                        <Text style={styles.titleText}>
-                            MASTER <Text style={{ color: '#dc3545' }}>BARBER</Text> | INICIO
-                        </Text>
-                    </View>
-
-                    <View style={styles.menuContainer}>
-                        <Text style={styles.menuTitle}>MENUUUUU</Text>
-                        <View style={styles.divider} />
-                        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                            <View style={{ flex: 1 }}>
-                                <Text style={styles.menuLink}>LINKS AYUDAS</Text>
-                                <Text style={styles.menuLinkHighlighted}>GESTION BARBEROS</Text>
-                                <Text style={styles.menuLinkHighlighted}>INVENTARIO</Text>
-                                <Text style={styles.menuLinkHighlighted}>GESTION INVENTARIO</Text>
-                            </View>
-                            <View
-                                style={{
-                                    transform: [{ scale: isHovered ? 1.1 : 1 }],
-                                    marginLeft: Dimensions.get('window').width * 0.05,
-                                }}
-                                onTouchStart={() => setIsHovered(true)}
-                                onTouchEnd={() => setIsHovered(false)}
-                            >
-                                <Image source={require('../../assets/logo.png')} style={styles.logo} />
-                            </View>
+                <View style={styles.menuContainer}>
+                    <Text style={styles.menuTitle}>MENUUUUU</Text>
+                    <View style={styles.divider} />
+                    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                        <View style={{ flex: 1 }}>
+                            <Text style={styles.menuLink}>LINKS AYUDAS</Text>
+                            <Text style={styles.menuLinkHighlighted}>GESTION BARBEROS</Text>
+                            <Text style={styles.menuLinkHighlighted}>INVENTARIO</Text>
+                            <Text style={styles.menuLinkHighlighted}>GESTION INVENTARIO</Text>
+                        </View>
+                        <View
+                            style={{
+                                transform: [{ scale: isHovered ? 1.1 : 1 }],
+                                marginLeft: Dimensions.get('window').width * 0.05,
+                            }}
+                            onTouchStart={() => setIsHovered(true)}
+                            onTouchEnd={() => setIsHovered(false)}
+                        >
+                            <Image source={require('../../assets/logo.png')} style={styles.logo} />
                         </View>
                     </View>
+                </View>
 
-                    <View style={styles.barbersContainer}>
-                        <Text style={styles.barbersTitle}>BARBEROS ACTUALES</Text>
-                        <View style={styles.divider} />
-                        <Text style={styles.barberItem}>• Deiby - Cortes Perfilados, Accesoria En Imagen Buen Uso De Las Maquinas Y El Ambiente</Text>
-                        <Text style={styles.barberItem}>• Nixxon - Cortes Perfilados, Accesoria En Imagen Buen Uso De Las Maquinas Y El Ambiente</Text>
-                        <Text style={styles.barberItem}>• Jeisson - Cortes Perfilados, Accesoria En Imagen Buen Uso De Las Maquinas Y El Ambiente</Text>
-                    </View>
-                    <TouchableOpacity style={styles.closeSidebarButton} onPress={handleLogout}>
-                        <Text style={styles.closeSidebarButtonText}>CERRAR SESION</Text>
-                    </TouchableOpacity>
-                </ScrollView>
-            </View>
-        </DefaultLayout>
+                <View style={styles.barbersContainer}>
+                    <Text style={styles.barbersTitle}>BARBEROS ACTUALES</Text>
+                    {barberos.map((barbero, index) => (
+                        <View key={index} style={styles.divider}>
+                            <Text style={{ ...styles.barberItem, color: '#dc3545', fontFamily: 'BebasNeue_400Regular', fontSize: 20 }}>{barbero.nombre_usuario}</Text>
+                            <Text style={styles.barberItem}>{barbero.descripcion}</Text>
+                        </View>
+                    ))}
+                </View>
+            </ScrollView>
+        </View>
     );
 }
 
@@ -151,17 +163,13 @@ const styles = StyleSheet.create({
     header: {
         flexDirection: 'row',
         alignItems: 'center',
-        paddingTop: 60,
+        justifyContent: 'space-between',
+        paddingHorizontal: Dimensions.get('window').width * 0.05,
+        paddingTop: 20,
         backgroundColor: '#212529',
+        marginBottom: 15,
     },
-    adminText: {
-        color: '#ffffff',
-        fontSize: Dimensions.get('window').width * 0.05,
-        justifyContent: 'center',
-        marginLeft: 304,
-        flexDirection: 'row',
-        fontFamily: 'BebasNeue_400Regular',
-    },
+
     titleContainer: {
         justifyContent: 'center',
         marginTop: Dimensions.get('window').height * 0.04,
@@ -188,7 +196,6 @@ const styles = StyleSheet.create({
         marginTop: Dimensions.get('window').height * 0.01,
     },
     divider: {
-        borderBottomWidth: 1,
         borderBottomColor: '#ffffff',
         marginVertical: 10,
     },
@@ -230,29 +237,20 @@ const styles = StyleSheet.create({
         marginBottom: 5,
     },
     iconBars: {
-        marginLeft: Dimensions.get('window').width * 0.07,
+        marginLeft: 10,
         marginTop: Dimensions.get('window').height * 0.02,
     },
-    welcomeText: {
-        color: '#ffc107',
-        fontSize: Dimensions.get('window').width * 0.06,
-        textAlign: 'center',
-        flex: 1,
-        marginTop: Dimensions.get('window').height * 0.03,
-        fontFamily: 'BebasNeue_400Regular',
-    },
     iconUser: {
-        marginRight: Dimensions.get('window').width * 0.07,
+        marginRight: 10,
         marginTop: Dimensions.get('window').height * 0.02,
     },
     dropdownMenu: {
         position: 'absolute',
-        top: Dimensions.get('window').height * 0.1,
-        right: Dimensions.get('window').width * 0.05,
+        right: Dimensions.get('window').width * 0.2,
         backgroundColor: '#343a40',
         padding: 10,
         borderRadius: 5,
-        zIndex: 20,
+        marginTop: Dimensions.get('window').height * 0.05,
     },
     dropdownItem: {
         color: '#ffffff',

@@ -5,7 +5,7 @@ import InicioAdminScreen from '../screens/Admin/InicioAdmin';
 import GestionarBarberosScreen from '../screens/Admin/GestionarBarberos';
 import InventarioScreen from '../screens/Admin/Inventario';
 import GestionDeInventarioScreen from '../screens/Admin/GestionDeInventario';
-import { Ionicons } from '@expo/vector-icons'; // O cualquier librería de íconos que uses
+import { Ionicons } from '@expo/vector-icons'; 
 
 const Drawer = createDrawerNavigator();
 

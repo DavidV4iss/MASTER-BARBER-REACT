@@ -1,35 +1,38 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { StyleSheet, Text, View, ScrollView, Image, Button } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { useFonts as useBebas, BebasNeue_400Regular } from '@expo-google-fonts/bebas-neue';
 import { Dimensions } from 'react-native';
-import Register from './Registro';
-import InicioAdmin from '../Admin/InicioAdmin';
-import GestionReservas from '../barberos/GestionReservas';
 import DefaultLayout from '../../Layouts/DefaultLayout';
+import BarberosRepository from '../../repositories/BarberosRepository';
+import { useState } from 'react';
+
 
 export default function Home() {
-  const [currentScreen, setCurrentScreen] = useState('Home');
+  const [barberos, setBarberos] = useState([]);
 
   const [fontsLoaded] = useBebas({
     BebasNeue_400Regular,
   });
+
+  React.useEffect(() => {
+    const fetchBarberos = async () => {
+      try {
+        const response = await BarberosRepository.GetBarberos();
+        setBarberos(response.data);
+      } catch (err) {
+        console.log("Error al obtener los datos:", err);
+      }
+    };
+
+    fetchBarberos();
+  }, []);
 
   if (!fontsLoaded) {
     return null;
   }
 
 
-  if (currentScreen === 'register') {
-    return <Register />;
-  }
-
-  if (currentScreen === 'admin') {
-    return <InicioAdmin />;
-  }
-  if (currentScreen === 'gestionReservas') {
-    return <GestionReservas />;
-  }
 
   return (
     <DefaultLayout>
@@ -182,46 +185,18 @@ export default function Home() {
         </View>
 
         <View style={{ flexDirection: 'row', justifyContent: 'center', flexWrap: 'wrap', marginTop: Dimensions.get('window').height * 0.07, marginBottom: Dimensions.get('window').height * 0.2 }}>
-          <View style={styles.stylistCard}>
-            <Image
-              source={require('../../assets/deiby.jpg')}
-              style={styles.stylistImage}
-            />
-            <Text style={styles.stylistName}>DEIBY</Text>
-            <Text style={styles.stylistDescription}>
-              Cortes Perfilados, Accesoría En Imagen Buen Uso De Las Máquinas Y El Ambiente
-            </Text>
-          </View>
-          <View style={styles.stylistCard}>
-            <Image
-              source={require('../../assets/nixon.jpg')}
-              style={styles.stylistImage}
-            />
-            <Text style={styles.stylistName}>NIXXON</Text>
-            <Text style={styles.stylistDescription}>
-              Cortes Perfilados, Accesoría En Imagen Buen Uso De Las Máquinas Y El Ambiente
-            </Text>
-          </View>
-          <View style={styles.stylistCard}>
-            <Image
-              source={require('../../assets/jeisson.jpg')}
-              style={styles.stylistImage}
-            />
-            <Text style={styles.stylistName}>JEISSON</Text>
-            <Text style={styles.stylistDescription}>
-              Cortes Perfilados, Accesoría En Imagen Buen Uso De Las Máquinas Y El Ambiente
-            </Text>
-          </View>
-          <View style={styles.stylistCard}>
-            <Image
-              source={require('../../assets/jeisson.jpg')}
-              style={styles.stylistImage}
-            />
-            <Text style={styles.stylistName}>JEISSON</Text>
-            <Text style={styles.stylistDescription}>
-              Cortes Perfilados, Accesoría En Imagen Buen Uso De Las Máquinas Y El Ambiente
-            </Text>
-          </View>
+          {barberos.map((barbero, index) => (
+            <View style={styles.stylistCard} key={index}>
+              <Image
+                source={require('../../assets/deiby.jpg')}
+                style={styles.stylistImage}
+              />
+              <Text style={styles.stylistName}>{barbero.nombre_usuario}</Text>
+              <Text style={styles.stylistDescription}>
+                {barbero.descripcion}
+              </Text>
+            </View>
+          ))}
         </View>
 
         <View style={{ alignItems: 'center', marginTop: Dimensions.get('window').height * 0.0 }}>

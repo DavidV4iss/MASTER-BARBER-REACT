@@ -18,16 +18,22 @@ export default function GestionarBarberos() {
         BebasNeue_400Regular,
     });
 
-    if (!fontsLoaded) return null;
 
     const navigation = useNavigation();
     const [modalVisible, setModalVisible] = useState(false);
+    const [modalVisibleEdit, setModalVisibleEdit] = useState(false);
     const [barberos, setBarberos] = useState([]);
     const [barbero, setBarbero] = useState({
 
         nombre: "",
         email: "",
         contrasena: "",
+        descripcion: "",
+    });
+    const [barberoEdit, setBarberoEdit] = useState({
+        id_usuario: "",
+        nombre_usuario: "",
+        email: "",
         descripcion: "",
     });
 
@@ -47,8 +53,35 @@ export default function GestionarBarberos() {
         }
     };
 
+    const handlesubmitEdit = async () => {
+        try {
+            const datos = {
+                nombre: barberoEdit.nombre_usuario,
+                email: barberoEdit.email,
+                descripcion: barberoEdit.descripcion,
+            };
+
+            const response = await BarberosRepository.UpdateBarberos(barberoEdit.id_usuario, datos);
+            console.log(response);
+
+            navigation.reset({
+                index: 0,
+                routes: [{ name: 'Gestionar Barberos' }],
+            });
+
+            setModalVisibleEdit(false);
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+
     const handleChange = (data) => (value) => {
         setBarbero({ ...barbero, [data]: value });
+    };
+
+    const handleChangeEdit = (data) => (value) => {
+        setBarberoEdit({ ...barberoEdit, [data]: value });
     };
 
     const fetchBarberos = async () => {
@@ -63,6 +96,9 @@ export default function GestionarBarberos() {
     React.useEffect(() => {
         fetchBarberos();
     }, []);
+
+    if (!fontsLoaded) return null;
+
 
     const DeleteBarberos = async (id) => {
         try {
@@ -113,13 +149,16 @@ export default function GestionarBarberos() {
                         {barberos.map((barbero, index) => (
                             <View style={styles.card} key={index}>
                                 <View style={styles.cardContent}>
-                                    <Text style={styles.cardTitle}>{barbero.nombre}</Text>
+                                    <Text style={styles.cardTitle}>{barbero.nombre_usuario}</Text>
                                     <Text style={styles.cardText}>{barbero.email}</Text>
                                     <Text style={styles.cardText}>{barbero.descripcion}</Text>
                                     <View style={styles.cardActions}>
                                         <TouchableOpacity
                                             style={styles.editButton}
-                                            onPress={() => alert(`Editar`)}
+                                            onPress={() => {
+                                                setBarberoEdit(barbero);
+                                                setModalVisibleEdit(true);
+                                            }}
                                         >
                                             <Icon name="pencil" size={16} color="#000000" />
                                         </TouchableOpacity>
@@ -193,6 +232,57 @@ export default function GestionarBarberos() {
                 </View>
             </Modal>
             {/* FIN MODAL AÑADIR */}
+
+
+            {/* MODAL EDITAR */}
+            <Modal
+                animationType="slide"
+                transparent={true}
+                visible={modalVisibleEdit}
+                onRequestClose={() => setModalVisibleEdit(false)}
+            >
+                <View style={styles.modalContainer}>
+                    <View style={styles.modalContent}>
+                        <Text style={styles.modalTitle}>Editar Barbero</Text>
+                        <TextInput
+                            style={styles.input}
+                            placeholder="Nombre Del Barbero"
+                            placeholderTextColor="#ccc"
+                            onChangeText={handleChangeEdit("nombre_usuario")}
+                            value={barberoEdit.nombre_usuario}
+                        />
+                        <TextInput
+                            style={styles.input}
+                            placeholder="Email"
+                            placeholderTextColor="#ccc"
+                            onChangeText={handleChangeEdit("email")}
+                            value={barberoEdit.email}
+                        />
+                        <TextInput
+                            style={styles.input}
+                            placeholder="Descripción"
+                            placeholderTextColor="#ccc"
+                            onChangeText={handleChangeEdit("descripcion")}
+                            value={barberoEdit.descripcion}
+                        />
+                        <View style={styles.modalActions}>
+                            <TouchableOpacity
+                                style={styles.cancelButton}
+                                onPress={() => setModalVisibleEdit(false)}
+                            >
+                                <Text style={{ color: '#ffffff' }}>Cancelar</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity
+                                style={styles.saveButton}
+                                onPress={handlesubmitEdit}
+                            >
+                                <Text style={{ color: '#ffffff' }}>Guardar</Text>
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+                </View>
+            </Modal>
+            {/* FIN MODAL EDITAR */}
 
         </DefaultLayout>
     )

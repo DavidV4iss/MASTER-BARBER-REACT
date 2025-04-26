@@ -1,4 +1,5 @@
 import axios from "axios"
+import { showMessage } from "react-native-flash-message";
 class BarberosRepository {
 
     static async GetBarberos() {
@@ -16,27 +17,57 @@ class BarberosRepository {
     static async CreateBarberos(barbero) {
         try {
             const response = await axios.post("http://localhost:8080/CreateBarberos", barbero);
+            showMessage({
+                message: "Barbero creado exitosamente",
+                type: "success",
+                icon: "success",
+                duration: 2000
+            })
             return response;
         } catch (error) {
             const errorMessage = error?.response?.data?.message || "Error al obtener los barberos.";
             throw new Error(errorMessage);
         }
     }
-    static async UpdateBarberos(id) {
+    static async UpdateBarberos(id, barberoEdit) {
         try {
-            const response = await axios.get(`http://localhost:8080/UpdateBarberos/${id}`);
+            const response = await axios.put(`http://localhost:8080/UpdateBarberos/${id}`, barberoEdit);
+            showMessage({
+                message: "Barbero actualizado exitosamente",
+                type: "success",
+                icon: "success",
+                duration: 2000
+            })
             return response;
         } catch (error) {
-            const errorMessage = error?.response?.data?.message || "Error al obtener los barberos.";
+            const errorMessage = error?.response?.data?.message || "Error al actualizar el barbero.";
             throw new Error(errorMessage);
         }
     }
     static async DeleteBarberos(id) {
+        const confirmDelete = window.confirm('¿Está seguro de que desea eliminar al barbero?'); // Para web
+
+        if (!confirmDelete) {
+            return;
+        }
+
         try {
             const response = await axios.delete(`http://localhost:8080/DeleteBarberos/${id}`);
+            showMessage({
+                message: "Barbero eliminado exitosamente",
+                type: "success",
+                icon: "success",
+                duration: 2000
+            })
             return response;
         } catch (error) {
-            const errorMessage = error?.response?.data?.message || "Error al obtener los barberos.";
+            const errorMessage = error?.response?.data?.message || "Error al eliminar el barbero.";
+            showMessage({
+                message: "Error al eliminar el barbero",
+                description: errorMessage,
+                type: "danger",
+                icon: "danger",
+            })
             throw new Error(errorMessage);
         }
     }
