@@ -14,7 +14,6 @@ class AuthRepository {
     static async login(user) {
         try {
             const response = await axios.post("http://localhost:8080/login", user);
-            console.log(`Respuesta de auth repository: ${JSON.stringify(response)}`);
             return response;
         } catch (error) {
             const errorMessage = error?.response?.data?.message || "Error al iniciar sesión.";

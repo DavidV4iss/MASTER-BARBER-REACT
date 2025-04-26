@@ -14,7 +14,6 @@ export function AuthProvider({ children }) {
             setIsLoading(true);
             try {
                 const userData = await AuthService.validarToken();
-                console.log('User data from token validation:', userData); // Debug log
 
                 if (userData) {
                     setUser(userData);
@@ -36,8 +35,6 @@ export function AuthProvider({ children }) {
         setIsLoading(true);
         try {
             const response = await AuthService.login(user);
-            console.log("Login response:", response);
-
             const token = response?.data?.token;
             if (token) {
                 await AsyncStorage.setItem("token", token);
@@ -49,7 +46,6 @@ export function AuthProvider({ children }) {
                     icon: "success",
                     duration: 2000
                 })
-                alert("Bienvenido");
             }
         } catch (error) {
             console.error("Error en login:", error);
@@ -59,7 +55,6 @@ export function AuthProvider({ children }) {
                 type: "danger",
                 icon: "danger",
             })
-            alert(error.message);
         }
         setIsLoading(false);
     };
