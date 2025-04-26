@@ -56,7 +56,7 @@ const transporter = nodemailer.createTransport({
     }
 });
 
-
+//LOGIN
 app.post('/login', (req, res) => {
     const { email, password } = req.body;
 
@@ -107,6 +107,8 @@ app.post('/login', (req, res) => {
     });
 });
 
+//FIN LOGIN
+
 
 // Middleware para verificar el token
 const verificarToken = (req, res, next) => {
@@ -129,7 +131,7 @@ const verificarToken = (req, res, next) => {
 
 
 
-
+// Registro
 app.post('/registrar', (req, res) => {
     console.log(req.body);
     const nombreusuario = req.body.nombre_usuario;
@@ -198,6 +200,11 @@ app.post('/registrar', (req, res) => {
         }
     });
 });
+//Fin Registro
+
+
+
+// Enviar correo de restablecimiento de contraseña
 
 app.post('/EnvEmail', (req, res) => {
     const email = req.body.email;
@@ -252,6 +259,7 @@ app.post('/EnvEmail', (req, res) => {
         });
     });
 });
+//FIN CambiarPassword
 
 
 
@@ -423,13 +431,6 @@ app.put('/RestarInventario/:id', (req, res) => {
     }
     );
 });
-// FIN INVENTARIO
-
-
-
-
-
-
 
 app.get('/categorias', (req, res) => {
     db.query('SELECT * FROM categoria_producto', (err, results) => {
@@ -443,6 +444,7 @@ app.get('/categorias', (req, res) => {
     })
 })
 
+// FIN INVENTARIO
 
 
 
@@ -495,7 +497,6 @@ app.post('/Cambiarpasscod', (req, res) => {
 
 
 // CRUD DEL BARBERO
-
 const storageBarbero = multer.diskStorage({
     destination: function (req, file, cb) {
         cb(null, '../Frontend/public/images/imagesBarbero/')
@@ -643,8 +644,6 @@ app.delete('/DeleteBarberos/:id', (req, res) => {
     })
 });
 
-
-
 // FIN CRUD BARBERO
 
 
@@ -654,7 +653,7 @@ app.delete('/DeleteBarberos/:id', (req, res) => {
 
 
 
-
+//Perfil USUARIO
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
         cb(null, '../Frontend/public/images/perfil/')
@@ -745,6 +744,7 @@ app.get('/traerUsuario/:email', (req, res) => {
         }
     })
 })
+//Fin Perfil
 
 
 
@@ -966,10 +966,10 @@ app.patch('/UpdateReservasEstado/:id', (req, res) => {
                     }
 
                     // Guardar la notificación en la base de datos
-                    const mensaje = `El estado de tu reserva ha sido actualizado a: ${nuevoEstado}. Servicio: ${servicioNombre}, Fecha: ${new Date(reserva.fecha).toLocaleString()}`;
+                    const mensaje = `El estado de tu reserva ha sido actualizado a: ${nuevoEstado}. Servicio: ${servicioNombre}, Fecha:${new Date(reserva.fecha).toLocaleString()}`;
                     db.query(
-                        'INSERT INTO notificaciones (cliente_id, mensaje) VALUES (?, ?)',
-                        [clienteId, mensaje],
+                        'INSERT INTO notificaciones (cliente_id, mensaje, fecha) VALUES (?,?,?)',
+                        [clienteId, mensaje, new Date(reserva.fecha).toLocaleString()],
                         (err) => {
                             if (err) {
                                 console.error('Error al guardar la notificación:', err);
@@ -1023,6 +1023,11 @@ app.delete('/DeleteReserva/:id', (req, res) => {
     });
 });
 
+// Fin Reservas
+
+
+
+// Notificaciones
 app.get('/GetNotificaciones/:cliente_id', (req, res) => {
     const cliente_id = req.params.cliente_id;
 
@@ -1061,12 +1066,12 @@ app.delete('/DeleteNotificacionReserva/:id', (req, res) => {
         res.status(200).json({ message: 'Notificación eliminada correctamente' });
     });
 });
+// Fin Notificaciones
 
 
 
 
-
-
+// VENTAS
 app.get('/GetVentas', (req, res) => {
     const { rango } = req.query; // Rango puede ser 'diario', 'semanal', 'mensual', 'anual'
 
@@ -1093,11 +1098,10 @@ app.get('/GetVentas', (req, res) => {
 });
 
 app.post('/GuardarVentas', (req, res) => {
-    const ventas = req.body; // Las ventas deben ser un array de objetos
+    const ventas = req.body;
 
     const q = 'INSERT INTO ventas (id_producto, cantidad, fecha, PrecioUnitario, nombre) VALUES ?';
 
-    // Convertir las ventas en un formato adecuado para la consulta
     const values = ventas.map((venta) => [
         venta.id_producto,
         venta.cantidad,
@@ -1114,7 +1118,7 @@ app.post('/GuardarVentas', (req, res) => {
         res.status(200).json({ message: 'Ventas guardadas exitosamente' });
     });
 });
-
+// FIN VENTAS
 
 app.listen(8080, () => {
     console.log("Conexion exitosa:)")
