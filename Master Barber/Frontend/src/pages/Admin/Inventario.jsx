@@ -262,7 +262,7 @@ export default function Inventario() {
                                             <td className='text-center'>{categorias.find(c => c.id_categoria_producto === item.id_categoria_producto).categoria}</td>
                                             <td className='text-center'>{item.proveedor}</td>
                                             <td className='text-center'>{item.fecha_venta}</td>
-                                            <td className='text-center'><img src={`/images/imagesInventario/${item.Foto}`} className='img-fluid zoomhover2' style={{ width: '150px', height: '150px', objectFit: 'cover' }} /></td>
+                                            <td className='text-center'><img src={`http://localhost:8080/ImagesInventario/${item.Foto}`} className='img-fluid zoomhover2' style={{ width: '150px', height: '150px', objectFit: 'cover' }} /></td>
                                             <td className='text-center'>{item.PrecioUnitario}</td>
                                             <td>
                                                 <div className="d-flex">
@@ -295,7 +295,7 @@ export default function Inventario() {
                                     </div>
                                     <div className="d-flex justify-content-center ">
                                         <div className="card bg-dark" style={{ width: '10rem' }}>
-                                            <img src={imagePreviewEdit || `/images/imagesInventario/${productoEditar.foto}`} style={{ width: '100%', height: '100%', objectFit: 'cover' }} className='img-fluid text-white rounded' alt="Imagen" />
+                                            <img src={imagePreviewEdit || `http://localhost:8080/ImagesInventario/${productoEditar.foto}`} style={{ width: '100%', height: '100%', objectFit: 'cover' }} className='img-fluid text-white rounded' alt="Imagen" />
                                         </div>
                                     </div>
                                     <div class="modal-body">

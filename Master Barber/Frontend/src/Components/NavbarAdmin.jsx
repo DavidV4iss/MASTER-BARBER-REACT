@@ -25,7 +25,7 @@ export default function NavbarAdmin() {
         const res = await axios.get(`http://localhost:8080/traerUsuario/${email}`);
         setAdmin(res.data[0]);
         if (res.data[0].Foto) {
-          setImagePreview(`/images/perfil/${res.data[0].Foto}`);
+          setImagePreview(`http://localhost:8080/perfil/${res.data[0].Foto}`);
         }
       } catch (err) {
         console.log("Error al obtener los datos:", err);

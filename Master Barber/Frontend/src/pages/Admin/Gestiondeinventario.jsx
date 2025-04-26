@@ -243,7 +243,7 @@ export default function Gestiondeinventario() {
                             <Link onClick={() => agregarProducto(item)} className="col text-decoration-none" key={item.id_producto}>
                                 <div className="col ">
                                     <div className="card bg-dark">
-                                        <img src={`/images/imagesInventario/${item.Foto}`} alt="..." className="card-img-top" />
+                                        <img src={`http://localhost:8080/ImagesInventario/${item.Foto}`} alt="..." className="card-img-top" />
                                         <div className="card-body">
                                             <h5 className="card-title text-danger bebas text-center">{item.nombre}</h5>
                                             <p className="card-text text-white text-center">{item.PrecioUnitario}</p>

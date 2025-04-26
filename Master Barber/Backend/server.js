@@ -14,6 +14,9 @@ const path = require('path');
 const app = express();
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+app.use('/imagesBarbero', express.static(path.join(__dirname, './uploads/imagesBarbero')));
+app.use('/ImagesInventario', express.static(path.join(__dirname, './uploads/ImagesInventario')));
+app.use('/perfil', express.static(path.join(__dirname, './uploads/perfil')));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
@@ -273,7 +276,7 @@ app.post('/EnvEmail', (req, res) => {
 
 const storageInventario = multer.diskStorage({
     destination: function (req, file, cb) {
-        cb(null, '../Frontend/public/images/imagesInventario/')
+        cb(null, './uploads/ImagesInventario')
     },
     filename: function (req, file, cb) {
         cb(null, `inventario_${Date.now()}` + '-' + file.originalname)
@@ -347,7 +350,7 @@ app.post('/CreateInventario', uploadInventario.single('foto'), (req, res) => {
 
 const borrarFotoInventario = async (foto) => {
     try {
-        const filePath = path.resolve(__dirname, `../Frontend/public/images/imagesInventario/${foto}`);
+        const filePath = path.resolve(__dirname, `./uploads/ImagesInventario/${foto}`);
         await fs.promises.unlink(filePath);
     } catch (err) {
         console.error('Error eliminando imagen:', err);
@@ -501,7 +504,7 @@ app.post('/Cambiarpasscod', (req, res) => {
 // CRUD DEL BARBERO
 const storageBarbero = multer.diskStorage({
     destination: function (req, file, cb) {
-        cb(null, '../Frontend/public/images/imagesBarbero/')
+        cb(null, './uploads/imagesBarbero/')
     },
     filename: function (req, file, cb) {
         cb(null, `barbero_${Date.now()}` + '-' + file.originalname)
@@ -572,7 +575,7 @@ app.post('/CreateBarberos', uploadBarbero.single('foto'), (req, res) => {
 
 const borrarFotoBarbero = async (foto) => {
     try {
-        const filePath = path.resolve(__dirname, `../Frontend/public/images/imagesBarbero/${foto}`);
+        const filePath = path.resolve(__dirname, `./uploads/imagesBarbero/${foto}`);
         await fs.promises.unlink(filePath);
     } catch (err) {
         console.error('Error eliminando imagen:', err);
@@ -658,7 +661,7 @@ app.delete('/DeleteBarberos/:id', (req, res) => {
 //Perfil USUARIO
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        cb(null, '../Frontend/public/images/perfil/')
+        cb(null, './uploads/perfil/')
     },
     filename: function (req, file, cb) {
         cb(null, Date.now() + '-' + file.originalname)
@@ -670,7 +673,7 @@ const upload = multer({ storage: storage })
 
 const borrarFoto = async (foto) => {
     try {
-        const filePath = path.resolve(__dirname, `../Frontend/public/images/perfil/${foto}`);
+        const filePath = path.resolve(__dirname, `./uploads/perfil/${foto}`);
         await fs.promises.unlink(filePath);
     } catch (err) {
         console.error('Error eliminando imagen:', err);

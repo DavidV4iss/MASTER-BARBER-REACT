@@ -24,7 +24,7 @@ export default function PerfilUser() {
         const res = await axios.get(`http://localhost:8081/traerUsuario/${email}`);
         setUser(res.data[0]);
         if (res.data[0].Foto) {
-          setImagePreview(`/images/perfil/${res.data[0].Foto}`);
+          setImagePreview(`http://localhost:8081/perfil/${res.data[0].Foto}`);
         }
       } catch (err) {
         console.log("Error al obtener los datos:", err);

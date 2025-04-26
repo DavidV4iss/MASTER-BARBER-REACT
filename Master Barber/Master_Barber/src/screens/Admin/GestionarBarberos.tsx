@@ -9,6 +9,8 @@ import { BebasNeue_400Regular } from "@expo-google-fonts/bebas-neue";
 import { useState } from 'react';
 import { useFonts } from "expo-font";
 import BarberosRepository from '../../repositories/BarberosRepository';
+import * as ImagePicker from 'expo-image-picker';
+import { Ionicons } from '@expo/vector-icons';
 
 
 
@@ -23,38 +25,52 @@ export default function GestionarBarberos() {
     const [modalVisible, setModalVisible] = useState(false);
     const [modalVisibleEdit, setModalVisibleEdit] = useState(false);
     const [barberos, setBarberos] = useState([]);
+    const [imagePreview, setImagePreview] = useState(null);
+    const [imagePreviewEditar, setImagePreviewEditar] = useState(null);
     const [barbero, setBarbero] = useState({
 
         nombre: "",
         email: "",
         contrasena: "",
         descripcion: "",
+        foto: null,
     });
     const [barberoEdit, setBarberoEdit] = useState({
         id_usuario: "",
         nombre_usuario: "",
         email: "",
         descripcion: "",
+        foto: null,
     });
 
 
 
     const handlesubmit = async () => {
         try {
-            const response = await BarberosRepository.CreateBarberos(barbero);
-            console.log(response);
+            const formData = new FormData();
+            formData.append('nombre', barbero.nombre);
+            formData.append('email', barbero.email);
+            formData.append('contrasena', barbero.contrasena);
+            formData.append('descripcion', barbero.descripcion);
+            if (barbero.foto) {
+                formData.append('foto', {
+                    uri: barbero.foto.uri,
+                    type: barbero.foto.type,
+                    name: barbero.foto.name,
+                });
+            }
 
+            const response = await BarberosRepository.CreateBarberos(formData);
+            console.log(response);
             navigation.reset({
                 index: 0,
                 routes: [{ name: 'Gestionar Barberos' }],
             });
-
             setModalVisible(false);
         } catch (error) {
             console.log(error);
         }
     };
-
     const handlesubmitEdit = async () => {
         try {
             const datos = {
@@ -74,6 +90,46 @@ export default function GestionarBarberos() {
             setModalVisibleEdit(false);
         } catch (error) {
             console.log(error);
+        }
+    };
+
+    const handleSeleccionarImagen = async () => {
+        let result = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: ['images'],
+            allowsEditing: true,
+            aspect: [4, 3],
+            quality: 1,
+        });
+
+        if (!result.canceled) {
+            const asset = result.assets[0];
+            const foto = {
+                uri: asset.uri,
+                type: 'image/jpeg',
+                name: `foto_${Date.now()}.jpg`,
+            }
+            setBarbero({ ...barbero, foto });
+            setImagePreview(asset.uri);
+        }
+    };
+
+    const handleSeleccionarImagenEditar = async () => {
+        let result = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: ['images'],
+            allowsEditing: true,
+            aspect: [4, 3],
+            quality: 1,
+        });
+
+        if (!result.canceled) {
+            const asset = result.assets[0];
+            const foto = {
+                uri: asset.uri,
+                type: 'image/jpeg',
+                name: `foto_${Date.now()}.jpg`,
+            }
+            setBarberoEdit({ ...barberoEdit, foto });
+            setImagePreviewEditar(asset.uri);
         }
     };
 
@@ -151,6 +207,7 @@ export default function GestionarBarberos() {
                         {barberos.map((barbero, index) => (
                             <View style={styles.card} key={index}>
                                 <View style={styles.cardContent}>
+                                    <Image source={{ uri: `http://192.168.20.15:8080/imagesBarbero/${barbero.Foto}` }} style={{ ...styles.cardImage, padding: 200 }} />
                                     <Text style={styles.cardTitle}>{barbero.nombre_usuario}</Text>
                                     <Text style={styles.cardText}>{barbero.email}</Text>
                                     <Text style={styles.cardText}>{barbero.descripcion}</Text>
@@ -215,6 +272,23 @@ export default function GestionarBarberos() {
                             onChangeText={handleChange("descripcion")}
                             value={barbero.descripcion}
                         />
+                        <TouchableOpacity
+                            onPress={handleSeleccionarImagen}
+                            style={styles.imageUploadButton}
+                        >
+                            {imagePreview ? (
+                                <Image
+                                    source={{ uri: imagePreview }}
+                                    style={styles.imagePreview}
+                                    resizeMode="cover"
+                                />
+                            ) : (
+                                <View style={styles.imagePlaceholder}>
+                                    <Ionicons name="image-outline" size={40} color="#aaa" />
+                                    <Text style={styles.placeholderText}>Seleccionar imagen</Text>
+                                </View>
+                            )}
+                        </TouchableOpacity>
 
 
                         <View style={styles.modalActions}>
@@ -266,7 +340,26 @@ export default function GestionarBarberos() {
                             placeholderTextColor="#ccc"
                             onChangeText={handleChangeEdit("descripcion")}
                             value={barberoEdit.descripcion}
+
                         />
+                        <TouchableOpacity
+                            onPress={handleSeleccionarImagenEditar}
+                            style={styles.imageUploadButton}
+                        >
+                            {imagePreviewEditar ? (
+                                <Image
+                                    source={{ uri: imagePreviewEditar }}
+                                    style={styles.imagePreview}
+                                    resizeMode="cover"
+                                />
+                            ) : (
+                                <View style={styles.imagePlaceholder}>
+                                    <Ionicons name="image-outline" size={40} color="#aaa" />
+                                    <Text style={styles.placeholderText}>Seleccionar imagen</Text>
+                                </View>
+                            )}
+                        </TouchableOpacity>
+
                         <View style={styles.modalActions}>
                             <TouchableOpacity
                                 style={styles.cancelButton}
@@ -406,6 +499,30 @@ const styles = StyleSheet.create({
         flex: 1,
         marginLeft: 10,
         alignItems: 'center',
+    },
+    imageUploadButton: {
+        marginVertical: 15,
+        height: 150,
+        borderWidth: 1,
+        borderColor: '#ddd',
+        borderRadius: 8,
+        justifyContent: 'center',
+        alignItems: 'center',
+        overflow: 'hidden',
+    },
+    imagePreview: {
+        width: '100%',
+        height: '100%',
+    },
+    imagePlaceholder: {
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: 20,
+    },
+    placeholderText: {
+        marginTop: 8,
+        color: '#aaa',
+        fontSize: 14,
     },
 })
 

@@ -4,7 +4,7 @@ class BarberosRepository {
 
     static async GetBarberos() {
         try {
-            const response = await axios.get("http://localhost:8080/GetBarberos");
+            const response = await axios.get("http://192.168.20.15:8080/GetBarberos");
             return response;
         } catch (error) {
             const errorMessage = error?.response?.data?.message || "Error al obtener los barberos.";
@@ -16,22 +16,32 @@ class BarberosRepository {
 
     static async CreateBarberos(barbero) {
         try {
-            const response = await axios.post("http://localhost:8080/CreateBarberos", barbero);
+            const response = await axios.post("http://192.168.20.15:8080/CreateBarberos", barbero, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+            });
             showMessage({
                 message: "Barbero creado exitosamente",
                 type: "success",
                 icon: "success",
-                duration: 2000
-            })
+                duration: 2000,
+            });
             return response;
         } catch (error) {
-            const errorMessage = error?.response?.data?.message || "Error al obtener los barberos.";
+            const errorMessage = error?.response?.data || "Error al crear el barbero.";
+            showMessage({
+                message: "Error al crear el barbero",
+                description: errorMessage,
+                type: "danger",
+                icon: "danger",
+            });
             throw new Error(errorMessage);
         }
     }
     static async UpdateBarberos(id, barberoEdit) {
         try {
-            const response = await axios.put(`http://localhost:8080/UpdateBarberos/${id}`, barberoEdit);
+            const response = await axios.put(`http://192.168.20.15:8080/UpdateBarberos/${id}`, barberoEdit);
             showMessage({
                 message: "Barbero actualizado exitosamente",
                 type: "success",
@@ -45,14 +55,8 @@ class BarberosRepository {
         }
     }
     static async DeleteBarberos(id) {
-        const confirmDelete = window.confirm('¿Está seguro de que desea eliminar al barbero?'); // Para web
-
-        if (!confirmDelete) {
-            return;
-        }
-
         try {
-            const response = await axios.delete(`http://localhost:8080/DeleteBarberos/${id}`);
+            const response = await axios.delete(`http://192.168.20.15:8080/DeleteBarberos/${id}`);
             showMessage({
                 message: "Barbero eliminado exitosamente",
                 type: "success",

@@ -238,7 +238,7 @@ export default function Reserva() {
                                         <div className="card-body">
                                             <div className="text-center">
                                                 <img
-                                                    src={`/images/imagesBarbero/${barbero.Foto}`}
+                                                    src={`http://localhost:8080/imagesBarbero/${barbero.Foto}`}
                                                     className="card-img-top img-fluid"
                                                     alt={barbero.nombre_usuario}
                                                 />

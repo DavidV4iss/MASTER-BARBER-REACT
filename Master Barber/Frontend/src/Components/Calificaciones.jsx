@@ -47,7 +47,7 @@ export default function Calificaciones() {
             <div className="card h-100 bg-dark card-calificacion" onClick={() => handleShow(calificacion)}>
               <div className="card-body">
                 <img
-                  src={`/images/perfil/${usuarios.find((user) => user.id_usuario === calificacion.usuario_id)?.Foto}`}
+                  src={`http://localhost:8080/perfil/${usuarios.find((user) => user.id_usuario === calificacion.usuario_id)?.Foto}`}
                   className="img-fluid rounded-circle"
                   style={{ width: "100px", height: "100px", objectFit: "cover" }}
                 />
@@ -69,7 +69,7 @@ export default function Calificaciones() {
           </Modal.Header >
           <Modal.Body className='bg-dark'>
             <img
-              src={`/images/perfil/${usuarios.find((user) => user.id_usuario === selectedCalificacion.usuario_id)?.Foto}`}
+              src={`http://localhost:8080/perfil/${usuarios.find((user) => user.id_usuario === selectedCalificacion.usuario_id)?.Foto}`}
               className="img-fluid rounded-circle mx-auto d-block mt-3"
               style={{ width: "70px", height: "70px", objectFit: "cover" }}
             />

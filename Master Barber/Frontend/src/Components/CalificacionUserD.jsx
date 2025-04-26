@@ -89,7 +89,7 @@ export default function CalificacionesUserD() {
                         <div className="card h-100 bg-dark" onClick={() => handleShow(calificacion)}>
                             <div className="card-body">
                                 <img
-                                    src={`/images/perfil/${usuarios.find((user) => user.id_usuario === calificacion.usuario_id)?.Foto}`}
+                                    src={`http://localhost:8080/perfil/${usuarios.find((user) => user.id_usuario === calificacion.usuario_id)?.Foto}`}
                                     className="img-fluid rounded-circle"
                                     style={{ width: "100px", height: "100px", objectFit: "cover" }}
                                 />

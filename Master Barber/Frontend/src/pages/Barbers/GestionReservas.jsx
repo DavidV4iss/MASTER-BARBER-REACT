@@ -146,7 +146,7 @@ export default function GestionReservas() {
         const cliente = clientes.find(cliente => cliente.id_usuario === id);
         return [{
             nombre: cliente ? cliente.nombre_usuario : 'Desconocido',
-            IMG: cliente ? <img src={`/images/perfil/${cliente.Foto}`} alt="Foto de Perfil" style={{ width: '100px', height: '100px', borderRadius: '50%', marginRight: '10px' }} /> : 'Desconocido'
+            IMG: cliente ? <img src={`http://localhost:8080/perfil/${cliente.Foto}`} alt="Foto de Perfil" style={{ width: '100px', height: '100px', borderRadius: '50%', marginRight: '10px' }} /> : 'Desconocido'
         }];
     };
 

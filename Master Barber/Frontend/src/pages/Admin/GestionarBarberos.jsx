@@ -203,7 +203,7 @@ export default function GestionarBarberos() {
 
   const openEditModal = (barbero) => {
     setBarberoEdit(barbero);
-    setImagePreviewEdit(`/images/imagesBarbero/${barbero.Foto}`);
+    setImagePreviewEdit(`http://localhost:8080/imagesBarbero/${barbero.Foto}`);
   };
 
   return (
@@ -234,7 +234,7 @@ export default function GestionarBarberos() {
                     <td className='w-25 text-center p-5'>{barbero.nombre_usuario}</td>
                     <td className='w-25 text-center p-5'>{barbero.email}</td>
                     <td className='w-25 text-center p-5'>{barbero.descripcion}</td>
-                    <td><img src={`/images/imagesBarbero/${barbero.Foto}`} className='img-fluid zoomhover2' alt="" /></td>
+                    <td><img src={`http://localhost:8080/imagesBarbero/${barbero.Foto}`} className='img-fluid zoomhover2' alt="" /></td>
                     <td>
                       <div className="d-flex justify-content-center mt-5 mx-5">
                         <button type="button" className="btn btn-outline-warning me-5" onClick={() => openEditModal(barbero)} data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@mdo">
@@ -263,7 +263,7 @@ export default function GestionarBarberos() {
                 </div>
                 <div className="modal-body d-flex justify-content-center ">
                   <div className="card bg-dark" style={{ width: '10rem' }}>
-                    <img src={imagePreviewEdit || `/images/imagesBarbero/${barberoEdit.foto}`} style={{ width: '100%', height: '100%', objectFit: 'cover' }} className='img-fluid text-white rounded' alt="Imagen Barbero" />
+                    <img src={imagePreviewEdit || `http://localhost:8080/imagesBarbero/${barberoEdit.foto}`} style={{ width: '100%', height: '100%', objectFit: 'cover' }} className='img-fluid text-white rounded' alt="Imagen Barbero" />
                   </div>
                 </div>
                 <div className="modal-body">

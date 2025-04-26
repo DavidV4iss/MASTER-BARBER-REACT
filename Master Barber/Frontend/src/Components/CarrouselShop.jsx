@@ -63,7 +63,7 @@ export default function CarrouselShop() {
                     <SwiperSlide key={carrousel.id}>
                         <div className="card text-center bg-dark">
                             <div className="card-body">
-                                <img src={`/images/imagesInventario/${carrousel.Foto}`} className='img-fluid ' alt="" />
+                                <img src={`http://localhost:8080/ImagesInventario/${carrousel.Foto}`} className='img-fluid ' alt="" />
                                 <h5 className="card-title mt-4 antonparabackend text-danger">{carrousel.nombre}</h5>
                                 <p className="card-text text-white mt-4">{carrousel.descripcion_P}</p>
                                 <p className="card-text text-white mt-2">Quedan {carrousel.cantidad} Unidades De Este Producto</p>
