@@ -111,23 +111,25 @@ app.post('/login', (req, res) => {
 
 
 // Middleware para verificar el token
-const verificarToken = (req, res, next) => {
+app.get('/validarToken', (req, res) => {
     const token = req.headers['authorization'];
 
-    if (!token) {
-        return res.status(403).json({ error: "Token no proporcionado" });
-    }
+    if (!token) return res.status(403).json({ error: 'Token no proporcionado' });
 
-    jwt.verify(token, process.env.JWT_SECRET || 'miClaveSecreta', (err, decoded) => {
-        if (err) {
-            return res.status(401).json({ error: "Token inválido" });
-        }
+    jwt.verify(token, 'miClaveSecreta', (err, decoded) => {
+        if (err) return res.status(401).json({ error: 'Token inválido' });
 
-        // Guardar la información del usuario en la solicitud para usar en rutas protegidas
-        req.usuario = decoded;
-        next();
+        return res.status(200).json({
+            user: {
+                id: decoded.id,
+                email: decoded.email,
+                role: decoded.role,
+            },
+        });
     });
-};
+});
+
+
 
 
 

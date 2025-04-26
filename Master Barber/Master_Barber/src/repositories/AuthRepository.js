@@ -24,14 +24,15 @@ class AuthRepository {
 
     static async validarToken(token) {
         try {
-            if (!token) {
-                return null;
-            }
+            if (!token) return null;
+
             const response = await axios.get("http://localhost:8080/validarToken", {
                 headers: {
-                    Authorization: `Bearer ${token}`,
+                    Authorization: token,
                 },
             });
+
+            return response;
         } catch (error) {
             if (error.response && error.response.status === 401) {
                 await AsyncStorage.removeItem('token');

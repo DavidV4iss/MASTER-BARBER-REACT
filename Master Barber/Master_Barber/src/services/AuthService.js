@@ -23,27 +23,27 @@ class AuthService {
     }
 
     static async validarToken() {
-    try {
-        const token = await AsyncStorage.getItem('token');
-        if (!token) return null;
+        try {
+            const token = await AsyncStorage.getItem('token');
+            if (!token) return null;
 
-        const response = await AuthRepository.validarToken(token);
-        
-        // Asegurarse de que la estructura del usuario sea consistente
-        if (response?.user) {
-            return {
-                id: response.user.id,
-                email: response.user.email,
-                role: response.user.role
-            };
+            const response = await AuthRepository.validarToken(token);
+
+            if (response?.data?.user) {
+                return {
+                    id: response.data.user.id,
+                    email: response.data.user.email,
+                    role: response.data.user.role
+                };
+            }
+
+            return null;
+        } catch (error) {
+            console.warn("Error validando token:", error.message);
+            await AsyncStorage.removeItem('token');
+            return null;
         }
-        return null;
-    } catch (error) {
-        console.warn("Error validando token:", error.message);
-        await AsyncStorage.removeItem('token');
-        return null;
     }
-}
     static async getToken() {
         try {
             const token = await AsyncStorage.getItem("token");

@@ -21,9 +21,7 @@ export default function Login() {
     BebasNeue_400Regular,
   });
 
-  if (!fontsLoaded) {
-    return null;
-  }
+  if (!fontsLoaded) return null;
 
   const handleLogin = async () => {
     if (!email || !password) {

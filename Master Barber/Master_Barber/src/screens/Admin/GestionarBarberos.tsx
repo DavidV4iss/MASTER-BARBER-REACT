@@ -4,14 +4,69 @@ import { Dimensions } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import DefaultLayout from "../../Layouts/DefaultLayout";
 import { useNavigation } from '@react-navigation/native';
+import { Anton_400Regular } from "@expo-google-fonts/anton";
+import { BebasNeue_400Regular } from "@expo-google-fonts/bebas-neue";
 import { useState } from 'react';
+import { useFonts } from "expo-font";
+
+import BarberosRepository from '../../repositories/BarberosRepository';
 
 
 
 export default function GestionarBarberos() {
+    const [fontsLoaded] = useFonts({
+        Anton: Anton_400Regular,
+        BebasNeue_400Regular,
+    });
 
+    if (!fontsLoaded) return null;
     const navigation = useNavigation();
     const [modalVisible, setModalVisible] = useState(false);
+    const [barberos, setBarberos] = useState([]);
+    const [barbero, setBarbero] = useState({
+
+        nombre: "",
+        email: "",
+        contrasena: "",
+        descripcion: "",
+    });
+
+    const handlesubmit = async () => {
+        try {
+            const response = await BarberosRepository.CreateBarberos(barbero);
+            console.log(response);
+
+            navigation.reset({
+                index: 0,
+                routes: [{ name: 'Gestionar Barberos' }],
+            });
+
+            setModalVisible(false);
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+    const handleChange = (data) => (value) => {
+        setBarbero({ ...barbero, [data]: value });
+    };
+
+    const fetchBarberos = async () => {
+        try {
+            const response = await BarberosRepository.GetBarberos();
+            setBarberos(response.data);
+        } catch (err) {
+            console.log("Error al obtener los datos:", err);
+        }
+    };
+
+    React.useEffect(() => {
+        fetchBarberos();
+    }, []);
+
+
+
+
 
     return (
         <DefaultLayout>
@@ -41,92 +96,29 @@ export default function GestionarBarberos() {
                     </TouchableOpacity>
 
                     <View>
-                        <View style={styles.card}>
-                            <Image
-                                source={require('../../assets/deiby.jpg')}
-                                style={styles.cardImage}
-                                resizeMode="cover"
-                            />
-                            <View style={styles.cardContent}>
-                                <Text style={styles.cardTitle}>Deiby</Text>
-                                <Text style={styles.cardText}>Email: Deiby30@gmail.com</Text>
-                                <Text style={styles.cardText}>
-                                    Cortes Perfilados, Accesoria En Imagen Buen Uso De Las Maquinas Y El Ambiente
-                                </Text>
-                                <View style={styles.cardActions}>
-                                    <TouchableOpacity
-                                        style={styles.editButton}
-                                        onPress={() => alert('Editar Deiby')}
-                                    >
-                                        <Icon name="pencil" size={16} color="#000000" />
-                                    </TouchableOpacity>
-                                    <TouchableOpacity
-                                        style={styles.deleteButton}
-                                        onPress={() => alert('Eliminar Deiby')}
-                                    >
-                                        <Icon name="trash" size={16} color="#ffffff" />
-                                    </TouchableOpacity>
+                        {barberos.map((barbero, index) => (
+                            <View style={styles.card} key={index}>
+                                <View style={styles.cardContent}>
+                                    <Text style={styles.cardTitle}>{barbero.nombre}</Text>
+                                    <Text style={styles.cardText}>{barbero.email}</Text>
+                                    <Text style={styles.cardText}>{barbero.descripcion}</Text>
+                                    <View style={styles.cardActions}>
+                                        <TouchableOpacity
+                                            style={styles.editButton}
+                                            onPress={() => alert(`Editar`)}
+                                        >
+                                            <Icon name="pencil" size={16} color="#000000" />
+                                        </TouchableOpacity>
+                                        <TouchableOpacity
+                                            style={styles.deleteButton}
+                                            onPress={() => alert(`Eliminar `)}
+                                        >
+                                            <Icon name="trash" size={16} color="#ffffff" />
+                                        </TouchableOpacity>
+                                    </View>
                                 </View>
                             </View>
-                        </View>
-
-                        <View style={styles.card}>
-                            <Image
-                                source={require('../../assets/nixon.jpg')}
-                                style={styles.cardImage}
-                                resizeMode="cover"
-                            />
-                            <View style={styles.cardContent}>
-                                <Text style={styles.cardTitle}>Nixxon</Text>
-                                <Text style={styles.cardText}>Email: nixxon30@gmail.com</Text>
-                                <Text style={styles.cardText}>
-                                    Cortes Perfilados, Accesoria En Imagen Buen Uso De Las Maquinas Y El Ambiente
-                                </Text>
-                                <View style={styles.cardActions}>
-                                    <TouchableOpacity
-                                        style={styles.editButton}
-                                        onPress={() => alert('Editar Nixxon')}
-                                    >
-                                        <Icon name="pencil" size={16} color="#000000" />
-                                    </TouchableOpacity>
-                                    <TouchableOpacity
-                                        style={styles.deleteButton}
-                                        onPress={() => alert('Eliminar Nixxon')}
-                                    >
-                                        <Icon name="trash" size={16} color="#ffffff" />
-                                    </TouchableOpacity>
-                                </View>
-                            </View>
-                        </View>
-
-                        <View style={styles.card}>
-                            <Image
-                                source={require('../../assets/jeisson.jpg')}
-                                style={styles.cardImage}
-                                resizeMode="cover"
-                            />
-                            <View style={styles.cardContent}>
-                                <Text style={styles.cardTitle}>Jeisson</Text>
-                                <Text style={styles.cardText}>Email: jeisson30@gmail.com</Text>
-                                <Text style={styles.cardText}>
-                                    Cortes Perfilados, Accesoria En Imagen Buen Uso De Las Maquinas Y El Ambiente
-                                </Text>
-                                <View style={styles.cardActions}>
-                                    <TouchableOpacity
-                                        style={styles.editButton}
-                                        onPress={() => alert('Editar Jeisson')}
-                                    >
-                                        <Icon name="pencil" size={16} color="#000000" />
-                                    </TouchableOpacity>
-                                    <TouchableOpacity
-                                        style={styles.deleteButton}
-                                        onPress={() => alert('Eliminar Jeisson')}
-                                    >
-                                        <Icon name="trash" size={16} color="#ffffff" />
-                                    </TouchableOpacity>
-                                </View>
-                            </View>
-                        </View>
+                        ))}
                     </View>
                 </ScrollView>
             </View>
@@ -144,27 +136,31 @@ export default function GestionarBarberos() {
                             style={styles.input}
                             placeholder="Nombre Del Barbero"
                             placeholderTextColor="#ccc"
+                            onChangeText={handleChange("nombre")}
+                            value={barbero.nombre}
                         />
                         <TextInput
                             style={styles.input}
                             placeholder="Email"
                             placeholderTextColor="#ccc"
+                            onChangeText={handleChange("email")}
+                            value={barbero.email}
                         />
                         <TextInput
                             style={styles.input}
                             placeholder="Contraseña"
                             placeholderTextColor="#ccc"
+                            onChangeText={handleChange("contrasena")}
+                            value={barbero.contrasena}
                         />
                         <TextInput
                             style={styles.input}
                             placeholder="Descripción"
                             placeholderTextColor="#ccc"
+                            onChangeText={handleChange("descripcion")}
+                            value={barbero.descripcion}
                         />
-                        <TextInput
-                            style={styles.input}
-                            placeholder="Imagen Del Barbero"
-                            placeholderTextColor="#ccc"
-                        />
+
 
                         <View style={styles.modalActions}>
                             <TouchableOpacity
@@ -176,7 +172,7 @@ export default function GestionarBarberos() {
                             <TouchableOpacity
                                 style={styles.saveButton}
                             >
-                                <Text style={{ color: '#ffffff' }}>Guardar</Text>
+                                <Text style={{ color: '#ffffff' }} onPress={handlesubmit}>Guardar</Text>
                             </TouchableOpacity>
                         </View>
                     </View>

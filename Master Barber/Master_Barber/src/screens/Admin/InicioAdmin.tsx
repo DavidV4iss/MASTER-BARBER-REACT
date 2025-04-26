@@ -6,6 +6,7 @@ import { Anton_400Regular } from "@expo-google-fonts/anton";
 import { StyleSheet, Text, View, ScrollView, Image, TouchableOpacity } from 'react-native';
 import DefaultLayout from '../../Layouts/DefaultLayout';
 import { useNavigation } from "@react-navigation/native";
+import { BebasNeue_400Regular } from "@expo-google-fonts/bebas-neue";
 
 
 
@@ -17,11 +18,10 @@ export default function InicioAdmin() {
 
     const [fontsLoaded] = useFonts({
         Anton: Anton_400Regular,
+        BebasNeue_400Regular,
     });
 
-    if (!fontsLoaded) {
-        return null;
-    }
+    if (!fontsLoaded) return null;
 
     return (
         <DefaultLayout>
