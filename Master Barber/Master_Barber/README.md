@@ -44,8 +44,11 @@ Para probar la aplicación, usa los siguientes usuarios según el rol:
 
 
 Rol	Correo	Contraseña
+
 Administrador	Admin@gmail.com	Admin12345
+
 Usuario (Cliente)	Usuario@gmail.com	usuario12345
+
 Barbero	barbero@gmail.com	barbero12345
 
 Importante:
@@ -89,8 +92,11 @@ npm start
 
 Acceder con las credenciales de prueba.
 Rol	Correo	Contraseña
+
 Administrador	Admin@gmail.com	Admin12345
+
 Usuario (Cliente)	Usuario@gmail.com	usuario12345
+
 Barbero	barbero@gmail.com	barbero12345
 
 ¡Listo! Ahora puedes comenzar a utilizar y probar todas las funcionalidades de MASTER-BARBER-REACT.
