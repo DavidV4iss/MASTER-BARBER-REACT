@@ -88,3 +88,9 @@ Asegúrate de que las dependencias de ambos (frontend y backend) estén correcta
 Verifica que los puertos 8080 y 5173 no estén siendo utilizados por otro servicio.
 
 ¡Listo! Ahora deberías tener la aplicación corriendo en tu entorno local.
+
+NOTA IMPORTANTE:
+USUARIOS PARA CADA ROL
+ADMINISTRADOR: Correo: Admin@gmail.com  Contraseña:Admin12345
+USUARIO(cliente): Correo: Usuario@gmail.com  Contraseña:usuario12345
+BARBERO: Correo: barbero@gmail.com   Contraseña: barbero12345
