@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 22-04-2025 a las 06:13:30
+-- Tiempo de generación: 27-04-2025 a las 08:39:54
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -77,8 +77,8 @@ CREATE TABLE `inventario` (
 --
 
 INSERT INTO `inventario` (`id_producto`, `nombre`, `descripcion_P`, `cantidad`, `id_categoria_producto`, `proveedor`, `PrecioUnitario`, `fecha_venta`, `Foto`) VALUES
-(64, 'Locion Desinfectante', 'Desinfecta', 100, 3, 'Versace', 50000, '2025-04-21 22:57:00', 'inventario_1745294289658-LOCION-REFRESCANTEjpg.jpg'),
-(65, 'Maquina Para Barberia', 'Corte Fino', 100, 3, 'Wahl', 700000, '2025-04-21 22:58:00', 'inventario_1745294359621-Maquina.jpg');
+(64, 'Locion Desinfectante', 'Desinfecta', 83, 3, 'Versace', 50000, '2025-04-21 22:57:00', 'inventario_1745710456659-LOCION-REFRESCANTEjpg.jpg'),
+(65, 'Maquina Para Barberia', 'Corte Fino', 87, 3, 'Wahl', 700000, '2025-04-21 22:58:00', 'inventario_1745710466339-Maquina.jpg');
 
 -- --------------------------------------------------------
 
@@ -90,7 +90,6 @@ CREATE TABLE `notificaciones` (
   `id_notificacion` int(11) NOT NULL,
   `cliente_id` int(11) NOT NULL,
   `mensaje` text NOT NULL,
-  `leido` tinyint(1) DEFAULT 0,
   `fecha` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -108,13 +107,6 @@ CREATE TABLE `reservas` (
   `fecha` datetime NOT NULL,
   `estado` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Volcado de datos para la tabla `reservas`
---
-
-INSERT INTO `reservas` (`id_reserva`, `cliente_id`, `barbero_id`, `servicio`, `fecha`, `estado`) VALUES
-(117, 64, 63, 2, '2025-04-21 22:00:00', 'Aceptada');
 
 -- --------------------------------------------------------
 
@@ -135,25 +127,6 @@ INSERT INTO `rol` (`id_rol`, `nombre_rol`) VALUES
 (1, 'Administrador'),
 (2, 'Barbero'),
 (3, 'Cliente');
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `servicio_adicional`
---
-
-CREATE TABLE `servicio_adicional` (
-  `id_servicio` int(11) NOT NULL,
-  `nombre_servicio` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Volcado de datos para la tabla `servicio_adicional`
---
-
-INSERT INTO `servicio_adicional` (`id_servicio`, `nombre_servicio`) VALUES
-(1, 'Cejas'),
-(2, 'Barba');
 
 -- --------------------------------------------------------
 
@@ -201,11 +174,9 @@ CREATE TABLE `usuarios` (
 --
 
 INSERT INTO `usuarios` (`id_usuario`, `nombre_usuario`, `email`, `nit`, `telefono`, `contrasena`, `id_rol`, `user_reset_code`, `user_reset_code_expiration`, `Foto`, `descripcion`) VALUES
-(6, 'ADMINISTRADOR', 'Admin@gmail.com', 1028662004, '3142758305', '$2a$10$gKkjGOeNlRvXzyePlVJq1.r/9Y.F6.f.UROSSUNuM7Sjv1xkZyRo.', 1, NULL, NULL, '1745294451617-MB3.JPG', ''),
-(61, 'Nixxon', 'nixon@gmail.com', 0, '', '$2a$10$HOOAW/asF61qODGSTpND..Rfny9ZspX.2JPKBvNFjxo5sTAFbFoQa', 2, NULL, NULL, 'barbero_1745294135333-B3.JPG', 'Cortes Perfilados , Accesoria En Imagen Buen Uso De Las Maquinas Y El Ambinte'),
-(62, 'Jeisson', 'jeison@gmail.com', 0, '', '$2a$10$e4d/.0.Z9Y7W8wIUrRABeeIE9kvod18g6F8gVfZRCR7YRUZbMyGHq', 2, NULL, NULL, 'barbero_1745294173931-B2.JPG', 'Cortes Perfilados , Accesoria En Imagen Buen Uso De Las Maquinas Y El Ambinte'),
-(63, 'Deiby', 'Deiby@gmail.com', 0, '', '$2a$10$hRnVLP7SV.87s6yMaYT1vONoCrbvXLAugrkpS826r2D.avaBUilae', 2, NULL, NULL, 'barbero_1745294206226-B1.JPG', 'Cortes Perfilados , Accesoria En Imagen Buen Uso De Las Maquinas Y El Ambinte'),
-(64, 'Usuario 1', 'Usuario@gmail.com', 1028662003, '3107877174', '$2a$10$T8tSncl7F6gquU0V2FJ1HO/dSe5XUH9nZmT8KmuHqJJPSY4w7ta4S', 3, NULL, NULL, '1745294581177-MB7.JPG', '');
+(6, 'ADMINISTRADOR', 'Admin@gmail.com', 1028662004, '3142758305', '$2a$10$gKkjGOeNlRvXzyePlVJq1.r/9Y.F6.f.UROSSUNuM7Sjv1xkZyRo.', 1, NULL, NULL, '1745735244188-MB3.JPG', ''),
+(64, 'Usuario 1', 'Usuario@gmail.com', 1028662003, '3107877174', '$2a$10$T8tSncl7F6gquU0V2FJ1HO/dSe5XUH9nZmT8KmuHqJJPSY4w7ta4S', 3, NULL, NULL, '1745735591288-LOGO.png', ''),
+(101, 'BARBERO', 'barbero@gmail.com', 0, '', '$2a$10$I1kFZ3Nvhdo4HIJYE8Ibhuh9cB2N/Dx1GpolQtcFQwRY7ZHC.pSaq', 2, NULL, NULL, 'barbero_1745735817137-B1.JPG', 'Cortes Perfilados , Accesoria En Imagen Buen Uso De Las Maquinas Y El Ambinte');
 
 -- --------------------------------------------------------
 
@@ -269,12 +240,6 @@ ALTER TABLE `rol`
   ADD PRIMARY KEY (`id_rol`);
 
 --
--- Indices de la tabla `servicio_adicional`
---
-ALTER TABLE `servicio_adicional`
-  ADD PRIMARY KEY (`id_servicio`);
-
---
 -- Indices de la tabla `tipo_servicio`
 --
 ALTER TABLE `tipo_servicio`
@@ -301,7 +266,7 @@ ALTER TABLE `ventas`
 -- AUTO_INCREMENT de la tabla `calificaciones`
 --
 ALTER TABLE `calificaciones`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=56;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=57;
 
 --
 -- AUTO_INCREMENT de la tabla `categoria_producto`
@@ -313,37 +278,31 @@ ALTER TABLE `categoria_producto`
 -- AUTO_INCREMENT de la tabla `inventario`
 --
 ALTER TABLE `inventario`
-  MODIFY `id_producto` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=66;
+  MODIFY `id_producto` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=67;
 
 --
 -- AUTO_INCREMENT de la tabla `notificaciones`
 --
 ALTER TABLE `notificaciones`
-  MODIFY `id_notificacion` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=45;
+  MODIFY `id_notificacion` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=59;
 
 --
 -- AUTO_INCREMENT de la tabla `reservas`
 --
 ALTER TABLE `reservas`
-  MODIFY `id_reserva` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=118;
-
---
--- AUTO_INCREMENT de la tabla `servicio_adicional`
---
-ALTER TABLE `servicio_adicional`
-  MODIFY `id_servicio` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id_reserva` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=126;
 
 --
 -- AUTO_INCREMENT de la tabla `usuarios`
 --
 ALTER TABLE `usuarios`
-  MODIFY `id_usuario` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=65;
+  MODIFY `id_usuario` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=102;
 
 --
 -- AUTO_INCREMENT de la tabla `ventas`
 --
 ALTER TABLE `ventas`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=64;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=73;
 
 --
 -- Restricciones para tablas volcadas
