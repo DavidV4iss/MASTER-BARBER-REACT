@@ -1,74 +1,142 @@
-# Proyecto MASTER-BARBER-REACT
+# MASTER-BARBER-REACT
 
-Este proyecto es una aplicación para la gestión de turnos y administración de inventario para una barbería, utilizando React en el frontend y Node.js en el backend.
+Este proyecto es una aplicación fullstack para la gestión de turnos y administración de inventarios en una barbería. Utiliza React para el frontend y Node.js para el backend.
 
-## Requisitos
+## 📋 Requisitos previos
 
-- [Node.js](https://nodejs.org/) instalado en tu máquina.
-- [Git](https://git-scm.com/) instalado para clonar el repositorio.
+Antes de comenzar, asegúrate de tener instalados los siguientes programas:
 
-## Instrucciones
+- [Node.js v14+](https://nodejs.org/) 
+- [npm v6+](https://www.npmjs.com/) o [Yarn](https://yarnpkg.com/)
+- [Git](https://git-scm.com/)
+- Puertos 3000 y 5000 disponibles en tu máquina.
 
-Sigue los siguientes pasos para clonar el repositorio y ejecutar el proyecto en tu entorno local.
+## 🗄️ Base de Datos
 
-### 1. Clonar el repositorio
+El proyecto utiliza una base de datos MySQL para la gestión de los datos. Asegúrate de tener MySQL corriendo en tu máquina.
 
-Primero, clona el repositorio en tu máquina local utilizando Git. Abre una terminal y ejecuta el siguiente comando:
+### Configuración de la base de datos
 
-```bash
+1. Crear base de datos:
+
+   ```sql
+   CREATE DATABASE master_barber;
+Importar el archivo master_barber.sql en tu gestor de base de datos (como MySQL Workbench o mediante consola).
+
+El archivo SQL se encuentra en:
+back/src/config/master_barber.sql
+
+🛠️ Configuración inicial
+1. Clonar el repositorio
+Clona el repositorio desde GitHub en tu máquina local:
+
+bash
+Copiar
+Editar
 git clone https://github.com/tu-usuario/MASTER-BARBER-REACT.git
-2. Abrir el proyecto en Visual Studio Code
-Abre la carpeta MASTER-BARBER-REACT en Visual Studio Code.
-
-bash
-Copiar
-Editar
 cd MASTER-BARBER-REACT
-code .
-3. Iniciar el Backend
-Dentro de la carpeta del proyecto, abre la terminal en Visual Studio Code o usa una nueva terminal y navega a la carpeta del backend (por lo general, es una carpeta llamada backend o similar). Luego, instala los módulos necesarios ejecutando el siguiente comando:
+2. Instalar dependencias
+Backend:
+
+Dentro de la carpeta del proyecto, navega a la carpeta back y ejecuta el siguiente comando para instalar las dependencias del backend:
 
 bash
 Copiar
 Editar
+cd back
 npm install
-Una vez que se hayan instalado los módulos, inicia el backend con el siguiente comando:
+Frontend:
+
+Abre una nueva terminal y navega a la carpeta frontend, luego instala las dependencias del frontend:
 
 bash
 Copiar
 Editar
-npm start
-El backend debería estar corriendo ahora en tu máquina local.
-
-4. Iniciar el Frontend
-Abre una nueva terminal en Visual Studio Code y navega hasta la carpeta del frontend (por lo general, es una carpeta llamada frontend). Luego, instala los módulos necesarios ejecutando:
-
-bash
-Copiar
-Editar
+cd ../front
 npm install
-Después de que se hayan instalado los módulos, inicia el frontend con:
+3. Configurar la Base de Datos
+Asegúrate de tener MySQL corriendo en tu máquina local.
+
+Crea la base de datos master_barber.
+
+Importa el script back/src/config/master_barber.sql en tu gestor de base de datos.
+
+4. Configuración de la URL Local
+Asegúrate de que la URL del frontend y el backend se configuren correctamente. El backend generalmente corre en el puerto 5000, y el frontend en el puerto 3000. Si los puertos son diferentes, actualiza las URLs en los archivos de configuración.
+
+🔌 Configuración de Ngrok (opcional)
+Si necesitas exponer tu aplicación en la red, puedes usar Ngrok para crear una URL pública temporal para pruebas.
+
+Instalación de Ngrok:
+
+Descarga Ngrok desde Ngrok.
+
+Extrae el archivo descargado.
+
+(Opcional) Añadir Ngrok a tu PATH para acceso global.
+
+Autenticación con Ngrok:
+
+Ejecuta el siguiente comando para autenticar tu cuenta de Ngrok:
 
 bash
 Copiar
 Editar
+ngrok authtoken TU_TOKEN_AQUI
+Iniciar Ngrok:
+
+Para exponer tu frontend a través de Ngrok, ejecuta:
+
+bash
+Copiar
+Editar
+ngrok http 3000
+Ngrok generará una URL pública que podrás usar para acceder a tu aplicación remotamente.
+
+🖥️ Ejecución del Proyecto
+1. Iniciar el Backend
+En la terminal del backend, navega a la carpeta back y ejecuta el siguiente comando para iniciar el servidor:
+
+bash
+Copiar
+Editar
+cd back
 npm start
-5. Acceder a la aplicación
-Una vez que el frontend y el backend estén corriendo, puedes acceder a la aplicación abriendo tu navegador y visitando la siguiente URL:
-
-arduino
-Copiar
-Editar
-(http://localhost:5173/)
-¡Ahora deberías poder ver y utilizar la aplicación en tu navegador local!
-
-Notas adicionales
-Asegúrate de que los puertos del backend y frontend no entren en conflicto (puedes configurarlos en los archivos de configuración de ambos).
-
-Si encuentras algún problema, verifica que hayas seguido todos los pasos correctamente y que las dependencias estén correctamente instaladas.
+2. Iniciar el Frontend
+En la terminal del frontend, navega a la carpeta front y ejecuta el siguiente comando para iniciar el servidor:
 
 bash
 Copiar
 Editar
+cd ../front
+npm start
+3. Acceder a la aplicación
+Local: Abre tu navegador y visita http://localhost:3000.
 
-Este archivo proporciona una guía completa para configurar y ejecutar tu proyecto, tanto el backend como el frontend, en tu entorno local. ¡Espero que te sea útil!
+Remoto (Ngrok): Usa la URL HTTPS proporcionada por Ngrok.
+
+🚨 Solución de Problemas
+Problemas con la Base de Datos
+Asegúrate de que la base de datos se llame exactamente master_barber.
+
+Verifica que el script master_barber.sql se haya importado correctamente.
+
+Revisa la conexión a la base de datos en el archivo de configuración del backend (back/src/config/database.js).
+
+Problemas con el Backend o Frontend
+Asegúrate de que las dependencias de ambos (frontend y backend) estén correctamente instaladas (npm install).
+
+Verifica que los puertos 3000 y 5000 no estén siendo utilizados por otro servicio.
+
+Ngrok no inicia
+Verifica que el puerto 3000 está libre.
+
+Si tienes un firewall, asegúrate de que no esté bloqueando Ngrok.
+
+¡Listo! Ahora deberías tener la aplicación corriendo en tu entorno local o expuesta remotamente utilizando Ngrok para pruebas.
+
+go
+Copiar
+Editar
+
+Este `README.md` cubre todos los pasos de configuración y ejecución del proyecto, y está basado en 
