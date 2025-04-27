@@ -73,13 +73,20 @@ export default function GestionarBarberos() {
     };
     const handlesubmitEdit = async () => {
         try {
-            const datos = {
-                nombre: barberoEdit.nombre_usuario,
-                email: barberoEdit.email,
-                descripcion: barberoEdit.descripcion,
-            };
+            const formData = new FormData();
+            formData.append('nombre', barberoEdit.nombre_usuario);
+            formData.append('email', barberoEdit.email);
+            formData.append('descripcion', barberoEdit.descripcion);
 
-            const response = await BarberosRepository.UpdateBarberos(barberoEdit.id_usuario, datos);
+            if (barberoEdit.foto) {
+                formData.append('foto', {
+                    uri: barberoEdit.foto.uri,
+                    type: barberoEdit.foto.type,
+                    name: barberoEdit.foto.name,
+                });
+            }
+
+            const response = await BarberosRepository.UpdateBarberos(barberoEdit.id_usuario, formData);
             console.log(response);
 
             navigation.reset({
@@ -127,12 +134,11 @@ export default function GestionarBarberos() {
                 uri: asset.uri,
                 type: 'image/jpeg',
                 name: `foto_${Date.now()}.jpg`,
-            }
+            };
             setBarberoEdit({ ...barberoEdit, foto });
-            setImagePreviewEditar(asset.uri);
+            setImagePreviewEditar(`http://localhost:8080/imagesBarbero/${barberoEdit.foto}`);
         }
     };
-
 
     const handleChange = (data) => (value) => {
         setBarbero({ ...barbero, [data]: value });
@@ -278,7 +284,7 @@ export default function GestionarBarberos() {
                         >
                             {imagePreview ? (
                                 <Image
-                                    source={{ uri: imagePreview }}
+                                    source={{ uri: imagePreviewEditar || `http://192.168.20.15:8080/imagesBarbero/${barberoEdit.foto}` }}
                                     style={styles.imagePreview}
                                     resizeMode="cover"
                                 />
@@ -348,7 +354,7 @@ export default function GestionarBarberos() {
                         >
                             {imagePreviewEditar ? (
                                 <Image
-                                    source={{ uri: imagePreviewEditar }}
+                                    source={{ uri: imagePreviewEditar || `http://192.168.20.15:8080/imagesBarbero/${barberoEdit.foto}` }}
                                     style={styles.imagePreview}
                                     resizeMode="cover"
                                 />
