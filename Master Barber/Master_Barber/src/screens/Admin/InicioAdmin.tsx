@@ -8,6 +8,7 @@ import { useNavigation } from "@react-navigation/native";
 import { BebasNeue_400Regular } from "@expo-google-fonts/bebas-neue";
 import useAuth from "../../hooks/useAuth";
 import BarberosRepository from '../../repositories/BarberosRepository';
+import DefaultLayout from '../../Layouts/DefaultLayout';
 
 
 
@@ -49,8 +50,8 @@ export default function InicioAdmin() {
     }
 
     return (
+        <DefaultLayout>
         <View style={{ flex: 1, backgroundColor: '#212529' }}>
-
             <View style={styles.header}>
                 <TouchableOpacity onPress={() => navigation.openDrawer()}>
                     <Icon name="bars" size={Dimensions.get('window').width * 0.08} color="#ffffff" style={styles.iconBars} />
@@ -112,7 +113,8 @@ export default function InicioAdmin() {
                     ))}
                 </View>
             </ScrollView>
-        </View>
+            </View>
+        </DefaultLayout>
     );
 }
 

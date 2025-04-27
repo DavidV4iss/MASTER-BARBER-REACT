@@ -13,7 +13,7 @@ class AuthRepository {
 
     static async login(user) {
         try {
-            const response = await axios.post("http://192.168.20.15:8080/login", user);
+            const response = await axios.post("http://192.168.80.11:8080/login", user);
             return response;
         } catch (error) {
             const errorMessage = error?.response?.data?.message || "Error al iniciar sesión.";
@@ -25,7 +25,7 @@ class AuthRepository {
         try {
             if (!token) return null;
 
-            const response = await axios.get("http://192.168.20.15:8080/validarToken", {
+            const response = await axios.get("http://192.168.80.11:8080/validarToken", {
                 headers: {
                     Authorization: token,
                 },

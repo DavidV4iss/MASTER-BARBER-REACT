@@ -36,7 +36,7 @@ const GestionReservas = () => {
                 <Text style={styles.textInfo}>
                     Desde este apartado, podras revisar todos los turnos agendados, aceptarlos, cancelarlos o finalizarlos según sea necesario. Manten tu agenda organizada y asegurate de brindar un mejor servicio a tus clientes
                 </Text>
-                <Text style={styles.title}>Gestiona tus reservas</Text>
+                <Text style={styles.title}>Gestiona ya tus reservas</Text>
                 <View style={styles.card}>
                     <Image source={require('../../assets/deiby.jpg')} style={styles.image} />
                     <View style={styles.cardText}>
@@ -122,12 +122,11 @@ const styles = StyleSheet.create({
     },
     welcome: {
         flexDirection: 'row',
-        alignItems: 'center',
         justifyContent: 'center',
         width: '100%',
         height: 80,
-        marginTop: 40,
-        marginBottom: 30,
+        marginTop: 30,
+        marginBottom: 10,
         borderRadius: 0,
         overflow: 'hidden',
     },
@@ -138,7 +137,7 @@ const styles = StyleSheet.create({
         textAlign: 'center',
     },
     icon: {
-        fontSize: 32,
+        fontSize: 34,
         color: '#ffff',
         marginLeft: 140, 
     },
@@ -146,7 +145,6 @@ const styles = StyleSheet.create({
         fontSize: 32,
         fontFamily: 'BebasNeue',
         color: '#dc3545',
-        textAlign: 'center',
     },
     welcomeName: {
         fontSize: 28,
@@ -159,13 +157,14 @@ const styles = StyleSheet.create({
         color: '#ffffff',
         marginBottom: 25,
         fontFamily: 'BebasNeue',
+        textAlign: 'center',
     },
     title: {
         textAlign: 'center',
         fontSize: 30,
         fontFamily: 'BebasNeue',
         color: '#ffffff',
-        marginTop: 40,
+        marginTop: 35,
     },
     card: {
         width: 320,
