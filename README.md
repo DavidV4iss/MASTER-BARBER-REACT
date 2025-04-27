@@ -9,7 +9,8 @@ Antes de comenzar, asegúrate de tener instalados los siguientes programas:
 - [Node.js v14+](https://nodejs.org/) 
 - [npm v6+](https://www.npmjs.com/) o [Yarn](https://yarnpkg.com/)
 - [Git](https://git-scm.com/)
-- Puertos 3000 y 5000 disponibles en tu máquina.
+- Puertos 5173 disponibles en tu máquina.
+- http://localhost:5173/
 
 ## 🗄️ Base de Datos
 
