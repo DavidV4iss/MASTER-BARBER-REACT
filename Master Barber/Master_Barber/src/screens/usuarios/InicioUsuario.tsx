@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { View, Text, StyleSheet, Image } from 'react-native'
+import { View, Text, StyleSheet, Image, TouchableOpacity, Dimensions } from 'react-native'
 import Icon from 'react-native-vector-icons/FontAwesome'
 import DefaultLayout from '../../Layouts/DefaultLayout'
 import { ScrollView } from 'react-native-gesture-handler'
@@ -8,6 +8,8 @@ import { Anton_400Regular } from '@expo-google-fonts/anton'
 import { BebasNeue_400Regular } from '@expo-google-fonts/bebas-neue'
 import { ProgressSteps, ProgressStep } from 'react-native-progress-steps';
 import { Calendar, LocaleConfig } from 'react-native-calendars';
+import { useNavigation } from '@react-navigation/native';
+import useAuth from '../../hooks/useAuth'
 
 export default function InicioUsuario() {
 
@@ -32,6 +34,7 @@ export default function InicioUsuario() {
     }
     LocaleConfig.defaultLocale = 'es';
 
+    const { logout } = useAuth()
     const [fontsLoaded] = useFonts({
         Anton: Anton_400Regular,
         BebasNeue: BebasNeue_400Regular,
@@ -39,18 +42,37 @@ export default function InicioUsuario() {
 
     const [selected, setSelected] = React.useState<string | null>(null);
 
+    const [isDropdownVisible, setIsDropdownVisible] = useState(false);
+    const handleLogout = () => {
+        logout();
+    }
+    
     if (!fontsLoaded) {
         return null;
     }
-
     return (
         <DefaultLayout>
             <View style={styles.container}>
                 <View style={styles.welcome}>
                     <Text style={styles.MB}>Master Barber</Text>
                     <View style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                        <Icon style={styles.icon} name="user-circle" onPress={() => { }} />
-                        <Text style={{ color: '#ffffff', marginTop: 5 }}>
+                        <View style={styles.header}>
+                            <TouchableOpacity onPress={() => setIsDropdownVisible(!isDropdownVisible)}>
+                                <Icon name="user-circle" style={styles.icon} />
+                            </TouchableOpacity >
+                            {isDropdownVisible && (
+                                <View style={styles.dropdownMenu} >
+                                    <TouchableOpacity>
+                                        <Text style={{ ...styles.dropdownItem, marginBottom: 5, fontFamily: 'BebasNeue_400Regular', color: '#ffc107' }}>Perfil</Text>
+                                    </TouchableOpacity>
+                                    <TouchableOpacity onPress={handleLogout}>
+                                        <Text style={{ ...styles.dropdownItem, padding: 10, backgroundColor: '#dc3545', fontFamily: 'BebasNeue_400Regular' }}>Cerrar Sesión</Text>
+                                    </TouchableOpacity>
+
+                                </View>
+                            )}
+                        </View>
+                        <Text style={{ color: '#ffffff', fontFamily: 'BebasNeue', fontSize: 14 }}>
                             Cristian
                         </Text>
                     </View>
@@ -76,130 +98,134 @@ export default function InicioUsuario() {
                             label="Paso 1"
                             buttonNextText="Continuar"
                             buttonPreviousText="Atrás"
-                            // nextBtnStyle={{ backgroundColor: '#dc3545', borderRadius: 10, padding: 10 }}
-                            // nextBtnTextStyle={{ color: '#ffffff', fontFamily: 'BebasNeue', fontSize: 18 }}
-                            // previousBtnStyle={{ backgroundColor: '#6c757d', borderRadius: 10, padding: 10 }}
-                            // previousBtnTextStyle={{ color: '#ffffff', fontFamily: 'BebasNeue', fontSize: 18 }}
-                            // onNext={onNextStep}
-                            // errors={errors}
+                        // nextBtnStyle={{ backgroundColor: '#dc3545', borderRadius: 10, padding: 10 }}
+                        // nextBtnTextStyle={{ color: '#ffffff', fontFamily: 'BebasNeue', fontSize: 18 }}
+                        // previousBtnStyle={{ backgroundColor: '#6c757d', borderRadius: 10, padding: 10 }}
+                        // previousBtnTextStyle={{ color: '#ffffff', fontFamily: 'BebasNeue', fontSize: 18 }}
+                        // onNext={onNextStep}
+                        // errors={errors}
                         >
-                    <Text style={styles.textPaso}>
-                        Selecciona el servicio que deseas
-                    </Text>
-                    <View style={styles.cardService}>
-                        <View style={styles.card1Service}>
-                            <Text style={styles.cardTextService}>
-                                Corte basico
+                            <Text style={styles.textPaso}>
+                                Selecciona el servicio que deseas
                             </Text>
-                            <Image style={styles.cardImage} source={require('../../assets/cortepremium.jpg')} />
-                            <Text style={styles.textDescripcion}
-                                numberOfLines={3}
-                                ellipsizeMode='tail' >
-                                Incluye corte, barba, cejas, lineas dependiendo el gusto y mascarillas si lo deseas
-                            </Text>
-                        </View>
+                            <View style={styles.cardService}>
+                                <View style={styles.card1Service}>
+                                    <Text style={styles.cardTextService}>
+                                        Corte basico
+                                    </Text>
+                                    <Image style={styles.cardImage} source={require('../../assets/cortepremium.jpg')} />
+                                    <Text style={styles.textDescripcion}
+                                        numberOfLines={3}
+                                        ellipsizeMode='tail' >
+                                        Incluye corte, barba, cejas, lineas dependiendo el gusto y mascarillas si lo deseas
+                                    </Text>
+                                </View>
 
-                        <View style={styles.card2Service}>
-                            <Text style={styles.cardTextService}>
-                                Corte premium
-                            </Text>
-                            <Image style={styles.cardImage} source={require('../../assets/cortepremium.jpg')} />
-                            <Text style={styles.textDescripcion}
-                                numberOfLines={3}
-                                ellipsizeMode='tail' >
-                                Incluye corte, barba, cejas, lineas dependiendo el gusto y mascarillas si lo deseas
-                            </Text>
-                        </View>
-                    </View>
-                    </ProgressStep>
+                                <View style={styles.card2Service}>
+                                    <Text style={styles.cardTextService}>
+                                        Corte premium
+                                    </Text>
+                                    <Image style={styles.cardImage} source={require('../../assets/cortepremium.jpg')} />
+                                    <Text style={styles.textDescripcion}
+                                        numberOfLines={3}
+                                        ellipsizeMode='tail' >
+                                        Incluye corte, barba, cejas, lineas dependiendo el gusto y mascarillas si lo deseas
+                                    </Text>
+                                </View>
+                            </View>
+                        </ProgressStep>
                         <ProgressStep
                             label="Paso 2"
                             buttonNextText="Continuar"
                             buttonPreviousText="Atrás"
-                            // nextBtnTextStyle={{ color: '#ffffff', fontFamily: 'BebasNeue', fontSize: 18 }}
-                            // previousBtnStyle={{ backgroundColor: '#6c757d', borderRadius: 10, padding: 10 }}
-                            // previousBtnTextStyle={{ color: '#ffffff', fontFamily: 'BebasNeue', fontSize: 18 }}
-                            // buttonFinishText="Finalizar"
-                            // finishBtnStyle={{ backgroundColor: '#28a745', borderRadius: 10, padding: 10 }}
-                            // finishBtnTextStyle={{ color: '#ffffff', fontFamily: 'BebasNeue', fontSize: 18 }}
+                        // nextBtnTextStyle={{ color: '#ffffff', fontFamily: 'BebasNeue', fontSize: 18 }}
+                        // previousBtnStyle={{ backgroundColor: '#6c757d', borderRadius: 10, padding: 10 }}
+                        // previousBtnTextStyle={{ color: '#ffffff', fontFamily: 'BebasNeue', fontSize: 18 }}
+                        // buttonFinishText="Finalizar"
+                        // finishBtnStyle={{ backgroundColor: '#28a745', borderRadius: 10, padding: 10 }}
+                        // finishBtnTextStyle={{ color: '#ffffff', fontFamily: 'BebasNeue', fontSize: 18 }}
                         >
-                    <Text style={styles.textPaso}>
-                        Selecciona tu barbero preferido
-                    </Text>
-                    <View style={styles.cardBarbers}>
-                        <View style={styles.card1Barbers}>
-                            <Text style={styles.cardTextBarbers}>
-                                Nixxon
+                            <Text style={styles.textPaso}>
+                                Selecciona tu barbero preferido
                             </Text>
-                            <Image style={styles.cardImage} source={require('../../assets/nixon.jpg')} />
-                            <Text style={styles.textDescripcion}
-                                numberOfLines={3}
-                                ellipsizeMode='tail' >
-                                Cortes Perfilados,
-                                Asesoria En Imagen,
-                                Buen Uso De Las Maquinas Y El Ambiente
-                            </Text>
-                        </View>
+                            <View style={styles.cardBarbers}>
+                                <View style={styles.card1Barbers}>
+                                    <Text style={styles.cardTextBarbers}>
+                                        Nixxon
+                                    </Text>
+                                    <Image style={styles.cardImage} source={require('../../assets/nixon.jpg')} />
+                                    <Text style={styles.textDescripcion}
+                                        numberOfLines={3}
+                                        ellipsizeMode='tail' >
+                                        Cortes Perfilados,
+                                        Asesoria En Imagen,
+                                        Buen Uso De Las Maquinas Y El Ambiente
+                                    </Text>
+                                </View>
 
-                        <View style={styles.card2Barbers}>
-                            <Text style={styles.cardTextBarbers}>
-                                Deiby
-                            </Text>
-                            <Image style={styles.cardImage} source={require('../../assets/deiby.jpg')} />
-                            <Text style={styles.textDescripcion}
-                                numberOfLines={3}
-                                ellipsizeMode='tail' >
-                                Cortes Perfilados,
-                                Asesoria En Imagen,
-                                Buen Uso De Las Maquinas Y El Ambiente
-                            </Text>
-                        </View>
-                    </View>
-                    <View style={styles.card3Barbers}>
-                        <Text style={styles.cardTextBarbers}>
-                            Jeison
-                        </Text>
-                        <Image style={styles.cardImage} source={require('../../assets/jeisson.jpg')} />
-                        <Text style={styles.textDescripcion}
-                            numberOfLines={4}
-                            ellipsizeMode='tail' >
-                            Cortes Perfilados,
-                            Asesoria En Imagen,
-                            Buen Uso De Las Maquinas Y El Ambiente
-                        </Text>
-                    </View>
-                    </ProgressStep>
+                                <View style={styles.card2Barbers}>
+                                    <Text style={styles.cardTextBarbers}>
+                                        Deiby
+                                    </Text>
+                                    <Image style={styles.cardImage} source={require('../../assets/deiby.jpg')} />
+                                    <Text style={styles.textDescripcion}
+                                        numberOfLines={3}
+                                        ellipsizeMode='tail' >
+                                        Cortes Perfilados,
+                                        Asesoria En Imagen,
+                                        Buen Uso De Las Maquinas Y El Ambiente
+                                    </Text>
+                                </View>
+                            </View>
+                            <View style={styles.card3Barbers}>
+                                <Text style={styles.cardTextBarbers}>
+                                    Jeison
+                                </Text>
+                                <Image style={styles.cardImage} source={require('../../assets/jeisson.jpg')} />
+                                <Text style={styles.textDescripcion}
+                                    numberOfLines={4}
+                                    ellipsizeMode='tail' >
+                                    Cortes Perfilados,
+                                    Asesoria En Imagen,
+                                    Buen Uso De Las Maquinas Y El Ambiente
+                                </Text>
+                            </View>
+                        </ProgressStep>
                         <ProgressStep
                             label="Paso 3"
                             buttonPreviousText="Atrás"
-                            // previousBtnStyle={{ backgroundColor: '#6c757d', borderRadius: 10, padding: 10 }}
-                            // previousBtnTextStyle={{ color: '#ffffff', fontFamily: 'BebasNeue', fontSize: 18 }}
-                            // buttonFinishText="Finalizar"
-                            // finishBtnStyle={{ backgroundColor: '#28a745', borderRadius: 10, padding: 10 }}
-                            // finishBtnTextStyle={{ color: '#ffffff', fontFamily: 'BebasNeue', fontSize: 18 }}
-                        >
-                    <Text style={styles.textPaso}>
-                        Selecciona la fecha y hora de tu reserva
-                    </Text>
-                    <View style={styles.calendarDate}>
-                        <Calendar
-                            style={{
-                                borderWidth: 1,
-                                borderColor: 'gray',
-                                height: 360,
-                                borderRadius: 10
-                            }}
-                            current={'2025-04-26'}
-                            onDayPress={day => {
-                                setSelected(day.dateString);
-                            }}
-                            markedDates={{
-                                [selected]: { selected: true, disableTouchEvent: true, selectedColor: '#dc3545' }
-                            }}
-                        />
-                    </View>
 
-                    </ProgressStep>
+                        // previousBtnStyle={{ backgroundColor: '#6c757d', borderRadius: 10, padding: 10 }}
+                        // previousBtnTextStyle={{ color: '#ffffff', fontFamily: 'BebasNeue', fontSize: 18 }}
+                        // buttonFinishText="Finalizar"
+                        // finishBtnStyle={{ backgroundColor: '#28a745', borderRadius: 10, padding: 10 }}
+                        // finishBtnTextStyle={{ color: '#ffffff', fontFamily: 'BebasNeue', fontSize: 18 }}
+                        >
+                            <Text style={styles.textPaso}>
+                                Selecciona la fecha y hora de tu reserva
+                            </Text>
+                            <View style={styles.calendarDate}>
+                                <Calendar
+                                    style={{
+                                        borderWidth: 2,
+                                        borderColor: '#6c757d',
+                                        height: 360,
+                                        borderRadius: 10,
+                                        overflow: 'hidden',
+                                        justifyContent: 'center',
+
+                                    }}
+                                    current={'2025-04-26'}
+                                    onDayPress={day => {
+                                        setSelected(day.dateString);
+
+                                    }}
+                                    markedDates={{
+                                        [selected]: { selected: true, disableTouchEvent: true, selectedColor: '#dc3545' }
+                                    }}
+                                />
+                            </View>
+                        </ProgressStep>
                     </ProgressSteps>
                 </View>
                 {/* Aqui termina el paso a paso Step */}
@@ -209,6 +235,26 @@ export default function InicioUsuario() {
 }
 
 const styles = StyleSheet.create({
+    header: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        paddingTop: 2,
+        backgroundColor: '#212529',
+        marginBottom: 1,
+    },
+    dropdownMenu: {
+        position: 'absolute',
+        right: Dimensions.get('window').width * 0.2,
+        backgroundColor: '#343a40',
+        padding: 10,
+        borderRadius: 5,
+        marginTop: Dimensions.get('window').height * 0.05,
+    },
+    dropdownItem: {
+        color: '#ffffff',
+        fontSize: Dimensions.get('window').width * 0.04,
+        paddingVertical: 5,
+    },
     scrollContainer: {
         flexGrow: 1,
     },
@@ -230,12 +276,19 @@ const styles = StyleSheet.create({
         fontSize: 32,
         fontFamily: 'BebasNeue',
         color: '#dc3545',
-        textAlign: 'center',
+        borderRadius: 10,
+        borderWidth: 1,
+        padding: 10,
+        borderColor: '#dc3545',
+
     },
     icon: {
         fontSize: 34,
         color: '#ffff',
-        paddingTop: 5
+        paddingTop: 10,
+        borderRadius: 100,
+        padding: 10,
+        borderColor: '#ffffff',
 
     },
     welcomeText: {
@@ -252,13 +305,13 @@ const styles = StyleSheet.create({
         fontSize: 30,
         fontFamily: 'Anton',
         color: '#ffc107',
-        marginTop: 20
+        marginTop: 20,
     },
     textPaso: {
         fontSize: 20,
         fontFamily: 'BebasNeue',
         color: '#ffffff',
-        marginTop: 50,
+        marginTop: 40,
         textAlign: 'center'
 
     },
@@ -357,7 +410,6 @@ const styles = StyleSheet.create({
         color: '#ffffff',
         marginTop: 30,
         width: 300,
-        marginLeft: 20
     },
 
 

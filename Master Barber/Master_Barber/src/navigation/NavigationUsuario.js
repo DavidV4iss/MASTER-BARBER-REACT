@@ -5,7 +5,6 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import InicioUsuario from '../screens/usuarios/InicioUsuario';
 
 const Tab = createBottomTabNavigator();
-// const Stack = createStackNavigator();
 export default function NavigationUsuario() {
   return (
     <Tab.Navigator
@@ -19,8 +18,8 @@ export default function NavigationUsuario() {
         },
         tabBarIcon: ({ color, size, focused }) => {
           let iconName;
-          if (route.name === "InicioUsuario") {
-            iconName = focused ? "home-sharp" : "home-outline";
+          if (route.name === "Usuario") {
+            iconName = focused ? "skull" : "skull-outline";
           }
           return <Ionicons name={iconName} size={size} color={color} />;
         },
@@ -28,7 +27,7 @@ export default function NavigationUsuario() {
         tabBarInactiveTintColor: "#B0B0B0",
       })}
     >
-      <Tab.Screen name="InicioUsuario" component={InicioUsuario} />
+      <Tab.Screen name="Usuario" component={InicioUsuario} />
     </Tab.Navigator>
   )
 };
