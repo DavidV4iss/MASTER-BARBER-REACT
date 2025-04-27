@@ -43,7 +43,7 @@ class BarberosRepository {
         try {
             const response = await axios.put(`http://192.168.20.15:8080/UpdateBarberos/${id}`, barberoEdit);
             showMessage({
-                message: "Barbero actualizado exitosament",
+                message: "Barbero actualizado exitosamente",
                 type: "success",
                 icon: "success",
                 duration: 2000
