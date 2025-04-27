@@ -51,68 +51,68 @@ export default function InicioAdmin() {
 
     return (
         <DefaultLayout>
-        <View style={{ flex: 1, backgroundColor: '#212529' }}>
-            <View style={styles.header}>
-                <TouchableOpacity onPress={() => navigation.openDrawer()}>
-                    <Icon name="bars" size={Dimensions.get('window').width * 0.08} color="#ffffff" style={styles.iconBars} />
-                </TouchableOpacity>
-                <TouchableOpacity onPress={() => setIsDropdownVisible(!isDropdownVisible)}>
-                    <Icon name="user-circle" size={Dimensions.get('window').width * 0.08} color="#ffffff" style={styles.iconUser} />
-                </TouchableOpacity >
-                {isDropdownVisible && (
-                    <View style={styles.dropdownMenu} >
-                        <TouchableOpacity>
-                            <Text style={{ ...styles.dropdownItem, marginBottom: 5, fontFamily: 'BebasNeue_400Regular', color: '#ffc107' }}>Perfil</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity onPress={handleLogout}>
-                            <Text style={{ ...styles.dropdownItem, padding: 10, backgroundColor: '#dc3545', fontFamily: 'BebasNeue_400Regular' }}>Cerrar Sesión</Text>
-                        </TouchableOpacity>
+            <View style={{ flex: 1, backgroundColor: '#212529' }}>
+                <View style={styles.header}>
+                    <TouchableOpacity onPress={() => navigation.openDrawer()}>
+                        <Icon name="bars" size={Dimensions.get('window').width * 0.08} color="#ffffff" style={styles.iconBars} />
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => setIsDropdownVisible(!isDropdownVisible)}>
+                        <Icon name="user-circle" size={Dimensions.get('window').width * 0.08} color="#ffffff" style={styles.iconUser} />
+                    </TouchableOpacity >
+                    {isDropdownVisible && (
+                        <View style={styles.dropdownMenu} >
+                            <TouchableOpacity>
+                                <Text style={{ ...styles.dropdownItem, marginBottom: 5, fontFamily: 'BebasNeue_400Regular', color: '#ffc107' }}>Perfil</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity onPress={handleLogout}>
+                                <Text style={{ ...styles.dropdownItem, padding: 10, backgroundColor: '#dc3545', fontFamily: 'BebasNeue_400Regular' }}>Cerrar Sesión</Text>
+                            </TouchableOpacity>
 
+                        </View>
+                    )}
+                </View>
+
+                <ScrollView>
+
+                    <View style={styles.titleContainer}>
+                        <Text style={styles.titleText}>
+                            MASTER <Text style={{ color: '#dc3545' }}>BARBER</Text> | INICIO
+                        </Text>
                     </View>
-                )}
-            </View>
 
-            <ScrollView>
-
-                <View style={styles.titleContainer}>
-                    <Text style={styles.titleText}>
-                        MASTER <Text style={{ color: '#dc3545' }}>BARBER</Text> | INICIO
-                    </Text>
-                </View>
-
-                <View style={styles.menuContainer}>
-                    <Text style={styles.menuTitle}>MENUUUUU</Text>
-                    <View style={styles.divider} />
-                    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                        <View style={{ flex: 1 }}>
-                            <Text style={styles.menuLink}>LINKS AYUDAS</Text>
-                            <Text style={styles.menuLinkHighlighted}>GESTION BARBEROS</Text>
-                            <Text style={styles.menuLinkHighlighted}>INVENTARIO</Text>
-                            <Text style={styles.menuLinkHighlighted}>GESTION INVENTARIO</Text>
-                        </View>
-                        <View
-                            style={{
-                                transform: [{ scale: isHovered ? 1.1 : 1 }],
-                                marginLeft: Dimensions.get('window').width * 0.05,
-                            }}
-                            onTouchStart={() => setIsHovered(true)}
-                            onTouchEnd={() => setIsHovered(false)}
-                        >
-                            <Image source={require('../../assets/logo.png')} style={styles.logo} />
+                    <View style={styles.menuContainer}>
+                        <Text style={styles.menuTitle}>MENUUUUU</Text>
+                        <View style={styles.divider} />
+                        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                            <View style={{ flex: 1 }}>
+                                <Text style={styles.menuLink}>LINKS AYUDAS</Text>
+                                <Text style={styles.menuLinkHighlighted}>GESTION BARBEROS</Text>
+                                <Text style={styles.menuLinkHighlighted}>INVENTARIO</Text>
+                                <Text style={styles.menuLinkHighlighted}>GESTION INVENTARIO</Text>
+                            </View>
+                            <View
+                                style={{
+                                    transform: [{ scale: isHovered ? 1.1 : 1 }],
+                                    marginLeft: Dimensions.get('window').width * 0.05,
+                                }}
+                                onTouchStart={() => setIsHovered(true)}
+                                onTouchEnd={() => setIsHovered(false)}
+                            >
+                                <Image source={require('../../assets/logo.png')} style={styles.logo} />
+                            </View>
                         </View>
                     </View>
-                </View>
 
-                <View style={styles.barbersContainer}>
-                    <Text style={styles.barbersTitle}>BARBEROS ACTUALES</Text>
-                    {barberos.map((barbero, index) => (
-                        <View key={index} style={styles.divider}>
-                            <Text style={{ ...styles.barberItem, color: '#dc3545', fontFamily: 'BebasNeue_400Regular', fontSize: 20 }}>{barbero.nombre_usuario}</Text>
-                            <Text style={styles.barberItem}>{barbero.descripcion}</Text>
-                        </View>
-                    ))}
-                </View>
-            </ScrollView>
+                    <View style={styles.barbersContainer}>
+                        <Text style={styles.barbersTitle}>BARBEROS ACTUALES</Text>
+                        {barberos.map((barbero, index) => (
+                            <View key={index} style={styles.divider}>
+                                <Text style={{ ...styles.barberItem, color: '#dc3545', fontFamily: 'BebasNeue_400Regular', fontSize: 20 }}>{barbero.nombre_usuario}</Text>
+                                <Text style={styles.barberItem}>{barbero.descripcion}</Text>
+                            </View>
+                        ))}
+                    </View>
+                </ScrollView>
             </View>
         </DefaultLayout>
     );
