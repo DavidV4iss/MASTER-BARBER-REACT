@@ -91,6 +91,11 @@ Verifica que los puertos 8080 y 5173 no estén siendo utilizados por otro servic
 
 NOTA IMPORTANTE:
 USUARIOS PARA CADA ROL
+
 ADMINISTRADOR: Correo: Admin@gmail.com  Contraseña:Admin12345
+
+
 USUARIO(cliente): Correo: Usuario@gmail.com  Contraseña:usuario12345
+
+
 BARBERO: Correo: barbero@gmail.com   Contraseña: barbero12345
