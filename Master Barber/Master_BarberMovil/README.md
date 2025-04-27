@@ -99,4 +99,4 @@ Usuario (Cliente)	Usuario@gmail.com	usuario12345
 
 Barbero	barbero@gmail.com	barbero12345
 
-¡Listo! Ahora puedes comenzar a utilizar y probar todas las funcionalidades de MASTER-BARBER-REACT.
+¡Listo! Ahora puedes comenzar a utilizar y probar todas las funcionalidades de MASTER-BARBER-REACT tendra que descargar en la Appstore o play store, la aplicacion de Expo go y escanear el codigo Qr o ingresar la url que te manda en la terminal al inicializar la carpeta Master_BarberMovil .
