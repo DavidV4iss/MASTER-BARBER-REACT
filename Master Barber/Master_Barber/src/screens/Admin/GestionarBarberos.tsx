@@ -136,7 +136,7 @@ export default function GestionarBarberos() {
                 name: `foto_${Date.now()}.jpg`,
             };
             setBarberoEdit({ ...barberoEdit, foto });
-            setImagePreviewEditar(`http://localhost:8080/imagesBarbero/${barberoEdit.foto}`);
+            setImagePreviewEditar(asset.uri);
         }
     };
 
