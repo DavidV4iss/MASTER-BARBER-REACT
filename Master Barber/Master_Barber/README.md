@@ -16,24 +16,16 @@ Aplicación fullstack para la gestión de barberías. Incluye un backend Node.js
 
 Abre tu terminal y ejecuta:
 
-```bash
 git clone https://github.com/tu-usuario/MASTER-BARBER-REACT.git
 cd MASTER-BARBER-REACT
 2. Abrir el proyecto en Visual Studio Code
+
 Abre la carpeta MASTER-BARBER-REACT en Visual Studio Code:
 
-bash
-Copiar
-Editar
-code .
 3. Iniciar el Backend
 Navega dentro de la carpeta Master Barber.
 
 Abre una terminal y ejecuta:
-
-bash
-Copiar
-Editar
 npm install
 npm start
 Esto instalará las dependencias necesarias y levantará el servidor backend.
@@ -43,9 +35,6 @@ Ahora, ve a la carpeta Master_BarberMovil.
 
 Abre una terminal nueva en esa carpeta y ejecuta:
 
-bash
-Copiar
-Editar
 npm install
 npm start
 Esto instalará las dependencias del proyecto móvil y lanzará el entorno de desarrollo.
@@ -71,7 +60,9 @@ Para poder hacer la funcionalida del administrador tendra que dirijirse a la car
 "http://():8080/CreateBarberos"
 "http://():8080/UpdateBarberos/${id}"
 "http://():8080/DeleteBarberos/${id}"
-te saldra ya una ip por defecto configurada, la cambias por la tuya 
+
+¡IMPORTANTE!:
+Te saldra ya una ip por defecto configurada, la cambias por la tuya 
 EN LOS () Colocas tu ipV4
 como saber tu ip?, tendras que abrir un cmd como administrador y ejecutar el siguiente codigo ipconfig y te aparecera una opcion que dice ipV4 copias y pegas en estos() y ya cuando lo tengas borras las llaves()
 
