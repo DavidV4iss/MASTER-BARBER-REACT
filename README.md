@@ -22,7 +22,7 @@ El proyecto utiliza una base de datos MySQL para la gestión de los datos. Aseg�
 
    ```sql
    CREATE DATABASE master_barber;
-Importar el archivo master_barber.sql en tu gestor de base de datos (como MySQL Workbench o mediante consola).
+Importar el archivo master_barber.sql en tu gestor de base de datos (como MySQL (XAMPP)).
 
 El archivo SQL se encuentra en:
 \Documents\GitHub\MASTER-BARBER-REACT\Master Barber\BaseDeDatos
@@ -79,7 +79,8 @@ Asegúrate de que la base de datos se llame exactamente master_barber.
 
 Verifica que el script master_barber.sql se haya importado correctamente.
 
-Revisa la conexión a la base de datos en el archivo de configuración del backend (back/src/config/database.js).
+Revisa la conexión a la base de datos en el archivo de configuración del backend (\Documents\GitHub\MASTER-BARBER-REACT\Master Barber\Backend  DOCUMENTO SERVER.JS).
+En la terminal debera decir Conexion exitosa:) Conectado a la base de datos
 
 Problemas con el Backend o Frontend
 Asegúrate de que las dependencias de ambos (frontend y backend) estén correctamente instaladas (npm install).
