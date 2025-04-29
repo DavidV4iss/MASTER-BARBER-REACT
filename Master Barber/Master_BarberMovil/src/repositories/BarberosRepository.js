@@ -38,7 +38,7 @@ class BarberosRepository {
     }
     static async UpdateBarberos(id, barberoEdit) {
         try {
-            const response = await API.put(`UpdateBarberos/${id}`, barberoEdit);
+            const response = await API.put(`UpdateBarberos/${id}`, barberoEdit, { headers: { "Content-Type": "multipart/form-data" } });
             showMessage({
                 message: "Barbero actualizado exitosamente",
                 type: "success",

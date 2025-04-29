@@ -12,6 +12,7 @@ import BarberosRepository from '../../repositories/BarberosRepository';
 import * as ImagePicker from 'expo-image-picker';
 import { Ionicons } from '@expo/vector-icons';
 import { getBaseURL } from '../../config/api';
+import useAuth from '../../hooks/useAuth';
 
 
 
@@ -20,14 +21,16 @@ export default function GestionarBarberos() {
         Anton: Anton_400Regular,
         BebasNeue_400Regular,
     });
+    const { logout } = useAuth()
 
 
     const navigation = useNavigation();
     const [modalVisible, setModalVisible] = useState(false);
     const [modalVisibleEdit, setModalVisibleEdit] = useState(false);
-    const [barberos, setBarberos] = useState([]);
     const [imagePreview, setImagePreview] = useState(null);
     const [imagePreviewEditar, setImagePreviewEditar] = useState(null);
+    const [isDropdownVisible, setIsDropdownVisible] = useState(false);
+    const [barberos, setBarberos] = useState([]);
     const [barbero, setBarbero] = useState({
 
         nombre: "",
@@ -187,6 +190,10 @@ export default function GestionarBarberos() {
         }
     };
 
+    const handleLogout = () => {
+        logout();
+    }
+
 
 
 
@@ -195,12 +202,24 @@ export default function GestionarBarberos() {
     return (
         <DefaultLayout>
             <View style={{ flex: 1, backgroundColor: '#212529', padding: 20 }}>
-                <View style={styles.header2}>
+                <View style={styles.header}>
                     <TouchableOpacity onPress={() => navigation.openDrawer()}>
                         <Icon name="bars" size={Dimensions.get('window').width * 0.08} color="#ffffff" style={styles.iconBars} />
                     </TouchableOpacity>
-                    <Text style={styles.welcomeText}>¡¡BIENVENIDO!!</Text>
-                    <Icon name="user-circle" size={Dimensions.get('window').width * 0.08} color="#ffffff" style={styles.iconUser} />
+                    <TouchableOpacity onPress={() => setIsDropdownVisible(!isDropdownVisible)}>
+                        <Icon name="user-circle" size={Dimensions.get('window').width * 0.08} color="#ffffff" style={styles.iconUser} />
+                    </TouchableOpacity >
+                    {isDropdownVisible && (
+                        <View style={styles.dropdownMenu} >
+                            <TouchableOpacity>
+                                <Text style={{ ...styles.dropdownItem, marginBottom: 5, fontFamily: 'BebasNeue_400Regular', color: '#ffc107' }}>Perfil</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity onPress={handleLogout}>
+                                <Text style={{ ...styles.dropdownItem, padding: 10, backgroundColor: '#dc3545', fontFamily: 'BebasNeue_400Regular' }}>Cerrar Sesión</Text>
+                            </TouchableOpacity>
+
+                        </View>
+                    )}
                 </View>
                 <ScrollView>
                     <Text style={[styles.responsiveText, { marginBottom: 20, marginTop: Dimensions.get('window').height * 0.09 }]}>
@@ -223,7 +242,7 @@ export default function GestionarBarberos() {
                         {barberos.map((barbero, index) => (
                             <View style={styles.card} key={index}>
                                 <View style={styles.cardContent}>
-                                    <Image source={{ uri: `${getBaseURL()}imagesBarbero/${barbero.Foto}` }} style={{ ...styles.cardImage, alignSelf: 'center', width: '50%', height: '50%', marginBottom: 15 }} />
+                                    <Image source={{ uri: `${getBaseURL()}imagesBarbero/${barbero.Foto}` }} style={{ ...styles.cardImage, marginBottom: 15 }} />
                                     <Text style={{ ...styles.cardTitle, color: '#dc3545', fontFamily: 'Anton_400Regular', fontSize: 20 }}>{barbero.nombre_usuario}</Text>
                                     <Text style={styles.cardText}>{barbero.email}</Text>
                                     <Text style={styles.cardText}>{barbero.descripcion}</Text>
@@ -437,7 +456,8 @@ const styles = StyleSheet.create({
 
     cardImage: {
         width: '100%',
-        height: 150,
+        height: 270,
+        resizeMode: 'cover',
     },
     cardContent: {
         padding: 15,
@@ -539,6 +559,27 @@ const styles = StyleSheet.create({
         marginTop: 8,
         color: '#aaa',
         fontSize: 14,
+    },
+    dropdownMenu: {
+        position: 'absolute',
+        right: Dimensions.get('window').width * 0.2,
+        backgroundColor: '#343a40',
+        padding: 10,
+        borderRadius: 5,
+    },
+    dropdownItem: {
+        color: '#ffffff',
+        fontSize: Dimensions.get('window').width * 0.04,
+        paddingVertical: 5,
+    },
+    header: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        paddingHorizontal: Dimensions.get('window').width * 0.00,
+        paddingTop: 20,
+        backgroundColor: '#212529',
+        marginBottom: 15,
     },
 })
 

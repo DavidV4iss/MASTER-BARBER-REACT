@@ -552,7 +552,6 @@ app.post('/CreateBarberos', uploadBarbero.single('foto'), (req, res) => {
     const descripcion = req.body.descripcion;
     const fotoName = req.file.filename;
 
-    console.log(req.body)
 
 
     if (contrasena.length < 8) {
@@ -610,7 +609,6 @@ app.put('/UpdateBarberos/:id', uploadBarbero.single('foto'), (req, res) => {
         const descripcion = req.body.descripcion
         const fotoName = req.file ? req.file.filename : ''
 
-        // Obtener la imagen actual del inventario
         db.query('SELECT Foto FROM usuarios WHERE id_usuario = ?', [id], (err, results) => {
             if (err) {
                 console.log(err);
