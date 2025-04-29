@@ -10,6 +10,7 @@ const multer = require('multer');
 const fs = require('fs')
 const path = require('path');
 const os = require('os');
+const { file } = require('pdfkit');
 const port = 8080;
 
 const app = express();
@@ -540,12 +541,19 @@ app.get('/GetBarberos/:id', (req, res) => {
     })
 })
 
+
 app.post('/CreateBarberos', uploadBarbero.single('foto'), (req, res) => {
+    if (!req.file) {
+        return res.status(400).send('No se ha subido un archivo');
+    }
     const nombre = req.body.nombre;
     const email = req.body.email;
     const contrasena = req.body.contrasena;
     const descripcion = req.body.descripcion;
     const fotoName = req.file.filename;
+
+    console.log(req.body)
+
 
     if (contrasena.length < 8) {
         return res.status(400).send('La contraseña debe tener al menos 8 caracteres');
@@ -554,7 +562,6 @@ app.post('/CreateBarberos', uploadBarbero.single('foto'), (req, res) => {
     const hashPassword = bcrypt.hashSync(contrasena, 10);
 
     const q = 'INSERT INTO usuarios (nombre_usuario, email, contrasena, descripcion, Foto, id_rol) VALUES (?,?,?,?,?,?)';
-
     const values = [
         nombre,
         email,
@@ -574,6 +581,7 @@ app.post('/CreateBarberos', uploadBarbero.single('foto'), (req, res) => {
     });
 });
 
+
 const borrarFotoBarbero = async (foto) => {
     try {
         const filePath = path.resolve(__dirname, `./uploads/imagesBarbero/${foto}`);
@@ -582,6 +590,7 @@ const borrarFotoBarbero = async (foto) => {
         console.error('Error eliminando imagen:', err);
     }
 };
+
 
 app.put('/UpdateBarberos/:id', uploadBarbero.single('foto'), (req, res) => {
 

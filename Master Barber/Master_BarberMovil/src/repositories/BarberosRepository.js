@@ -17,11 +17,7 @@ class BarberosRepository {
 
     static async CreateBarberos(barbero) {
         try {
-            const response = await API.post("CreateBarberos", barbero, {
-                headers: {
-                    'Content-Type': 'multipart/form-data',
-                },
-            });
+            const response = await API.post("CreateBarberos", barbero, { headers: { "Content-Type": "multipart/form-data" } });
             showMessage({
                 message: "Barbero creado exitosamente",
                 type: "success",

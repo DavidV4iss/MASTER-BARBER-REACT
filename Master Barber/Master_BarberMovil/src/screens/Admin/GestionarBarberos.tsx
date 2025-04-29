@@ -1,5 +1,5 @@
 import React from 'react'
-import { StyleSheet, Text, View, ScrollView, Image, TouchableOpacity, Modal, TextInput } from 'react-native';
+import { StyleSheet, Text, View, ScrollView, Image, TouchableOpacity, Modal, TextInput, Platform } from 'react-native';
 import { Dimensions } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import DefaultLayout from "../../Layouts/DefaultLayout";
@@ -11,6 +11,7 @@ import { useFonts } from "expo-font";
 import BarberosRepository from '../../repositories/BarberosRepository';
 import * as ImagePicker from 'expo-image-picker';
 import { Ionicons } from '@expo/vector-icons';
+import { getBaseURL } from '../../config/api';
 
 
 
@@ -53,11 +54,17 @@ export default function GestionarBarberos() {
             formData.append('contrasena', barbero.contrasena);
             formData.append('descripcion', barbero.descripcion);
             if (barbero.foto) {
-                formData.append('foto', {
-                    uri: barbero.foto.uri,
-                    type: barbero.foto.type,
-                    name: barbero.foto.name,
-                });
+                if (Platform.OS === 'web') {
+                    formData.append('foto', barbero.foto);
+                }
+                else {
+                    formData.append('foto', {
+                        uri: barbero.foto.uri,
+                        type: barbero.foto.type,
+                        name: barbero.foto.name,
+                    });
+                }
+
             }
 
             const response = await BarberosRepository.CreateBarberos(formData);
@@ -110,6 +117,9 @@ export default function GestionarBarberos() {
 
         if (!result.canceled) {
             const asset = result.assets[0];
+            if (Platform.OS === 'web') {
+                setBarbero({ ...barbero, foto: asset });
+            }
             const foto = {
                 uri: asset.uri,
                 type: 'image/jpeg',
@@ -213,7 +223,7 @@ export default function GestionarBarberos() {
                         {barberos.map((barbero, index) => (
                             <View style={styles.card} key={index}>
                                 <View style={styles.cardContent}>
-                                    <Image source={{ uri: `http://localhost:8080/imagesBarbero/${barbero.Foto}` }} style={{ ...styles.cardImage, alignSelf: 'center', width: '50%', height: '50%', marginBottom: 15 }} />
+                                    <Image source={{ uri: `${getBaseURL()}imagesBarbero/${barbero.Foto}` }} style={{ ...styles.cardImage, alignSelf: 'center', width: '50%', height: '50%', marginBottom: 15 }} />
                                     <Text style={{ ...styles.cardTitle, color: '#dc3545', fontFamily: 'Anton_400Regular', fontSize: 20 }}>{barbero.nombre_usuario}</Text>
                                     <Text style={styles.cardText}>{barbero.email}</Text>
                                     <Text style={styles.cardText}>{barbero.descripcion}</Text>
@@ -284,7 +294,7 @@ export default function GestionarBarberos() {
                         >
                             {imagePreview ? (
                                 <Image
-                                    source={{ uri: imagePreviewEditar || `http://192.168.20.15:8080/imagesBarbero/${barberoEdit.foto}` }}
+                                    source={{ uri: imagePreview }}
                                     style={styles.imagePreview}
                                     resizeMode="cover"
                                 />
@@ -354,7 +364,7 @@ export default function GestionarBarberos() {
                         >
                             {imagePreviewEditar ? (
                                 <Image
-                                    source={{ uri: imagePreviewEditar || `http://192.168.20.15:8080/imagesBarbero/${barberoEdit.foto}` }}
+                                    source={{ uri: imagePreviewEditar }}
                                     style={styles.imagePreview}
                                     resizeMode="cover"
                                 />
