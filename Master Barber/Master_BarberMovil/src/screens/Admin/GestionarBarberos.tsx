@@ -213,7 +213,7 @@ export default function GestionarBarberos() {
                         {barberos.map((barbero, index) => (
                             <View style={styles.card} key={index}>
                                 <View style={styles.cardContent}>
-                                    <Image source={{ uri: `http://192.168.20.15:8080/imagesBarbero/${barbero.Foto}` }} style={{ ...styles.cardImage, alignSelf: 'center', width: '50%', height: '50%', marginBottom: 15 }} />
+                                    <Image source={{ uri: `http://localhost:8080/imagesBarbero/${barbero.Foto}` }} style={{ ...styles.cardImage, alignSelf: 'center', width: '50%', height: '50%', marginBottom: 15 }} />
                                     <Text style={{ ...styles.cardTitle, color: '#dc3545', fontFamily: 'Anton_400Regular', fontSize: 20 }}>{barbero.nombre_usuario}</Text>
                                     <Text style={styles.cardText}>{barbero.email}</Text>
                                     <Text style={styles.cardText}>{barbero.descripcion}</Text>

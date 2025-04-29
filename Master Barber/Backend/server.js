@@ -9,7 +9,8 @@ const jwt = require('jsonwebtoken');
 const multer = require('multer');
 const fs = require('fs')
 const path = require('path');
-
+const os = require('os');
+const port = 8080;
 
 const app = express();
 app.use(express.urlencoded({ extended: true }));
@@ -1125,11 +1126,29 @@ app.post('/GuardarVentas', (req, res) => {
 });
 // FIN VENTAS
 
-app.listen(8080, () => {
-    console.log("Conexion exitosa:)")
-});
-app.get('/', (req, res) => {
-    res.send("Api de master barber:)")
-})
 
+app.get('/', (req, res) => {
+    res.send("Api de master barber :)");
+});
+
+function getLocalIP() {
+    const interfaces = os.networkInterfaces();
+    for (const name in interfaces) {
+        for (const iface of interfaces[name]) {
+            if (iface.family === 'IPv4' && !iface.internal) {
+                return iface.address;
+            }
+        }
+    }
+    return 'localhost';
+}
+
+// Iniciar el servidor
+app.listen(port, '0.0.0.0', () => {
+    const localIP = getLocalIP();
+    console.log("Conexión exitosa :)");
+    console.log(`Servidor ejecutando en:`);
+    console.log(`- Local:    http://localhost:${port}`);
+    console.log(`- Red:      http://${localIP}:${port}`);
+});
 
