@@ -100,6 +100,7 @@ const styles = StyleSheet.create({
     fontFamily: "Anton",
     color: "#fff",
     marginBottom: 10,
+    marginTop : 40
   },
   subtitle: {
     fontSize: 18,

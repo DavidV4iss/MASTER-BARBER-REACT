@@ -92,7 +92,7 @@ const styles = StyleSheet.create({
 
        },
     tittle:{
-        marginTop: 90,
+        marginTop: 40,
         textAlign: 'center',
         fontSize:34,
         fontFamily: 'BebasNeue_400Regular',
