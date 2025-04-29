@@ -273,14 +273,10 @@ const styles = StyleSheet.create({
         marginBottom: 10,
     },
     MB: {
-        fontSize: 32,
+        fontSize: 28,
         fontFamily: 'BebasNeue',
-        color: '#dc3545',
-        borderRadius: 10,
-        borderWidth: 1,
-        padding: 10,
-        borderColor: '#dc3545',
-
+        color: '#ffc107',
+        textAlign: 'center',
     },
     icon: {
         fontSize: 34,

@@ -1,17 +1,23 @@
 import { Anton_400Regular } from '@expo-google-fonts/anton';
 import { BebasNeue_400Regular } from '@expo-google-fonts/bebas-neue';
 import { useFonts } from 'expo-font';
-import React from 'react';
+import React, { useState } from 'react';
 import { View, Text, StyleSheet, Image, ActivityIndicator, TouchableOpacity, ScrollView, Dimensions } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import DefaultLayout from '../../Layouts/DefaultLayout';
+import useAuth from '../../hooks/useAuth';
 
 const GestionReservas = () => {
     const [fontsLoaded] = useFonts({
         Anton: Anton_400Regular,
         BebasNeue: BebasNeue_400Regular,
     });
-    
+    const { logout } = useAuth()
+    const [isDropdownVisible, setIsDropdownVisible] = useState(false);
+        const handleLogout = () => {
+            logout();
+    }
+
     if (!fontsLoaded) {
         return (
             <View style={styles.container}>
@@ -27,7 +33,27 @@ const GestionReservas = () => {
             <View style={styles.container}>
                 <View style={styles.welcome}>
                 <Text style={styles.MB}>Master Barber</Text>
-                <Icon style={styles.icon} name="user-circle" onPress={() => {}} />
+                <View style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                        <View style={styles.header}>
+                                            <TouchableOpacity onPress={() => setIsDropdownVisible(!isDropdownVisible)}>
+                                                <Icon name="user-circle" style={styles.icon} />
+                                            </TouchableOpacity >
+                                            {isDropdownVisible && (
+                                                <View style={styles.dropdownMenu} >
+                                                    <TouchableOpacity>
+                                                        <Text style={{ ...styles.dropdownItem, marginBottom: 5, fontFamily: 'BebasNeue_400Regular', color: '#ffc107' }}>Perfil</Text>
+                                                    </TouchableOpacity>
+                                                    <TouchableOpacity onPress={handleLogout}>
+                                                        <Text style={{ ...styles.dropdownItem, padding: 10, backgroundColor: '#dc3545', fontFamily: 'BebasNeue_400Regular' }}>Cerrar Sesión</Text>
+                                                    </TouchableOpacity>
+                
+                                                </View>
+                                            )}
+                                        </View>
+                                        <Text style={{ color: '#ffffff', fontFamily: 'BebasNeue', fontSize: 14 }}>
+                                            Cristian
+                                        </Text>
+                                    </View>
                 </View>
                 <Text style={styles.welcomeText}>
                     BIENVENIDO BARBERO
@@ -116,19 +142,16 @@ const styles = StyleSheet.create({
     container: {
         alignItems: 'center',
         flex: 1,
-        justifyContent: 'center',
         backgroundColor: '#212529',
-        paddingBottom: 20,
     },
     welcome: {
         flexDirection: 'row',
-        justifyContent: 'center',
+        justifyContent: 'space-between',
+        paddingHorizontal: 25,
+        alignItems: 'center',
         width: '100%',
-        height: 80,
-        marginTop: 30,
+        height: 100,
         marginBottom: 10,
-        borderRadius: 0,
-        overflow: 'hidden',
     },
     MB: {
         fontSize: 28,
@@ -139,12 +162,37 @@ const styles = StyleSheet.create({
     icon: {
         fontSize: 34,
         color: '#ffff',
-        marginLeft: 140, 
+        paddingTop: 10,
+        borderRadius: 100,
+        padding: 10,
+        borderColor: '#ffffff',
+
+    },
+    dropdownMenu: {
+        position: 'absolute',
+        right: Dimensions.get('window').width * 0.2,
+        backgroundColor: '#343a40',
+        padding: 10,
+        borderRadius: 5,
+        marginTop: Dimensions.get('window').height * 0.05,
+    },
+    dropdownItem: {
+        color: '#ffffff',
+        fontSize: Dimensions.get('window').width * 0.04,
+        paddingVertical: 5,
+    },
+    header: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        paddingTop: 2,
+        backgroundColor: '#212529',
+        marginBottom: 1,
     },
     welcomeText: {
         fontSize: 32,
         fontFamily: 'BebasNeue',
         color: '#dc3545',
+        marginTop: 30
     },
     welcomeName: {
         fontSize: 28,
@@ -230,3 +278,7 @@ const styles = StyleSheet.create({
 });
 
 export default GestionReservas;
+
+function logout() {
+    throw new Error('Function not implemented.');
+}
