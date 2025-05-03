@@ -243,7 +243,7 @@ export default function GestionarBarberos() {
                             <View style={styles.card} key={index}>
                                 <View style={styles.cardContent}>
                                     <Image source={{ uri: `${getBaseURL()}imagesBarbero/${barbero.Foto}` }} style={{ ...styles.cardImage, marginBottom: 15 }} />
-                                    <Text style={{ ...styles.cardTitle, color: '#dc3545', fontFamily: 'Anton_400Regular', fontSize: 20 }}>{barbero.nombre_usuario}</Text>
+                                    <Text style={{ ...styles.cardTitle, color: '#dc3545', fontFamily: 'Anton_400Regular', fontSize: 20, textAlign: 'center' }}>{barbero.nombre_usuario}</Text>
                                     <Text style={styles.cardText}>{barbero.email}</Text>
                                     <Text style={styles.cardText}>{barbero.descripcion}</Text>
                                     <View style={styles.cardActions}>

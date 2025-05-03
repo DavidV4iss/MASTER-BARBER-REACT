@@ -248,7 +248,7 @@ export default function Inventario() {
                                         <th scope="col" className=' bebas p-4 fs-3'>Proveedor</th>
                                         <th scope="col" className=' bebas p-4  fs-3'>Fecha Y Hora</th>
                                         <th scope="col" className=' bebas p-4 fs-3'>Imagen</th>
-                                        <th scope="col" className=' bebas p-4 fs-3'>Costo de venta</th>
+                                        <th scope="col" className=' bebas p-4 fs-3'>Precio</th>
                                         <th scope="col" className=' bebas p-4 text-warning fs-3'>Acciones</th>
                                     </tr>
                                 </thead>

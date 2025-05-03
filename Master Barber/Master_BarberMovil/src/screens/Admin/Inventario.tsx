@@ -255,14 +255,14 @@ export default function GestionarBarberos() {
                         {inventario.map((inventario, id_producto) => (
                             <View style={styles.card} key={id_producto}>
                                 <View style={styles.cardContent}>
-                                    <Image source={{ uri: `${getBaseURL()}ImagesInventario/${inventario.Foto}` }} style={{ ...styles.cardImage, marginBottom: 15 }} />
-                                    <Text style={{ ...styles.cardTitle, color: '#dc3545', fontFamily: 'Anton_400Regular', fontSize: 20 }}>{inventario.nombre}</Text>
-                                    <Text style={styles.cardText}>{inventario.id_producto}</Text>
-                                    <Text style={styles.cardText}>{inventario.descripcion_P}</Text>
-                                    <Text style={styles.cardText}>{inventario.cantidad}</Text>
-                                    <Text style={styles.cardText}>{inventario.proveedor}</Text>
-                                    <Text style={styles.cardText}>{inventario.fecha_venta}</Text>
-                                    <Text style={styles.cardText}>{inventario.PrecioUnitario}</Text>
+                                    <Image source={{ uri: `${getBaseURL()}ImagesInventario/${inventario.Foto}` }} style={{ ...styles.cardImage, marginBottom: 15, }} />
+                                    <Text style={{ ...styles.cardTitle, color: '#dc3545', fontFamily: 'Anton_400Regular', fontSize: 20, textAlign: 'center' }}>{inventario.nombre}</Text>
+                                    <Text style={styles.cardText}><Text style={{ fontWeight: 'bold', color: '#dc3545' }}>ID: </Text> {"   "} {inventario.id_producto}</Text>
+                                    <Text style={styles.cardText}><Text style={{ fontWeight: 'bold', color: '#dc3545' }}>Descripcion: </Text>  {"   "}{inventario.descripcion_P}</Text>
+                                    <Text style={styles.cardText}><Text style={{ fontWeight: 'bold', color: '#dc3545' }}>Cantidad: </Text>{"   "}  {inventario.cantidad}</Text>
+                                    <Text style={styles.cardText}><Text style={{ fontWeight: 'bold', color: '#dc3545' }}>Proveedor: </Text>{"   "}{inventario.proveedor}</Text>
+                                    <Text style={styles.cardText}><Text style={{ fontWeight: 'bold', color: '#dc3545' }}>Fecha Y Hora: </Text>{"   "}{inventario.fecha_venta}</Text>
+                                    <Text style={{ ...styles.cardText, marginBottom: 30 }}><Text style={{ fontWeight: 'bold', color: '#dc3545' }}>Precio: </Text>{"   "}{inventario.PrecioUnitario}</Text>
 
                                     <View style={styles.cardActions}>
                                         <TouchableOpacity
