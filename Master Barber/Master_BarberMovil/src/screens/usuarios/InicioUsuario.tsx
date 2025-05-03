@@ -15,6 +15,7 @@ import { Ionicons } from '@expo/vector-icons'
 
 
 export default function InicioUsuario() {
+    const navigation = useNavigation();
     const [activeStep, setActiveStep] = useState(0);
     const [isValid, setIsValid] = useState(false);
     const [errors, setErrors] = useState(false);
@@ -65,35 +66,12 @@ export default function InicioUsuario() {
                             {isDropdownVisible && (
                                 <View style={styles.dropdownMenu} >
                                     <TouchableOpacity>
-                                        <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-                                            <Ionicons name="person-outline" size={15} color="#ffc107"
-                                                style={{ marginRight: 5}}
-                                            />
-                                            <Text style={{ ...styles.dropdownItem, fontFamily: 'BebasNeue_400Regular', color: '#ffc107' }}>Perfil</Text>
-                                        </View>
-                                    </TouchableOpacity>
-                                    <TouchableOpacity>
-                                        <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-                                            <Ionicons name="notifications-circle-outline" size={15} color="#ffc107"
-                                                style={{ marginRight: 5}}
-                                            />
-                                            <Text style={{ ...styles.dropdownItem, fontFamily: 'BebasNeue_400Regular', color: '#ffc107' }}>Reservas</Text>
-                                        </View>
+                                        <Text style={{ ...styles.dropdownItem, marginBottom: 5, fontFamily: 'BebasNeue_400Regular', color: '#ffc107' }}>Perfil</Text>
                                     </TouchableOpacity>
                                     <TouchableOpacity onPress={handleLogout}>
-                                        <View style={{
-                                            display: 'flex', flexDirection: 'row', marginBottom: 10,
-                                            backgroundColor: '#dc3545', borderRadius: 5,
-                                            padding: 'auto',
-                                            width: 85,
-                                            height: 47,
-                                        }}>
-                                            <Ionicons name="log-out" size={15} color="#ffffff"
-                                                style={{ marginRight: 10, marginLeft: 10, marginTop: 15 }}
-                                            />
-                                            <Text style={{ ...styles.dropdownItem, fontFamily: 'BebasNeue_400Regular', color: '#ffffff', marginRight: 10 }}>Cerrar sesión</Text>
-                                        </View>
+                                        <Text style={{ ...styles.dropdownItem, padding: 10, backgroundColor: '#dc3545', fontFamily: 'BebasNeue_400Regular' }}>Cerrar Sesión</Text>
                                     </TouchableOpacity>
+
                                 </View>
                             )}
                         </View>
@@ -274,6 +252,10 @@ export default function InicioUsuario() {
                 <TouchableOpacity style={{ backgroundColor: '#dc3545', borderRadius: 10, padding: 10, alignItems: 'center', justifyContent: 'center', marginBottom: 10, marginTop: 10 }}>
                     <Text style={{ color: '#ffffff', fontFamily: 'BebasNeue', fontSize: 20 }}>Enviar calificacion</Text>
                 </TouchableOpacity>
+
+                <Text style={{ color: '#ffc107', fontFamily: 'BebasNeue', fontSize: 20, marginTop: 30 }}>
+                    Mis calificaciones
+                </Text>
             </View>
         </DefaultLayout>
     )
@@ -288,15 +270,12 @@ const styles = StyleSheet.create({
         marginBottom: 1,
     },
     dropdownMenu: {
-        width: 100,
-        height: 120,
         position: 'absolute',
         right: Dimensions.get('window').width * 0.2,
         backgroundColor: '#343a40',
         padding: 10,
         borderRadius: 5,
-        marginTop: Dimensions.get('window').height * 0.10,
-
+        marginTop: Dimensions.get('window').height * 0.05,
     },
     dropdownItem: {
         color: '#ffffff',
