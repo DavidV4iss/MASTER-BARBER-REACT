@@ -419,24 +419,11 @@ export default function GestionarBarberos() {
 }
 
 const styles = StyleSheet.create({
-    header2: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        backgroundColor: '#212529',
-    },
     iconBars: {
         marginLeft: Dimensions.get('window').width * 0.07,
         marginTop: Dimensions.get('window').height * 0.02,
     },
 
-    welcomeText: {
-        color: '#ffc107',
-        fontSize: Dimensions.get('window').width * 0.06,
-        textAlign: 'center',
-        flex: 1,
-        marginTop: Dimensions.get('window').height * 0.03,
-        fontFamily: 'BebasNeue_400Regular',
-    },
     iconUser: {
         marginRight: Dimensions.get('window').width * 0.07,
         marginTop: Dimensions.get('window').height * 0.02,

@@ -1,17 +1,50 @@
-import React from 'react';
-import { Dimensions } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { Dimensions, ActivityIndicator, View } from 'react-native';
 import { createDrawerNavigator } from '@react-navigation/drawer';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import InicioAdminScreen from '../screens/Admin/InicioAdmin';
 import GestionarBarberosScreen from '../screens/Admin/GestionarBarberos';
 import InventarioScreen from '../screens/Admin/Inventario';
 import GestionDeInventarioScreen from '../screens/Admin/GestionDeInventario';
-import { Ionicons } from '@expo/vector-icons'; 
+import { Ionicons } from '@expo/vector-icons';
 
 const Drawer = createDrawerNavigator();
 
 export default function NavigationAdmin() {
+    const [initialRoute, setInitialRoute] = useState(null);
+    const [isReady, setIsReady] = useState(false);
+
+    useEffect(() => {
+        const getLastRoute = async () => {
+            try {
+                const lastRoute = await AsyncStorage.getItem('lastRoute');
+                setInitialRoute(lastRoute || 'Inicio');
+            } catch (error) {
+                console.error('Error al recuperar la última ruta:', error);
+                setInitialRoute('Inicio');
+            } finally {
+                setIsReady(true);
+            }
+        };
+        getLastRoute();
+    }, []);
+
+    if (!isReady) {
+        return (
+            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                <ActivityIndicator size="large" color="#dc3545" />
+            </View>
+        );
+    }
+
+    const handleStateChange = async (state) => {
+        const currentRoute = state.routes[state.index].name;
+        await AsyncStorage.setItem('lastRoute', currentRoute);
+    };
+
     return (
         <Drawer.Navigator
+            initialRouteName={initialRoute}
             screenOptions={{
                 headerShown: false,
                 drawerStyle: {
@@ -19,6 +52,9 @@ export default function NavigationAdmin() {
                     width: Dimensions.get('window').width * 0.6,
                 },
                 drawerInactiveTintColor: 'white',
+            }}
+            screenListeners={{
+                state: (e) => handleStateChange(e.data.state),
             }}
         >
             <Drawer.Screen
