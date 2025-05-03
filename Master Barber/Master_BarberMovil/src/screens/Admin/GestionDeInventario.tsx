@@ -13,6 +13,7 @@ export default function GestionDeInventario() {
     const [isDropdownVisible, setIsDropdownVisible] = React.useState(false);
     const navigation = useNavigation();
     const { logout } = useAuth();
+
     const [fontsLoaded] = useFonts({
         Anton: Anton_400Regular,
         BebasNeue_400Regular,
