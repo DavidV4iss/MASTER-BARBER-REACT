@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { View, Text, StyleSheet, Image, TouchableOpacity, Dimensions } from 'react-native'
 import Icon from 'react-native-vector-icons/FontAwesome'
 import DefaultLayout from '../../Layouts/DefaultLayout'
-import { ScrollView } from 'react-native-gesture-handler'
+import { ScrollView, TextInput } from 'react-native-gesture-handler'
 import { useFonts } from 'expo-font'
 import { Anton_400Regular } from '@expo-google-fonts/anton'
 import { BebasNeue_400Regular } from '@expo-google-fonts/bebas-neue'
@@ -10,9 +10,11 @@ import { ProgressSteps, ProgressStep } from 'react-native-progress-steps';
 import { Calendar, LocaleConfig } from 'react-native-calendars';
 import { useNavigation } from '@react-navigation/native';
 import useAuth from '../../hooks/useAuth'
+import { Rating, AirbnbRating } from 'react-native-ratings';
+import { Ionicons } from '@expo/vector-icons'
+
 
 export default function InicioUsuario() {
-
     const [activeStep, setActiveStep] = useState(0);
     const [isValid, setIsValid] = useState(false);
     const [errors, setErrors] = useState(false);
@@ -46,7 +48,7 @@ export default function InicioUsuario() {
     const handleLogout = () => {
         logout();
     }
-    
+
     if (!fontsLoaded) {
         return null;
     }
@@ -63,12 +65,35 @@ export default function InicioUsuario() {
                             {isDropdownVisible && (
                                 <View style={styles.dropdownMenu} >
                                     <TouchableOpacity>
-                                        <Text style={{ ...styles.dropdownItem, marginBottom: 5, fontFamily: 'BebasNeue_400Regular', color: '#ffc107' }}>Perfil</Text>
+                                        <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+                                            <Ionicons name="person-outline" size={15} color="#ffc107"
+                                                style={{ marginRight: 5}}
+                                            />
+                                            <Text style={{ ...styles.dropdownItem, fontFamily: 'BebasNeue_400Regular', color: '#ffc107' }}>Perfil</Text>
+                                        </View>
+                                    </TouchableOpacity>
+                                    <TouchableOpacity>
+                                        <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+                                            <Ionicons name="notifications-circle-outline" size={15} color="#ffc107"
+                                                style={{ marginRight: 5}}
+                                            />
+                                            <Text style={{ ...styles.dropdownItem, fontFamily: 'BebasNeue_400Regular', color: '#ffc107' }}>Reservas</Text>
+                                        </View>
                                     </TouchableOpacity>
                                     <TouchableOpacity onPress={handleLogout}>
-                                        <Text style={{ ...styles.dropdownItem, padding: 10, backgroundColor: '#dc3545', fontFamily: 'BebasNeue_400Regular' }}>Cerrar Sesión</Text>
+                                        <View style={{
+                                            display: 'flex', flexDirection: 'row', marginBottom: 10,
+                                            backgroundColor: '#dc3545', borderRadius: 5,
+                                            padding: 'auto',
+                                            width: 85,
+                                            height: 47,
+                                        }}>
+                                            <Ionicons name="log-out" size={15} color="#ffffff"
+                                                style={{ marginRight: 10, marginLeft: 10, marginTop: 15 }}
+                                            />
+                                            <Text style={{ ...styles.dropdownItem, fontFamily: 'BebasNeue_400Regular', color: '#ffffff', marginRight: 10 }}>Cerrar sesión</Text>
+                                        </View>
                                     </TouchableOpacity>
-
                                 </View>
                             )}
                         </View>
@@ -98,12 +123,6 @@ export default function InicioUsuario() {
                             label="Paso 1"
                             buttonNextText="Continuar"
                             buttonPreviousText="Atrás"
-                        // nextBtnStyle={{ backgroundColor: '#dc3545', borderRadius: 10, padding: 10 }}
-                        // nextBtnTextStyle={{ color: '#ffffff', fontFamily: 'BebasNeue', fontSize: 18 }}
-                        // previousBtnStyle={{ backgroundColor: '#6c757d', borderRadius: 10, padding: 10 }}
-                        // previousBtnTextStyle={{ color: '#ffffff', fontFamily: 'BebasNeue', fontSize: 18 }}
-                        // onNext={onNextStep}
-                        // errors={errors}
                         >
                             <Text style={styles.textPaso}>
                                 Selecciona el servicio que deseas
@@ -138,12 +157,6 @@ export default function InicioUsuario() {
                             label="Paso 2"
                             buttonNextText="Continuar"
                             buttonPreviousText="Atrás"
-                        // nextBtnTextStyle={{ color: '#ffffff', fontFamily: 'BebasNeue', fontSize: 18 }}
-                        // previousBtnStyle={{ backgroundColor: '#6c757d', borderRadius: 10, padding: 10 }}
-                        // previousBtnTextStyle={{ color: '#ffffff', fontFamily: 'BebasNeue', fontSize: 18 }}
-                        // buttonFinishText="Finalizar"
-                        // finishBtnStyle={{ backgroundColor: '#28a745', borderRadius: 10, padding: 10 }}
-                        // finishBtnTextStyle={{ color: '#ffffff', fontFamily: 'BebasNeue', fontSize: 18 }}
                         >
                             <Text style={styles.textPaso}>
                                 Selecciona tu barbero preferido
@@ -194,12 +207,7 @@ export default function InicioUsuario() {
                         <ProgressStep
                             label="Paso 3"
                             buttonPreviousText="Atrás"
-
-                        // previousBtnStyle={{ backgroundColor: '#6c757d', borderRadius: 10, padding: 10 }}
-                        // previousBtnTextStyle={{ color: '#ffffff', fontFamily: 'BebasNeue', fontSize: 18 }}
-                        // buttonFinishText="Finalizar"
-                        // finishBtnStyle={{ backgroundColor: '#28a745', borderRadius: 10, padding: 10 }}
-                        // finishBtnTextStyle={{ color: '#ffffff', fontFamily: 'BebasNeue', fontSize: 18 }}
+                            buttonFinishText="Reservar"
                         >
                             <Text style={styles.textPaso}>
                                 Selecciona la fecha y hora de tu reserva
@@ -229,6 +237,43 @@ export default function InicioUsuario() {
                     </ProgressSteps>
                 </View>
                 {/* Aqui termina el paso a paso Step */}
+
+                <View style={styles.calificaciones}>
+                    <Text style={{ color: '#dc3545', fontFamily: 'BebasNeue', fontSize: 20 }}>
+                        Calificaciones
+                    </Text>
+                    <Text style={{ color: '#ffffff', fontFamily: 'BebasNeue', fontSize: 20 }}>
+                        ||
+                    </Text>
+                    <Text style={{ color: '#ffc107', fontFamily: 'BebasNeue', fontSize: 20 }}>
+                        Vip
+                    </Text>
+
+                </View>
+                <AirbnbRating
+                    count={5}
+                    reviews={['Terrible', 'Malo', 'Regular', 'Bueno', 'Excelente']}
+                    defaultRating={0}
+                    reviewSize={20}
+                    size={25}
+                    starContainerStyle={{
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                    }}
+                />
+                <Text style={{ color: '#ffc107', fontFamily: 'BebasNeue', fontSize: 20, marginTop: 30 }}>
+                    Comentarios
+                </Text>
+                <TextInput
+                    style={styles.input}
+                    multiline={true}
+                    numberOfLines={4}
+                    textAlignVertical="top"
+                />
+                <TouchableOpacity style={{ backgroundColor: '#dc3545', borderRadius: 10, padding: 10, alignItems: 'center', justifyContent: 'center', marginBottom: 10, marginTop: 10 }}>
+                    <Text style={{ color: '#ffffff', fontFamily: 'BebasNeue', fontSize: 20 }}>Enviar calificacion</Text>
+                </TouchableOpacity>
             </View>
         </DefaultLayout>
     )
@@ -243,12 +288,15 @@ const styles = StyleSheet.create({
         marginBottom: 1,
     },
     dropdownMenu: {
+        width: 100,
+        height: 120,
         position: 'absolute',
         right: Dimensions.get('window').width * 0.2,
         backgroundColor: '#343a40',
         padding: 10,
         borderRadius: 5,
-        marginTop: Dimensions.get('window').height * 0.05,
+        marginTop: Dimensions.get('window').height * 0.10,
+
     },
     dropdownItem: {
         color: '#ffffff',
@@ -407,7 +455,26 @@ const styles = StyleSheet.create({
         marginTop: 30,
         width: 300,
     },
-
+    calificaciones: {
+        flexDirection: 'row',
+        fontSize: 24,
+        fontFamily: 'BebasNeue',
+        color: '#ffffff',
+        marginTop: 30,
+        width: 300,
+        textAlign: 'center',
+        justifyContent: 'center',
+    },
+    input: {
+        width: 300,
+        height: 200,
+        margin: 12,
+        borderWidth: 1,
+        padding: 10,
+        borderColor: '#ffffff',
+        borderRadius: 15,
+        color: '#ffffff',
+    },
 
 
 })
