@@ -11,7 +11,6 @@ import { showMessage } from "react-native-flash-message";
 export default function Login() {
 
   const { login } = useAuth()
-
   const navigation = useNavigation();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
