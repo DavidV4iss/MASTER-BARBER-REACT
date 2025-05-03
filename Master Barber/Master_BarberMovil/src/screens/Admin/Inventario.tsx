@@ -196,7 +196,7 @@ export default function GestionarBarberos() {
             console.log(response);
             navigation.reset({
                 index: 0,
-                routes: [{ name: 'Gestionar Barberos' }],
+                routes: [{ name: 'Inventario' }],
             });
         } catch (error) {
             console.log(error);
