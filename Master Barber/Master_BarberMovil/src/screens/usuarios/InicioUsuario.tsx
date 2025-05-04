@@ -1,20 +1,38 @@
 import React, { useState } from 'react'
-import { View, Text, StyleSheet, Image, TouchableOpacity, Dimensions } from 'react-native'
+import { View, Text, StyleSheet, Image, TouchableOpacity, Dimensions, Platform, Button } from 'react-native'
 import Icon from 'react-native-vector-icons/FontAwesome'
 import DefaultLayout from '../../Layouts/DefaultLayout'
-import { ScrollView, TextInput } from 'react-native-gesture-handler'
+import { TextInput } from 'react-native-gesture-handler'
 import { useFonts } from 'expo-font'
 import { Anton_400Regular } from '@expo-google-fonts/anton'
 import { BebasNeue_400Regular } from '@expo-google-fonts/bebas-neue'
 import { ProgressSteps, ProgressStep } from 'react-native-progress-steps';
-import { Calendar, LocaleConfig } from 'react-native-calendars';
 import { useNavigation } from '@react-navigation/native';
 import useAuth from '../../hooks/useAuth'
-import { Rating, AirbnbRating } from 'react-native-ratings';
-import { Ionicons } from '@expo/vector-icons'
+import { AirbnbRating } from 'react-native-ratings';
+import DateTimePicker from '@react-native-community/datetimepicker';
+    
+    
+
 
 
 export default function InicioUsuario() {
+    const [date, setDate] = useState(new Date());
+    const [show, setShow] = useState(false);
+
+    const onChange = (event, selectedDate) => {
+        const currentDate = selectedDate || date;
+        setShow(Platform.OS === 'ios'); 
+        setDate(currentDate);
+    };
+
+    const showDatepicker = () => {
+        setShow(true);
+    };
+
+
+
+
     const navigation = useNavigation();
     const [activeStep, setActiveStep] = useState(0);
     const [isValid, setIsValid] = useState(false);
@@ -27,16 +45,6 @@ export default function InicioUsuario() {
             setErrors(false);
         }
     };
-
-    LocaleConfig.locales['es'] = {
-        monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
-        monthNamesShort: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],
-        dayNames: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
-        dayNamesShort: ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'],
-        today: 'Hoy'
-    }
-    LocaleConfig.defaultLocale = 'es';
-
     const { logout } = useAuth()
     const [fontsLoaded] = useFonts({
         Anton: Anton_400Regular,
@@ -190,26 +198,21 @@ export default function InicioUsuario() {
                             <Text style={styles.textPaso}>
                                 Selecciona la fecha y hora de tu reserva
                             </Text>
-                            <View style={styles.calendarDate}>
-                                <Calendar
-                                    style={{
-                                        borderWidth: 2,
-                                        borderColor: '#6c757d',
-                                        height: 360,
-                                        borderRadius: 10,
-                                        overflow: 'hidden',
-                                        justifyContent: 'center',
-
-                                    }}
-                                    current={'2025-04-26'}
-                                    onDayPress={day => {
-                                        setSelected(day.dateString);
-
-                                    }}
-                                    markedDates={{
-                                        [selected]: { selected: true, disableTouchEvent: true, selectedColor: '#dc3545' }
-                                    }}
-                                />
+                            <View>
+                                <View style ={{ alignItems: 'center', justifyContent: 'center' }}>
+                                    <TouchableOpacity style={styles.button} onPress={showDatepicker}>
+                                        <Text style={styles.buttonText}>Seleccionar fecha y hora</Text>
+                                    </TouchableOpacity>
+                                    
+                                    {show && (
+                                        <DateTimePicker
+                                            value={date}
+                                            mode="datetime"
+                                            display="default"
+                                            onChange={onChange}
+                                        />
+                                    )}
+                                </View>
                             </View>
                         </ProgressStep>
                     </ProgressSteps>
@@ -260,6 +263,7 @@ export default function InicioUsuario() {
         </DefaultLayout>
     )
 }
+    
 
 const styles = StyleSheet.create({
     header: {
@@ -427,13 +431,6 @@ const styles = StyleSheet.create({
         marginTop: 25
 
     },
-    calendarDate: {
-        fontSize: 20,
-        fontFamily: 'BebasNeue',
-        color: '#ffffff',
-        marginTop: 30,
-        width: 300,
-    },
     calificaciones: {
         flexDirection: 'row',
         fontSize: 24,
@@ -454,6 +451,22 @@ const styles = StyleSheet.create({
         borderRadius: 15,
         color: '#ffffff',
     },
-
+    button: {
+        width: 200,
+        height: 50,
+        margin: 12,
+        padding: 10,
+        borderRadius: 15,
+        color: '#ffffff',
+        textAlign: 'center',
+        justifyContent: 'center',
+        backgroundColor: '#dc3545',
+    },
+    buttonText: {
+        fontSize: 20,
+        fontFamily: 'BebasNeue',
+        color: '#ffffff',
+        textAlign: 'center',
+    }
 
 })
