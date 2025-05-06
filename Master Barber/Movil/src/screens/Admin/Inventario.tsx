@@ -1,5 +1,5 @@
 import React from 'react'
-import { StyleSheet, Text, View, ScrollView, Image, TouchableOpacity, Modal, TextInput, Platform } from 'react-native';
+import { StyleSheet, Text, View, ScrollView, Image, TouchableOpacity, Modal, TextInput, Platform, Button } from 'react-native';
 import { Dimensions } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import DefaultLayout from "../../Layouts/DefaultLayout";
@@ -13,7 +13,8 @@ import * as ImagePicker from 'expo-image-picker';
 import { Ionicons } from '@expo/vector-icons';
 import { getBaseURL } from '../../config/api';
 import useAuth from '../../hooks/useAuth';
-
+import { Picker } from '@react-native-picker/picker';
+import DatePicker from 'react-native-date-picker';
 
 
 export default function GestionarBarberos() {
@@ -31,6 +32,9 @@ export default function GestionarBarberos() {
     const [imagePreviewEditar, setImagePreviewEditar] = useState(null);
     const [isDropdownVisible, setIsDropdownVisible] = useState(false);
     const [inventario, setInventario] = useState([]);
+    const [selectedValue, setSelectedValue] = useState('');
+    const [date, setDate] = useState(new Date());
+    const [open, setOpen] = useState(false);
     const [producto, setProducto] = useState({
         nombre: '',
         descripcion_P: '',
@@ -288,93 +292,114 @@ export default function GestionarBarberos() {
                 </ScrollView>
             </View>
             {/* ModalAñadir */}
-            <Modal
-                animationType="slide"
-                transparent={true}
-                visible={modalVisible}
-                onRequestClose={() => setModalVisible(false)}
-            >
-                <View style={styles.modalContainer}>
-                    <View style={styles.modalContent}>
-                        <Text style={styles.modalTitle}>Añadir Nuevo Producto</Text>
-                        <TextInput
-                            style={styles.input}
-                            placeholder="Nombre Del Producto"
-                            placeholderTextColor="#ccc"
-                            onChangeText={handleChange("nombre")}
-                            value={producto.nombre}
-                        />
-                        <TextInput
-                            style={styles.input}
-                            placeholder="Descripcion"
-                            placeholderTextColor="#ccc"
-                            onChangeText={handleChange("descripcion_P")}
-                            value={producto.descripcion_P}
-                        />
-                        <TextInput
-                            style={styles.input}
-                            placeholder="Cantidad"
-                            placeholderTextColor="#ccc"
-                            onChangeText={handleChange("cantidad")}
-                            value={producto.cantidad}
-                        />
-                        <TextInput
-                            style={styles.input}
-                            placeholder="Proveedor"
-                            placeholderTextColor="#ccc"
-                            onChangeText={handleChange("proveedor")}
-                            value={producto.proveedor}
-                        />
-                        <TextInput
-                            style={styles.input}
-                            placeholder="Fecha Venta"
-                            placeholderTextColor="#ccc"
-                            onChangeText={handleChange("fecha_venta")}
-                            value={producto.fecha_venta}
-                        />
-
-                        <TextInput
-                            style={styles.input}
-                            placeholder="Precio Unitario"
-                            placeholderTextColor="#ccc"
-                            onChangeText={handleChange("PrecioUnitario")}
-                            value={producto.PrecioUnitario}
-                        />
-                        <TouchableOpacity
-                            onPress={handleSeleccionarImagen}
-                            style={styles.imageUploadButton}
-                        >
-                            {imagePreview ? (
-                                <Image
-                                    source={{ uri: imagePreview }}
-                                    style={styles.imagePreview}
-                                    resizeMode="cover"
-                                />
-                            ) : (
-                                <View style={styles.imagePlaceholder}>
-                                    <Ionicons name="image-outline" size={40} color="#aaa" />
-                                    <Text style={styles.placeholderText}>Seleccionar imagen</Text>
-                                </View>
-                            )}
-                        </TouchableOpacity>
-
-
-                        <View style={styles.modalActions}>
-                            <TouchableOpacity
-                                style={styles.cancelButton}
-                                onPress={() => setModalVisible(false)}
+            <ScrollView style={{ backgroundColor: '#212529', padding: 20 }}>
+                <Modal
+                    animationType="slide"
+                    transparent={true}
+                    visible={modalVisible}
+                    onRequestClose={() => setModalVisible(false)}
+                >
+                    <View style={styles.modalContainer}>
+                        <View style={styles.modalContent}>
+                            <Text style={styles.modalTitle}>Añadir Nuevo Producto</Text>
+                            <TextInput
+                                style={styles.input}
+                                placeholder="Nombre Del Producto"
+                                placeholderTextColor="#ccc"
+                                onChangeText={handleChange("nombre")}
+                                value={producto.nombre}
+                            />
+                            <TextInput
+                                style={styles.input}
+                                placeholder="Descripcion"
+                                placeholderTextColor="#ccc"
+                                onChangeText={handleChange("descripcion_P")}
+                                value={producto.descripcion_P}
+                            />
+                            <TextInput
+                                style={styles.input}
+                                placeholder="Cantidad"
+                                placeholderTextColor="#ccc"
+                                onChangeText={handleChange("cantidad")}
+                                value={producto.cantidad}
+                            />
+                            <Picker
+                                selectedValue={selectedValue}
+                                onValueChange={(itemValue) =>
+                                    setSelectedValue(itemValue)
+                                }
+                                style={styles.input}
                             >
-                                <Text style={{ color: '#ffffff' }}>Cancelar</Text>
-                            </TouchableOpacity>
+                                <Picker.Item label="Seleccionar Categoria" value="null" />
+                                <Picker.Item label="Option 1" value="option1" />
+                                <Picker.Item label="Option 2" value="option2" />
+                                <Picker.Item label="Option 3" value="option3" />
+                            </Picker>
+                            <TextInput
+                                style={styles.input}
+                                placeholder="Proveedor"
+                                placeholderTextColor="#ccc"
+                                onChangeText={handleChange("proveedor")}
+                                value={producto.proveedor}
+                            />
+                            <Button title="Open Date Picker" onPress={() => setOpen(true)} />
+                            <DatePicker
+                                modal
+                                open={open}
+                                date={date}
+                                onConfirm={(newDate) => {
+                                    setOpen(false);
+                                    setDate(newDate);
+                                }}
+                                onCancel={() => {
+                                    setOpen(false);
+                                }}
+                            />
+                            <Text>Selected date: {date.toDateString()}</Text>
+
+                            <TextInput
+                                style={styles.input}
+                                placeholder="Precio Unitario"
+                                placeholderTextColor="#ccc"
+                                onChangeText={handleChange("PrecioUnitario")}
+                                value={producto.PrecioUnitario}
+                            />
                             <TouchableOpacity
-                                style={styles.saveButton}
+                                onPress={handleSeleccionarImagen}
+                                style={styles.imageUploadButton}
                             >
-                                <Text style={{ color: '#ffffff' }} onPress={handlesubmit}>Guardar</Text>
+                                {imagePreview ? (
+                                    <Image
+                                        source={{ uri: imagePreview }}
+                                        style={styles.imagePreview}
+                                        resizeMode="cover"
+                                    />
+                                ) : (
+                                    <View style={styles.imagePlaceholder}>
+                                        <Ionicons name="image-outline" size={40} color="#aaa" />
+                                        <Text style={styles.placeholderText}>Seleccionar imagen</Text>
+                                    </View>
+                                )}
                             </TouchableOpacity>
+
+
+                            <View style={styles.modalActions}>
+                                <TouchableOpacity
+                                    style={styles.cancelButton}
+                                    onPress={() => setModalVisible(false)}
+                                >
+                                    <Text style={{ color: '#ffffff' }}>Cancelar</Text>
+                                </TouchableOpacity>
+                                <TouchableOpacity
+                                    style={styles.saveButton}
+                                >
+                                    <Text style={{ color: '#ffffff' }} onPress={handlesubmit}>Guardar</Text>
+                                </TouchableOpacity>
+                            </View>
                         </View>
                     </View>
-                </View>
-            </Modal>
+                </Modal>
+            </ScrollView>
             {/* FIN MODAL AÑADIR */}
 
 
