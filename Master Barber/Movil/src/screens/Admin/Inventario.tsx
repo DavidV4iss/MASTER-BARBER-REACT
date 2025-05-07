@@ -14,10 +14,10 @@ import { Ionicons } from '@expo/vector-icons';
 import { getBaseURL } from '../../config/api';
 import useAuth from '../../hooks/useAuth';
 import { Picker } from '@react-native-picker/picker';
-import DateTimePicker from 'react-native-ui-datepicker';
+import DateTimePicker from '@react-native-community/datetimepicker';
 
 
-export default function GestionarBarberos() {
+export default function Inventario() {
     const [fontsLoaded] = useFonts({
         Anton: Anton_400Regular,
         BebasNeue_400Regular,
@@ -35,7 +35,7 @@ export default function GestionarBarberos() {
     const [selectedValue, setSelectedValue] = useState('');
     const [date, setDate] = useState(new Date());
     const [showDatePicker, setShowDatePicker] = useState(false);
-    const [showTimePicker, setShowTimePicker] = useState(false)
+    const [showTimePicker, setShowTimePicker] = useState(false);
     const [producto, setProducto] = useState({
         nombre: '',
         descripcion_P: '',
@@ -71,7 +71,8 @@ export default function GestionarBarberos() {
             formData.append('cantidad', producto.cantidad);
             formData.append('id_categoria_producto', producto.id_categoria_producto);
             formData.append('proveedor', producto.proveedor);
-            formData.append('fecha_venta', producto.fecha_venta);
+            const fechaLocal = `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')} ${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`;
+            formData.append('fecha_venta', fechaLocal);
             formData.append('PrecioUnitario', producto.PrecioUnitario);
             if (producto.foto) {
                 if (Platform.OS === 'web') {
@@ -88,7 +89,6 @@ export default function GestionarBarberos() {
             }
 
             const response = await InventarioRepository.CreateInventario(formData);
-            console.log(response);
             navigation.reset({
                 index: 0,
                 routes: [{ name: 'Inventario' }],
@@ -118,8 +118,6 @@ export default function GestionarBarberos() {
             }
 
             const response = await InventarioRepository.UpdateInventario(productoEditar.id_producto, formData);
-            console.log(response);
-
             navigation.reset({
                 index: 0,
                 routes: [{ name: 'Inventario' }],
@@ -182,6 +180,46 @@ export default function GestionarBarberos() {
         setProductoEditar({ ...productoEditar, [data]: value });
     };
 
+
+    const onDateChange = (event, selectedDate) => {
+        if (event.type === 'dismissed') {
+            setShowDatePicker(false);
+            return;
+        }
+
+        setShowDatePicker(Platform.OS === 'ios');
+        if (selectedDate) {
+            setDate(prev => new Date(
+                selectedDate.getFullYear(),
+                selectedDate.getMonth(),
+                selectedDate.getDate(),
+                prev.getHours(),
+                prev.getMinutes()
+            ));
+        }
+    };
+
+    const onTimeChange = (event, selectedTime) => {
+        if (event.type === 'dismissed') {
+            setShowTimePicker(false);
+            return;
+        }
+
+        setShowTimePicker(Platform.OS === 'ios');
+        if (selectedTime) {
+            setDate(prev => new Date(
+                prev.getFullYear(),
+                prev.getMonth(),
+                prev.getDate(),
+                selectedTime.getHours(),
+                selectedTime.getMinutes()
+            ));
+        }
+    };
+
+
+
+
     const fetchInventario = async () => {
         try {
             const response = await InventarioRepository.GetInventario();
@@ -212,41 +250,12 @@ export default function GestionarBarberos() {
     }, []);
 
 
-    const onDateChange = (event, selectedDate) => {
-        if (selectedDate) {
-            const updatedDate = new Date(
-                selectedDate.getFullYear(),
-                selectedDate.getMonth(),
-                selectedDate.getDate(),
-                date.getHours(),
-                date.getMinutes()
-            );
-            setDate(updatedDate);
-        }
-        setShowDatePicker(false);
-    };
-
-    const onTimeChange = (event, selectedTime) => {
-        if (selectedTime) {
-            const updatedDate = new Date(
-                date.getFullYear(),
-                date.getMonth(),
-                date.getDate(),
-                selectedTime.getHours(),
-                selectedTime.getMinutes()
-            );
-            setDate(updatedDate);
-        }
-        setShowTimePicker(true);
-    };
-
     if (!fontsLoaded) return null;
 
 
     const DeleteInventario = async (id) => {
         try {
             const response = await InventarioRepository.DeleteInventario(id);
-            console.log(response);
             navigation.reset({
                 index: 0,
                 routes: [{ name: 'Inventario' }],
@@ -340,17 +349,16 @@ export default function GestionarBarberos() {
                 </View>
             </View>
             {/* ModalAñadir */}
-            <ScrollView>
-                <Modal
-                    animationType="slide"
-                    transparent={true}
-                    visible={modalVisible}
-                    onRequestClose={() => setModalVisible(false)}
-                    style={{ padding: "100%" }}
-                >
-                    <View style={styles.modalContainer}>
-                        <View style={styles.modalContent}>
-                            <Text style={styles.modalTitle}>Añadir Nuevo Producto</Text>
+            <Modal
+                animationType="slide"
+                transparent={true}
+                visible={modalVisible}
+                onRequestClose={() => setModalVisible(false)}
+            >
+                <View style={styles.modalContainer}>
+                    <View style={styles.modalContent}>
+                        <Text style={styles.modalTitle}>Añadir Nuevo Producto</Text>
+                        <ScrollView contentContainerStyle={{ paddingBottom: 20 }}>
                             <TextInput
                                 style={styles.input}
                                 placeholder="Nombre Del Producto"
@@ -374,9 +382,10 @@ export default function GestionarBarberos() {
                             />
                             <Picker
                                 selectedValue={selectedValue}
-                                onValueChange={(itemValue) =>
-                                    setSelectedValue(itemValue)
-                                }
+                                onValueChange={(itemValue) => {
+                                    setSelectedValue(itemValue);
+                                    setProducto({ ...producto, id_categoria_producto: itemValue });
+                                }}
                                 style={styles.input}
                             >
                                 <Picker.Item label="Selecciona una categoria" value="" style={{ color: '#fff' }} />
@@ -391,35 +400,39 @@ export default function GestionarBarberos() {
                                 onChangeText={handleChange("proveedor")}
                                 value={producto.proveedor}
                             />
-                            <View style={{ padding: 20 }}>
-                                <Text style={{ fontSize: 16 }}>Fecha y hora seleccionadas:</Text>
-                                <Text style={{ fontSize: 18, fontWeight: 'bold', marginVertical: 10 }}>
-                                    {date.toLocaleString()}
-                                </Text>
+                            <View>
+                                <View style={{ marginTop: 10, borderRadius: 8, marginBottom: 15, width: '100%', }} >
+                                    <Button title="Seleccionar Fecha" onPress={() => setShowDatePicker(true)} />
+                                </View>
+                                <View style={{ marginTop: 10, borderRadius: 5, marginBottom: 15, width: '100%', }}>
+                                    <Button title="Seleccionar Hora" onPress={() => setShowTimePicker(true)} />
+                                </View>
 
-                                <Button title="Seleccionar fecha" onPress={() => setShowDatePicker(true)} />
-                                <Button title="Seleccionar hora" onPress={() => setShowTimePicker(true)} />
 
-                                {/* Selector de fecha */}
                                 {showDatePicker && (
                                     <DateTimePicker
                                         value={date}
-                                        mode="date" // Solo permite seleccionar la fecha
+                                        mode="date"
                                         display="default"
                                         onChange={onDateChange}
                                     />
                                 )}
 
-                                {/* Selector de hora */}
                                 {showTimePicker && (
                                     <DateTimePicker
                                         value={date}
-                                        mode="time" // Solo permite seleccionar la hora
+                                        mode="time"
                                         display="default"
                                         onChange={onTimeChange}
+                                        is24Hour={true}
                                     />
                                 )}
+                                <Text style={{ color: '#fff', fontFamily: 'BebasNeue_400Regular', fontSize: 18, alignSelf: 'center' }}>Fecha y hora seleccionada:{"        "}{date.toLocaleString()}</Text>
+                                <Text></Text>
                             </View>
+
+
+
 
                             <TextInput
                                 style={styles.input}
@@ -446,7 +459,6 @@ export default function GestionarBarberos() {
                                 )}
                             </TouchableOpacity>
 
-
                             <View style={styles.modalActions}>
                                 <TouchableOpacity
                                     style={styles.cancelButton}
@@ -456,14 +468,15 @@ export default function GestionarBarberos() {
                                 </TouchableOpacity>
                                 <TouchableOpacity
                                     style={styles.saveButton}
+                                    onPress={handlesubmit}
                                 >
-                                    <Text style={{ color: '#ffffff' }} onPress={handlesubmit}>Guardar</Text>
+                                    <Text style={{ color: '#ffffff' }}>Guardar</Text>
                                 </TouchableOpacity>
                             </View>
-                        </View>
+                        </ScrollView>
                     </View>
-                </Modal>
-            </ScrollView>
+                </View>
+            </Modal>
             {/* FIN MODAL AÑADIR */}
 
 
@@ -619,16 +632,14 @@ const styles = StyleSheet.create({
         borderRadius: 5,
     },
     modalContainer: {
-        position: 'absolute',
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: 'rgba(0, 0, 0, 0.5)',
-        padding: 50,
-        marginBottom: 20,
     },
     modalContent: {
-        width: '80%',
+        flex: 1,
+        width: '90%',
         backgroundColor: '#343a40',
         borderRadius: 10,
         padding: 20,
