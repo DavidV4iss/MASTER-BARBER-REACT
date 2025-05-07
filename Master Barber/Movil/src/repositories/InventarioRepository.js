@@ -13,6 +13,17 @@ class InventarioRepository {
         }
     }
 
+
+    static async categorias() {
+        try {
+            const response = await API.get("categorias");
+            return response;
+        } catch (error) {
+            const errorMessage = error?.response?.data?.message || "Error al obtener los productos.";
+            throw new Error(errorMessage);
+        }
+    }
+
     static async CreateInventario(inventario) {
         try {
             const response = await API.post("CreateInventario", inventario, { headers: { "Content-Type": "multipart/form-data" } });

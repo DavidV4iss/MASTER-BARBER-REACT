@@ -14,7 +14,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { getBaseURL } from '../../config/api';
 import useAuth from '../../hooks/useAuth';
 import { Picker } from '@react-native-picker/picker';
-import DatePicker from 'react-native-date-picker';
+import DateTimePicker from 'react-native-ui-datepicker';
 
 
 export default function GestionarBarberos() {
@@ -34,7 +34,8 @@ export default function GestionarBarberos() {
     const [inventario, setInventario] = useState([]);
     const [selectedValue, setSelectedValue] = useState('');
     const [date, setDate] = useState(new Date());
-    const [open, setOpen] = useState(false);
+    const [showDatePicker, setShowDatePicker] = useState(false);
+    const [showTimePicker, setShowTimePicker] = useState(false)
     const [producto, setProducto] = useState({
         nombre: '',
         descripcion_P: '',
@@ -56,6 +57,9 @@ export default function GestionarBarberos() {
         foto: null,
         PrecioUnitario: ''
     });
+
+    const [categorias, setCategorias] = useState([]);
+
 
 
 
@@ -191,6 +195,51 @@ export default function GestionarBarberos() {
         fetchInventario();
     }, []);
 
+    React.useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const [inventarioRes, categoriasRes] = await Promise.all([
+                    InventarioRepository.GetInventario(),
+                    InventarioRepository.categorias(),
+                ]);
+                setInventario(inventarioRes.data);
+                setCategorias(categoriasRes.data);
+            } catch (error) {
+                console.log(error);
+            }
+        };
+        fetchData();
+    }, []);
+
+
+    const onDateChange = (event, selectedDate) => {
+        if (selectedDate) {
+            const updatedDate = new Date(
+                selectedDate.getFullYear(),
+                selectedDate.getMonth(),
+                selectedDate.getDate(),
+                date.getHours(),
+                date.getMinutes()
+            );
+            setDate(updatedDate);
+        }
+        setShowDatePicker(false);
+    };
+
+    const onTimeChange = (event, selectedTime) => {
+        if (selectedTime) {
+            const updatedDate = new Date(
+                date.getFullYear(),
+                date.getMonth(),
+                date.getDate(),
+                selectedTime.getHours(),
+                selectedTime.getMinutes()
+            );
+            setDate(updatedDate);
+        }
+        setShowTimePicker(true);
+    };
+
     if (!fontsLoaded) return null;
 
 
@@ -238,66 +287,66 @@ export default function GestionarBarberos() {
                         </View>
                     )}
                 </View>
-                <ScrollView>
-                    <Text style={[styles.responsiveText, { marginBottom: 20, marginTop: Dimensions.get('window').height * 0.09 }]}>
-                        HOLA, <Text style={{ color: '#dc3545' }}>ADMINISTRADOR</Text> | AQUÍ PODRÁS EDITAR, AÑADIR Y ELIMINAR BARBEROS
-                    </Text>
-                    <TouchableOpacity
-                        style={{
-                            backgroundColor: '#dc3545',
-                            padding: 10,
-                            borderRadius: 5,
-                            alignSelf: 'flex-end',
-                            marginBottom: 20,
-                        }}
-                        onPress={() => setModalVisible(true)}
-                    >
-                        <Text style={{ color: '#ffffff', fontWeight: 'bold' }}>Añadir</Text>
-                    </TouchableOpacity>
+                <Text style={[styles.responsiveText, { marginBottom: 20, marginTop: Dimensions.get('window').height * 0.09 }]}>
+                    HOLA, <Text style={{ color: '#dc3545' }}>ADMINISTRADOR</Text> | AQUÍ PODRÁS EDITAR, AÑADIR Y ELIMINAR BARBEROS
+                </Text>
+                <TouchableOpacity
+                    style={{
+                        backgroundColor: '#dc3545',
+                        padding: 10,
+                        borderRadius: 5,
+                        alignSelf: 'flex-end',
+                        marginBottom: 20,
+                    }}
+                    onPress={() => setModalVisible(true)}
+                >
+                    <Text style={{ color: '#ffffff', fontWeight: 'bold' }}>Añadir</Text>
+                </TouchableOpacity>
 
-                    <View>
-                        {inventario.map((inventario, id_producto) => (
-                            <View style={styles.card} key={id_producto}>
-                                <View style={styles.cardContent}>
-                                    <Image source={{ uri: `${getBaseURL()}ImagesInventario/${inventario.Foto}` }} style={{ ...styles.cardImage, marginBottom: 15, }} />
-                                    <Text style={{ ...styles.cardTitle, color: '#dc3545', fontFamily: 'Anton_400Regular', fontSize: 20, textAlign: 'center' }}>{inventario.nombre}</Text>
-                                    <Text style={styles.cardText}><Text style={{ fontWeight: 'bold', color: '#dc3545' }}>ID: </Text> {"   "} {inventario.id_producto}</Text>
-                                    <Text style={styles.cardText}><Text style={{ fontWeight: 'bold', color: '#dc3545' }}>Descripcion: </Text>  {"   "}{inventario.descripcion_P}</Text>
-                                    <Text style={styles.cardText}><Text style={{ fontWeight: 'bold', color: '#dc3545' }}>Cantidad: </Text>{"   "}  {inventario.cantidad}</Text>
-                                    <Text style={styles.cardText}><Text style={{ fontWeight: 'bold', color: '#dc3545' }}>Proveedor: </Text>{"   "}{inventario.proveedor}</Text>
-                                    <Text style={styles.cardText}><Text style={{ fontWeight: 'bold', color: '#dc3545' }}>Fecha Y Hora: </Text>{"   "}{inventario.fecha_venta}</Text>
-                                    <Text style={{ ...styles.cardText, marginBottom: 30 }}><Text style={{ fontWeight: 'bold', color: '#dc3545' }}>Precio: </Text>{"   "}{inventario.PrecioUnitario}</Text>
+                <View>
+                    {inventario.map((inventario, id_producto) => (
+                        <View style={styles.card} key={id_producto}>
+                            <View style={styles.cardContent}>
+                                <Image source={{ uri: `${getBaseURL()}ImagesInventario/${inventario.Foto}` }} style={{ ...styles.cardImage, marginBottom: 15, }} />
+                                <Text style={{ ...styles.cardTitle, color: '#dc3545', fontFamily: 'Anton_400Regular', fontSize: 20, textAlign: 'center' }}>{inventario.nombre}</Text>
+                                <Text style={styles.cardText}><Text style={{ fontWeight: 'bold', color: '#dc3545' }}>ID: </Text> {"   "} {inventario.id_producto}</Text>
+                                <Text style={styles.cardText}><Text style={{ fontWeight: 'bold', color: '#dc3545' }}>Descripcion: </Text>  {"   "}{inventario.descripcion_P}</Text>
+                                <Text style={styles.cardText}><Text style={{ fontWeight: 'bold', color: '#dc3545' }}>Cantidad: </Text>{"   "}  {inventario.cantidad}</Text>
+                                <Text style={styles.cardText}><Text style={{ fontWeight: 'bold', color: '#dc3545' }}>Categoria: </Text>{"   "}{categorias.find((categoria) => categoria.id_categoria_producto === inventario.id_categoria_producto)?.categoria}</Text>
+                                <Text style={styles.cardText}><Text style={{ fontWeight: 'bold', color: '#dc3545' }}>Proveedor: </Text>{"   "}{inventario.proveedor}</Text>
+                                <Text style={styles.cardText}><Text style={{ fontWeight: 'bold', color: '#dc3545' }}>Fecha Y Hora: </Text>{"   "}{inventario.fecha_venta}</Text>
+                                <Text style={{ ...styles.cardText, marginBottom: 30 }}><Text style={{ fontWeight: 'bold', color: '#dc3545' }}>Precio: </Text>{"   "}{inventario.PrecioUnitario}</Text>
 
-                                    <View style={styles.cardActions}>
-                                        <TouchableOpacity
-                                            style={styles.editButton}
-                                            onPress={() => {
-                                                setProductoEditar(inventario);
-                                                setModalVisibleEdit(true);
-                                            }}
-                                        >
-                                            <Icon name="pencil" size={16} color="#000000" />
-                                        </TouchableOpacity>
-                                        <TouchableOpacity
-                                            style={styles.deleteButton}
-                                            onPress={() => DeleteInventario(inventario.id_producto)}
-                                        >
-                                            <Icon name="trash" size={16} color="#ffffff" />
-                                        </TouchableOpacity>
-                                    </View>
+                                <View style={styles.cardActions}>
+                                    <TouchableOpacity
+                                        style={styles.editButton}
+                                        onPress={() => {
+                                            setProductoEditar(inventario);
+                                            setModalVisibleEdit(true);
+                                        }}
+                                    >
+                                        <Icon name="pencil" size={16} color="#000000" />
+                                    </TouchableOpacity>
+                                    <TouchableOpacity
+                                        style={styles.deleteButton}
+                                        onPress={() => DeleteInventario(inventario.id_producto)}
+                                    >
+                                        <Icon name="trash" size={16} color="#ffffff" />
+                                    </TouchableOpacity>
                                 </View>
                             </View>
-                        ))}
-                    </View>
-                </ScrollView>
+                        </View>
+                    ))}
+                </View>
             </View>
             {/* ModalAñadir */}
-            <ScrollView style={{ backgroundColor: '#212529', padding: 20 }}>
+            <ScrollView>
                 <Modal
                     animationType="slide"
                     transparent={true}
                     visible={modalVisible}
                     onRequestClose={() => setModalVisible(false)}
+                    style={{ padding: "100%" }}
                 >
                     <View style={styles.modalContainer}>
                         <View style={styles.modalContent}>
@@ -330,10 +379,10 @@ export default function GestionarBarberos() {
                                 }
                                 style={styles.input}
                             >
-                                <Picker.Item label="Seleccionar Categoria" value="null" />
-                                <Picker.Item label="Option 1" value="option1" />
-                                <Picker.Item label="Option 2" value="option2" />
-                                <Picker.Item label="Option 3" value="option3" />
+                                <Picker.Item label="Selecciona una categoria" value="" style={{ color: '#fff' }} />
+                                {categorias.map((categoria) => (
+                                    <Picker.Item key={categoria.id_categoria_producto} label={categoria.categoria} value={categoria.id_categoria_producto} />
+                                ))}
                             </Picker>
                             <TextInput
                                 style={styles.input}
@@ -342,20 +391,35 @@ export default function GestionarBarberos() {
                                 onChangeText={handleChange("proveedor")}
                                 value={producto.proveedor}
                             />
-                            <Button title="Open Date Picker" onPress={() => setOpen(true)} />
-                            <DatePicker
-                                modal
-                                open={open}
-                                date={date}
-                                onConfirm={(newDate) => {
-                                    setOpen(false);
-                                    setDate(newDate);
-                                }}
-                                onCancel={() => {
-                                    setOpen(false);
-                                }}
-                            />
-                            <Text>Selected date: {date.toDateString()}</Text>
+                            <View style={{ padding: 20 }}>
+                                <Text style={{ fontSize: 16 }}>Fecha y hora seleccionadas:</Text>
+                                <Text style={{ fontSize: 18, fontWeight: 'bold', marginVertical: 10 }}>
+                                    {date.toLocaleString()}
+                                </Text>
+
+                                <Button title="Seleccionar fecha" onPress={() => setShowDatePicker(true)} />
+                                <Button title="Seleccionar hora" onPress={() => setShowTimePicker(true)} />
+
+                                {/* Selector de fecha */}
+                                {showDatePicker && (
+                                    <DateTimePicker
+                                        value={date}
+                                        mode="date" // Solo permite seleccionar la fecha
+                                        display="default"
+                                        onChange={onDateChange}
+                                    />
+                                )}
+
+                                {/* Selector de hora */}
+                                {showTimePicker && (
+                                    <DateTimePicker
+                                        value={date}
+                                        mode="time" // Solo permite seleccionar la hora
+                                        display="default"
+                                        onChange={onTimeChange}
+                                    />
+                                )}
+                            </View>
 
                             <TextInput
                                 style={styles.input}
@@ -493,7 +557,7 @@ export default function GestionarBarberos() {
             </Modal>
             {/* FIN MODAL EDITAR */}
 
-        </DefaultLayout>
+        </DefaultLayout >
     )
 }
 
@@ -555,10 +619,13 @@ const styles = StyleSheet.create({
         borderRadius: 5,
     },
     modalContainer: {
+        position: 'absolute',
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: 'rgba(0, 0, 0, 0.5)',
+        padding: 50,
+        marginBottom: 20,
     },
     modalContent: {
         width: '80%',
@@ -647,5 +714,8 @@ const styles = StyleSheet.create({
         backgroundColor: '#212529',
         marginBottom: 15,
     },
+    container: { padding: 20 },
+    label: { fontSize: 16, marginBottom: 10 },
+    value: { fontSize: 18, fontWeight: 'bold', marginBottom: 20 },
 })
 
