@@ -36,6 +36,9 @@ export default function Inventario() {
     const [date, setDate] = useState(new Date());
     const [showDatePicker, setShowDatePicker] = useState(false);
     const [showTimePicker, setShowTimePicker] = useState(false);
+    const [editDate, setEditDate] = useState(new Date());
+    const [showEditDatePicker, setShowEditDatePicker] = useState(false);
+    const [showEditTimePicker, setShowEditTimePicker] = useState(false);
     const [producto, setProducto] = useState({
         nombre: '',
         descripcion_P: '',
@@ -74,18 +77,17 @@ export default function Inventario() {
             const fechaLocal = `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')} ${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`;
             formData.append('fecha_venta', fechaLocal);
             formData.append('PrecioUnitario', producto.PrecioUnitario);
-            if (producto.foto) {
-                if (Platform.OS === 'web') {
-                    formData.append('foto', producto.foto);
-                }
-                else {
-                    formData.append('foto', {
-                        uri: producto.foto.uri,
-                        type: producto.foto.type,
-                        name: producto.foto.name,
-                    });
-                }
-
+            if (Platform.OS === 'web') {
+                const response = await fetch(producto.foto.uri);
+                const blob = await response.blob();
+                formData.append('foto', blob, producto.foto.name);
+            }
+            else {
+                formData.append('foto', {
+                    uri: producto.foto.uri,
+                    type: producto.foto.type,
+                    name: producto.foto.name,
+                })
             }
 
             const response = await InventarioRepository.CreateInventario(formData);
@@ -106,17 +108,24 @@ export default function Inventario() {
             formData.append('cantidad', productoEditar.cantidad);
             formData.append('id_categoria_producto', productoEditar.id_categoria_producto);
             formData.append('proveedor', productoEditar.proveedor);
-            formData.append('fecha_venta', productoEditar.fecha_venta);
+
+            const fechaLocal = `${editDate.getFullYear()}-${(editDate.getMonth() + 1).toString().padStart(2, '0')}-${editDate.getDate().toString().padStart(2, '0')} ${editDate.getHours().toString().padStart(2, '0')}:${editDate.getMinutes().toString().padStart(2, '0')}`;
+            formData.append('fecha_venta', fechaLocal);
+
             formData.append('PrecioUnitario', productoEditar.PrecioUnitario);
 
-            if (productoEditar.foto) {
-                formData.append('foto', {
-                    uri: productoEditar.foto.uri,
-                    type: productoEditar.foto.type,
-                    name: productoEditar.foto.name,
-                });
+            if (Platform.OS === 'web') {
+                const response = await fetch(producto.foto.uri);
+                const blob = await response.blob();
+                formData.append('foto', blob, producto.foto.name);
             }
-
+            else {
+                formData.append('foto', {
+                    uri: producto.foto.uri,
+                    type: producto.foto.type,
+                    name: producto.foto.name,
+                })
+            }
             const response = await InventarioRepository.UpdateInventario(productoEditar.id_producto, formData);
             navigation.reset({
                 index: 0,
@@ -219,6 +228,45 @@ export default function Inventario() {
 
 
 
+    const onEditDateChange = (event, selectedDate) => {
+        if (event.type === 'dismissed') {
+            setShowEditDatePicker(false);
+            return;
+        }
+
+        setShowEditDatePicker(Platform.OS === 'ios');
+        if (selectedDate) {
+            setEditDate(prev => new Date(
+                selectedDate.getFullYear(),
+                selectedDate.getMonth(),
+                selectedDate.getDate(),
+                prev.getHours(),
+                prev.getMinutes()
+            ));
+        }
+    };
+
+    const onEditTimeChange = (event, selectedTime) => {
+        if (event.type === 'dismissed') {
+            setShowEditTimePicker(false);
+            return;
+        }
+
+        setShowEditTimePicker(Platform.OS === 'ios');
+        if (selectedTime) {
+            setEditDate(prev => new Date(
+                prev.getFullYear(),
+                prev.getMonth(),
+                prev.getDate(),
+                selectedTime.getHours(),
+                selectedTime.getMinutes()
+            ));
+        }
+    };
+
+
+
+
 
     const fetchInventario = async () => {
         try {
@@ -228,10 +276,6 @@ export default function Inventario() {
             console.log("Error al obtener los datos:", err);
         }
     };
-
-    React.useEffect(() => {
-        fetchInventario();
-    }, []);
 
     React.useEffect(() => {
         const fetchData = async () => {
@@ -247,6 +291,7 @@ export default function Inventario() {
             }
         };
         fetchData();
+        fetchInventario();
     }, []);
 
 
@@ -331,9 +376,20 @@ export default function Inventario() {
                                         style={styles.editButton}
                                         onPress={() => {
                                             setProductoEditar(inventario);
+
+                                            const fecha = new Date(inventario.fecha_venta);
+                                            if (!isNaN(fecha.getTime())) {
+                                                setEditDate(fecha);
+                                            } else {
+                                                setEditDate(new Date());
+                                            }
+
+                                            setImagePreviewEditar(`${getBaseURL()}ImagesInventario/${inventario.Foto}`);
                                             setModalVisibleEdit(true);
                                         }}
                                     >
+
+
                                         <Icon name="pencil" size={16} color="#000000" />
                                     </TouchableOpacity>
                                     <TouchableOpacity
@@ -427,13 +483,8 @@ export default function Inventario() {
                                         is24Hour={true}
                                     />
                                 )}
-                                <Text style={{ color: '#fff', fontFamily: 'BebasNeue_400Regular', fontSize: 18, alignSelf: 'center' }}>Fecha y hora seleccionada:{"        "}{date.toLocaleString()}</Text>
-                                <Text></Text>
+                                <Text style={{ color: '#fff', fontFamily: 'BebasNeue_400Regular', fontSize: 18, alignSelf: 'center', marginBottom: 20 }}>Fecha y hora seleccionada:{"        "}{date.toLocaleString()}</Text>
                             </View>
-
-
-
-
                             <TextInput
                                 style={styles.input}
                                 placeholder="Precio Unitario"
@@ -459,7 +510,7 @@ export default function Inventario() {
                                 )}
                             </TouchableOpacity>
 
-                            <View style={styles.modalActions}>
+                            <View style={{ ...styles.modalActions, marginBottom: 20 }}>
                                 <TouchableOpacity
                                     style={styles.cancelButton}
                                     onPress={() => setModalVisible(false)}
@@ -490,86 +541,120 @@ export default function Inventario() {
                 <View style={styles.modalContainer}>
                     <View style={styles.modalContent}>
                         <Text style={styles.modalTitle}>Editar Producto</Text>
-                        <TextInput
-                            style={styles.input}
-                            placeholder="Nombre Del Producto"
-                            placeholderTextColor="#ccc"
-                            onChangeText={handleChangeEdit("nombre")}
-                            value={productoEditar.nombre}
-                        />
-                        <TextInput
-                            style={styles.input}
-                            placeholder="Descripcion"
-                            placeholderTextColor="#ccc"
-                            onChangeText={handleChangeEdit("descripcion_P")}
-                            value={productoEditar.descripcion_P}
-                        />
-                        <TextInput
-                            style={styles.input}
-                            placeholder="Cantidad"
-                            placeholderTextColor="#ccc"
-                            onChangeText={handleChangeEdit("cantidad")}
-                            value={productoEditar.cantidad}
+                        <ScrollView style={{ width: '100%' }}>
+                            <TextInput
+                                style={styles.input}
+                                placeholder="Nombre Del Producto"
+                                placeholderTextColor="#ccc"
+                                onChangeText={handleChangeEdit("nombre")}
+                                value={productoEditar.nombre}
+                            />
+                            <TextInput
+                                style={styles.input}
+                                placeholder="Descripcion"
+                                placeholderTextColor="#ccc"
+                                onChangeText={handleChangeEdit("descripcion_P")}
+                                value={productoEditar.descripcion_P}
+                            />
+                            <TextInput
+                                style={styles.input}
+                                placeholder="Cantidad"
+                                placeholderTextColor="#ccc"
+                                onChangeText={handleChangeEdit("cantidad")}
+                                value={productoEditar.cantidad}
+                            />
+                            <Picker
+                                selectedValue={productoEditar.id_categoria_producto}
+                                onValueChange={(itemValue) => setProductoEditar({ ...productoEditar, id_categoria_producto: itemValue })}
+                                style={styles.input}
+                            >
+                                <Picker.Item label="Selecciona una categoria" value="" style={{ color: '#fff' }} />
+                                {categorias.map((categoria) => (
+                                    <Picker.Item key={categoria.id_categoria_producto} label={categoria.categoria} value={categoria.id_categoria_producto} />
+                                ))}
+                            </Picker>
+                            <TextInput
+                                style={styles.input}
+                                placeholder="Proveedor"
+                                placeholderTextColor="#ccc"
+                                onChangeText={handleChangeEdit("proveedor")}
+                                value={productoEditar.proveedor}
+                            />
+                            <View style={{ marginTop: 10, borderRadius: 8, marginBottom: 15 }}>
+                                <Button title="Seleccionar Fecha" onPress={() => setShowEditDatePicker(true)} />
+                            </View>
+                            <View style={{ marginBottom: 15 }}>
+                                <Button title="Seleccionar Hora" onPress={() => setShowEditTimePicker(true)} />
+                            </View>
 
-                        />
-                        <TextInput
-                            style={styles.input}
-                            placeholder="Proveedor"
-                            placeholderTextColor="#ccc"
-                            onChangeText={handleChange("proveedor")}
-                            value={producto.proveedor}
-                        />
-                        <TextInput
-                            style={styles.input}
-                            placeholder="Fecha Venta"
-                            placeholderTextColor="#ccc"
-                            onChangeText={handleChange("fecha_venta")}
-                            value={producto.fecha_venta}
-                        />
-                        <TextInput
-                            style={styles.input}
-                            placeholder="Precio Unitario"
-                            placeholderTextColor="#ccc"
-                            onChangeText={handleChange("PrecioUnitario")}
-                            value={producto.PrecioUnitario}
-                        />
-                        <TouchableOpacity
-                            onPress={handleSeleccionarImagenEditar}
-                            style={styles.imageUploadButton}
-                        >
-                            {imagePreviewEditar ? (
-                                <Image
-                                    source={{ uri: imagePreviewEditar }}
-                                    style={styles.imagePreview}
-                                    resizeMode="cover"
+                            {showEditDatePicker && (
+                                <DateTimePicker
+                                    value={editDate}
+                                    mode="date"
+                                    display="default"
+                                    onChange={onEditDateChange}
                                 />
-                            ) : (
-                                <View style={styles.imagePlaceholder}>
-                                    <Ionicons name="image-outline" size={40} color="#aaa" />
-                                    <Text style={styles.placeholderText}>Seleccionar imagen</Text>
-                                </View>
                             )}
-                        </TouchableOpacity>
 
-                        <View style={styles.modalActions}>
+                            {showEditTimePicker && (
+                                <DateTimePicker
+                                    value={editDate}
+                                    mode="time"
+                                    display="default"
+                                    onChange={onEditTimeChange}
+                                    is24Hour={true}
+                                />
+                            )}
+
+                            <Text style={{ color: '#fff', fontFamily: 'BebasNeue_400Regular', fontSize: 18, alignSelf: 'center', marginBottom: 20 }}>
+                                Fecha y hora seleccionada: {editDate.toLocaleString()}
+                            </Text>
+
+                            <TextInput
+                                style={styles.input}
+                                placeholder="Precio Unitario"
+                                placeholderTextColor="#ccc"
+                                onChangeText={handleChangeEdit("PrecioUnitario")}
+                                value={productoEditar.PrecioUnitario}
+                            />
+
                             <TouchableOpacity
-                                style={styles.cancelButton}
-                                onPress={() => setModalVisibleEdit(false)}
+                                onPress={handleSeleccionarImagenEditar}
+                                style={styles.imageUploadButton}
                             >
-                                <Text style={{ color: '#ffffff' }}>Cancelar</Text>
+                                {imagePreviewEditar ? (
+                                    <Image
+                                        source={{ uri: imagePreviewEditar }}
+                                        style={styles.imagePreview}
+                                        resizeMode="cover"
+                                    />
+                                ) : (
+                                    <View style={styles.imagePlaceholder}>
+                                        <Ionicons name="image-outline" size={40} color="#aaa" />
+                                        <Text style={styles.placeholderText}>Seleccionar imagen</Text>
+                                    </View>
+                                )}
                             </TouchableOpacity>
-                            <TouchableOpacity
-                                style={styles.saveButton}
-                                onPress={handlesubmitEdit}
-                            >
-                                <Text style={{ color: '#ffffff' }}>Guardar</Text>
-                            </TouchableOpacity>
-                        </View>
+
+                            <View style={{ ...styles.modalActions, marginBottom: 20 }}>
+                                <TouchableOpacity
+                                    style={styles.cancelButton}
+                                    onPress={() => setModalVisibleEdit(false)}
+                                >
+                                    <Text style={{ color: '#ffffff' }}>Cancelar</Text>
+                                </TouchableOpacity>
+                                <TouchableOpacity
+                                    style={styles.saveButton}
+                                    onPress={handlesubmitEdit}
+                                >
+                                    <Text style={{ color: '#ffffff' }}>Guardar</Text>
+                                </TouchableOpacity>
+                            </View>
+                        </ScrollView>
                     </View>
                 </View>
             </Modal>
             {/* FIN MODAL EDITAR */}
-
         </DefaultLayout >
     )
 }
