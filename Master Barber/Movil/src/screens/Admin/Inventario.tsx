@@ -77,6 +77,7 @@ export default function Inventario() {
             const fechaLocal = `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')} ${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`;
             formData.append('fecha_venta', fechaLocal);
             formData.append('PrecioUnitario', producto.PrecioUnitario);
+
             if (Platform.OS === 'web') {
                 const response = await fetch(producto.foto.uri);
                 const blob = await response.blob();
@@ -103,29 +104,45 @@ export default function Inventario() {
     const handlesubmitEdit = async () => {
         try {
             const formData = new FormData();
-            formData.append('nombre', productoEditar.nombre);
-            formData.append('descripcion_P', productoEditar.descripcion_P);
-            formData.append('cantidad', productoEditar.cantidad);
-            formData.append('id_categoria_producto', productoEditar.id_categoria_producto);
-            formData.append('proveedor', productoEditar.proveedor);
 
-            const fechaLocal = `${editDate.getFullYear()}-${(editDate.getMonth() + 1).toString().padStart(2, '0')}-${editDate.getDate().toString().padStart(2, '0')} ${editDate.getHours().toString().padStart(2, '0')}:${editDate.getMinutes().toString().padStart(2, '0')}`;
-            formData.append('fecha_venta', fechaLocal);
-
-            formData.append('PrecioUnitario', productoEditar.PrecioUnitario);
-
-            if (Platform.OS === 'web') {
-                const response = await fetch(producto.foto.uri);
-                const blob = await response.blob();
-                formData.append('foto', blob, producto.foto.name);
+            if (productoEditar.nombre) {
+                formData.append('nombre', productoEditar.nombre);
             }
-            else {
-                formData.append('foto', {
-                    uri: producto.foto.uri,
-                    type: producto.foto.type,
-                    name: producto.foto.name,
-                })
+            if (productoEditar.descripcion_P) {
+                formData.append('descripcion_P', productoEditar.descripcion_P);
             }
+            if (productoEditar.cantidad) {
+                formData.append('cantidad', productoEditar.cantidad);
+            }
+            if (productoEditar.id_categoria_producto) {
+                formData.append('id_categoria_producto', productoEditar.id_categoria_producto);
+            }
+            if (productoEditar.proveedor) {
+                formData.append('proveedor', productoEditar.proveedor);
+            }
+            if (productoEditar.PrecioUnitario) {
+                formData.append('PrecioUnitario', productoEditar.PrecioUnitario);
+            }
+
+            if (editDate) {
+                const fechaLocal = `${editDate.getFullYear()}-${(editDate.getMonth() + 1).toString().padStart(2, '0')}-${editDate.getDate().toString().padStart(2, '0')} ${editDate.getHours().toString().padStart(2, '0')}:${editDate.getMinutes().toString().padStart(2, '0')}`;
+                formData.append('fecha_venta', fechaLocal);
+            }
+
+            if (productoEditar.foto) {
+                if (Platform.OS === 'web' && productoEditar.foto.uri) {
+                    const response = await fetch(productoEditar.foto.uri);
+                    const blob = await response.blob();
+                    formData.append('foto', blob, productoEditar.foto.name);
+                } else {
+                    formData.append('foto', {
+                        uri: productoEditar.foto.uri,
+                        type: productoEditar.foto.type,
+                        name: productoEditar.foto.name,
+                    });
+                }
+            }
+
             const response = await InventarioRepository.UpdateInventario(productoEditar.id_producto, formData);
             navigation.reset({
                 index: 0,
@@ -263,10 +280,6 @@ export default function Inventario() {
             ));
         }
     };
-
-
-
-
 
     const fetchInventario = async () => {
         try {
@@ -810,8 +823,5 @@ const styles = StyleSheet.create({
         backgroundColor: '#212529',
         marginBottom: 15,
     },
-    container: { padding: 20 },
-    label: { fontSize: 16, marginBottom: 10 },
-    value: { fontSize: 18, fontWeight: 'bold', marginBottom: 20 },
 })
 
