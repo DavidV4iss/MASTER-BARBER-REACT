@@ -1,5 +1,5 @@
-import React, { useState } from 'react'
-import { View, Text, StyleSheet, Image, TouchableOpacity, Dimensions, Platform, Button } from 'react-native'
+import React, { useEffect, useState } from 'react'
+import { View, Text, StyleSheet, Image, TouchableOpacity, Dimensions, Platform } from 'react-native'
 import Icon from 'react-native-vector-icons/FontAwesome'
 import DefaultLayout from '../../Layouts/DefaultLayout'
 import { TextInput } from 'react-native-gesture-handler'
@@ -11,18 +11,117 @@ import { useNavigation } from '@react-navigation/native';
 import useAuth from '../../hooks/useAuth'
 import { AirbnbRating } from 'react-native-ratings';
 import DateTimePicker from '@react-native-community/datetimepicker';
-    
-    
+import axios from 'axios'
+import moment from 'moment';
+
+
 
 
 
 export default function InicioUsuario() {
-    const [date, setDate] = useState(new Date());
     const [show, setShow] = useState(false);
+    const [service, setService] = useState('');
+    const [date, setDate] = useState(new Date());
+    const [barberoId, setBarberoId] = useState('');
+    const [barberos, setBarberos] = useState([]);
+    const [servicios, setServicios] = useState([]);
+    const [currentStep, setCurrentStep] = useState(1);
+    const [horasOcupadas, setHorasOcupadas] = useState([]);
+
+    const token = localStorage.getItem('token');
+    const tokenDecoded = token ? JSON.parse(atob(token.split('.')[1])) : null;
+    const id = tokenDecoded?.id || null;
+
+
+    const nextStep = () => {
+        if (currentStep === 1 && !service) {
+            alert('Por favor, selecciona un servicio antes de continuar.');
+            return;
+        }
+
+        if (currentStep === 2 && !barberoId) {
+            alert('Por favor, selecciona un barbero antes de continuar.');
+            return;
+        }
+
+        setCurrentStep((prevStep) => prevStep + 1);
+    };
+
+    const prevStep = () => {
+        setCurrentStep((prevStep) => prevStep - 1);
+    };
+
+    useEffect(() => {
+        axios.get('http://localhost:8080/GetBarberos')
+            .then(response => {
+                setBarberos(response.data);
+            })
+            .catch(error => {
+                console.error('Hubo un error al obtener los barberos:', error);
+            });
+
+        if (barberoId) {
+            axios.get(`http://localhost:8080/GetReservas/barbero/${barberoId}`)
+                .then(response => {
+                    const horasOcupadas = response.data.map(reserva => new Date(reserva.fecha));
+                    setHorasOcupadas(horasOcupadas);
+                })
+                .catch(error => {
+                    console.error('Error al obtener las reservas:', error);
+                });
+        }
+
+        axios.get('http://localhost:8080/GetServicios')
+            .then(response => {
+                setServicios(response.data);
+            })
+            .catch(error => {
+                console.error('Hubo un error al obtener los servicios:', error);
+            });
+    }, [barberoId]);
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+
+        if (!service || !barberoId || !date) {
+            alert('Por favor, selecciona el servicio, barbero y fecha antes de continuar.');
+            return;
+        }
+
+        const formattedSelectedDate = moment(date).format('YYYY-MM-DD HH:mm:ss');
+
+        try {
+            const response = await axios.get(`http://localhost:8080/GetReservas/barbero/${barberoId}`);
+            const horasOcupadas = response.data.map(reserva => moment(reserva.fecha).format('YYYY-MM-DD HH:mm:ss'));
+
+            if (horasOcupadas.includes(formattedSelectedDate)) {
+                alert('La hora seleccionada ya está ocupada. Por favor, elige otra hora.');
+                return;
+            }
+
+            await axios.post('http://localhost:8080/CrearReservas', {
+                cliente_id: id,
+                barbero_id: barberoId,
+                servicio: service,
+                fecha: formattedSelectedDate,
+                estado: 'Pendiente',
+            });
+
+            alert('Reserva creada con éxito.');
+
+            setCurrentStep(1);
+            setService('');
+            setBarberoId('');
+            setDate(new Date());
+        } catch (error) {
+            alert('Hubo un error al crear la reserva.');
+        }
+    };
+
 
     const onChange = (event, selectedDate) => {
         const currentDate = selectedDate || date;
-        setShow(Platform.OS === 'ios'); 
+        setShow(Platform.OS === 'ios');
         setDate(currentDate);
     };
 
@@ -30,28 +129,12 @@ export default function InicioUsuario() {
         setShow(true);
     };
 
-
-
-
     const navigation = useNavigation();
-    const [activeStep, setActiveStep] = useState(0);
-    const [isValid, setIsValid] = useState(false);
-    const [errors, setErrors] = useState(false);
-
-    const onNextStep = () => {
-        if (!isValid) {
-            setErrors(true);
-        } else {
-            setErrors(false);
-        }
-    };
     const { logout } = useAuth()
     const [fontsLoaded] = useFonts({
         Anton: Anton_400Regular,
         BebasNeue: BebasNeue_400Regular,
     });
-
-    const [selected, setSelected] = React.useState<string | null>(null);
 
     const [isDropdownVisible, setIsDropdownVisible] = useState(false);
     const handleLogout = () => {
@@ -61,6 +144,7 @@ export default function InicioUsuario() {
     if (!fontsLoaded) {
         return null;
     }
+
     return (
         <DefaultLayout>
             <View style={styles.container}>
@@ -94,130 +178,100 @@ export default function InicioUsuario() {
 
 
                 {/* Aqui va el paso a paso Step */}
-
-                <View style={{ flex: 1 }}>
-                    {/* <ProgressSteps
-                        activeStepIconBorderColor="#dc3545"
-                        activeLabelColor="#dc3545"
-                        completedStepIconColor="#ffc107"
-                        completedProgressBarColor="#ffc107"
-                        activeStepNumColor="#ffffff"
-                        completedStepNumColor="#212529"
-                        labelColor="#ffffff"
-                    >
-                        <ProgressStep
-                            label="Paso 1"
-                            buttonNextText="Continuar"
-                            buttonPreviousText="Atrás"
-                        >
-                            <Text style={styles.textPaso}>
-                                Selecciona el servicio que deseas
-                            </Text>
+                {/* Paso 1: Selección de servicio */}
+                {currentStep === 1 && (
+                    <>
+                        <Text style={styles.textPaso}>Selecciona el servicio que deseas</Text>
+                        <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
+                        {servicios.map((servicio) => (
                             <View style={styles.cardService}>
-                                <View style={styles.card1Service}>
-                                    <Text style={styles.cardTextService}>
-                                        Corte basico
-                                    </Text>
-                                    <Image style={styles.cardImage} source={require('../../assets/cortepremium.jpg')} />
-                                    <Text style={styles.textDescripcion}
-                                        numberOfLines={3}
-                                        ellipsizeMode='tail' >
-                                        Incluye corte, barba, cejas, lineas dependiendo el gusto y mascarillas si lo deseas
-                                    </Text>
-                                </View>
+                                <TouchableOpacity style={styles.card1Service} onPress={() => setService(servicio.nombre)}>
+                                    <Text style={styles.cardTextService}>{servicio.nombre}</Text>
+                                    <Image style={styles.cardImage} source={require('../../assets/cortebasico.jpg')} />
+                                    <Text style={styles.textDescripcion}>{servicio.descripcion_S}</Text>
+                                </TouchableOpacity>
 
-                                <View style={styles.card2Service}>
-                                    <Text style={styles.cardTextService}>
-                                        Corte premium
-                                    </Text>
-                                    <Image style={styles.cardImage} source={require('../../assets/cortepremium.jpg')} />
-                                    <Text style={styles.textDescripcion}
-                                        numberOfLines={3}
-                                        ellipsizeMode='tail' >
-                                        Incluye corte, barba, cejas, lineas dependiendo el gusto y mascarillas si lo deseas
-                                    </Text>
-                                </View>
+                                
                             </View>
-                        </ProgressStep>
-                        <ProgressStep
-                            label="Paso 2"
-                            buttonNextText="Continuar"
-                            buttonPreviousText="Atrás"
-                        >
-                            <Text style={styles.textPaso}>
-                                Selecciona tu barbero preferido
-                            </Text>
-                            <View style={styles.cardBarbers}>
-                                <View style={styles.card1Barbers}>
-                                    <Text style={styles.cardTextBarbers}>
-                                        Nixxon
-                                    </Text>
-                                    <Image style={styles.cardImage} source={require('../../assets/nixon.jpg')} />
-                                    <Text style={styles.textDescripcion}
-                                        numberOfLines={3}
-                                        ellipsizeMode='tail' >
-                                        Cortes Perfilados,
-                                        Asesoria En Imagen,
-                                        Buen Uso De Las Maquinas Y El Ambiente
-                                    </Text>
-                                </View>
+                        ))}
+                        </View>
+                    </>
+                )}
 
-                                <View style={styles.card2Barbers}>
-                                    <Text style={styles.cardTextBarbers}>
-                                        Deiby
-                                    </Text>
-                                    <Image style={styles.cardImage} source={require('../../assets/deiby.jpg')} />
-                                    <Text style={styles.textDescripcion}
-                                        numberOfLines={3}
-                                        ellipsizeMode='tail' >
-                                        Cortes Perfilados,
-                                        Asesoria En Imagen,
-                                        Buen Uso De Las Maquinas Y El Ambiente
-                                    </Text>
-                                </View>
-                            </View>
-                            <View style={styles.card3Barbers}>
-                                <Text style={styles.cardTextBarbers}>
-                                    Jeison
-                                </Text>
-                                <Image style={styles.cardImage} source={require('../../assets/jeisson.jpg')} />
-                                <Text style={styles.textDescripcion}
-                                    numberOfLines={4}
-                                    ellipsizeMode='tail' >
-                                    Cortes Perfilados,
-                                    Asesoria En Imagen,
-                                    Buen Uso De Las Maquinas Y El Ambiente
-                                </Text>
-                            </View>
-                        </ProgressStep>
-                        <ProgressStep
-                            label="Paso 3"
-                            buttonPreviousText="Atrás"
-                            buttonFinishText="Reservar"
-                        >
-                            <Text style={styles.textPaso}>
-                                Selecciona la fecha y hora de tu reserva
-                            </Text>
-                            <View>
-                                <View style ={{ alignItems: 'center', justifyContent: 'center' }}>
-                                    <TouchableOpacity style={styles.button} onPress={showDatepicker}>
-                                        <Text style={styles.buttonText}>Seleccionar fecha y hora</Text>
-                                    </TouchableOpacity>
-                                    
-                                    {show && (
-                                        <DateTimePicker
-                                            value={date}
-                                            mode="datetime"
-                                            display="default"
-                                            onChange={onChange}
-                                        />
-                                    )}
-                                </View>
-                            </View>
-                        </ProgressStep>
-                    </ProgressSteps> */}
-                </View>
+                {/* Paso 2: Selección de barbero */}
+                {currentStep === 2 && (
+                    <>
+                        <Text style={styles.textPaso}>Selecciona tu barbero preferido</Text>
+                        <View style={styles.cardBarbers}>
+                            <TouchableOpacity style={styles.card1Barbers} onPress={() => setBarberoId('Nixxon')}>
+                                <Text style={styles.cardTextBarbers}>Nixxon</Text>
+                                <Image style={styles.cardImage} source={require('../../assets/nixon.jpg')} />
+                                <Text style={styles.textDescripcion}>Cortes perfilados, asesoría en imagen</Text>
+                            </TouchableOpacity>
+                        </View>
+                    </>
+                )}
+
+                {/* Paso 3: Selección de fecha y hora */}
+                {currentStep === 3 && (
+                    <>
+                        <Text style={styles.textPaso}>Selecciona la fecha y hora de tu reserva</Text>
+                        <TouchableOpacity style={styles.button} onPress={showDatepicker}>
+                            <Text style={styles.buttonText}>Elegir fecha y hora</Text>
+                        </TouchableOpacity>
+                        {show && (
+                            <DateTimePicker
+                                value={date}
+                                mode="datetime"
+                                display="default"
+                                onChange={onChange}
+                            />
+                        )}
+                    </>
+                )}
                 {/* Aqui termina el paso a paso Step */}
+
+                <View style={{ flexDirection: 'row', marginTop: 20 }}>
+                    {currentStep > 1 && (
+                        <TouchableOpacity style={styles.buttonReserva} onPress={() => setCurrentStep(currentStep - 1)}>
+                            <Text style={styles.buttonText}>Atrás</Text>
+                        </TouchableOpacity>
+                    )}
+                    {currentStep < 3 && (
+                        <TouchableOpacity
+                            style={styles.buttonReserva}
+                            onPress={() => {
+                                if (currentStep === 1 && !service) {
+                                    alert('Selecciona un servicio');
+                                    return;
+                                }
+                                if (currentStep === 2 && !barberoId) {
+                                    alert('Selecciona un barbero');
+                                    return;
+                                }
+                                setCurrentStep(currentStep + 1);
+                            }}
+                        >
+                            <Text style={styles.buttonText}>Siguiente</Text>
+                        </TouchableOpacity>
+                    )}
+                    {currentStep === 3 && (
+                        <TouchableOpacity
+                            style={styles.buttonReserva}
+                            onPress={() => {
+                                alert(`Reserva confirmada:\nServicio: ${service}\nBarbero: ${barberoId}\nFecha: ${date.toLocaleString()}`);
+                                setCurrentStep(1);
+                                setService(null);
+                                setBarberoId(null);
+                                setDate(new Date());
+                            }}
+                        >
+                            <Text style={styles.buttonText}>Confirmar Reserva</Text>
+                        </TouchableOpacity>
+                    )}
+                </View>
+
+
 
                 <View style={styles.calificaciones}>
                     <Text style={{ color: '#dc3545', fontFamily: 'BebasNeue', fontSize: 20 }}>
@@ -263,7 +317,7 @@ export default function InicioUsuario() {
         </DefaultLayout>
     )
 }
-    
+
 
 const styles = StyleSheet.create({
     header: {
@@ -467,6 +521,17 @@ const styles = StyleSheet.create({
         fontFamily: 'BebasNeue',
         color: '#ffffff',
         textAlign: 'center',
+    },
+    buttonReserva: {
+        width: 150,
+        height: 50,
+        margin: 12,
+        padding: 10,
+        borderRadius: 15,
+        color: '#ffffff',
+        textAlign: 'center',
+        justifyContent: 'center',
+        backgroundColor: '#ffc107',
     }
 
 })
