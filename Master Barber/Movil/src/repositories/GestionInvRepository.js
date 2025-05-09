@@ -14,9 +14,9 @@ class GestionInvRepository {
     }
 
 
-    static async GuardarVentas(ventasConFecha) {
+    static async GuardarVentas(ventas) {
         try {
-            const response = await API.post("GuardarVentas", { ventasConFecha });
+            const response = await API.post("GuardarVentas", { ventas });
 
             showMessage({
                 message: "Venta creada exitosamente",
