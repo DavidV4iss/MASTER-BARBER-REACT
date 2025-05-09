@@ -24,7 +24,6 @@ export default function GestionDeInventario() {
     const navigation = useNavigation();
     const [rango, setRango] = React.useState('Diario');
     const [inventario, setInventario] = React.useState<any[]>([]);
-    const [ventasProcesadas, setVentasProcesadas] = React.useState([]);
     const [venta, setVenta] = React.useState<any[]>([]);
 
     const { logout } = useAuth();
@@ -147,10 +146,6 @@ export default function GestionDeInventario() {
                 </style>
             </head>
             <body>
-            
-                <div style="text-align:center; margin-bottom: 20px;">
-                    <img src="https://www.google.com/url?sa=i&url=https%3A%2F%2Fm.facebook.com%2Fp%2FMaster-Barber-VIP-100078723720363%2F&psig=AOvVaw0OaFMu6ChdIcL8SOtZ8em0&ust=1746883430177000&source=images&cd=vfe&opi=89978449&ved=0CBQQjRxqFwoTCIiPvoS-lo0DFQAAAAAdAAAAABAE" alt="Logo" style="width:120px; height:auto;" />
-                </div>
             
                 <h1>Reporte de Ventas</h1>
                 <p><strong>Rango:</strong> ${rango}</p>
