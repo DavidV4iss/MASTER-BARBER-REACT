@@ -13,15 +13,18 @@ import { getBaseURL } from '../../config/api';
 import DefaultLayout from '../../Layouts/DefaultLayout';
 import { showMessage } from 'react-native-flash-message';
 import GestionInvRepository from '../../repositories/GestionInvRepository';
+import * as Print from 'expo-print';
+import * as Sharing from 'expo-sharing';
+
 
 
 
 export default function GestionDeInventario() {
     const [isDropdownVisible, setIsDropdownVisible] = React.useState(false);
     const navigation = useNavigation();
-    const [selectedValue, setSelectedValue] = React.useState('Diario');
+    const [rango, setRango] = React.useState('Diario');
     const [inventario, setInventario] = React.useState<any[]>([]);
-    const [ventasProcesadas, setVentasProcesadas] = React.useState<any[]>([]);
+    const [ventasProcesadas, setVentasProcesadas] = React.useState([]);
     const [venta, setVenta] = React.useState<any[]>([]);
 
     const { logout } = useAuth();
@@ -30,6 +33,21 @@ export default function GestionDeInventario() {
         Anton: Anton_400Regular,
         BebasNeue_400Regular,
     });
+
+    const fetchInventario = async () => {
+        try {
+            const response = await InventarioRepository.GetInventario();
+            setInventario(response.data);
+        } catch (err) {
+            console.log("Error al obtener los datos:", err);
+        }
+    };
+    React.useEffect(() => {
+        fetchInventario();
+    }, []);
+
+
+
 
     const agregarProducto = (id_producto: number) => {
         setInventario((prevInventario) => {
@@ -61,6 +79,12 @@ export default function GestionDeInventario() {
     };
 
 
+
+    const calcularTotal = () => {
+        return venta.reduce((total, item) => total + (item.PrecioUnitario * item.cantidad), 0);
+    };
+
+
     const handleSubmit = async () => {
         try {
             const ventasConFecha = venta.map((producto) => ({
@@ -78,9 +102,9 @@ export default function GestionDeInventario() {
 
             showMessage({
                 message: `Venta exitosa`,
-                description: `El Producto <span style="color: yellow">${ventasConFecha[0].nombre}</span> Fue Restado Del Inventario Correctamente, Realizaste Una Venta Por Un Valor De: <span style="color: yellow">${calcularTotal()}</span>`,
+                description: `El Producto ${""} ${ventasConFecha[0].nombre} ${""} Fue Vendido Por Un Valor De: ${" "} ${ventasConFecha[0].PrecioUnitario} Fue Restado Del Inventario Correctamente.`,
                 type: 'success',
-                duration: 3000,
+                duration: 7000,
             });
 
             setVenta([]);
@@ -94,25 +118,91 @@ export default function GestionDeInventario() {
         }
     };
 
-
-
-    const calcularTotal = () => {
-        return venta.reduce((total, item) => total + (item.PrecioUnitario * item.cantidad), 0);
-    };
-
-
-
-    const fetchInventario = async () => {
+    const generarPDF = async () => {
         try {
-            const response = await InventarioRepository.GetInventario();
-            setInventario(response.data);
-        } catch (err) {
-            console.log("Error al obtener los datos:", err);
+            const response = await GestionInvRepository.GetVentas(rango);
+            const ventas = response.data;
+
+            const ventasAgrupadas = ventas.reduce((acc, venta) => {
+                const key = venta.id_producto;
+                if (!acc[key]) {
+                    acc[key] = { ...venta, cantidad: 0 };
+                }
+                acc[key].cantidad += venta.cantidad;
+                return acc;
+            }, {});
+
+            const ventasArray = Object.values(ventasAgrupadas);
+
+            ventasArray.sort((a, b) => b.cantidad - a.cantidad);
+
+            let htmlContent = `
+            <html>
+            <head>
+                <style>
+                    body { font-family: Arial, sans-serif; padding: 20px; }
+                    h1 { text-align: center; color: #dc3545; }
+                    table, th, td { border: 1px solid #ccc; padding: 8px; text-align: center; }
+                    th { background-color: #f2f2f2; }
+                </style>
+            </head>
+            <body>
+            
+                <div style="text-align:center; margin-bottom: 20px;">
+                    <img src="https://www.google.com/url?sa=i&url=https%3A%2F%2Fm.facebook.com%2Fp%2FMaster-Barber-VIP-100078723720363%2F&psig=AOvVaw0OaFMu6ChdIcL8SOtZ8em0&ust=1746883430177000&source=images&cd=vfe&opi=89978449&ved=0CBQQjRxqFwoTCIiPvoS-lo0DFQAAAAAdAAAAABAE" alt="Logo" style="width:120px; height:auto;" />
+                </div>
+            
+                <h1>Reporte de Ventas</h1>
+                <p><strong>Rango:</strong> ${rango}</p>
+                <p><strong>Fecha de Generación:</strong> ${new Date().toLocaleString()}</p>
+                <table style="width: 100%; border-collapse: collapse;">
+                    <tr>
+                        <th>Producto</th>
+                        <th>Cantidad</th>
+                        <th>Precio Unitario</th>
+                        <th>Total</th>
+                    </tr>
+            `;
+
+            if (ventasArray.length === 0) {
+                htmlContent += `
+                    <tr><td colspan="4">No hay ventas en este rango</td></tr>`;
+            }
+
+            let totalGeneral = 0;
+
+            ventasArray.forEach((venta) => {
+                const total = venta.PrecioUnitario * venta.cantidad;
+                totalGeneral += total;
+                htmlContent += `
+                    <tr>
+                        <td>${venta.nombre}</td>
+                        <td>${venta.cantidad}</td>
+                        <td>$${venta.PrecioUnitario.toFixed(2)}</td>
+                        <td>$${total.toFixed(2)}</td>
+                    </tr>`;
+            });
+
+            htmlContent += `
+                </table>
+                <h3>Total General: $${totalGeneral.toFixed(2)}</h3>
+            </body>
+            </html>
+            `;
+
+            const { uri } = await Print.printToFileAsync({ html: htmlContent });
+            await Sharing.shareAsync(uri);
+        } catch (error) {
+            console.error('Error al generar el PDF:', error);
+            showMessage({
+                message: 'Error al generar el PDF',
+                description: error.message,
+                type: 'danger',
+            });
         }
     };
-    React.useEffect(() => {
-        fetchInventario();
-    }, []);
+
+
 
 
     if (!fontsLoaded) return null;
@@ -153,8 +243,8 @@ export default function GestionDeInventario() {
 
                 <View style={styles.pickerWrapper}>
                     <Picker
-                        selectedValue={selectedValue}
-                        onValueChange={(itemValue) => setSelectedValue(itemValue)}
+                        selectedValue={rango}
+                        onValueChange={(itemValue) => setRango(itemValue)}
                         dropdownIconColor="#fff"
                         style={styles.picker}
                     >
@@ -166,9 +256,10 @@ export default function GestionDeInventario() {
 
 
 
-                <TouchableOpacity style={{ ...styles.pdfButton, marginBottom: 40, marginTop: 25 }}>
+                <TouchableOpacity onPress={generarPDF} style={{ ...styles.pdfButton, marginBottom: 40, marginTop: 25 }}>
                     <Text style={styles.pdfButtonText}>GENERAR PDF</Text>
                 </TouchableOpacity>
+
 
                 <View>
                     {inventario.map((item, id_producto) => (

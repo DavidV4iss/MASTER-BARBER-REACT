@@ -3,9 +3,9 @@ import API from "../config/api";
 
 class GestionInvRepository {
 
-    static async GetVentas() {
+    static async GetVentas(rango) {
         try {
-            const response = await API.get("GetVentas");
+            const response = await API.get("GetVentas" + `?rango=${rango}`);
             return response;
         } catch (error) {
             const errorMessage = error?.response?.data?.message || "Error al obtener las ventas.";
@@ -16,7 +16,7 @@ class GestionInvRepository {
 
     static async GuardarVentas(ventas) {
         try {
-            const response = await API.post("GuardarVentas", { ventas });
+            const response = await API.post("GuardarVentas", ventas);
 
             showMessage({
                 message: "Venta creada exitosamente",

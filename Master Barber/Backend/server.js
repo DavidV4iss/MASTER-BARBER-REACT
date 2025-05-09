@@ -1113,8 +1113,6 @@ app.get('/GetVentas', (req, res) => {
 app.post('/GuardarVentas', (req, res) => {
     const ventas = req.body;
 
-    console.log(ventas);
-
     if (!Array.isArray(ventas)) {
         return res.status(400).json({ error: 'Las ventas deben ser un array' });
     }
