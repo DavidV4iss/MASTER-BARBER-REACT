@@ -23,7 +23,6 @@ export default function App() {
 
 function MainNavigator() {
   const { user, isLoading } = useAuth();
-  console.log(user);
 
   if (isLoading) return (
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
