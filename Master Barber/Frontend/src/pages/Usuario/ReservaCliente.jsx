@@ -7,7 +7,6 @@ import styled from 'styled-components';
 import moment from 'moment';
 
 const formattedDate = moment().format('YYYY-MM-DD HH:mm:ss');
-
 const StyledDatePicker = styled(DatePicker)`
   width: 435px;
   height: 40px;
@@ -30,11 +29,12 @@ export default function Reserva() {
     const [servicios, setServicios] = useState([]);
     const [currentStep, setCurrentStep] = useState(1);
     const [horasOcupadas, setHorasOcupadas] = useState([]);
-
     const token = localStorage.getItem('token');
     const tokenDecoded = token ? JSON.parse(atob(token.split('.')[1])) : null;
     const id = tokenDecoded?.id || null;
 
+
+    //PASO A PASO DE RESERVA
     const nextStep = () => {
         if (currentStep === 1 && !service) {
             Swal.fire({
@@ -66,7 +66,9 @@ export default function Reserva() {
     const prevStep = () => {
         setCurrentStep((prevStep) => prevStep - 1);
     };
+    //
 
+    //LOGICA DE API
     useEffect(() => {
         axios.get('http://localhost:8080/GetBarberos')
             .then(response => {
@@ -163,6 +165,7 @@ export default function Reserva() {
             });
         }
     };
+    //
 
     return (
         <div className='text-white text-center mt-5 rounded-4 container'>

@@ -22,9 +22,19 @@ class ReservasClientesRepository {
         }
     }
 
-    static async GetBarberos (id) {
+    static async GetBarberos () {
         try {
-            const response = await API.get(`GetBarberos/${id}`);
+            const response = await API.get("GetBarberos");
+            return response;
+        } catch (error) {
+            const errorMessage = error?.response?.data?.message || "Error al obtener los barberos.";
+            throw new Error(errorMessage);
+        }
+    }
+
+    static async GetBarberosDisponibles () {
+        try {
+            const response = await API.get((`GetReservasbarbero${barberoId}`));
             return response;
         } catch (error) {
             const errorMessage = error?.response?.data?.message || "Error al obtener los barberos.";
