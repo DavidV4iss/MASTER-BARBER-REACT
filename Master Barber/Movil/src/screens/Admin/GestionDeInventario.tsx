@@ -24,6 +24,7 @@ export default function GestionDeInventario() {
     const navigation = useNavigation();
     const [rango, setRango] = React.useState('Diario');
     const [inventario, setInventario] = React.useState<any[]>([]);
+    const [ventasProcesadas, setVentasProcesadas] = React.useState([]);
     const [venta, setVenta] = React.useState<any[]>([]);
 
     const { logout } = useAuth();
