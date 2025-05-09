@@ -71,7 +71,6 @@ export default function GestionarBarberos() {
 
 
             const response = await BarberosRepository.CreateBarberos(formData);
-            console.log(response);
             navigation.reset({
                 index: 0,
                 routes: [{ name: 'Gestionar Barberos' }],
@@ -191,7 +190,6 @@ export default function GestionarBarberos() {
     const DeleteBarberos = async (id) => {
         try {
             const response = await BarberosRepository.DeleteBarberos(id);
-            console.log(response);
             navigation.reset({
                 index: 0,
                 routes: [{ name: 'Gestionar Barberos' }],
