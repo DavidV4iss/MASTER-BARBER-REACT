@@ -85,38 +85,43 @@ export default function GestionDeInventario() {
     };
 
 
-    const handleSubmit = async () => {
-        try {
-            const ventasConFecha = venta.map((producto) => ({
-                ...producto,
-                fecha: new Date(),
-            }));
+const handleSubmit = async () => {
+    try {
+        const ventasConFecha = venta.map((producto) => ({
+            ...producto,
+            fecha: new Date(),
+        }));
 
-            for (const producto of ventasConFecha) {
-                await GestionInvRepository.RestarInventario(producto.id_producto, producto.cantidad);
-
-            }
-
-            await GestionInvRepository.GuardarVentas(ventasConFecha);
-
-
-            showMessage({
-                message: `Venta exitosa`,
-                description: `El Producto ${""} ${ventasConFecha[0].nombre} ${""} Fue Vendido Por Un Valor De: ${" "} ${ventasConFecha[0].PrecioUnitario} Fue Restado Del Inventario Correctamente.`,
-                type: 'success',
-                duration: 7000,
-            });
-
-            setVenta([]);
-        } catch (error) {
-            console.error('Error al procesar la venta:', error);
-            showMessage({
-                message: 'Error al procesar la venta',
-                description: error.message,
-                type: 'danger',
-            });
+        for (const producto of ventasConFecha) {
+            await GestionInvRepository.RestarInventario(producto.id_producto, producto.cantidad);
         }
-    };
+
+        await GestionInvRepository.GuardarVentas(ventasConFecha);
+
+        const productosVendidos = ventasConFecha.map(p => 
+            `• ${p.nombre} - ${p.cantidad} x $${p.PrecioUnitario} = $${p.cantidad * p.PrecioUnitario}`
+        ).join('\n');
+
+        showMessage({
+            message: 'Venta exitosa',
+            description: `Productos vendidos:\n${productosVendidos}`,
+            type: 'success',
+            duration: 7000,
+        });
+
+        setVenta([]);
+    } catch (error) {
+        console.error('Error al procesar la venta:', error);
+        showMessage({
+            message: 'Error al procesar la venta',
+            description: error.message,
+            type: 'danger',
+        });
+    }
+};
+
+
+
 
     const generarPDF = async () => {
         try {
