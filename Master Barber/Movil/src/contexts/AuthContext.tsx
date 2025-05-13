@@ -74,11 +74,6 @@ export function AuthProvider({ children }) {
         setUser(null);
         setIsLoading(false);
     };
-
-    if (isLoading) {
-        return <Text>Loading...</Text>;
-    }
-
     return (
         <AuthContext.Provider value={{ user, isLoading, login, logout }}>
             {children}
