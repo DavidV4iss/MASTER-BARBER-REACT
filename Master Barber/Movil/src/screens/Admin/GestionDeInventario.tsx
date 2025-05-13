@@ -24,7 +24,6 @@ export default function GestionDeInventario() {
     const navigation = useNavigation();
     const [rango, setRango] = React.useState('Diario');
     const [inventario, setInventario] = React.useState<any[]>([]);
-    const [ventasProcesadas, setVentasProcesadas] = React.useState([]);
     const [venta, setVenta] = React.useState<any[]>([]);
 
     const { logout } = useAuth();
@@ -85,40 +84,40 @@ export default function GestionDeInventario() {
     };
 
 
-const handleSubmit = async () => {
-    try {
-        const ventasConFecha = venta.map((producto) => ({
-            ...producto,
-            fecha: new Date(),
-        }));
+    const handleSubmit = async () => {
+        try {
+            const ventasConFecha = venta.map((producto) => ({
+                ...producto,
+                fecha: new Date(),
+            }));
 
-        for (const producto of ventasConFecha) {
-            await GestionInvRepository.RestarInventario(producto.id_producto, producto.cantidad);
+            for (const producto of ventasConFecha) {
+                await GestionInvRepository.RestarInventario(producto.id_producto, producto.cantidad);
+            }
+
+            await GestionInvRepository.GuardarVentas(ventasConFecha);
+
+            const productosVendidos = ventasConFecha.map(p =>
+                `• ${p.nombre} - ${p.cantidad} x $${p.PrecioUnitario} = $${p.cantidad * p.PrecioUnitario}`
+            ).join('\n');
+
+            showMessage({
+                message: 'Venta exitosa',
+                description: `Productos vendidos:\n${productosVendidos}`,
+                type: 'success',
+                duration: 7000,
+            });
+
+            setVenta([]);
+        } catch (error) {
+            console.error('Error al procesar la venta:', error);
+            showMessage({
+                message: 'Error al procesar la venta',
+                description: error.message,
+                type: 'danger',
+            });
         }
-
-        await GestionInvRepository.GuardarVentas(ventasConFecha);
-
-        const productosVendidos = ventasConFecha.map(p => 
-            `• ${p.nombre} - ${p.cantidad} x $${p.PrecioUnitario} = $${p.cantidad * p.PrecioUnitario}`
-        ).join('\n');
-
-        showMessage({
-            message: 'Venta exitosa',
-            description: `Productos vendidos:\n${productosVendidos}`,
-            type: 'success',
-            duration: 7000,
-        });
-
-        setVenta([]);
-    } catch (error) {
-        console.error('Error al procesar la venta:', error);
-        showMessage({
-            message: 'Error al procesar la venta',
-            description: error.message,
-            type: 'danger',
-        });
-    }
-};
+    };
 
 
 
@@ -220,20 +219,9 @@ const handleSubmit = async () => {
                     <TouchableOpacity onPress={() => navigation.openDrawer()}>
                         <Icon name="bars" size={Dimensions.get('window').width * 0.08} color="#ffffff" style={styles.iconBars} />
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={() => setIsDropdownVisible(!isDropdownVisible)}>
-                        <Icon name="user-circle" size={Dimensions.get('window').width * 0.08} color="#ffffff" style={styles.iconUser} />
+                    <TouchableOpacity onPress={handleLogout}>
+                        <Icon name="sign-out" size={Dimensions.get('window').width * 0.08} color="#ffffff" style={styles.iconUser} />
                     </TouchableOpacity >
-                    {isDropdownVisible && (
-                        <View style={styles.dropdownMenu} >
-                            <TouchableOpacity>
-                                <Text style={{ ...styles.dropdownItem, marginBottom: 5, fontFamily: 'BebasNeue_400Regular', color: '#ffc107' }}>Perfil</Text>
-                            </TouchableOpacity>
-                            <TouchableOpacity onPress={handleLogout}>
-                                <Text style={{ ...styles.dropdownItem, padding: 10, backgroundColor: '#dc3545', fontFamily: 'BebasNeue_400Regular' }}>Cerrar Sesión</Text>
-                            </TouchableOpacity>
-
-                        </View>
-                    )}
                 </View>
 
                 <Text style={styles.title}>

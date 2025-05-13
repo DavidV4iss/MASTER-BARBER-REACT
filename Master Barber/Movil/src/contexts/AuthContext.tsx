@@ -2,6 +2,8 @@ import React, { createContext, useState, useEffect } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { showMessage } from "react-native-flash-message";
 import AuthService from "../services/AuthService";
+import { Text } from "react-native"
+
 
 export const AuthContext = createContext(null);
 
@@ -74,7 +76,7 @@ export function AuthProvider({ children }) {
     };
 
     if (isLoading) {
-        return <div>Loading...</div>;
+        return <Text>Loading...</Text>;
     }
 
     return (

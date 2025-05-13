@@ -52,7 +52,7 @@ export default function NavigationAdmin() {
                 headerShown: false,
                 drawerStyle: {
                     backgroundColor: '#212529',
-                    width: Dimensions.get('window').width * 0.6,
+                    width: 250,
                 },
                 drawerInactiveTintColor: 'white',
             }}
@@ -100,8 +100,8 @@ export default function NavigationAdmin() {
                 name="Perfil"
                 component={PerfilAdmin}
                 options={{
-                    drawerLabel: () => null, // Oculta el label
-                    drawerItemStyle: { display: 'none' }, // Oculta de la lista principal
+                    drawerLabel: () => null,
+                    drawerItemStyle: { display: 'none' },
                 }}
             />
         </Drawer.Navigator>

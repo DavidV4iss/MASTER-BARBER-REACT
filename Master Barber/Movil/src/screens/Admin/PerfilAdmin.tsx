@@ -1,71 +1,238 @@
-import React from 'react'
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native'
+import React, { useEffect, useState } from 'react';
+import { View, Text, TouchableOpacity, StyleSheet, Image, TextInput, Alert } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import { Dimensions } from 'react-native';
-import { useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
+import * as ImagePicker from 'expo-image-picker';
 import useAuth from '../../hooks/useAuth';
+import Ionicons from '@expo/vector-icons/Ionicons';
+import { BebasNeue_400Regular } from '@expo-google-fonts/bebas-neue';
+import { Anton_400Regular } from '@expo-google-fonts/anton';
+import { useFonts } from 'expo-font';
+import PerfilRepository from '../../repositories/PerfilRepository';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { getBaseURL } from '../../config/api';
+import { showMessage } from 'react-native-flash-message';
+
 export default function PerfilAdmin() {
+    const [fontsLoaded] = useFonts({
+        Anton: Anton_400Regular,
+        BebasNeue_400Regular,
+    });
 
-        const { logout } = useAuth()
-        const [isDropdownVisible, setIsDropdownVisible] = useState(false);
-        const navigation = useNavigation();
+    const { logout } = useAuth();
+    const navigation = useNavigation();
 
-        const handleLogout = () => {
-            logout()
+    const [admin, setAdmin] = useState<any>({});
+    const [imagePreviewEditar, setImagePreviewEditar] = useState<string | null>(null);
+    const [nuevoNombre, setNuevoNombre] = useState('');
+
+    React.useEffect(() => {
+        const fetchAdmin = async () => {
+            try {
+                const token = await AsyncStorage.getItem('token');
+                if (!token) return;
+
+                const usuario = JSON.parse(atob(token.split('.')[1]));
+                const email = usuario.email;
+
+                const res = await PerfilRepository.traerUsuarios(email);
+                const user = res.data[0];
+                setAdmin(user);
+                setNuevoNombre(user.nombre || '');
+
+                if (user.Foto) {
+                    setImagePreviewEditar(`${getBaseURL()}perfil/${user.Foto}`);
+                }
+            } catch (err) {
+                console.log("Error al obtener los datos:", err);
+            }
+        };
+
+        fetchAdmin();
+    }, []);
+
+    const handleSeleccionarImagenEditar = async () => {
+        let result = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: ['images'],
+            allowsEditing: true,
+            aspect: [4, 3],
+            quality: 1,
+        });
+
+        if (!result.canceled) {
+            const asset = result.assets[0];
+            const foto = {
+                uri: asset.uri,
+                type: 'image/jpeg',
+                name: `foto_${Date.now()}.jpg`,
+            };
+            setAdmin(prev => ({ ...prev, foto }));
+            setImagePreviewEditar(asset.uri);
         }
-    
-  return (
-      <View style={styles.header}>
-                        <TouchableOpacity onPress={() => navigation.openDrawer()}>
-                            <Icon name="bars" size={Dimensions.get('window').width * 0.08} color="#ffffff" style={styles.iconBars} />
-                        </TouchableOpacity>
-                        <TouchableOpacity onPress={() => setIsDropdownVisible(!isDropdownVisible)}>
-                            <Icon name="user-circle" size={Dimensions.get('window').width * 0.08} color="#ffffff" style={styles.iconUser} />
-                        </TouchableOpacity >
-                        {isDropdownVisible && (
-                            <View style={styles.dropdownMenu} >
-                                <TouchableOpacity>
-                                    <Text style={{ ...styles.dropdownItem, marginBottom: 5, fontFamily: 'BebasNeue_400Regular', color: '#ffc107' }}>Perfil</Text>
-                                </TouchableOpacity>
-                                <TouchableOpacity onPress={handleLogout}>
-                                    <Text style={{ ...styles.dropdownItem, padding: 10, backgroundColor: '#dc3545', fontFamily: 'BebasNeue_400Regular' }}>Cerrar Sesión</Text>
-                                </TouchableOpacity>
-    
-                            </View>
-                        )}
+    };
+
+    const handleActualizar = async () => {
+        try {
+            const token = await AsyncStorage.getItem('token');
+            const usuario = JSON.parse(atob(token.split('.')[1]));
+            const email = usuario.email;
+
+            const formData = new FormData();
+            if (nuevoNombre && nuevoNombre !== admin.nombre) {
+                formData.append('nombre', nuevoNombre);
+            }
+            if (admin.foto) {
+                formData.append('file', admin.foto);
+            }
+
+            if (!formData.has('nombre') && !formData.has('file')) {
+                return Alert.alert('Sin cambios', 'No hiciste ningún cambio para actualizar.');
+            }
+
+            await PerfilRepository.actualizarUsuario(email, formData);
+
+            showMessage({
+                message: 'PERFIL ACTUALIZADO PERFECTAMENTE',
+                type: 'success',
+                duration: 3000
+            })
+            navigation.reset({
+                index: 0,
+                routes: [{ name: 'Perfil' }],
+            });
+        } catch (error) {
+            console.error('Error al actualizar perfil:', error);
+            Alert.alert('Error', 'Hubo un problema al actualizar el perfil.');
+        }
+    };
+
+    if (!fontsLoaded) return null;
+
+    const handleLogout = () => {
+        logout();
+    };
+
+    return (
+        <View style={styles.container}>
+            <View style={styles.header}>
+                <TouchableOpacity onPress={() => navigation.openDrawer()}>
+                    <Icon name="bars" size={30} color="#ffffff" style={styles.iconBars} />
+                </TouchableOpacity>
+                <TouchableOpacity onPress={handleLogout}>
+                    <Icon name="sign-out" size={30} color="#ffffff" style={styles.iconUser} />
+                </TouchableOpacity>
+            </View>
+
+            <Text style={{ ...styles.title, fontFamily: 'BebasNeue_400Regular', marginTop: 70 }}>¡Perfil!</Text>
+            <Text style={{ color: 'gray', marginTop: 10, fontFamily: 'BebasNeue_400Regular', fontSize: 15, marginBottom: 15 }}>Para cambiar tu foto de perfil presiona sobre la imagen</Text>
+
+            <TouchableOpacity onPress={handleSeleccionarImagenEditar} style={styles.imageUploadButton}>
+                {imagePreviewEditar ? (
+                    <Image
+                        source={{ uri: imagePreviewEditar }}
+                        style={styles.imagePreview}
+                        resizeMode="cover"
+                    />
+                ) : (
+                    <View style={styles.imagePlaceholder}>
+                        <Ionicons name="image-outline" size={40} color="#aaa" />
+                        <Text style={styles.placeholderText}>Seleccionar imagen</Text>
                     </View>
-  )
+                )}
+            </TouchableOpacity>
+
+            <Text style={{ color: '#ffffff', marginTop: 10, fontFamily: 'BebasNeue_400Regular', fontSize: 20 }}>Nombre actual:     {admin.nombre_usuario}</Text>
+            <TextInput
+                style={styles.input}
+                placeholder="Nuevo Nombre"
+                placeholderTextColor="#aaa"
+                value={nuevoNombre}
+                onChangeText={setNuevoNombre}
+            />
+
+            <View style={styles.uploadSection}>
+                <TouchableOpacity style={styles.updateButton} onPress={handleActualizar}>
+                    <Text style={styles.updateButtonText}>Actualizar</Text>
+                </TouchableOpacity>
+            </View>
+        </View>
+    );
 }
 
 const styles = StyleSheet.create({
-        header: {
-        flexDirection: 'row',
+    container: {
+        flex: 1,
+        backgroundColor: '#1c1c1c',
         alignItems: 'center',
+        padding: 20,
+    },
+    header: {
+        width: '100%',
+        flexDirection: 'row',
         justifyContent: 'space-between',
-        paddingHorizontal: Dimensions.get('window').width * 0.00,
-        paddingTop: 20,
-        backgroundColor: '#212529',
-        marginBottom: 15,
+        paddingTop: 50,
     },
-      iconBars: {
-        marginLeft: Dimensions.get('window').width * 0.07,
-        marginTop: Dimensions.get('window').height * 0.02,
+    iconBars: {
+        marginLeft: 20,
     },
-     iconUser: {
-        marginRight: Dimensions.get('window').width * 0.07,
-        marginTop: Dimensions.get('window').height * 0.02,
+    iconUser: {
+        marginRight: 20,
     },
-        dropdownMenu: {
-        position: 'absolute',
-        right: Dimensions.get('window').width * 0.2,
-        backgroundColor: '#343a40',
+    title: {
+        color: '#ffc107',
+        fontSize: 43,
+        fontWeight: 'bold',
+        marginVertical: 20,
+    },
+    imageUploadButton: {
+        marginVertical: 15,
+        height: 150,
+        width: 150,
+        borderWidth: 1,
+        borderColor: '#ddd',
+        borderRadius: 75,
+        justifyContent: 'center',
+        alignItems: 'center',
+        overflow: 'hidden',
+    },
+    imagePreview: {
+        width: 150,
+        height: 150,
+        borderRadius: 75,
+    },
+    imagePlaceholder: {
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: 20,
+    },
+    placeholderText: {
+        marginTop: 8,
+        color: '#aaa',
+        fontSize: 14,
+    },
+    input: {
+        backgroundColor: '#2c2c2c',
+        color: '#fff',
+        width: '80%',
         padding: 10,
         borderRadius: 5,
+        textAlign: 'center',
+        marginTop: 30,
     },
-       dropdownItem: {
-        color: '#ffffff',
-        fontSize: Dimensions.get('window').width * 0.04,
-        paddingVertical: 5,
+    uploadSection: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginTop: 40,
     },
-})
+    updateButton: {
+        backgroundColor: '#dc3545',
+        paddingVertical: 10,
+        paddingHorizontal: 15,
+        borderRadius: 5,
+        marginLeft: 10,
+    },
+    updateButtonText: {
+        color: '#fff',
+        fontWeight: 'bold',
+    },
+});

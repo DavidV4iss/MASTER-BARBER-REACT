@@ -30,14 +30,13 @@ export default function Inventario() {
     const [modalVisibleEdit, setModalVisibleEdit] = useState(false);
     const [imagePreview, setImagePreview] = useState(null);
     const [imagePreviewEditar, setImagePreviewEditar] = useState(null);
-    const [isDropdownVisible, setIsDropdownVisible] = useState(false);
     const [inventario, setInventario] = useState([]);
     const [selectedValue, setSelectedValue] = useState('');
     const [date, setDate] = useState(new Date());
-    const [showDatePicker, setShowDatePicker] = useState(false);
-    const [showTimePicker, setShowTimePicker] = useState(false);
     const [editDate, setEditDate] = useState(new Date());
+    const [showDatePicker, setShowDatePicker] = useState(false);
     const [showEditDatePicker, setShowEditDatePicker] = useState(false);
+    const [showTimePicker, setShowTimePicker] = useState(false);
     const [showEditTimePicker, setShowEditTimePicker] = useState(false);
     const [producto, setProducto] = useState({
         nombre: '',
@@ -339,20 +338,9 @@ export default function Inventario() {
                     <TouchableOpacity onPress={() => navigation.openDrawer()}>
                         <Icon name="bars" size={Dimensions.get('window').width * 0.08} color="#ffffff" style={styles.iconBars} />
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={() => setIsDropdownVisible(!isDropdownVisible)}>
-                        <Icon name="user-circle" size={Dimensions.get('window').width * 0.08} color="#ffffff" style={styles.iconUser} />
+                    <TouchableOpacity onPress={handleLogout}>
+                        <Icon name="sign-out" size={Dimensions.get('window').width * 0.08} color="#ffffff" style={styles.iconUser} />
                     </TouchableOpacity >
-                    {isDropdownVisible && (
-                        <View style={styles.dropdownMenu} >
-                            <TouchableOpacity>
-                                <Text style={{ ...styles.dropdownItem, marginBottom: 5, fontFamily: 'BebasNeue_400Regular', color: '#ffc107' }}>Perfil</Text>
-                            </TouchableOpacity>
-                            <TouchableOpacity onPress={handleLogout}>
-                                <Text style={{ ...styles.dropdownItem, padding: 10, backgroundColor: '#dc3545', fontFamily: 'BebasNeue_400Regular' }}>Cerrar Sesión</Text>
-                            </TouchableOpacity>
-
-                        </View>
-                    )}
                 </View>
                 <Text style={[styles.responsiveText, { marginBottom: 20, marginTop: Dimensions.get('window').height * 0.09 }]}>
                     HOLA, <Text style={{ color: '#dc3545' }}>ADMINISTRADOR</Text> | AQUÍ PODRÁS EDITAR, AÑADIR Y ELIMINAR BARBEROS

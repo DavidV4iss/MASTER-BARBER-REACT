@@ -18,7 +18,6 @@ import DefaultLayout from '../../Layouts/DefaultLayout';
 export default function InicioAdmin() {
     const [isHovered, setIsHovered] = useState(false);
     const navigation = useNavigation();
-    const [isDropdownVisible, setIsDropdownVisible] = useState(false);
     const [barberos, setBarberos] = useState([]);
 
     const { logout } = useAuth()
@@ -56,20 +55,9 @@ export default function InicioAdmin() {
                     <TouchableOpacity onPress={() => navigation.openDrawer()}>
                         <Icon name="bars" size={Dimensions.get('window').width * 0.08} color="#ffffff" style={styles.iconBars} />
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={() => setIsDropdownVisible(!isDropdownVisible)}>
-                        <Icon name="user-circle" size={Dimensions.get('window').width * 0.08} color="#ffffff" style={styles.iconUser} />
+                    <TouchableOpacity onPress={handleLogout}>
+                        <Icon name="sign-out" size={Dimensions.get('window').width * 0.08} color="#ffffff" style={styles.iconUser} />
                     </TouchableOpacity >
-                    {isDropdownVisible && (
-                        <View style={styles.dropdownMenu} >
-                            <TouchableOpacity>
-                                <Text style={{ ...styles.dropdownItem, marginBottom: 5, fontFamily: 'BebasNeue_400Regular', color: '#ffc107' }}>Perfil</Text>
-                            </TouchableOpacity>
-                            <TouchableOpacity onPress={handleLogout}>
-                                <Text style={{ ...styles.dropdownItem, padding: 10, backgroundColor: '#dc3545', fontFamily: 'BebasNeue_400Regular' }}>Cerrar Sesión</Text>
-                            </TouchableOpacity>
-
-                        </View>
-                    )}
                 </View>
 
                 <ScrollView>
