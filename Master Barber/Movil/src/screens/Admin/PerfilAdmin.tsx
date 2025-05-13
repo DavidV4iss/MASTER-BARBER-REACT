@@ -47,9 +47,10 @@ export default function PerfilAdmin() {
                 console.log("Error al obtener los datos:", err);
             }
         };
-
         fetchAdmin();
     }, []);
+
+
 
     const handleSeleccionarImagenEditar = async () => {
         let result = await ImagePicker.launchImageLibraryAsync({
@@ -70,6 +71,8 @@ export default function PerfilAdmin() {
             setImagePreviewEditar(asset.uri);
         }
     };
+
+
 
     const handleActualizar = async () => {
         try {
