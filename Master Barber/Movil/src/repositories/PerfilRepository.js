@@ -13,13 +13,14 @@ class PerfilRepository {
     }
 
 
-    static async actualizarUsuario(email: string, formData: FormData) {
+    static async actualizarUsuario(email, formData) {
         return API.put(`actualizarUsuario/${email}`, formData, {
             headers: {
-                "Content-Type": "multipart/form-data",
+                'Content-Type': 'multipart/form-data',
             },
         });
     }
+
 
 
 }
