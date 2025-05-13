@@ -54,6 +54,26 @@ class GestionInvRepository {
         }
     }
 
+
+    static async actualizarUsuario(email) {
+        try {
+            const response = await API.put(`actualizarUsuario/${email}`);
+
+            showMessage({
+                message: "Inventario actualizado exitosamente",
+                type: "success",
+                icon: "success",
+                duration: 2000
+            })
+            return response;
+        } catch (error) {
+            const errorMessage = error?.response?.data?.message || "Error al actualizar el producto.";
+            throw new Error(errorMessage);
+        }
+    }
+
 }
+
+    
 
 export default GestionInvRepository

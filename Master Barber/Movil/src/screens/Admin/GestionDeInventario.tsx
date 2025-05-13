@@ -347,6 +347,7 @@ const styles = StyleSheet.create({
         paddingVertical: 5,
     },
     title: {
+        marginTop: 40,
         fontFamily: 'Anton',
         fontSize: 20,
         color: '#ffffff',
@@ -358,6 +359,7 @@ const styles = StyleSheet.create({
         color: '#dc3545',
     },
     pickerWrapper: {
+        marginTop: 25,
         borderWidth: 1,
         borderColor: '#6c757d',
         borderRadius: 5,
