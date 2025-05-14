@@ -11,10 +11,40 @@ class ReservasClientesRepository {
              throw new Error(errorMessage);
          }
     }
+
+    static async GetServicios () {
+        try {
+            const response = await API.get("GetServicios");
+            return response;
+        } catch (error) {
+            const errorMessage = error?.response?.data?.message || "Error al obtener los servicios.";
+            throw new Error(errorMessage);
+        }
+    }
+
+    static async GetBarberos () {
+        try {
+            const response = await API.get("GetBarberos");
+            return response;
+        } catch (error) {
+            const errorMessage = error?.response?.data?.message || "Error al obtener los barberos.";
+            throw new Error(errorMessage);
+        }
+    }
+
+    static async GetBarberosDisponibles () {
+        try {
+            const response = await API.get((`GetReservasbarbero${barberoId}`));
+            return response;
+        } catch (error) {
+            const errorMessage = error?.response?.data?.message || "Error al obtener los barberos.";
+            throw new Error(errorMessage);
+        }
+    }
     
     static async CrearReservas(reserva) {
         try {
-            const response = await API.post("CreateReservas", reserva, { headers: { "Content-Type": "multipart/form-data" } });
+            const response = await API.post("CrearReservas", reserva, { headers: { "Content-Type": "multipart/form-data" } });
             showMessage({
                 message: "Reserva creada exitosamente",
                 type: "success",

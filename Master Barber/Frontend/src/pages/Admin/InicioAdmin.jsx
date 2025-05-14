@@ -33,10 +33,8 @@ export default function InicioAdmin() {
                             <div className="col container mx-2">
                                 <p className='mx-4  text-white antonparabackend mt-2 col'>links ayudas</p>
                                 <p><a href="GestionarBarberos" className="link-warning link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover mx-4 bebas">GESTION BARBEROS</a></p>
-                                <p><a href="HrsBarberos" className="link-warning link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover mx-4 bebas">HORAS BARBEROS</a></p>
                                 <p><a href="Inventario" className="link-warning link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover mx-4 bebas">INVENTARIO</a></p>
                                 <p><a href="Gestiondeinventario" className="link-warning link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover mx-4 bebas">GESTION INVENTARIO</a></p>
-                                <p><a href="Analisisdeventas" className="link-warning link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover mx-4 bebas">ANALISISVENTAS</a></p>
                             </div>
                             <div className="col zoomhover2">
                                 <img src="LOGO.png" alt="" width="100%" height="90%" className="d-inline-block align-text-top mx-3 mt-1" />

@@ -6,10 +6,15 @@ import { Dimensions } from 'react-native';
 import DefaultLayout from '../../Layouts/DefaultLayout';
 import BarberosRepository from '../../repositories/BarberosRepository';
 import { useState } from 'react';
+import InventarioRepository from '../../repositories/InventarioRepository';
+import { getBaseURL } from '../../config/api';
+
+const { width, height } = Dimensions.get('window');
 
 
 export default function Home() {
   const [barberos, setBarberos] = useState([]);
+  const [inventario, setInventario] = useState([]);
 
   const [fontsLoaded] = useBebas({
     BebasNeue_400Regular,
@@ -26,6 +31,20 @@ export default function Home() {
     };
 
     fetchBarberos();
+  }, []);
+
+
+  React.useEffect(() => {
+    const fetchInventario = async () => {
+      try {
+        const response = await InventarioRepository.GetInventario();
+        setInventario(response.data);
+      } catch (err) {
+        console.log("Error al obtener los datos:", err);
+      }
+    };
+
+    fetchInventario();
   }, []);
 
   if (!fontsLoaded) {
@@ -80,7 +99,7 @@ export default function Home() {
           <View style={{
             ...styles.card,
             width: Dimensions.get('window').width * 0.4,
-            height: Dimensions.get('window').width * 0.8,
+            height: Dimensions.get('window').width * 0.9,
             marginHorizontal: 10,
             alignItems: 'center',
           }}>
@@ -110,7 +129,7 @@ export default function Home() {
           <View style={{
             ...styles.card,
             width: Dimensions.get('window').width * 0.4, // Ajusta el ancho de las cartas
-            height: Dimensions.get('window').width * 0.8,
+            height: Dimensions.get('window').width * 0.9,
             marginHorizontal: 10,
             alignItems: 'center',
           }}>
@@ -206,79 +225,19 @@ export default function Home() {
         <ScrollView
           horizontal
           showsHorizontalScrollIndicator={false}
-          contentContainerStyle={{ paddingHorizontal: Dimensions.get('window').width * 0.05, marginTop: Dimensions.get('window').height * 0.05 }}
+          contentContainerStyle={styles.scrollContainer}
         >
-          <View style={styles.productCard}>
-            <Image
-              source={require('../../assets/cortepremium.jpg')}
-              style={styles.productImage}
-            />
-            <Text style={styles.productTitle}>PORTA CUCHILLAS</Text>
-            <Text style={styles.productDescription}>Corte Fino</Text>
-            <Text style={styles.productStock}>Quedan 58 Unidades De Este Producto</Text>
-            <Button title="Ver" color="#dc3545" onPress={() => { }} />
-          </View>
-          <View style={styles.productCard}>
-            <Image
-              source={require('../../assets/cortepremium.jpg')}
-              style={styles.productImage}
-            />
-            <Text style={styles.productTitle}>POLVOS TEXTURIZANTES</Text>
-            <Text style={styles.productDescription}>Un Corte Texturizado</Text>
-            <Text style={styles.productStock}>Quedan 34 Unidades De Este Producto</Text>
-            <Button title="Ver" color="#dc3545" onPress={() => { }} />
-          </View>
-          <View style={styles.productCard}>
-            <Image
-              source={require('../../assets/cortepremium.jpg')}
-              style={styles.productImage}
-            />
-            <Text style={styles.productTitle}>LOCION DESINFECTANTE</Text>
-            <Text style={styles.productDescription}>Desinfecta</Text>
-            <Text style={styles.productStock}>Quedan 84 Unidades De Este Producto</Text>
-            <Button title="Ver" color="#dc3545" onPress={() => { }} />
-          </View>
-          <View style={styles.productCard}>
-            <Image
-              source={require('../../assets/cortepremium.jpg')}
-              style={styles.productImage}
-            />
-            <Text style={styles.productTitle}>LOCION DESINFECTANTE</Text>
-            <Text style={styles.productDescription}>Desinfecta</Text>
-            <Text style={styles.productStock}>Quedan 84 Unidades De Este Producto</Text>
-            <Button title="Ver" color="#dc3545" onPress={() => { }} />
-          </View>
-          <View style={styles.productCard}>
-            <Image
-              source={require('../../assets/cortepremium.jpg')}
-              style={styles.productImage}
-            />
-            <Text style={styles.productTitle}>LOCION DESINFECTANTE</Text>
-            <Text style={styles.productDescription}>Desinfecta</Text>
-            <Text style={styles.productStock}>Quedan 84 Unidades De Este Producto</Text>
-            <Button title="Ver" color="#dc3545" onPress={() => { }} />
-          </View>
-          <View style={styles.productCard}>
-            <Image
-              source={require('../../assets/cortepremium.jpg')}
-              style={styles.productImage}
-            />
-            <Text style={styles.productTitle}>LOCION DESINFECTANTE</Text>
-            <Text style={styles.productDescription}>Desinfecta</Text>
-            <Text style={styles.productStock}>Quedan 84 Unidades De Este Producto</Text>
-            <Button title="Ver" color="#dc3545" onPress={() => { }} />
-          </View>
-          <View style={styles.productCard}>
-            <Image
-              source={require('../../assets/cortepremium.jpg')}
-              style={styles.productImage}
-            />
-            <Text style={styles.productTitle}>LOCION DESINFECTANTE</Text>
-            <Text style={styles.productDescription}>Desinfecta</Text>
-            <Text style={styles.productStock}>Quedan 84 Unidades De Este Producto</Text>
-            <Button title="Ver" color="#dc3545" onPress={() => { }} />
-          </View>
+          {inventario.map((item, index) => (
+            <View style={styles.productCard} key={index}>
+              <Image source={{ uri: `${getBaseURL()}ImagesInventario/${item.Foto}` }} style={styles.cardImage} />
+              <Text style={styles.productTitle}>{item.nombre}</Text>
+              <Text style={styles.productDescription}>{item.descripcion_P}</Text>
+              <Text style={styles.productStock}>Quedan {item.cantidad} Unidades De Este Producto</Text>
+              <Button title="Ver" color="#dc3545" onPress={() => { }} />
+            </View>
+          ))}
         </ScrollView>
+
 
         <View style={{ alignItems: 'center', marginTop: Dimensions.get('window').height * 0.1, }}>
           <Text style={{ ...styles.title3, fontSize: Dimensions.get('window').width * 0.1 }}>LO QUE PIENSAN NUESTROS CLIENTES</Text>
@@ -342,7 +301,11 @@ const styles = StyleSheet.create({
     backgroundColor: '#212529',
     alignItems: 'center',
   },
-
+  scrollContainer: {
+    paddingHorizontal: width * 0.05,
+    paddingTop: height * 0.03,
+    paddingBottom: height * 0.05,
+  },
 
   header: {
     paddingTop: 60,
@@ -418,9 +381,10 @@ const styles = StyleSheet.create({
 
   cardImage: {
     width: '100%',
-    height: '70%',
+    height: height * 0.3,
     resizeMode: 'cover',
-
+    borderRadius: 8,
+    marginBottom: 10,
   },
 
   cardContent: {
@@ -499,40 +463,37 @@ const styles = StyleSheet.create({
 
   //CSS PARA EL CARRUSEL DE PRODUCTOS
   productCard: {
-    marginBottom: Dimensions.get('window').height * 0.20,
-    width: Dimensions.get('window').width * 0.5,
-    marginHorizontal: 10,
+    width: width * 0.7,
     backgroundColor: '#212529',
-    borderRadius: 10,
-    overflow: 'hidden',
+    borderRadius: 12,
+    padding: 16,
+    marginRight: width * 0.05,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.9,
+    shadowRadius: 6,
+    elevation: 9,
     alignItems: 'center',
-    padding: 10,
-    borderWidth: 1,
-    borderColor: '#6c757d',
   },
-  productImage: {
-    width: '100%',
-    height: Dimensions.get('window').width * 0.5,
-    resizeMode: 'contain',
-  },
+
   productTitle: {
     color: '#dc3545',
-    fontSize: Dimensions.get('window').width * 0.05,
+    fontSize: 18,
     fontWeight: 'bold',
-    marginTop: 10,
+    marginBottom: 6,
     textAlign: 'center',
   },
   productDescription: {
-    color: '#ffffff',
-    fontSize: Dimensions.get('window').width * 0.04,
+    fontSize: 14,
+    color: '#fff',
     textAlign: 'center',
-    marginTop: 5,
+    marginBottom: 10,
   },
   productStock: {
-    color: '#6c757d',
-    fontSize: Dimensions.get('window').width * 0.035,
+    fontSize: 14,
+    color: '#888',
+    marginBottom: 10,
     textAlign: 'center',
-    marginVertical: 10,
   },
   // FIN DE CSS PARA EL CARRUSEL DE PRODUCTOS
 

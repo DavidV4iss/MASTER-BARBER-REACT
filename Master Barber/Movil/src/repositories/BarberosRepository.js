@@ -36,6 +36,8 @@ class BarberosRepository {
             throw new Error(errorMessage);
         }
     }
+
+    
     static async UpdateBarberos(id, barberoEdit) {
         try {
             const response = await API.put(`UpdateBarberos/${id}`, barberoEdit, { headers: { "Content-Type": "multipart/form-data" } });
@@ -51,6 +53,8 @@ class BarberosRepository {
             throw new Error(errorMessage);
         }
     }
+
+
     static async DeleteBarberos(id) {
         try {
             const response = await API.delete(`DeleteBarberos/${id}`);

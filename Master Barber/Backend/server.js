@@ -679,14 +679,6 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage })
 
-const borrarFoto = async (foto) => {
-    try {
-        const filePath = path.resolve(__dirname, `./uploads/perfil/${foto}`);
-        await fs.promises.unlink(filePath);
-    } catch (err) {
-        console.error('Error eliminando imagen:', err);
-    }
-};
 
 
 app.put('/actualizarUsuario/:email', upload.single('file'), (req, res) => {
@@ -700,7 +692,6 @@ app.put('/actualizarUsuario/:email', upload.single('file'), (req, res) => {
             return res.status(500).send('Error en el servidor');
         }
         else {
-            borrarFoto(results[0].Foto)
             let queryValues = [];
             let queryString = 'UPDATE usuarios SET ';
 
@@ -1112,6 +1103,10 @@ app.get('/GetVentas', (req, res) => {
 
 app.post('/GuardarVentas', (req, res) => {
     const ventas = req.body;
+
+    if (!Array.isArray(ventas)) {
+        return res.status(400).json({ error: 'Las ventas deben ser un array' });
+    }
 
     const q = 'INSERT INTO ventas (id_producto, cantidad, fecha, PrecioUnitario, nombre) VALUES ?';
 

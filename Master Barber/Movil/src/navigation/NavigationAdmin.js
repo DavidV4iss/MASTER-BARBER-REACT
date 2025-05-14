@@ -6,7 +6,9 @@ import InicioAdminScreen from '../screens/Admin/InicioAdmin';
 import GestionarBarberosScreen from '../screens/Admin/GestionarBarberos';
 import InventarioScreen from '../screens/Admin/Inventario';
 import GestionDeInventarioScreen from '../screens/Admin/GestionDeInventario';
+import PerfilAdmin from '../screens/Admin/PerfilAdmin';
 import { Ionicons } from '@expo/vector-icons';
+import CustomDrawerContent from '../screens/Admin/CustomDrawerContent';
 
 const Drawer = createDrawerNavigator();
 
@@ -45,11 +47,12 @@ export default function NavigationAdmin() {
     return (
         <Drawer.Navigator
             initialRouteName={initialRoute}
+            drawerContent={(props) => <CustomDrawerContent {...props} />}
             screenOptions={{
                 headerShown: false,
                 drawerStyle: {
                     backgroundColor: '#212529',
-                    width: Dimensions.get('window').width * 0.6,
+                    width: 250,
                 },
                 drawerInactiveTintColor: 'white',
             }}
@@ -91,6 +94,14 @@ export default function NavigationAdmin() {
                     drawerIcon: ({ color, size }) => (
                         <Ionicons name="clipboard-outline" size={size} color={color} />
                     ),
+                }}
+            />
+            <Drawer.Screen
+                name="Perfil"
+                component={PerfilAdmin}
+                options={{
+                    drawerLabel: () => null,
+                    drawerItemStyle: { display: 'none' },
                 }}
             />
         </Drawer.Navigator>

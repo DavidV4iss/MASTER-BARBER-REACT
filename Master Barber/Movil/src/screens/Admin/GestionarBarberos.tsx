@@ -29,7 +29,6 @@ export default function GestionarBarberos() {
     const [modalVisibleEdit, setModalVisibleEdit] = useState(false);
     const [imagePreview, setImagePreview] = useState(null);
     const [imagePreviewEditar, setImagePreviewEditar] = useState(null);
-    const [isDropdownVisible, setIsDropdownVisible] = useState(false);
     const [barberos, setBarberos] = useState([]);
     const [barbero, setBarbero] = useState({
 
@@ -48,7 +47,6 @@ export default function GestionarBarberos() {
     });
 
 
-
     const handlesubmit = async () => {
         try {
             const formData = new FormData();
@@ -56,22 +54,22 @@ export default function GestionarBarberos() {
             formData.append('email', barbero.email);
             formData.append('contrasena', barbero.contrasena);
             formData.append('descripcion', barbero.descripcion);
-            if (barbero.foto) {
-                if (Platform.OS === 'web') {
-                    formData.append('foto', barbero.foto);
-                }
-                else {
-                    formData.append('foto', {
-                        uri: barbero.foto.uri,
-                        type: barbero.foto.type,
-                        name: barbero.foto.name,
-                    });
-                }
 
+            if (Platform.OS === 'web') {
+                const response = await fetch(barbero.foto.uri);
+                const blob = await response.blob();
+                formData.append('foto', blob, barbero.foto.name);
+            }
+            else {
+                formData.append('foto', {
+                    uri: barbero.foto.uri,
+                    type: barbero.foto.type,
+                    name: barbero.foto.name,
+                })
             }
 
+
             const response = await BarberosRepository.CreateBarberos(formData);
-            console.log(response);
             navigation.reset({
                 index: 0,
                 routes: [{ name: 'Gestionar Barberos' }],
@@ -84,21 +82,32 @@ export default function GestionarBarberos() {
     const handlesubmitEdit = async () => {
         try {
             const formData = new FormData();
-            formData.append('nombre', barberoEdit.nombre_usuario);
-            formData.append('email', barberoEdit.email);
-            formData.append('descripcion', barberoEdit.descripcion);
+
+            if (barberoEdit.nombre_usuario) {
+                formData.append('nombre', barberoEdit.nombre_usuario);
+            }
+            if (barberoEdit.email) {
+                formData.append('email', barberoEdit.email);
+            }
+            if (barberoEdit.descripcion) {
+                formData.append('descripcion', barberoEdit.descripcion);
+            }
 
             if (barberoEdit.foto) {
-                formData.append('foto', {
-                    uri: barberoEdit.foto.uri,
-                    type: barberoEdit.foto.type,
-                    name: barberoEdit.foto.name,
-                });
+                if (Platform.OS === 'web' && barberoEdit.foto.uri) {
+                    const response = await fetch(barberoEdit.foto.uri);
+                    const blob = await response.blob();
+                    formData.append('foto', blob, barberoEdit.foto.name);
+                } else {
+                    formData.append('foto', {
+                        uri: barberoEdit.foto.uri,
+                        type: barberoEdit.foto.type,
+                        name: barberoEdit.foto.name,
+                    });
+                }
             }
 
             const response = await BarberosRepository.UpdateBarberos(barberoEdit.id_usuario, formData);
-            console.log(response);
-
             navigation.reset({
                 index: 0,
                 routes: [{ name: 'Gestionar Barberos' }],
@@ -180,7 +189,6 @@ export default function GestionarBarberos() {
     const DeleteBarberos = async (id) => {
         try {
             const response = await BarberosRepository.DeleteBarberos(id);
-            console.log(response);
             navigation.reset({
                 index: 0,
                 routes: [{ name: 'Gestionar Barberos' }],
@@ -206,20 +214,9 @@ export default function GestionarBarberos() {
                     <TouchableOpacity onPress={() => navigation.openDrawer()}>
                         <Icon name="bars" size={Dimensions.get('window').width * 0.08} color="#ffffff" style={styles.iconBars} />
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={() => setIsDropdownVisible(!isDropdownVisible)}>
-                        <Icon name="user-circle" size={Dimensions.get('window').width * 0.08} color="#ffffff" style={styles.iconUser} />
+                    <TouchableOpacity onPress={handleLogout}>
+                        <Icon name="sign-out" size={Dimensions.get('window').width * 0.08} color="#ffffff" style={styles.iconUser} />
                     </TouchableOpacity >
-                    {isDropdownVisible && (
-                        <View style={styles.dropdownMenu} >
-                            <TouchableOpacity>
-                                <Text style={{ ...styles.dropdownItem, marginBottom: 5, fontFamily: 'BebasNeue_400Regular', color: '#ffc107' }}>Perfil</Text>
-                            </TouchableOpacity>
-                            <TouchableOpacity onPress={handleLogout}>
-                                <Text style={{ ...styles.dropdownItem, padding: 10, backgroundColor: '#dc3545', fontFamily: 'BebasNeue_400Regular' }}>Cerrar Sesión</Text>
-                            </TouchableOpacity>
-
-                        </View>
-                    )}
                 </View>
                 <ScrollView>
                     <Text style={[styles.responsiveText, { marginBottom: 20, marginTop: Dimensions.get('window').height * 0.09 }]}>
@@ -251,6 +248,7 @@ export default function GestionarBarberos() {
                                             style={styles.editButton}
                                             onPress={() => {
                                                 setBarberoEdit(barbero);
+                                                setImagePreviewEditar(`${getBaseURL()}imagesBarbero/${barbero.Foto}`);
                                                 setModalVisibleEdit(true);
                                             }}
                                         >
@@ -279,66 +277,68 @@ export default function GestionarBarberos() {
                 <View style={styles.modalContainer}>
                     <View style={styles.modalContent}>
                         <Text style={styles.modalTitle}>Añadir Nuevo Barbero</Text>
-                        <TextInput
-                            style={styles.input}
-                            placeholder="Nombre Del Barbero"
-                            placeholderTextColor="#ccc"
-                            onChangeText={handleChange("nombre")}
-                            value={barbero.nombre}
-                        />
-                        <TextInput
-                            style={styles.input}
-                            placeholder="Email"
-                            placeholderTextColor="#ccc"
-                            onChangeText={handleChange("email")}
-                            value={barbero.email}
-                        />
-                        <TextInput
-                            style={styles.input}
-                            placeholder="Contraseña"
-                            placeholderTextColor="#ccc"
-                            onChangeText={handleChange("contrasena")}
-                            value={barbero.contrasena}
-                        />
-                        <TextInput
-                            style={styles.input}
-                            placeholder="Descripción"
-                            placeholderTextColor="#ccc"
-                            onChangeText={handleChange("descripcion")}
-                            value={barbero.descripcion}
-                        />
-                        <TouchableOpacity
-                            onPress={handleSeleccionarImagen}
-                            style={styles.imageUploadButton}
-                        >
-                            {imagePreview ? (
-                                <Image
-                                    source={{ uri: imagePreview }}
-                                    style={styles.imagePreview}
-                                    resizeMode="cover"
-                                />
-                            ) : (
-                                <View style={styles.imagePlaceholder}>
-                                    <Ionicons name="image-outline" size={40} color="#aaa" />
-                                    <Text style={styles.placeholderText}>Seleccionar imagen</Text>
-                                </View>
-                            )}
-                        </TouchableOpacity>
+                        <ScrollView >
+                            <TextInput
+                                style={styles.input}
+                                placeholder="Nombre Del Barbero"
+                                placeholderTextColor="#ccc"
+                                onChangeText={handleChange("nombre")}
+                                value={barbero.nombre}
+                            />
+                            <TextInput
+                                style={styles.input}
+                                placeholder="Email"
+                                placeholderTextColor="#ccc"
+                                onChangeText={handleChange("email")}
+                                value={barbero.email}
+                            />
+                            <TextInput
+                                style={styles.input}
+                                placeholder="Contraseña"
+                                placeholderTextColor="#ccc"
+                                onChangeText={handleChange("contrasena")}
+                                value={barbero.contrasena}
+                            />
+                            <TextInput
+                                style={styles.input}
+                                placeholder="Descripción"
+                                placeholderTextColor="#ccc"
+                                onChangeText={handleChange("descripcion")}
+                                value={barbero.descripcion}
+                            />
+                            <TouchableOpacity
+                                onPress={handleSeleccionarImagen}
+                                style={styles.imageUploadButton}
+                            >
+                                {imagePreview ? (
+                                    <Image
+                                        source={{ uri: imagePreview }}
+                                        style={styles.imagePreview}
+                                        resizeMode="cover"
+                                    />
+                                ) : (
+                                    <View style={styles.imagePlaceholder}>
+                                        <Ionicons name="image-outline" size={40} color="#aaa" />
+                                        <Text style={styles.placeholderText}>Seleccionar imagen</Text>
+                                    </View>
+                                )}
+                            </TouchableOpacity>
 
 
-                        <View style={styles.modalActions}>
-                            <TouchableOpacity
-                                style={styles.cancelButton}
-                                onPress={() => setModalVisible(false)}
-                            >
-                                <Text style={{ color: '#ffffff' }}>Cancelar</Text>
-                            </TouchableOpacity>
-                            <TouchableOpacity
-                                style={styles.saveButton}
-                            >
-                                <Text style={{ color: '#ffffff' }} onPress={handlesubmit}>Guardar</Text>
-                            </TouchableOpacity>
-                        </View>
+                            <View style={styles.modalActions}>
+                                <TouchableOpacity
+                                    style={styles.cancelButton}
+                                    onPress={() => setModalVisible(false)}
+                                >
+                                    <Text style={{ color: '#ffffff' }}>Cancelar</Text>
+                                </TouchableOpacity>
+                                <TouchableOpacity
+                                    style={styles.saveButton}
+                                >
+                                    <Text style={{ color: '#ffffff' }} onPress={handlesubmit}>Guardar</Text>
+                                </TouchableOpacity>
+                            </View>
+                        </ScrollView>
                     </View>
                 </View>
             </Modal>
@@ -355,60 +355,62 @@ export default function GestionarBarberos() {
                 <View style={styles.modalContainer}>
                     <View style={styles.modalContent}>
                         <Text style={styles.modalTitle}>Editar Barbero</Text>
-                        <TextInput
-                            style={styles.input}
-                            placeholder="Nombre Del Barbero"
-                            placeholderTextColor="#ccc"
-                            onChangeText={handleChangeEdit("nombre_usuario")}
-                            value={barberoEdit.nombre_usuario}
-                        />
-                        <TextInput
-                            style={styles.input}
-                            placeholder="Email"
-                            placeholderTextColor="#ccc"
-                            onChangeText={handleChangeEdit("email")}
-                            value={barberoEdit.email}
-                        />
-                        <TextInput
-                            style={styles.input}
-                            placeholder="Descripción"
-                            placeholderTextColor="#ccc"
-                            onChangeText={handleChangeEdit("descripcion")}
-                            value={barberoEdit.descripcion}
+                        <ScrollView style={{ width: '100%' }}>
+                            <TextInput
+                                style={styles.input}
+                                placeholder="Nombre Del Barbero"
+                                placeholderTextColor="#ccc"
+                                onChangeText={handleChangeEdit("nombre_usuario")}
+                                value={barberoEdit.nombre_usuario}
+                            />
+                            <TextInput
+                                style={styles.input}
+                                placeholder="Email"
+                                placeholderTextColor="#ccc"
+                                onChangeText={handleChangeEdit("email")}
+                                value={barberoEdit.email}
+                            />
+                            <TextInput
+                                style={styles.input}
+                                placeholder="Descripción"
+                                placeholderTextColor="#ccc"
+                                onChangeText={handleChangeEdit("descripcion")}
+                                value={barberoEdit.descripcion}
 
-                        />
-                        <TouchableOpacity
-                            onPress={handleSeleccionarImagenEditar}
-                            style={styles.imageUploadButton}
-                        >
-                            {imagePreviewEditar ? (
-                                <Image
-                                    source={{ uri: imagePreviewEditar }}
-                                    style={styles.imagePreview}
-                                    resizeMode="cover"
-                                />
-                            ) : (
-                                <View style={styles.imagePlaceholder}>
-                                    <Ionicons name="image-outline" size={40} color="#aaa" />
-                                    <Text style={styles.placeholderText}>Seleccionar imagen</Text>
-                                </View>
-                            )}
-                        </TouchableOpacity>
+                            />
+                            <TouchableOpacity
+                                onPress={handleSeleccionarImagenEditar}
+                                style={styles.imageUploadButton}
+                            >
+                                {imagePreviewEditar ? (
+                                    <Image
+                                        source={{ uri: imagePreviewEditar }}
+                                        style={styles.imagePreview}
+                                        resizeMode="cover"
+                                    />
+                                ) : (
+                                    <View style={styles.imagePlaceholder}>
+                                        <Ionicons name="image-outline" size={40} color="#aaa" />
+                                        <Text style={styles.placeholderText}>Seleccionar imagen</Text>
+                                    </View>
+                                )}
+                            </TouchableOpacity>
 
-                        <View style={styles.modalActions}>
-                            <TouchableOpacity
-                                style={styles.cancelButton}
-                                onPress={() => setModalVisibleEdit(false)}
-                            >
-                                <Text style={{ color: '#ffffff' }}>Cancelar</Text>
-                            </TouchableOpacity>
-                            <TouchableOpacity
-                                style={styles.saveButton}
-                                onPress={handlesubmitEdit}
-                            >
-                                <Text style={{ color: '#ffffff' }}>Guardar</Text>
-                            </TouchableOpacity>
-                        </View>
+                            <View style={styles.modalActions}>
+                                <TouchableOpacity
+                                    style={styles.cancelButton}
+                                    onPress={() => setModalVisibleEdit(false)}
+                                >
+                                    <Text style={{ color: '#ffffff' }}>Cancelar</Text>
+                                </TouchableOpacity>
+                                <TouchableOpacity
+                                    style={styles.saveButton}
+                                    onPress={handlesubmitEdit}
+                                >
+                                    <Text style={{ color: '#ffffff' }}>Guardar</Text>
+                                </TouchableOpacity>
+                            </View>
+                        </ScrollView>
                     </View>
                 </View>
             </Modal>
