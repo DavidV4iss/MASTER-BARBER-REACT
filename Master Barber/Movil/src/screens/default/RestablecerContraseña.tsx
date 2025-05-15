@@ -73,7 +73,6 @@ const RestablecerContrasena = () => {
     try {
       const response = await AuthRepository.Cambiarpasscod(user, verificaCode);
 
-      // Aquí validamos el texto del backend
       if (typeof response === 'string' && response.includes('éxito')) {
         showMessage({
           message: 'Contraseña restablecida con éxito',
