@@ -1,0 +1,116 @@
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36" version="27.0.5">
+  <diagram id="C5RBs43oDa-KdzZeNtuy" name="Page-1">
+    <mxGraphModel dx="466" dy="1962" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="WIyWlLk6GJQsqaUBKTNV-0" />
+        <mxCell id="WIyWlLk6GJQsqaUBKTNV-1" parent="WIyWlLk6GJQsqaUBKTNV-0" />
+        <mxCell id="nEV8NIuV4L0AE3yYRl37-23" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="WIyWlLk6GJQsqaUBKTNV-1" source="nEV8NIuV4L0AE3yYRl37-0" target="nEV8NIuV4L0AE3yYRl37-3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="nEV8NIuV4L0AE3yYRl37-0" value="C" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+          <mxGeometry x="540" y="40" width="60" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="nEV8NIuV4L0AE3yYRl37-24" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="WIyWlLk6GJQsqaUBKTNV-1" source="nEV8NIuV4L0AE3yYRl37-3" target="nEV8NIuV4L0AE3yYRl37-7">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="nEV8NIuV4L0AE3yYRl37-3" value="Genera la reserva de turno&amp;nbsp;" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+          <mxGeometry x="505" y="140" width="130" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="nEV8NIuV4L0AE3yYRl37-25" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="WIyWlLk6GJQsqaUBKTNV-1" source="nEV8NIuV4L0AE3yYRl37-7" target="nEV8NIuV4L0AE3yYRl37-9">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="nEV8NIuV4L0AE3yYRl37-7" value="Selecciona servicio&amp;nbsp;" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+          <mxGeometry x="510" y="250" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="nEV8NIuV4L0AE3yYRl37-26" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="WIyWlLk6GJQsqaUBKTNV-1" source="nEV8NIuV4L0AE3yYRl37-9" target="nEV8NIuV4L0AE3yYRl37-10">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="nEV8NIuV4L0AE3yYRl37-9" value="Selecciona Barbero&amp;nbsp;" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+          <mxGeometry x="510" y="340" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="nEV8NIuV4L0AE3yYRl37-27" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="WIyWlLk6GJQsqaUBKTNV-1" source="nEV8NIuV4L0AE3yYRl37-10" target="nEV8NIuV4L0AE3yYRl37-11">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="nEV8NIuV4L0AE3yYRl37-34" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="WIyWlLk6GJQsqaUBKTNV-1" source="nEV8NIuV4L0AE3yYRl37-10" target="nEV8NIuV4L0AE3yYRl37-17">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="420" y="460" />
+              <mxPoint x="420" y="815" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="nEV8NIuV4L0AE3yYRl37-35" value="Reasigna turno&amp;nbsp;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="nEV8NIuV4L0AE3yYRl37-34">
+          <mxGeometry x="-0.0827" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="nEV8NIuV4L0AE3yYRl37-10" value="Selecciona fecha y hora disponible&amp;nbsp;" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+          <mxGeometry x="510" y="430" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="nEV8NIuV4L0AE3yYRl37-28" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="WIyWlLk6GJQsqaUBKTNV-1" source="nEV8NIuV4L0AE3yYRl37-11" target="nEV8NIuV4L0AE3yYRl37-12">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="nEV8NIuV4L0AE3yYRl37-11" value="RESERVA&amp;nbsp;" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+          <mxGeometry x="510" y="525" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="nEV8NIuV4L0AE3yYRl37-29" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="WIyWlLk6GJQsqaUBKTNV-1" source="nEV8NIuV4L0AE3yYRl37-12" target="nEV8NIuV4L0AE3yYRl37-13">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="nEV8NIuV4L0AE3yYRl37-36" value="SI" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="nEV8NIuV4L0AE3yYRl37-29">
+          <mxGeometry x="-0.3778" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="nEV8NIuV4L0AE3yYRl37-37" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="WIyWlLk6GJQsqaUBKTNV-1" source="nEV8NIuV4L0AE3yYRl37-12" target="nEV8NIuV4L0AE3yYRl37-17">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="nEV8NIuV4L0AE3yYRl37-38" value="NO" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="nEV8NIuV4L0AE3yYRl37-37">
+          <mxGeometry x="-0.2667" y="1" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="nEV8NIuV4L0AE3yYRl37-12" value="Se reservo el turno correctamente" style="rhombus;whiteSpace=wrap;html=1;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+          <mxGeometry x="485" y="630" width="170" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="nEV8NIuV4L0AE3yYRl37-32" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="WIyWlLk6GJQsqaUBKTNV-1" source="nEV8NIuV4L0AE3yYRl37-13" target="nEV8NIuV4L0AE3yYRl37-15">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="nEV8NIuV4L0AE3yYRl37-13" value="El barbero acepta el turno&amp;nbsp;" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+          <mxGeometry x="700" y="645" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="nEV8NIuV4L0AE3yYRl37-33" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="WIyWlLk6GJQsqaUBKTNV-1" source="nEV8NIuV4L0AE3yYRl37-15" target="nEV8NIuV4L0AE3yYRl37-16">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="nEV8NIuV4L0AE3yYRl37-15" value="El cliente se dirige a la barbería para tomar este turno&amp;nbsp;" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+          <mxGeometry x="880" y="645" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="nEV8NIuV4L0AE3yYRl37-16" value="FIN&amp;nbsp;" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+          <mxGeometry x="1070" y="645" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="nEV8NIuV4L0AE3yYRl37-30" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="WIyWlLk6GJQsqaUBKTNV-1" source="nEV8NIuV4L0AE3yYRl37-17">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="760" y="815" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="nEV8NIuV4L0AE3yYRl37-17" value="El cliente podrá asignar en otro horario&amp;nbsp;" style="rhombus;whiteSpace=wrap;html=1;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+          <mxGeometry x="452.5" y="750" width="235" height="130" as="geometry" />
+        </mxCell>
+        <mxCell id="nEV8NIuV4L0AE3yYRl37-21" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="WIyWlLk6GJQsqaUBKTNV-1" source="nEV8NIuV4L0AE3yYRl37-19" target="nEV8NIuV4L0AE3yYRl37-20">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="nEV8NIuV4L0AE3yYRl37-19" value="B" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+          <mxGeometry x="540" y="-140" width="60" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="nEV8NIuV4L0AE3yYRl37-22" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="WIyWlLk6GJQsqaUBKTNV-1" source="nEV8NIuV4L0AE3yYRl37-20" target="nEV8NIuV4L0AE3yYRl37-0">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="nEV8NIuV4L0AE3yYRl37-20" value="Acepta turnos de clientes&amp;nbsp;" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+          <mxGeometry x="510" y="-50" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="nEV8NIuV4L0AE3yYRl37-31" value="FIN" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+          <mxGeometry x="760" y="785" width="120" height="60" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
