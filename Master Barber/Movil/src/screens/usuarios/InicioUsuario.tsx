@@ -1,14 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  Image,
-  TouchableOpacity,
-  Dimensions,
-  Platform,
-  Button,
-} from "react-native";
+import { View, Text, StyleSheet, Image, TouchableOpacity, Dimensions, Platform, Button, } from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome";
 import DefaultLayout from "../../Layouts/DefaultLayout";
 import { TextInput } from "react-native-gesture-handler";
@@ -112,9 +103,7 @@ export default function InicioUsuario() {
     }
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
+  const handleSubmit = async () => {
     if (!service || !barberoId || !date) {
       showMessage({
         message: "Campos incompletos",
@@ -305,8 +294,12 @@ export default function InicioUsuario() {
               {servicios.map((servicio) => (
                 <TouchableOpacity
                   key={servicio.id_tipo_servicio}
-                  style={styles.cardServicios}
-                  onPress={() => setService(servicio.nombre)}
+                  style={[
+                    styles.cardBarberos,
+                    { width: cardWidth },
+                    service === servicio.id_tipo_servicio && { borderColor: "yellow" },
+                  ]}
+                  onPress={() => setService(servicio.id_tipo_servicio)}
                 >
                   <Text style={styles.cardTextService}>{servicio.nombre}</Text>
 
@@ -333,7 +326,11 @@ export default function InicioUsuario() {
               {barberos.map((barbero) => (
                 <TouchableOpacity
                   key={barbero.id_barbero}
-                  style={[styles.cardBarberos, { width: cardWidth }]}
+                  style={[
+                    styles.cardBarberos,
+                    { width: cardWidth },
+                    barberoId === barbero.nombre_usuario && { borderColor: "#ffc107" },
+                  ]}
                   onPress={() => setBarberoId(barbero.nombre_usuario)}
                 >
                   <Text style={styles.cardTextService}>
@@ -474,16 +471,11 @@ export default function InicioUsuario() {
             <TouchableOpacity
               style={styles.buttonReserva}
               onPress={() => {
-                showMessage({
-                  message: "Reserva Creada con los siguientes datos",
-                  description: `Servicio: ${service} \nBarbero: ${barberoId} \nFecha: ${date.toLocaleString()}`,
-                  type: "success",
-                  icon: "success",
-                  duration: 2000,
-                });
+                handleSubmit();
+                setCurrentStep(1);
               }}
             >
-              <Text style={styles.buttonText} onPress={handleSubmit}>
+              <Text style={styles.buttonText}>
                 Confirmar Reserva
               </Text>
             </TouchableOpacity>
