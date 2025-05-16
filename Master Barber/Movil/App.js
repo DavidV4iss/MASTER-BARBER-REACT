@@ -9,14 +9,17 @@ import useAuth from './src/hooks/useAuth';
 import { AuthProvider } from './src/contexts/AuthContext';
 import FlashMessage from 'react-native-flash-message';
 import Constants from 'expo-constants';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 export default function App() {
   return (
     <AuthProvider>
-      <NavigationContainer>
-        <FlashMessage position="top" style={{ paddingTop: Constants.statusBarHeight, }} />
-        <MainNavigator />
-      </NavigationContainer>
+      <GestureHandlerRootView style={{ flex: 1 }}>
+        <NavigationContainer>
+          <FlashMessage position="top" style={{ paddingTop: Constants.statusBarHeight }} />
+          <MainNavigator />
+        </NavigationContainer>
+      </GestureHandlerRootView>
     </AuthProvider>
   );
 };
@@ -34,7 +37,7 @@ function MainNavigator() {
 
   switch (user.role) {
     case 1:
-      return <NavigationAdmin />
+      return <NavigationAdmin />;
     case 2:
       return <NavigationBarbero />;
     case 3:

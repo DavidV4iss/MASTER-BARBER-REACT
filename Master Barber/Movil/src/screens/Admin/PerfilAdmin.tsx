@@ -101,7 +101,7 @@ export default function PerfilAdmin() {
             })
             navigation.reset({
                 index: 0,
-                routes: [{ name: 'Perfil' }],
+                routes: [{ never: 'Perfil' }],
             });
         } catch (error) {
             console.error('Error al actualizar perfil:', error);

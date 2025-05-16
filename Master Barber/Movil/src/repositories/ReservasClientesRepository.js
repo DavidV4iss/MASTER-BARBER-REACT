@@ -2,17 +2,17 @@ import { showMessage } from "react-native-flash-message";
 import API from "../config/api";
 
 class ReservasClientesRepository {
-     static async GetReservas () {
-         try {
-             const response = await API.get("GetReservas");
-             return response;
-         } catch (error) {
-             const errorMessage = error?.response?.data?.message || "Error al obtener las reservas.";
-             throw new Error(errorMessage);
-         }
+    static async GetReservas() {
+        try {
+            const response = await API.get("GetReservas");
+            return response;
+        } catch (error) {
+            const errorMessage = error?.response?.data?.message || "Error al obtener las reservas.";
+            throw new Error(errorMessage);
+        }
     }
 
-    static async GetServicios () {
+    static async GetServicios() {
         try {
             const response = await API.get("GetServicios");
             return response;
@@ -22,7 +22,7 @@ class ReservasClientesRepository {
         }
     }
 
-    static async GetBarberos () {
+    static async GetBarberos() {
         try {
             const response = await API.get("GetBarberos");
             return response;
@@ -32,7 +32,7 @@ class ReservasClientesRepository {
         }
     }
 
-    static async GetBarberosDisponibles () {
+    static async GetBarberosDisponibles() {
         try {
             const response = await API.get((`GetReservasbarbero${barberoId}`));
             return response;
@@ -41,10 +41,10 @@ class ReservasClientesRepository {
             throw new Error(errorMessage);
         }
     }
-    
+
     static async CrearReservas(reserva) {
         try {
-            const response = await API.post("CrearReservas", reserva, { headers: { "Content-Type": "multipart/form-data" } });
+            const response = await API.post("CrearReservas", reserva);
             showMessage({
                 message: "Reserva creada exitosamente",
                 type: "success",
