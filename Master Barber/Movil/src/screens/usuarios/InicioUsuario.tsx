@@ -1,633 +1,754 @@
-import React, { useEffect, useState } from 'react'
-import { View, Text, StyleSheet, Image, TouchableOpacity, Dimensions, Platform, Button } from 'react-native'
-import Icon from 'react-native-vector-icons/FontAwesome'
-import DefaultLayout from '../../Layouts/DefaultLayout'
-import { TextInput } from 'react-native-gesture-handler'
-import { useFonts } from 'expo-font'
-import { Anton_400Regular } from '@expo-google-fonts/anton'
-import { BebasNeue_400Regular } from '@expo-google-fonts/bebas-neue'
-import { useNavigation } from '@react-navigation/native';
-import useAuth from '../../hooks/useAuth'
-import { AirbnbRating } from 'react-native-ratings';
-import DateTimePicker from '@react-native-community/datetimepicker';
-import moment from 'moment';
-import { getBaseURL } from '../../config/api'
-import { showMessage } from 'react-native-flash-message'
-import ReservasClientesRepository from '../../repositories/ReservasClientesRepository'
-
+import React, { useEffect, useState } from "react";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  TouchableOpacity,
+  Dimensions,
+  Platform,
+  Button,
+} from "react-native";
+import Icon from "react-native-vector-icons/FontAwesome";
+import DefaultLayout from "../../Layouts/DefaultLayout";
+import { TextInput } from "react-native-gesture-handler";
+import { useFonts } from "expo-font";
+import { Anton_400Regular } from "@expo-google-fonts/anton";
+import { BebasNeue_400Regular } from "@expo-google-fonts/bebas-neue";
+import { useNavigation } from "@react-navigation/native";
+import useAuth from "../../hooks/useAuth";
+import { AirbnbRating } from "react-native-ratings";
+import DateTimePicker from "@react-native-community/datetimepicker";
+import moment from "moment";
+import { getBaseURL } from "../../config/api";
+import { showMessage } from "react-native-flash-message";
+import ReservasClientesRepository from "../../repositories/ReservasClientesRepository";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function InicioUsuario() {
-    const [service, setService] = useState('');
-    const [date, setDate] = useState(new Date());
-    const [barberoId, setBarberoId] = useState('');
-    const [barberos, setBarberos] = useState([]);
-    const [servicios, setServicios] = useState([]);
-    const [currentStep, setCurrentStep] = useState(1);
-    const [horasOcupadas, setHorasOcupadas] = useState([]);
-    const token = localStorage.getItem('token');
-    const navigation = useNavigation();
-    const { logout } = useAuth()
-    const [showDatePicker, setShowDatePicker] = useState(false);
-    const [showTimePicker, setShowTimePicker] = useState(false);
-    const [isDropdownVisible, setIsDropdownVisible] = useState(false);
-    const imagenesServicios = {
-        "Corte basico": require('../../assets/cortebasico.jpg'),
-        "Corte premium": require('../../assets/cortepremium.jpg')
-    };
-    const [fontsLoaded] = useFonts({
-        Anton: Anton_400Regular,
-        BebasNeue: BebasNeue_400Regular,
-    });
-    const tokenDecoded = token ? JSON.parse(atob(token.split('.')[1])) : null;
-    const id = tokenDecoded?.id || null;
-    const screenWidth = Dimensions.get('window').width;
-    const cardWidth = (screenWidth - 60 - 15) / 2;
+  const [service, setService] = useState("");
+  const [date, setDate] = useState(new Date());
+  const [barberoId, setBarberoId] = useState("");
+  const [barberos, setBarberos] = useState([]);
+  const [servicios, setServicios] = useState([]);
+  const [currentStep, setCurrentStep] = useState(1);
+  const [horasOcupadas, setHorasOcupadas] = useState([]);
+  const token = useAuth().token;
+  const navigation = useNavigation();
+  const { logout } = useAuth();
+  const [showDatePicker, setShowDatePicker] = useState(false);
+  const [showTimePicker, setShowTimePicker] = useState(false);
+  const [isDropdownVisible, setIsDropdownVisible] = useState(false);
+  const imagenesServicios = {
+    "Corte basico": require("../../assets/cortebasico.jpg"),
+    "Corte premium": require("../../assets/cortepremium.jpg"),
+  };
+  const [fontsLoaded] = useFonts({
+    Anton: Anton_400Regular,
+    BebasNeue: BebasNeue_400Regular,
+  });
+  const tokenDecoded = token ? JSON.parse(atob(token.split(".")[1])) : null;
+  const id = tokenDecoded?.id || null;
+  const screenWidth = Dimensions.get("window").width;
+  const cardWidth = (screenWidth - 60 - 15) / 2;
 
-    const nextStep = () => {
-        if (currentStep === 1 && !service) {
-            alert('Por favor, selecciona un servicio antes de continuar.');
-            return;
-        }
-
-        if (currentStep === 2 && !barberoId) {
-            alert('Por favor, selecciona un barbero antes de continuar.');
-            return;
-        }
-
-        setCurrentStep((prevStep) => prevStep + 1);
-    };
-
-    const prevStep = () => {
-        setCurrentStep((prevStep) => prevStep - 1);
-    };
-
-    const onDateChange = (event, selectedDate) => {
-        if (event.type === 'dismissed') {
-            setShowDatePicker(false);
-            return;
-        }
-
-        setShowDatePicker(Platform.OS === 'ios');
-        if (selectedDate) {
-            setDate(prev => new Date(
-                selectedDate.getFullYear(),
-                selectedDate.getMonth(),
-                selectedDate.getDate(),
-                prev.getHours(),
-                prev.getMinutes()
-            ));
-        }
-    };
-
-    const onTimeChange = (event, selectedTime) => {
-        if (event.type === 'dismissed') {
-            setShowTimePicker(false);
-            return;
-        }
-
-        setShowTimePicker(Platform.OS === 'ios');
-        if (selectedTime) {
-            setDate(prev => new Date(
-                prev.getFullYear(),
-                prev.getMonth(),
-                prev.getDate(),
-                selectedTime.getHours(),
-                selectedTime.getMinutes()
-            ));
-        }
-    };
-
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-
-        if (!service || !barberoId || !date) {
-            showMessage({
-                message: "Campos incompletos",
-                description: "Por favor, selecciona el servicio, barbero y fecha antes de continuar.",
-                type: "warning",
-                icon: "warning",
-            });
-            return;
-        }
-
-        const formattedSelectedDate = moment(date).format('YYYY-MM-DD HH:mm:ss');
-
-        try {
-           
-            const responseHoras = await ReservasClientesRepository.GetReservas();
-            if (!responseHoras || !responseHoras.data) {
-                showMessage({
-                    message: "Error al cargar las reservas",
-                    description: "No se pudieron cargar las reservas del barbero. Intenta nuevamente.",
-                    type: "danger",
-                    icon: "danger",
-                });
-                return;
-            }
-
-         
-            const horasOcupadas = responseHoras.data.map(reserva => moment(reserva.fecha).format('YYYY-MM-DD HH:mm:ss'));
-
-            if (horasOcupadas.includes(formattedSelectedDate)) {
-                showMessage({
-                    message: "Hora ocupada",
-                    description: "La hora seleccionada ya está ocupada. Por favor, elige otra hora.",
-                    type: "warning",
-                    icon: "warning",
-                });
-                return;
-            }
-
-            const responseCrearReserva = await ReservasClientesRepository.CrearReservas({
-                cliente_id: id,
-                barbero_id: barberoId,
-                servicio: service,
-                fecha: formattedSelectedDate,
-                estado: 'Pendiente',
-            });
-
-            if (responseCrearReserva && responseCrearReserva.status === 200) {
-                showMessage({
-                    message: "Reserva creada exitosamente",
-                    type: "success",
-                    icon: "success",
-                    duration: 2000,
-                });
-            } else {
-                showMessage({
-                    message: "Error al crear la reserva",
-                    description: "No se pudo crear la reserva. Intenta nuevamente.",
-                    type: "danger",
-                    icon: "danger",
-                });
-            }
-
-            setCurrentStep(1);
-            setService(null);
-            setBarberoId(null);
-            setDate(null);
-    
-
-        } catch (error) {
-            console.log("Error al crear la reserva:", error);
-            showMessage({
-                message: "Error al procesar la reserva",
-                description: "Hubo un error inesperado. Intenta nuevamente.",
-                type: "danger",
-                icon: "danger",
-            });
-        }
-    };
-
-
-
-
-    const fetchServicios = async () => {
-        try {
-            const response = await ReservasClientesRepository.GetServicios();
-            setServicios(response.data);
-        } catch (err) {
-            console.log("Error al obtener los servicios:", err);
-        }
+  const nextStep = () => {
+    if (currentStep === 1 && !service) {
+      alert("Por favor, selecciona un servicio antes de continuar.");
+      return;
     }
 
-    const fetchBarberos = async () => {
-        try {
-            const response = await ReservasClientesRepository.GetBarberos();
-            setBarberos(response.data);
-        } catch (err) {
-            console.log("Error al obtener los barberos:", err);
-        }
-    }
-    React.useEffect(() => {
-        fetchServicios();
-        fetchBarberos();
-    })
-    const handleLogout = () => {
-        logout();
+    if (currentStep === 2 && !barberoId) {
+      alert("Por favor, selecciona un barbero antes de continuar.");
+      return;
     }
 
-    if (!fontsLoaded) {
-        return null;
+    setCurrentStep((prevStep) => prevStep + 1);
+  };
+
+  const prevStep = () => {
+    setCurrentStep((prevStep) => prevStep - 1);
+  };
+
+  const onDateChange = (event, selectedDate) => {
+    if (event.type === "dismissed") {
+      setShowDatePicker(false);
+      return;
     }
 
-    return (
-        <DefaultLayout>
-            <View style={styles.container}>
-                <View style={styles.welcome}>
-                    <Text style={styles.MB}>Master Barber</Text>
-                    <View style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                        <View style={styles.header}>
-                            <TouchableOpacity onPress={() => setIsDropdownVisible(!isDropdownVisible)}>
-                                <Icon name="user-circle" style={styles.icon} />
-                            </TouchableOpacity >
-                            {isDropdownVisible && (
-                                <View style={styles.dropdownMenu} >
-                                    <TouchableOpacity>
-                                        <Text style={{ ...styles.dropdownItem, marginBottom: 5, fontFamily: 'BebasNeue_400Regular', color: '#ffc107' }}>Perfil</Text>
-                                    </TouchableOpacity>
-                                    <TouchableOpacity onPress={handleLogout}>
-                                        <Text style={{ ...styles.dropdownItem, padding: 10, backgroundColor: '#dc3545', fontFamily: 'BebasNeue_400Regular' }}>Cerrar Sesión</Text>
-                                    </TouchableOpacity>
+    setShowDatePicker(Platform.OS === "ios");
+    if (selectedDate) {
+      setDate(
+        (prev) =>
+          new Date(
+            selectedDate.getFullYear(),
+            selectedDate.getMonth(),
+            selectedDate.getDate(),
+            prev.getHours(),
+            prev.getMinutes()
+          )
+      );
+    }
+  };
 
-                                </View>
-                            )}
-                        </View>
-                        <Text style={{ color: '#ffffff', fontFamily: 'BebasNeue', fontSize: 14 }}>
-                            Cristian
-                        </Text>
-                    </View>
-                </View>
-                <Text style={styles.textReserva}>
-                    Crea tu reserva ahora
-                </Text>
+  const onTimeChange = (event, selectedTime) => {
+    if (event.type === "dismissed") {
+      setShowTimePicker(false);
+      return;
+    }
 
+    setShowTimePicker(Platform.OS === "ios");
+    if (selectedTime) {
+      setDate(
+        (prev) =>
+          new Date(
+            prev.getFullYear(),
+            prev.getMonth(),
+            prev.getDate(),
+            selectedTime.getHours(),
+            selectedTime.getMinutes()
+          )
+      );
+    }
+  };
 
-                {/* Aqui va el paso a paso Step */}
-                {/* Paso 1: Selección de servicio */}
-                {currentStep === 1 && (
-                    <>
-                        <Text style={styles.textPaso}>Selecciona el servicio que deseas</Text>
-                        <View style={styles.cardService}>
-                            {servicios.map((servicio) => (
-                                <TouchableOpacity
-                                    key={servicio.id_tipo_servicio}
-                                    style={styles.cardServicios}
-                                    onPress={() => setService(servicio.nombre)}
-                                >
-                                    <Text style={styles.cardTextService}>{servicio.nombre}</Text>
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-                                    {/* Aquí es donde asociamos la imagen */}
-                                    <Image
-                                        style={styles.cardImage}
-                                        source={imagenesServicios[servicio.nombre]}
-                                    />
+    if (!service || !barberoId || !date) {
+      showMessage({
+        message: "Campos incompletos",
+        description:
+          "Por favor, selecciona el servicio, barbero y fecha antes de continuar.",
+        type: "warning",
+        icon: "warning",
+      });
+      return;
+    }
 
-                                    <Text style={styles.textDescripcion}>{servicio.descripcion_S}</Text>
-                                </TouchableOpacity>
-                            ))}
+    const formattedSelectedDate = moment(date).format("YYYY-MM-DD HH:mm:ss");
 
-                        </View>
-                    </>
-                )}
+    try {
+      const token = await AsyncStorage.getItem("token");
+      if (!token) return;
 
-                {/* Paso 2: Selección de barbero */}
-                {currentStep === 2 && (
-                    <>
-                        <Text style={styles.textPaso}>Selecciona tu barbero preferido</Text>
-                        <View style={styles.cardBarbers}>
-                            {barberos.map((barbero) => (
-                                <TouchableOpacity
-                                    key={barbero.id_barbero}
-                                    style={[styles.cardBarberos, { width: cardWidth }]}
-                                    onPress={() => setBarberoId(barbero.nombre_usuario)}
-                                >
-                                    <Text style={styles.cardTextService}>{barbero.nombre_usuario}</Text>
-                                    <Image
-                                        style={styles.cardImage}
-                                        source={{ uri: `${getBaseURL()}imagesBarbero/${barbero.Foto}` }}
-                                        resizeMode="cover"
-                                    />
-                                    <Text style={styles.textDescripcion}>{barbero.descripcion}</Text>
-                                </TouchableOpacity>
-                            ))}
-                        </View>
-                    </>
-                )}
+      const responseHoras = await ReservasClientesRepository.GetReservas();
+      if (!responseHoras || !responseHoras.data) {
+        showMessage({
+          message: "Error al cargar las reservas",
+          description:
+            "No se pudieron cargar las reservas del barbero. Intenta nuevamente.",
+          type: "danger",
+          icon: "danger",
+        });
+        return;
+      }
 
-                {/* Paso 3: Selección de fecha y hora */}
-                {currentStep === 3 && (
-                    <>
-                        <Text style={styles.textPaso}>Selecciona la fecha y hora de tu reserva</Text>
-                        <View style={{ alignItems: 'center' }}>
-                            <View style={{ marginTop: 10, borderRadius: 10, marginBottom: 15, width: '80%', }} >
-                                <Button title="Seleccionar Fecha" onPress={() => setShowDatePicker(true)} />
-                            </View>
-                            <View style={{ marginTop: 10, borderRadius: 10, marginBottom: 15, width: '80%', }}>
-                                <Button title="Seleccionar Hora" onPress={() => setShowTimePicker(true)} />
-                            </View>
+      const horasOcupadas = responseHoras.data.map((reserva) =>
+        moment(reserva.fecha).format("YYYY-MM-DD HH:mm:ss")
+      );
 
+      if (horasOcupadas.includes(formattedSelectedDate)) {
+        showMessage({
+          message: "Hora ocupada",
+          description:
+            "La hora seleccionada ya está ocupada. Por favor, elige otra hora.",
+          type: "warning",
+          icon: "warning",
+        });
+        return;
+      }
 
-                            {showDatePicker && (
-                                <DateTimePicker
-                                    value={date}
-                                    mode="date"
-                                    display="default"
-                                    onChange={onDateChange}
-                                />
-                            )}
+      const responseCrearReserva =
+        await ReservasClientesRepository.CrearReservas({
+          cliente_id: id,
+          barbero_id: barberoId,
+          servicio: service,
+          fecha: formattedSelectedDate,
+          estado: "Pendiente",
+        });
 
-                            {showTimePicker && (
-                                <DateTimePicker
-                                    value={date}
-                                    mode="time"
-                                    display="default"
-                                    onChange={onTimeChange}
-                                    is24Hour={true}
-                                />
-                            )}
-                            <Text style={{ color: '#fff', fontFamily: 'BebasNeue', fontSize: 18, alignSelf: 'center', marginBottom: 20 }}>Fecha y hora seleccionada:{"        "}{date.toLocaleString()}</Text>
-                        </View>
-                    </>
-                )}
-                {/* Aqui termina el paso a paso Step */}
+      if (responseCrearReserva && responseCrearReserva.status === 200) {
+        showMessage({
+          message: "Reserva creada exitosamente",
+          type: "success",
+          icon: "success",
+          duration: 2000,
+        });
+      } else {
+        showMessage({
+          message: "Error al crear la reserva",
+          description: "No se pudo crear la reserva. Intenta nuevamente.",
+          type: "danger",
+          icon: "danger",
+        });
+      }
 
-                <View style={{ flexDirection: 'row', marginTop: 20 }}>
-                    {currentStep > 1 && (
-                        <TouchableOpacity style={styles.buttonReserva} onPress={() => setCurrentStep(currentStep - 1)}>
-                            <Text style={styles.buttonText}>Atrás</Text>
-                        </TouchableOpacity>
-                    )}
-                    {currentStep < 3 && (
-                        <TouchableOpacity
-                            style={styles.buttonReserva}
-                            onPress={() => {
-                                if (currentStep === 1 && !service) {
-                                    showMessage({
-                                        message: "Error",
-                                        description: "Selecciona un servicio",
-                                        type: "danger",
-                                        icon: "danger",
-                                    })
-                                    return;
-                                }
-                                if (currentStep === 2 && !barberoId) {
-                                    showMessage({
-                                        message: "Error",
-                                        description: "Selecciona un barbero",
-                                        type: "danger",
-                                        icon: "danger",
-                                    })
-                                    return;
-                                }
-                                if (currentStep === 3 && !date) {
-                                    showMessage({
-                                        message: "Error",
-                                        description: "Selecciona una fecha y hora",
-                                        type: "danger",
-                                        icon: "danger",
-                                    })
-                                    return;
-                                }
-                                setCurrentStep(currentStep + 1);
-                            }}
-                        >
-                            <Text style={styles.buttonText}>Siguiente</Text>
-                        </TouchableOpacity>
-                    )}
-                    {currentStep === 3 && (
-                        <TouchableOpacity
-                            style={styles.buttonReserva}
-                            onPress={() => {
-                                showMessage({
-                                    message: "Reserva Creada con los siguientes datos",
-                                    description: `Servicio: ${service} \nBarbero: ${barberoId} \nFecha: ${date.toLocaleString()}`,
-                                    type: "success",
-                                    icon: "success",
-                                    duration: 2000
-                                })
-                            }}
-                        >
-                            <Text style={styles.buttonText} onPress={handleSubmit}>Confirmar Reserva</Text>
-                        </TouchableOpacity>
+      setCurrentStep(1);
+      setService(null);
+      setBarberoId(null);
+      setDate(null);
+    } catch (error) {
+      console.log("Error al crear la reserva:", error);
+      showMessage({
+        message: "Error al procesar la reserva",
+        description: "Hubo un error inesperado. Intenta nuevamente.",
+        type: "danger",
+        icon: "danger",
+      });
+    }
+  };
 
-                    )}
-                </View>
+  const fetchServicios = async () => {
+    try {
+      const token = await AsyncStorage.getItem("token");
+      if (!token) return;
 
+      const response = await ReservasClientesRepository.GetServicios();
+      setServicios(response.data);
+    } catch (err) {
+      console.log("Error al obtener los servicios:", err);
+    }
+  };
 
+  const fetchBarberos = async () => {
+    const token = await AsyncStorage.getItem("token");
+    if (!token) return;
 
-                <View style={styles.calificaciones}>
-                    <Text style={{ color: '#dc3545', fontFamily: 'BebasNeue', fontSize: 20 }}>
-                        Calificaciones
+    try {
+      const response = await ReservasClientesRepository.GetBarberos();
+      setBarberos(response.data);
+    } catch (err) {
+      console.log("Error al obtener los barberos:", err);
+    }
+  };
+  React.useEffect(() => {
+    fetchServicios();
+    fetchBarberos();
+  });
+  const handleLogout = () => {
+    logout();
+  };
+
+  if (!fontsLoaded) {
+    return null;
+  }
+
+  return (
+    <DefaultLayout>
+      <View style={styles.container}>
+        <View style={styles.welcome}>
+          <Text style={styles.MB}>Master Barber</Text>
+          <View
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <View style={styles.header}>
+              <TouchableOpacity
+                onPress={() => setIsDropdownVisible(!isDropdownVisible)}
+              >
+                <Icon name="user-circle" style={styles.icon} />
+              </TouchableOpacity>
+              {isDropdownVisible && (
+                <View style={styles.dropdownMenu}>
+                  <TouchableOpacity>
+                    <Text
+                      style={{
+                        ...styles.dropdownItem,
+                        marginBottom: 5,
+                        fontFamily: "BebasNeue_400Regular",
+                        color: "#ffc107",
+                      }}
+                    >
+                      Perfil
                     </Text>
-                    <Text style={{ color: '#ffffff', fontFamily: 'BebasNeue', fontSize: 20 }}>
-                        ||
+                  </TouchableOpacity>
+                  <TouchableOpacity onPress={handleLogout}>
+                    <Text
+                      style={{
+                        ...styles.dropdownItem,
+                        padding: 10,
+                        backgroundColor: "#dc3545",
+                        fontFamily: "BebasNeue_400Regular",
+                      }}
+                    >
+                      Cerrar Sesión
                     </Text>
-                    <Text style={{ color: '#ffc107', fontFamily: 'BebasNeue', fontSize: 20 }}>
-                        Vip
-                    </Text>
-
+                  </TouchableOpacity>
                 </View>
-                <AirbnbRating
-                    count={5}
-                    reviews={['Terrible', 'Malo', 'Regular', 'Bueno', 'Excelente']}
-                    defaultRating={0}
-                    reviewSize={20}
-                    size={25}
-                    starContainerStyle={{
-                        flexDirection: 'row',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                    }}
-                />
-                <Text style={{ color: '#ffc107', fontFamily: 'BebasNeue', fontSize: 20, marginTop: 30 }}>
-                    Comentarios
-                </Text>
-                <TextInput
-                    style={styles.input}
-                    multiline={true}
-                    numberOfLines={4}
-                    textAlignVertical="top"
-                />
-                <TouchableOpacity style={{ backgroundColor: '#dc3545', borderRadius: 10, padding: 10, alignItems: 'center', justifyContent: 'center', marginBottom: 10, marginTop: 10 }}>
-                    <Text style={{ color: '#ffffff', fontFamily: 'BebasNeue', fontSize: 20 }}>Enviar calificacion</Text>
-                </TouchableOpacity>
-
-                <Text style={{ color: '#ffc107', fontFamily: 'BebasNeue', fontSize: 20, marginTop: 30 }}>
-                    Mis calificaciones
-                </Text>
+              )}
             </View>
-        </DefaultLayout>
-    )
+            <Text
+              style={{
+                color: "#ffffff",
+                fontFamily: "BebasNeue",
+                fontSize: 14,
+              }}
+            >
+              Cristian
+            </Text>
+          </View>
+        </View>
+        <Text style={styles.textReserva}>Crea tu reserva ahora</Text>
+
+        {/* Aqui va el paso a paso Step */}
+        {/* Paso 1: Selección de servicio */}
+        {currentStep === 1 && (
+          <>
+            <Text style={styles.textPaso}>
+              Selecciona el servicio que deseas
+            </Text>
+            <View style={styles.cardService}>
+              {servicios.map((servicio) => (
+                <TouchableOpacity
+                  key={servicio.id_tipo_servicio}
+                  style={styles.cardServicios}
+                  onPress={() => setService(servicio.nombre)}
+                >
+                  <Text style={styles.cardTextService}>{servicio.nombre}</Text>
+
+                  {/* Aquí es donde asociamos la imagen */}
+                  <Image
+                    style={styles.cardImage}
+                    source={imagenesServicios[servicio.nombre]}
+                  />
+
+                  <Text style={styles.textDescripcion}>
+                    {servicio.descripcion_S}
+                  </Text>
+                </TouchableOpacity>
+              ))}
+            </View>
+          </>
+        )}
+
+        {/* Paso 2: Selección de barbero */}
+        {currentStep === 2 && (
+          <>
+            <Text style={styles.textPaso}>Selecciona tu barbero preferido</Text>
+            <View style={styles.cardBarbers}>
+              {barberos.map((barbero) => (
+                <TouchableOpacity
+                  key={barbero.id_barbero}
+                  style={[styles.cardBarberos, { width: cardWidth }]}
+                  onPress={() => setBarberoId(barbero.nombre_usuario)}
+                >
+                  <Text style={styles.cardTextService}>
+                    {barbero.nombre_usuario}
+                  </Text>
+                  <Image
+                    style={styles.cardImage}
+                    source={{
+                      uri: `${getBaseURL()}imagesBarbero/${barbero.Foto}`,
+                    }}
+                    resizeMode="cover"
+                  />
+                  <Text style={styles.textDescripcion}>
+                    {barbero.descripcion}
+                  </Text>
+                </TouchableOpacity>
+              ))}
+            </View>
+          </>
+        )}
+
+        {/* Paso 3: Selección de fecha y hora */}
+        {currentStep === 3 && (
+          <>
+            <Text style={styles.textPaso}>
+              Selecciona la fecha y hora de tu reserva
+            </Text>
+            <View style={{ alignItems: "center" }}>
+              <View
+                style={{
+                  marginTop: 10,
+                  borderRadius: 10,
+                  marginBottom: 15,
+                  width: "80%",
+                }}
+              >
+                <Button
+                  title="Seleccionar Fecha"
+                  onPress={() => setShowDatePicker(true)}
+                />
+              </View>
+              <View
+                style={{
+                  marginTop: 10,
+                  borderRadius: 10,
+                  marginBottom: 15,
+                  width: "80%",
+                }}
+              >
+                <Button
+                  title="Seleccionar Hora"
+                  onPress={() => setShowTimePicker(true)}
+                />
+              </View>
+
+              {showDatePicker && (
+                <DateTimePicker
+                  value={date}
+                  mode="date"
+                  display="default"
+                  onChange={onDateChange}
+                />
+              )}
+
+              {showTimePicker && (
+                <DateTimePicker
+                  value={date}
+                  mode="time"
+                  display="default"
+                  onChange={onTimeChange}
+                  is24Hour={true}
+                />
+              )}
+              <Text
+                style={{
+                  color: "#fff",
+                  fontFamily: "BebasNeue",
+                  fontSize: 18,
+                  alignSelf: "center",
+                  marginBottom: 20,
+                }}
+              >
+                Fecha y hora seleccionada:{"        "}
+                {date.toLocaleString()}
+              </Text>
+            </View>
+          </>
+        )}
+        {/* Aqui termina el paso a paso Step */}
+
+        <View style={{ flexDirection: "row", marginTop: 20 }}>
+          {currentStep > 1 && (
+            <TouchableOpacity
+              style={styles.buttonReserva}
+              onPress={() => setCurrentStep(currentStep - 1)}
+            >
+              <Text style={styles.buttonText}>Atrás</Text>
+            </TouchableOpacity>
+          )}
+          {currentStep < 3 && (
+            <TouchableOpacity
+              style={styles.buttonReserva}
+              onPress={() => {
+                if (currentStep === 1 && !service) {
+                  showMessage({
+                    message: "Error",
+                    description: "Selecciona un servicio",
+                    type: "danger",
+                    icon: "danger",
+                  });
+                  return;
+                }
+                if (currentStep === 2 && !barberoId) {
+                  showMessage({
+                    message: "Error",
+                    description: "Selecciona un barbero",
+                    type: "danger",
+                    icon: "danger",
+                  });
+                  return;
+                }
+                if (currentStep === 3 && !date) {
+                  showMessage({
+                    message: "Error",
+                    description: "Selecciona una fecha y hora",
+                    type: "danger",
+                    icon: "danger",
+                  });
+                  return;
+                }
+                setCurrentStep(currentStep + 1);
+              }}
+            >
+              <Text style={styles.buttonText}>Siguiente</Text>
+            </TouchableOpacity>
+          )}
+          {currentStep === 3 && (
+            <TouchableOpacity
+              style={styles.buttonReserva}
+              onPress={() => {
+                showMessage({
+                  message: "Reserva Creada con los siguientes datos",
+                  description: `Servicio: ${service} \nBarbero: ${barberoId} \nFecha: ${date.toLocaleString()}`,
+                  type: "success",
+                  icon: "success",
+                  duration: 2000,
+                });
+              }}
+            >
+              <Text style={styles.buttonText} onPress={handleSubmit}>
+                Confirmar Reserva
+              </Text>
+            </TouchableOpacity>
+          )}
+        </View>
+
+        <View style={styles.calificaciones}>
+          <Text
+            style={{ color: "#dc3545", fontFamily: "BebasNeue", fontSize: 20 }}
+          >
+            Calificaciones
+          </Text>
+          <Text
+            style={{ color: "#ffffff", fontFamily: "BebasNeue", fontSize: 20 }}
+          >
+            ||
+          </Text>
+          <Text
+            style={{ color: "#ffc107", fontFamily: "BebasNeue", fontSize: 20 }}
+          >
+            Vip
+          </Text>
+        </View>
+        <AirbnbRating
+          count={5}
+          reviews={["Terrible", "Malo", "Regular", "Bueno", "Excelente"]}
+          defaultRating={0}
+          reviewSize={20}
+          size={25}
+          starContainerStyle={{
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        />
+        <Text
+          style={{
+            color: "#ffc107",
+            fontFamily: "BebasNeue",
+            fontSize: 20,
+            marginTop: 30,
+          }}
+        >
+          Comentarios
+        </Text>
+        <TextInput
+          style={styles.input}
+          multiline={true}
+          numberOfLines={4}
+          textAlignVertical="top"
+        />
+        <TouchableOpacity
+          style={{
+            backgroundColor: "#dc3545",
+            borderRadius: 10,
+            padding: 10,
+            alignItems: "center",
+            justifyContent: "center",
+            marginBottom: 10,
+            marginTop: 10,
+          }}
+        >
+          <Text
+            style={{ color: "#ffffff", fontFamily: "BebasNeue", fontSize: 20 }}
+          >
+            Enviar calificacion
+          </Text>
+        </TouchableOpacity>
+
+        <Text
+          style={{
+            color: "#ffc107",
+            fontFamily: "BebasNeue",
+            fontSize: 20,
+            marginTop: 30,
+          }}
+        >
+          Mis calificaciones
+        </Text>
+      </View>
+    </DefaultLayout>
+  );
 }
 
-
 const styles = StyleSheet.create({
-    header: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        paddingTop: 2,
-        backgroundColor: '#212529',
-        marginBottom: 1,
-    },
-    dropdownMenu: {
-        position: 'absolute',
-        right: Dimensions.get('window').width * 0.2,
-        backgroundColor: '#343a40',
-        padding: 10,
-        borderRadius: 5,
-        marginTop: Dimensions.get('window').height * 0.05,
-    },
-    dropdownItem: {
-        color: '#ffffff',
-        fontSize: Dimensions.get('window').width * 0.04,
-        paddingVertical: 5,
-    },
-    scrollContainer: {
-        flexGrow: 1,
-    },
-    container: {
-        alignItems: 'center',
-        flex: 1,
-        backgroundColor: '#212529',
-    },
-    welcome: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        paddingHorizontal: 25,
-        alignItems: 'center',
-        width: '100%',
-        height: 100,
-        marginBottom: 10,
-    },
-    MB: {
-        fontSize: 28,
-        fontFamily: 'BebasNeue',
-        color: '#ffc107',
-        textAlign: 'center',
-    },
-    icon: {
-        fontSize: 34,
-        color: '#ffff',
-        paddingTop: 10,
-        borderRadius: 100,
-        padding: 10,
-        borderColor: '#ffffff',
-
-    },
-    welcomeText: {
-        fontSize: 32,
-        fontFamily: 'BebasNeue',
-        color: '#dc3545',
-    },
-    welcomeName: {
-        fontSize: 28,
-        fontFamily: 'BebasNeue',
-        color: '#ffc107',
-    },
-    textReserva: {
-        fontSize: 30,
-        fontFamily: 'Anton',
-        color: '#ffc107',
-        marginTop: 20,
-    },
-    textPaso: {
-        fontSize: 20,
-        fontFamily: 'BebasNeue',
-        color: '#ffffff',
-        marginTop: 40,
-        textAlign: 'center'
-
-    },
-    cardService: {
-        flexDirection: 'row',
-        justifyContent: 'center',
-        marginTop: 30,
-        marginLeft: 10
-    },
-    cardServicios: {
-        width: 160,
-        height: 250,
-        borderRadius: 20,
-        alignItems: 'center',
-        overflow: 'hidden',
-        borderWidth: 2,
-        borderColor: '#dc3545',
-        marginRight: 15
-
-    },
-    cardBarbers: {
-        flexDirection: 'row',
-        flexWrap: 'wrap',
-        justifyContent: 'space-between',
-        marginTop: 30,
-        marginHorizontal: 30,
-    },
-    cardBarberos: {
-        height: 250,
-        borderRadius: 20,
-        alignItems: 'center',
-        overflow: 'hidden',
-        borderWidth: 2,
-        borderColor: '#dc3545',
-        marginBottom: 15,
-        elevation: 3,
-    },
-    cardTextService: {
-        fontSize: 20,
-        fontFamily: 'BebasNeue',
-        color: '#ffc107',
-        marginTop: 10,
-        marginBottom: 8,
-    },
-    cardTextBarbers: {
-        fontSize: 20,
-        fontFamily: 'BebasNeue',
-        color: '#ffc107',
-        marginTop: 10,
-        marginBottom: 8,
-    },
-    cardImage: {
-        width: 100,
-        height: 100,
-        borderRadius: 50,
-        marginTop: 12
-    },
-    textDescripcion: {
-        fontSize: 14,
-        fontFamily: 'BebasNeue',
-        color: '#ffffff',
-        textAlign: 'center',
-        marginTop: 25
-
-    },
-    calificaciones: {
-        flexDirection: 'row',
-        fontSize: 24,
-        fontFamily: 'BebasNeue',
-        color: '#ffffff',
-        marginTop: 30,
-        width: 300,
-        textAlign: 'center',
-        justifyContent: 'center',
-    },
-    input: {
-        width: 300,
-        height: 200,
-        margin: 12,
-        borderWidth: 1,
-        padding: 10,
-        borderColor: '#ffffff',
-        borderRadius: 15,
-        color: '#ffffff',
-    },
-    button: {
-        width: 200,
-        height: 50,
-        margin: 12,
-        padding: 10,
-        borderRadius: 15,
-        color: '#ffffff',
-        textAlign: 'center',
-        justifyContent: 'center',
-        backgroundColor: '#dc3545',
-    },
-    buttonText: {
-        fontSize: 20,
-        fontFamily: 'BebasNeue',
-        color: '#ffffff',
-        textAlign: 'center',
-    },
-    buttonReserva: {
-        width: 150,
-        height: 50,
-        margin: 12,
-        padding: 10,
-        borderRadius: 15,
-        color: '#ffffff',
-        textAlign: 'center',
-        justifyContent: 'center',
-        backgroundColor: '#ffc107',
-    }
-
-})
+  header: {
+    flexDirection: "row",
+    alignItems: "center",
+    paddingTop: 2,
+    backgroundColor: "#212529",
+    marginBottom: 1,
+  },
+  dropdownMenu: {
+    position: "absolute",
+    right: Dimensions.get("window").width * 0.2,
+    backgroundColor: "#343a40",
+    padding: 10,
+    borderRadius: 5,
+    marginTop: Dimensions.get("window").height * 0.05,
+  },
+  dropdownItem: {
+    color: "#ffffff",
+    fontSize: Dimensions.get("window").width * 0.04,
+    paddingVertical: 5,
+  },
+  scrollContainer: {
+    flexGrow: 1,
+  },
+  container: {
+    alignItems: "center",
+    flex: 1,
+    backgroundColor: "#212529",
+  },
+  welcome: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    paddingHorizontal: 25,
+    alignItems: "center",
+    width: "100%",
+    height: 100,
+    marginBottom: 10,
+  },
+  MB: {
+    fontSize: 28,
+    fontFamily: "BebasNeue",
+    color: "#ffc107",
+    textAlign: "center",
+  },
+  icon: {
+    fontSize: 34,
+    color: "#ffff",
+    paddingTop: 10,
+    borderRadius: 100,
+    padding: 10,
+    borderColor: "#ffffff",
+  },
+  welcomeText: {
+    fontSize: 32,
+    fontFamily: "BebasNeue",
+    color: "#dc3545",
+  },
+  welcomeName: {
+    fontSize: 28,
+    fontFamily: "BebasNeue",
+    color: "#ffc107",
+  },
+  textReserva: {
+    fontSize: 30,
+    fontFamily: "Anton",
+    color: "#ffc107",
+    marginTop: 20,
+  },
+  textPaso: {
+    fontSize: 20,
+    fontFamily: "BebasNeue",
+    color: "#ffffff",
+    marginTop: 40,
+    textAlign: "center",
+  },
+  cardService: {
+    flexDirection: "row",
+    justifyContent: "center",
+    marginTop: 30,
+    marginLeft: 10,
+  },
+  cardServicios: {
+    width: 160,
+    height: 250,
+    borderRadius: 20,
+    alignItems: "center",
+    overflow: "hidden",
+    borderWidth: 2,
+    borderColor: "#dc3545",
+    marginRight: 15,
+  },
+  cardBarbers: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    justifyContent: "space-between",
+    marginTop: 30,
+    marginHorizontal: 30,
+  },
+  cardBarberos: {
+    height: 250,
+    borderRadius: 20,
+    alignItems: "center",
+    overflow: "hidden",
+    borderWidth: 2,
+    borderColor: "#dc3545",
+    marginBottom: 15,
+    elevation: 3,
+  },
+  cardTextService: {
+    fontSize: 20,
+    fontFamily: "BebasNeue",
+    color: "#ffc107",
+    marginTop: 10,
+    marginBottom: 8,
+  },
+  cardTextBarbers: {
+    fontSize: 20,
+    fontFamily: "BebasNeue",
+    color: "#ffc107",
+    marginTop: 10,
+    marginBottom: 8,
+  },
+  cardImage: {
+    width: 100,
+    height: 100,
+    borderRadius: 50,
+    marginTop: 12,
+  },
+  textDescripcion: {
+    fontSize: 14,
+    fontFamily: "BebasNeue",
+    color: "#ffffff",
+    textAlign: "center",
+    marginTop: 25,
+  },
+  calificaciones: {
+    flexDirection: "row",
+    fontSize: 24,
+    fontFamily: "BebasNeue",
+    color: "#ffffff",
+    marginTop: 30,
+    width: 300,
+    textAlign: "center",
+    justifyContent: "center",
+  },
+  input: {
+    width: 300,
+    height: 200,
+    margin: 12,
+    borderWidth: 1,
+    padding: 10,
+    borderColor: "#ffffff",
+    borderRadius: 15,
+    color: "#ffffff",
+  },
+  button: {
+    width: 200,
+    height: 50,
+    margin: 12,
+    padding: 10,
+    borderRadius: 15,
+    color: "#ffffff",
+    textAlign: "center",
+    justifyContent: "center",
+    backgroundColor: "#dc3545",
+  },
+  buttonText: {
+    fontSize: 20,
+    fontFamily: "BebasNeue",
+    color: "#ffffff",
+    textAlign: "center",
+  },
+  buttonReserva: {
+    width: 150,
+    height: 50,
+    margin: 12,
+    padding: 10,
+    borderRadius: 15,
+    color: "#ffffff",
+    textAlign: "center",
+    justifyContent: "center",
+    backgroundColor: "#ffc107",
+  },
+});
