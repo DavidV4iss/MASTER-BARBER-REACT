@@ -4445,7 +4445,7 @@
 											"width": 143,
 											"height": 13,
 											"underline": true,
-											"text": "mr homero"
+											"text": "Master Barber"
 										},
 										{
 											"_type": "LabelView",
@@ -4712,7 +4712,7 @@
 									"_parent": {
 										"$ref": "AAAAAAGQTGaTu5Q47mg="
 									},
-									"name": "mr homero"
+									"name": "Master Barber"
 								}
 							]
 						}
