@@ -24,7 +24,6 @@ export default function InicioUsuario() {
   const [servicios, setServicios] = useState([]);
   const [currentStep, setCurrentStep] = useState(1);
   const [horasOcupadas, setHorasOcupadas] = useState([]);
-  const token = useAuth().token;
   const navigation = useNavigation();
   const { logout } = useAuth();
   const [showDatePicker, setShowDatePicker] = useState(false);
@@ -38,8 +37,6 @@ export default function InicioUsuario() {
     Anton: Anton_400Regular,
     BebasNeue: BebasNeue_400Regular,
   });
-  const tokenDecoded = token ? JSON.parse(atob(token.split(".")[1])) : null;
-  const id = tokenDecoded?.id || null;
   const screenWidth = Dimensions.get("window").width;
   const cardWidth = (screenWidth - 60 - 15) / 2;
 
@@ -103,6 +100,42 @@ export default function InicioUsuario() {
     }
   };
 
+  const fetchServicios = async () => {
+    try {
+      const response = await ReservasClientesRepository.GetServicios();
+      setServicios(response.data);
+    } catch (err) {
+      console.log("Error al obtener los servicios:", err);
+    }
+  };[barberoId];
+
+  const fetchBarberos = async () => {
+    try {
+      const response = await ReservasClientesRepository.GetBarberos();
+      setBarberos(response.data);
+    } catch (err) {
+      console.log("Error al obtener los barberos:", err);
+    }
+  }
+  useEffect(() => {
+    const fetchBarberosDisponibles = async () => {
+      try {
+        const response = await ReservasClientesRepository.GetBarberosDisponibles(barberoId);
+        const horasOcupadas = response.data.map(reserva => new Date(reserva.fecha));
+        setHorasOcupadas(horasOcupadas);
+      } catch (err) {
+        console.log("Error al obtener las reservas del barbero:", err);
+      }
+    };
+
+    fetchBarberosDisponibles();
+  }, [barberoId]);
+  React.useEffect(() => {
+    fetchServicios();
+    fetchBarberos();
+  }, []);
+
+
   const handleSubmit = async () => {
     if (!service || !barberoId || !date) {
       showMessage({
@@ -118,36 +151,22 @@ export default function InicioUsuario() {
     const formattedSelectedDate = moment(date).format("YYYY-MM-DD HH:mm:ss");
 
     try {
-      const token = await AsyncStorage.getItem("token");
-      if (!token) return;
+      const response = await ReservasClientesRepository.GetBarberosDisponibles(barberoId);
 
-      const responseHoras = await ReservasClientesRepository.GetReservas();
-      if (!responseHoras || !responseHoras.data) {
-        showMessage({
-          message: "Error al cargar las reservas",
-          description:
-            "No se pudieron cargar las reservas del barbero. Intenta nuevamente.",
-          type: "danger",
-          icon: "danger",
-        });
-        return;
-      }
-
-      const horasOcupadas = responseHoras.data.map((reserva) =>
-        moment(reserva.fecha).format("YYYY-MM-DD HH:mm:ss")
-      );
-
+      const horasOcupadas = response.data.map(reserva => moment(reserva.fecha).format('YYYY-MM-DD HH:mm:ss'));
       if (horasOcupadas.includes(formattedSelectedDate)) {
         showMessage({
           message: "Hora ocupada",
           description:
-            "La hora seleccionada ya está ocupada. Por favor, elige otra hora.",
+            "La hora seleccionada ya está ocupada. Por favor, elige otra hora.",
           type: "warning",
           icon: "warning",
         });
         return;
       }
-
+      const token = await AsyncStorage.getItem("token");
+      const tokenDecoded = token ? JSON.parse(atob(token.split(".")[1])) : null;
+      const id = tokenDecoded?.id || null;
       const responseCrearReserva =
         await ReservasClientesRepository.CrearReservas({
           cliente_id: id,
@@ -157,26 +176,17 @@ export default function InicioUsuario() {
           estado: "Pendiente",
         });
 
-      if (responseCrearReserva && responseCrearReserva.status === 200) {
-        showMessage({
-          message: "Reserva creada exitosamente",
-          type: "success",
-          icon: "success",
-          duration: 2000,
-        });
-      } else {
-        showMessage({
-          message: "Error al crear la reserva",
-          description: "No se pudo crear la reserva. Intenta nuevamente.",
-          type: "danger",
-          icon: "danger",
-        });
-      }
+      showMessage({
+        message: "Reserva creada exitosamente",
+        type: "success",
+        icon: "success",
+        duration: 2000,
+      });
 
       setCurrentStep(1);
-      setService(null);
-      setBarberoId(null);
-      setDate(null);
+      setService('');
+      setBarberoId('');
+      setDate(new Date());
     } catch (error) {
       console.log("Error al crear la reserva:", error);
       showMessage({
@@ -187,34 +197,6 @@ export default function InicioUsuario() {
       });
     }
   };
-
-  const fetchServicios = async () => {
-    try {
-      const token = await AsyncStorage.getItem("token");
-      if (!token) return;
-
-      const response = await ReservasClientesRepository.GetServicios();
-      setServicios(response.data);
-    } catch (err) {
-      console.log("Error al obtener los servicios:", err);
-    }
-  };
-
-  const fetchBarberos = async () => {
-    const token = await AsyncStorage.getItem("token");
-    if (!token) return;
-
-    try {
-      const response = await ReservasClientesRepository.GetBarberos();
-      setBarberos(response.data);
-    } catch (err) {
-      console.log("Error al obtener los barberos:", err);
-    }
-  };
-  React.useEffect(() => {
-    fetchServicios();
-    fetchBarberos();
-  });
   const handleLogout = () => {
     logout();
   };
@@ -295,7 +277,7 @@ export default function InicioUsuario() {
                 <TouchableOpacity
                   key={servicio.id_tipo_servicio}
                   style={[
-                    styles.cardBarberos,
+                    styles.cardServicios,
                     { width: cardWidth },
                     service === servicio.id_tipo_servicio && { borderColor: "yellow" },
                   ]}
@@ -329,9 +311,9 @@ export default function InicioUsuario() {
                   style={[
                     styles.cardBarberos,
                     { width: cardWidth },
-                    barberoId === barbero.nombre_usuario && { borderColor: "#ffc107" },
+                    barberoId === barbero.id_usuario && { borderColor: "#ffc107" },
                   ]}
-                  onPress={() => setBarberoId(barbero.nombre_usuario)}
+                  onPress={() => setBarberoId(barbero.id_usuario)}
                 >
                   <Text style={styles.cardTextService}>
                     {barbero.nombre_usuario}
@@ -425,7 +407,7 @@ export default function InicioUsuario() {
           {currentStep > 1 && (
             <TouchableOpacity
               style={styles.buttonReserva}
-              onPress={() => setCurrentStep(currentStep - 1)}
+              onPress={prevStep}
             >
               <Text style={styles.buttonText}>Atrás</Text>
             </TouchableOpacity>
@@ -637,35 +619,39 @@ const styles = StyleSheet.create({
   },
   cardService: {
     flexDirection: "row",
-    justifyContent: "center",
+    flexWrap: "wrap",
+    gap: 20,
+    justifyContent: "space-between",
+    marginHorizontal: 20,
     marginTop: 30,
-    marginLeft: 10,
   },
+
   cardServicios: {
-    width: 160,
-    height: 250,
+    width: "auto",
+    height: "auto",
     borderRadius: 20,
     alignItems: "center",
     overflow: "hidden",
     borderWidth: 2,
     borderColor: "#dc3545",
-    marginRight: 15,
+    elevation: 3,
+
   },
   cardBarbers: {
     flexDirection: "row",
+    gap: 10,
     flexWrap: "wrap",
     justifyContent: "space-between",
     marginTop: 30,
     marginHorizontal: 30,
   },
   cardBarberos: {
-    height: 250,
+    height: "auto",
     borderRadius: 20,
     alignItems: "center",
     overflow: "hidden",
     borderWidth: 2,
     borderColor: "#dc3545",
-    marginBottom: 15,
     elevation: 3,
   },
   cardTextService: {
@@ -693,7 +679,8 @@ const styles = StyleSheet.create({
     fontFamily: "BebasNeue",
     color: "#ffffff",
     textAlign: "center",
-    marginTop: 25,
+    marginTop: 20,
+    marginBottom: 20,
   },
   calificaciones: {
     flexDirection: "row",

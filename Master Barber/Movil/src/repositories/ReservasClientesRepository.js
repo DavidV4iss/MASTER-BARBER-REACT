@@ -2,6 +2,8 @@ import { showMessage } from "react-native-flash-message";
 import API from "../config/api";
 
 class ReservasClientesRepository {
+
+    //RESERVAS DE CLIENTES 
     static async GetReservas() {
         try {
             const response = await API.get("GetReservas");
@@ -32,12 +34,12 @@ class ReservasClientesRepository {
         }
     }
 
-    static async GetBarberosDisponibles() {
+    static async GetBarberosDisponibles(barberoId) {
         try {
-            const response = await API.get((`GetReservasbarbero${barberoId}`));
+            const response = await API.get(`GetReservas/barbero/${barberoId}`);
             return response;
         } catch (error) {
-            const errorMessage = error?.response?.data?.message || "Error al obtener los barberos.";
+            const errorMessage = error?.response?.data?.message || "Error al obtener las reservas del barbero.";
             throw new Error(errorMessage);
         }
     }
@@ -45,34 +47,41 @@ class ReservasClientesRepository {
     static async CrearReservas(reserva) {
         try {
             const response = await API.post("CrearReservas", reserva);
-            showMessage({
-                message: "Reserva creada exitosamente",
-                type: "success",
-                icon: "success",
-                duration: 2000,
-            });
             return response;
         } catch (error) {
             const errorMessage = error?.response?.data || "Error al crear la reserva.";
-            showMessage({
-                message: "Error al crear la reserva",
-                description: errorMessage,
-                type: "danger",
-                icon: "danger",
-            });
             throw new Error(errorMessage);
         }
     }
 
-    static async UpdateReservas(id, reservaEditar) {
+    ///
+
+
+
+    static async TraerUsuario(email) {
         try {
-            const response = await API.put(`UpdateReservas/${id}`, reservaEditar, { headers: { "Content-Type": "multipart/form-data" } });
-            showMessage({
-                message: "Reserva actualizada exitosamente",
-                type: "success",
-                icon: "success",
-                duration: 2000
-            })
+            const response = await API.get(`traerUsuario/${email}`);
+            return response;
+        } catch (error) {
+            const errorMessage = error?.response?.data?.message || "Error al obtener el usuario.";
+            throw new Error(errorMessage);
+        }
+
+    }
+
+    static async GetClientes() {
+        try {
+            const response = await API.get("GetClientes");
+            return response;
+        } catch (error) {
+            const errorMessage = error?.response?.data?.message || "Error al obtener los clientes.";
+            throw new Error(errorMessage);
+        }
+    }
+
+    static async UpdateReservasEstado(id, estado) {
+        try {
+            const response = await API.patch(`UpdateReservasEstado/${id}`, { estado });
             return response;
         } catch (error) {
             const errorMessage = error?.response?.data?.message || "Error al actualizar la reserva.";
@@ -83,21 +92,9 @@ class ReservasClientesRepository {
     static async DeleteReservas(id) {
         try {
             const response = await API.delete(`DeleteReservas/${id}`);
-            showMessage({
-                message: "Reserva eliminada exitosamente",
-                type: "success",
-                icon: "success",
-                duration: 2000
-            })
             return response;
         } catch (error) {
             const errorMessage = error?.response?.data?.message || "Error al eliminar la reserva.";
-            showMessage({
-                message: "Error al eliminar la reserva",
-                description: errorMessage,
-                type: "danger",
-                icon: "danger",
-            })
             throw new Error(errorMessage);
         }
     }

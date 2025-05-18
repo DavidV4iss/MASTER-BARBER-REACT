@@ -1,13 +1,173 @@
 import { Anton_400Regular } from '@expo-google-fonts/anton';
 import { BebasNeue_400Regular } from '@expo-google-fonts/bebas-neue';
 import { useFonts } from 'expo-font';
-import React, { useState } from 'react';
+import React, { use, useEffect, useState } from 'react';
 import { View, Text, StyleSheet, Image, ActivityIndicator, TouchableOpacity, ScrollView, Dimensions } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import DefaultLayout from '../../Layouts/DefaultLayout';
 import useAuth from '../../hooks/useAuth';
+import ReservasClientesRepository from '../../repositories/ReservasClientesRepository';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const GestionReservas = () => {
+    const [reservas, setReservas] = useState([]);
+    const [servicios, setServicios] = useState([]);
+    const [clientes, setClientes] = useState([]);
+    const [isLoading, setIsLoading] = useState(false);
+    const [isLoadingFinal, setIsLoadingFinal] = useState(false);
+    const [isLoadingCancel, setIsLoadingCancel] = useState(false);
+    const [isLoadingAccept, setIsLoadingAccept] = useState(false);
+    const [finalizedReservations, setFinalizedReservations] = useState([]);
+    const [barberoId, setBarberoId] = useState("");
+    const [email, setEmail] = useState("");
+    const [cancelTimers, setCancelTimers] = useState({});
+
+
+    const fetchReservas = async () => {
+        try {
+            const response = await ReservasClientesRepository.GetBarberosDisponibles(barberoId);
+            setReservas(response.data);
+        } catch (err) {
+            console.log("Error al obtener las reservas del barbero:", err);
+        }   
+    }
+
+    const fetchTraerUsuarios = async () => {
+        try {
+            const response = await ReservasClientesRepository.TraerUsuario(email);
+            setClientes(response.data);
+            
+        } catch (err) {
+            console.log("Error al obtener los datos del barbero:", err);
+        }   
+    }
+
+    const fetchServicios = async () => {
+        try {
+            const response = await ReservasClientesRepository.GetServicios();
+            setServicios(response.data);
+        } catch (err) {
+            console.log("Error al obtener los servicios:", err);
+        }   
+    }
+
+    const fetchGetClientes = async () => {
+        try {
+            const response = await ReservasClientesRepository.GetClientes();
+            setClientes(response.data);
+        } catch (err) {
+            console.log("Error al obtener los clientes:", err);
+        }   
+    }
+
+    useEffect(() => {
+        fetchReservas();
+        fetchTraerUsuarios();
+        fetchServicios();
+        fetchGetClientes();
+    }, []);
+
+    const handleAccept = (id) => {
+            setIsLoadingAccept(true);
+        const response = ReservasClientesRepository.UpdateReservasEstado(id, 'Aceptada');
+        response
+            .then(response => {
+                console.log(response.data);
+                setReservas(reservas.map(reserva => reserva.id_reserva === id ? { ...reserva, estado: 'Aceptada' } : reserva));
+                // Limpiar temporizador si existe
+                if (cancelTimers[id]) {
+                    clearTimeout(cancelTimers[id]);
+                    setCancelTimers(prev => {
+                        const updatedTimers = { ...prev };
+                        delete updatedTimers[id];
+                        return updatedTimers;
+                    });
+                }
+            })
+            .catch(error => {
+                console.error('Hubo un error al aceptar la reserva:', error);
+            })
+            .finally(() => {
+                setIsLoadingAccept(false);
+            });
+    };
+    
+    const handleCancel = (id) => {
+        setIsLoadingCancel(true);
+        const response = ReservasClientesRepository.UpdateReservasEstado(id, 'Cancelada');
+        response
+            .then(response => {
+                console.log(response.data);
+                setReservas(reservas.map(reserva => reserva.id_reserva === id ? { ...reserva, estado: 'Cancelada' } : reserva));
+                // Iniciar temporizador de 1 hora
+                const timer = setTimeout(() => {
+                    handleDelete(id);
+                }, 60 * 60 * 1000);
+                setCancelTimers(prev => ({ ...prev, [id]: timer }));
+            })
+            .catch(error => {
+                console.error('Hubo un error al cancelar la reserva:', error);
+            })
+            .finally(() => {
+                setIsLoadingCancel(false);
+            });
+    };
+
+    const handleDelete = (id) => {
+        const response = ReservasClientesRepository.DeleteReservas(id);
+        response
+            .then(response => {
+                console.log(response.data);
+                setReservas(reservas.filter(reserva => reserva.id_reserva !== id));
+                // Limpiar temporizador si existe
+                if (cancelTimers[id]) {
+                    clearTimeout(cancelTimers[id]);
+                    setCancelTimers(prev => {
+                        const updatedTimers = { ...prev };
+                        delete updatedTimers[id];
+                        return updatedTimers;
+                    });
+                }
+            })
+            .catch(error => {
+                console.error('Hubo un error al eliminar la reserva:', error);
+            });
+    };
+
+    const handleFinalize = (id) => {
+        setIsLoadingFinal(true);
+        const response = ReservasClientesRepository.UpdateReservasEstado(id, 'finalizada');
+        response
+            .then(response => {
+                console.log(response.data);
+                setReservas(reservas.map(reserva => reserva.id_reserva === id ? { ...reserva, estado: 'finalizada' } : reserva));
+                setFinalizedReservations([...finalizedReservations, id]);
+            })
+            .catch(error => {
+                console.error('Hubo un error al finalizar la reserva:', error);
+            })
+            .finally(() => {
+                setIsLoadingFinal(false);
+            });
+    };
+
+
+    const getServiceName = (id) => {
+        const servicio = servicios.find(servicio => servicio.id_tipo_servicio === id);
+        return servicio ? servicio.nombre : 'Desconocido';
+    }
+
+    const getClientName = (id) => {
+        const cliente = clientes.find(cliente => cliente.id_cliente === id);
+        return cliente ? cliente.nombre : 'Desconocido';
+
+    }
+
+
+
+
+
+
     const [fontsLoaded] = useFonts({
         Anton: Anton_400Regular,
         BebasNeue: BebasNeue_400Regular,
@@ -26,6 +186,9 @@ const GestionReservas = () => {
             </View>
         );
     }
+
+
+
 
     return (
         <DefaultLayout>
@@ -62,13 +225,13 @@ const GestionReservas = () => {
                 <Text style={styles.textInfo}>
                     Desde este apartado, podras revisar todos los turnos agendados, aceptarlos, cancelarlos o finalizarlos según sea necesario. Manten tu agenda organizada y asegurate de brindar un mejor servicio a tus clientes
                 </Text>
-                <Text style={styles.title}>Gestiona ya tus reservas</Text>
-                <View style={styles.card}>
+                    <Text style={styles.title}>Gestiona ya tus reservas</Text>
+                    <View style={styles.card}>
                     <Image source={require('../../assets/deiby.jpg')} style={styles.image} />
                     <View style={styles.cardText}>
-                        <Text style={styles.cardClientServiceFhReserva}>
+                            <Text style={styles.cardClientServiceFhReserva}>
                             Cliente:
-                            <Text style={styles.cardText2}> "David Vaiss"</Text>
+                            <Text style={styles.cardText2}></Text>
                         </Text>
                         <Text style={styles.cardClientServiceFhReserva}>
                             Servicio:
@@ -94,41 +257,7 @@ const GestionReservas = () => {
                             <Text style={styles.styleBtext}>Cancelar</Text>
                         </TouchableOpacity>
                     </View>
-                </View>
-
-
-                <View style={styles.card}>
-                    <Image source={require('../../assets/nixon.jpg')} style={styles.image} />
-                    <View style={styles.cardText}>
-                        <Text style={styles.cardClientServiceFhReserva}>
-                            Cliente:
-                            <Text style={styles.cardText2}> "Fide"</Text>
-                        </Text>
-                        <Text style={styles.cardClientServiceFhReserva}>
-                            Servicio:
-                            <Text style={styles.cardText2}> "Corte Premium"</Text>
-                        </Text>
-                        <Text style={styles.cardClientServiceFhReserva}>
-                            Fecha y hora:
-                            <Text style={styles.cardText2}> "2023-08-15, 20:00 pm"</Text>
-                        </Text>
-                        <Text style={styles.cardClientServiceFhReserva}>
-                            Estado de la reserva:
-                            <Text style={styles.cardText2}> "Aceptado"</Text>
-                        </Text>
                     </View>
-                    <View style={styles.botones}>
-                        <TouchableOpacity style={styles.button1}>
-                            <Text style={styles.styleBtext}>Aceptar</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity style={styles.button2}>
-                            <Text style={styles.styleBtext}>Finalizar</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity style={styles.button3}>
-                            <Text style={styles.styleBtext}>Cancelar</Text>
-                        </TouchableOpacity>
-                    </View>
-                </View>
             </View>
             </ScrollView>
         </DefaultLayout>
