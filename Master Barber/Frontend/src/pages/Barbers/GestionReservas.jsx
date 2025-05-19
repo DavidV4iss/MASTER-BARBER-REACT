@@ -12,13 +12,11 @@ export default function GestionReservas() {
     const [isLoadingAccept, setIsLoadingAccept] = useState(false);
     const [finalizedReservations, setFinalizedReservations] = useState([]);
     const [cancelTimers, setCancelTimers] = useState({}); // Estado para manejar temporizadores
-
     const [Barber, setBarber] = useState({});
-
+    
     const token = localStorage.getItem('token');
     const tokenDecoded = token ? JSON.parse(atob(token.split('.')[1])) : null;
     const id = tokenDecoded.id;
-
     const usuario = JSON.parse(atob(token.split(".")[1]));
     const email = usuario.email;
 
@@ -206,6 +204,7 @@ export default function GestionReservas() {
                                             </>
                                         )}
                                     </div>
+                                    
                                 </div>
                             </div>
                         </div>

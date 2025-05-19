@@ -54,9 +54,6 @@ class ReservasClientesRepository {
         }
     }
 
-    ///
-
-
 
     static async TraerUsuario(email) {
         try {
@@ -98,6 +95,33 @@ class ReservasClientesRepository {
             throw new Error(errorMessage);
         }
     }
+    ///
+
+    ///NOTIFICACIONES
+    static async GetNotificaciones(id_usuario) {
+        try {
+            const response = await API.get(`GetNotificaciones/${id_usuario}`);
+            return response;
+        } catch (error) {
+            const errorMessage = error?.response?.data?.message || "Error al obtener las notificaciones.";
+            throw new Error(errorMessage);
+        }
+    }
+
+    static async DeleteNotificaciones(id) {
+        try {
+            const response = await API.delete(`DeleteNotificaciones/${id}`);
+            return response;
+        } catch (error) {
+            const errorMessage = error?.response?.data?.message || "Error al eliminar la notificación.";
+            throw new Error(errorMessage);
+        }
+    }
+
+
+
+
+
 }
 
 export default ReservasClientesRepository;

@@ -29,6 +29,7 @@ export default function InicioUsuario() {
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [showTimePicker, setShowTimePicker] = useState(false);
   const [isDropdownVisible, setIsDropdownVisible] = useState(false);
+  const [cliente, setCliente] = useState(null);
   const imagenesServicios = {
     "Corte basico": require("../../assets/cortebasico.jpg"),
     "Corte premium": require("../../assets/cortepremium.jpg"),
@@ -117,6 +118,15 @@ export default function InicioUsuario() {
       console.log("Error al obtener los barberos:", err);
     }
   }
+  const fetchTraerUsuarios = async (email) => {
+    try {
+      const response = await ReservasClientesRepository.TraerUsuario(email);
+      setCliente(response.data[0]);
+    } catch (err) {
+      console.log("Error al obtener los datos del barbero:", err);
+    }
+  };
+
   useEffect(() => {
     const fetchBarberosDisponibles = async () => {
       try {
@@ -133,7 +143,15 @@ export default function InicioUsuario() {
   React.useEffect(() => {
     fetchServicios();
     fetchBarberos();
+    AsyncStorage.getItem("token").then((token) => {
+      const tokenDecoded = token ? JSON.parse(atob(token.split(".")[1])) : null;
+      const email = tokenDecoded?.email;
+      if (email) {
+        fetchTraerUsuarios(email);
+      }
+    });
   }, []);
+  
 
 
   const handleSubmit = async () => {
@@ -259,7 +277,7 @@ export default function InicioUsuario() {
                 fontSize: 14,
               }}
             >
-              Cristian
+              {cliente ? cliente.nombre_usuario : "Cargando..."}
             </Text>
           </View>
         </View>
