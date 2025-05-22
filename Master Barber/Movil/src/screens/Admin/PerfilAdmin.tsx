@@ -98,7 +98,7 @@ export default function PerfilAdmin() {
                 message: 'PERFIL ACTUALIZADO EXITOSAMENTE',
                 description: 'Debes reiniciar la app para ver los cambios.',
                 type: 'success',
-                duration: 3000
+                duration: 5000
             })
             navigation.reset({
                 index: 0,
