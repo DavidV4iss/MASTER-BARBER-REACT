@@ -57,7 +57,7 @@ const transporter = nodemailer.createTransport({
     secure: true,
     auth: {
         user: 'cristianrueda0313@gmail.com',
-        pass: 'vvln hqsw dfnj isgw',
+        pass: 'tbrf jyaa kgel owsq',
     }
 });
 
@@ -710,7 +710,7 @@ app.put('/actualizarUsuario/:email', upload.single('file'), (req, res) => {
         }
         else {
             let queryValues = [];
-            let queryString = 'UPDATE usuarios SET ';
+            let queryString = 'UPDATE usuarios SET';
 
             if (nombre) {
                 queryValues.push(nombre);
