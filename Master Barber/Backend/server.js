@@ -708,36 +708,38 @@ app.put('/actualizarUsuario/:email', upload.single('file'), (req, res) => {
             console.log(err);
             return res.status(500).send('Error en el servidor');
         }
-        else {
-            let queryValues = [];
-            let queryString = 'UPDATE usuarios SET ';
 
-            if (nombre) {
-                queryValues.push(nombre);
-                queryString += 'nombre_usuario = ?';
-            }
+        let queryValues = [];
+        let queryString = 'UPDATE usuarios SET ';
+        let setParts = [];
 
-            if (file) {
-                if (queryValues.length > 0) {
-                    queryString += ', '; //
-                }
-                queryValues.push(file.filename);
-                queryString += 'Foto = ?';
-            }
-
-            queryString += ' WHERE email = ?';
-            queryValues.push(email);
-
-            db.query(queryString, queryValues, (err, results) => {
-                if (err) {
-                    console.log(err);
-                    return res.status(500).send('Error en el servidor');
-                } else {
-                    return res.status(200).send('Perfil actualizado exitosamente');
-                }
-            });
+        if (nombre) {
+            setParts.push('nombre_usuario = ?');
+            queryValues.push(nombre);
         }
-    })
+
+        if (file) {
+            setParts.push('Foto = ?');
+            queryValues.push(file.filename);
+        }
+
+        if (setParts.length === 0) {
+            return res.status(400).send('No hay campos para actualizar');
+        }
+
+        queryString += setParts.join(', ');
+        queryString += ' WHERE email = ?';
+        queryValues.push(email);
+
+        db.query(queryString, queryValues, (err, results) => {
+            if (err) {
+                console.log(err);
+                return res.status(500).send('Error en el servidor');
+            } else {
+                return res.status(200).send('Perfil actualizado exitosamente');
+            }
+        });
+    });
 });
 
 app.get('/traerUsuarios', (req, res) => {

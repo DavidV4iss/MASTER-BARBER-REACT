@@ -95,13 +95,14 @@ export default function PerfilAdmin() {
             await PerfilRepository.actualizarUsuario(email, formData);
 
             showMessage({
-                message: 'PERFIL ACTUALIZADO PERFECTAMENTE',
+                message: 'PERFIL ACTUALIZADO EXITOSAMENTE',
+                description: 'Debes reiniciar la app para ver los cambios.',
                 type: 'success',
                 duration: 3000
             })
             navigation.reset({
                 index: 0,
-                routes: [{ never: 'Perfil' }],
+                routes: [{ name: 'Perfil' }],
             });
         } catch (error) {
             console.error('Error al actualizar perfil:', error);
