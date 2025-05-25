@@ -224,7 +224,7 @@ export default function Index() {
                             console.log(barbero),
                             <div class="col" key={barbero.id_usuario}>
                                 <div class="card bg-dark mt-5">
-                                        <img src={`http://localhost:8080/imagesBarbero/${barbero.Foto}`} class="card-img-top img-fluid" alt="..." />
+                                    <img src={`http://localhost:8080/imagesBarbero/${barbero.Foto}`} class="card-img-top img-fluid" alt="..." />
                                     <div class="card-body">
                                         <h5 class="card-title text-danger text-center bebas fs-2 m-2">{barbero.nombre_usuario}</h5>
                                         <p class="card-text text-white text-center mt-3 m-3">{barbero.descripcion}</p>

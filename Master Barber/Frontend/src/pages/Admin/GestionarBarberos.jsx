@@ -77,7 +77,7 @@ export default function GestionarBarberos() {
         Swal.fire({
           icon: 'success',
           title: res.data,
-          timer: 1000,
+          timer: 9000,
           customClass: {
             popup: "dark-theme-popup bg-dark antonparabackend ",
           },
