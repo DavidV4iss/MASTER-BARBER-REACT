@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import NavbarIndex from '../../Components/NavbarIndex'
 import CarrouselShop from '../../Components/CarrouselShop'
-import Calificaciones from '../../Components/Calificaciones'
+import CalificacionesAdmin from '../../Components/CalificacionesAdmin'
 import Darkandlight from "../../Components/Dark and light";
 import axios from 'axios'
 
@@ -245,44 +245,19 @@ export default function Index() {
 
             <div className='welcome' id='turno'>
                 <h1 className={`text-center display-1 bebas ${theme === "light" ? "dark" : "text-white"}`}>¿PORQUE RESERVAR CON NOSOTROS?</h1>
-
-                <div className='container mt-5 p-5'>
-                    <div class="accordion" id="accordionPanelsStayOpenExample">
-                        <div class="accordion-item bg-dark">
-                            <h2 class="accordion-header">
-                                <button class="accordion-button bg-dark text-white" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="true" aria-controls="panelsStayOpen-collapseOne">
-                                    Accordion Item #1
-                                </button>
-                            </h2>
-                            <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse show text-white">
-                                <div class="accordion-body">
-                                    <strong>This is the first item's accordion body.</strong> It is shown by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.
-                                </div>
+                <div className="row col-12 col-sm-12">
+                    <div className="container col border border mt-5 row col contenidol ">
+                        <h1 className='bebas text-center text-white mt-2 border-bottom fs-1'>PROFESIONALES CERTIFICADOS ✅</h1>
+                        <div className='row'>
+                            <div className="col container text-white fs-4 mb-3 mx-4 mt-3 text-center    ">
+                                Contamos con un equipo altamente capacitado y con experiencia comprobada para brindarte un servicio de calidad.
                             </div>
                         </div>
-                        <div class="accordion-item">
-                            <h2 class="accordion-header">
-                                <button class="accordion-button collapsed bg-dark text-white" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseTwo" aria-expanded="false" aria-controls="panelsStayOpen-collapseTwo">
-                                    Accordion Item #2
-                                </button>
-                            </h2>
-                            <div id="panelsStayOpen-collapseTwo" class="accordion-collapse collapse bg-dark text-white">
-                                <div class="accordion-body">
-                                    <strong>This is the second item's accordion body.</strong> It is hidden by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.
-                                </div>
-                            </div>
-                        </div>
-                        <div class="accordion-item">
-                            <h2 class="accordion-header">
-                                <button class="accordion-button collapsed bg-dark text-white" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseThree" aria-expanded="false" aria-controls="panelsStayOpen-collapseThree">
-                                    Accordion Item #3
-                                </button>
-                            </h2>
-                            <div id="panelsStayOpen-collapseThree" class="accordion-collapse collapse bg-dark text-white">
-                                <div class="accordion-body">
-                                    <strong>This is the third item's accordion body.</strong> It is hidden by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.
-                                </div>
-                            </div>
+                    </div>
+                    <div className="col border border mt-4 col mx-5 mt-5">
+                        <h2 className='bebas text-center text-white mt-2 border-bottom fs-1'>EXPERIENCIA GARANTIZADA ⭐</h2>
+                        <div className=' text-white fs-4 mb-3 mx-4 mt-4 text-center'>
+                        Miles de clientes satisfechos nos respaldan. Tu satisfacción es nuestra prioridad.
                         </div>
                     </div>
                 </div>
@@ -301,7 +276,7 @@ export default function Index() {
 
             <div className={`antonparabackend text-center pt-5 mt-5 ${theme === "light" ? "dark" : "text-white"}`} id='calificaciones'>
                 <h1 className="display-1">LO QUE PIENSAN NUESTRO CLIENTES</h1>
-                <div className="mt-5 pt-5"><Calificaciones /></div>
+                <div className="mt-5 pt-5"><CalificacionesAdmin /></div>
 
             </div>
 

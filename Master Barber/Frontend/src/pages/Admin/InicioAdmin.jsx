@@ -29,7 +29,7 @@ export default function InicioAdmin() {
                 <p className='text-center text-white display-3 bebas mx-3'>MASTER <span className='text-danger'>BARBER</span>| INICIO </p>
                 <div className="row">
                     <div className="container col border border mt-5 row col contenidol">
-                        <h1 className='bebas text-center text-white mt-2 border-bottom fs-1 animate__slideOutDown'>MENUUUUUU</h1>
+                        <h1 className='bebas text-center text-white mt-2 border-bottom fs-1'>MENUUUUUU</h1>
                         <div className='row'>
                             <div className="col container mx-2">
                                 <p className='mx-4  text-white antonparabackend mt-2 col'>links ayudas</p>

@@ -77,7 +77,7 @@ export default function InicioUsuario() {
   }
 
   return (
-    <div className='Registro'>
+    <div>
       <NavbarUserIndex />
 
       <div

@@ -13,7 +13,7 @@ export default function GestionReservas() {
     const [finalizedReservations, setFinalizedReservations] = useState([]);
     const [cancelTimers, setCancelTimers] = useState({}); // Estado para manejar temporizadores
     const [Barber, setBarber] = useState({});
-    
+
     const token = localStorage.getItem('token');
     const tokenDecoded = token ? JSON.parse(atob(token.split('.')[1])) : null;
     const id = tokenDecoded.id;
@@ -152,7 +152,14 @@ export default function GestionReservas() {
         <div className='text-white mb-5'>
             <NavbarBarber />
             <div className='text-center mt-5 pt-5 contenido'>
-                <h2 className='fw-bold text-light  display-5 anton'>HOLA <span className="text-warning">{Barber.nombre_usuario}</span>, TIENES LAS SIGUIENTES RESERVAS PENDIENTES</h2>
+                <h2 className='fw-bold text-light display-5 anton'>
+                    HOLA <span className="text-warning">{Barber.nombre_usuario}</span>, {
+                        reservas.length > 0
+                            ? "TIENES LAS SIGUIENTES RESERVAS PENDIENTES"
+                            : "TODO TRANQUILO, NO TIENES RESERVAS"
+                    }
+                </h2>
+
 
                 {isLoadingFinal && (<div className='text-center mt-5 fs-4 UnifrakturMaguntia text-danger'>Finalizando...</div>)}
                 {isLoadingCancel && (<div className='text-center mt-5 fs-4 UnifrakturMaguntia text-warning'>Cancelando...</div>)}
@@ -204,7 +211,7 @@ export default function GestionReservas() {
                                             </>
                                         )}
                                     </div>
-                                    
+
                                 </div>
                             </div>
                         </div>
