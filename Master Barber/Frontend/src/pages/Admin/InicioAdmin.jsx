@@ -45,11 +45,15 @@ export default function InicioAdmin() {
                     <div className=" col border border mt-4 col mx-5 mt-5">
                         <h2 className='bebas text-center text-white mt-2 border-bottom fs-1'>BARBEROS ACTUALES</h2>
                         <div className='text-white  fs-5 mx-4 mt-3'>
-                            {barberos.map((barbero) => (
-                                <div className="mt-3 fw-bold">
-                                    <li>{barbero.nombre_usuario + " - " + barbero.descripcion}</li>
-                                </div>
-                            ))}
+                            {barberos.length === 0 ? (
+                                <div className="mt-3 fw-bold text-danger text-center mt-5 pt-5">No hay barberos para mostrar.</div>
+                            ) : (
+                                barberos.map((barbero) => (
+                                    <div className="mt-3 fw-bold" key={barbero.id || barbero.nombre_usuario}>
+                                        <li>{barbero.nombre_usuario + " - " + barbero.descripcion}</li>
+                                    </div>
+                                ))
+                            )}
                         </div>
                     </div>
 
