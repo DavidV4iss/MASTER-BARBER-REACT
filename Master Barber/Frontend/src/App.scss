@@ -176,6 +176,7 @@ body {
 .contenido3 {
   margin-left: 15%;
 }
+
 .contenido4 {
   margin-left: 37%;
 }
@@ -183,6 +184,7 @@ body {
 .contenido5 {
   margin-left: 25%;
 }
+
 .contenido6 {
   margin-left: 12%;
 }
@@ -348,11 +350,25 @@ button:hover {
 
 .card-calificacion:hover {
   box-shadow: 0 0 30px 5px rgba(255, 255, 255, 0.3);
-  transform: scale(1.05) rotate(4deg);
+  transform: scale(1.05);
   transition: transform 0.2s ease;
 }
 
-.w{
+.card-calificaciones {
+  width: 28rem;
+  border-radius: 20px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  background: linear-gradient(145deg, #1a1a1a, #2a2a2a);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+  cursor: pointer;
+}
+
+.card-calificaciones:hover {
+  transform: scale(1.03);
+  box-shadow: 0 12px 24px rgba(255, 0, 0, 0.4);
+}
+
+.w {
   width: 18%;
 }
 
@@ -369,7 +385,7 @@ button:hover {
 }
 
 .react-datepicker__month-container {
-  width:86.7%;
+  width: 86.7%;
   height: 100%;
 }
 
@@ -414,7 +430,7 @@ button:hover {
   color: #ffffff;
   font-size: 16px;
   margin: 0 30px;
-  padding: 5px 0; 
+  padding: 5px 0;
   border-radius: 100%;
   transition: background-color 0.5s ease;
   justify-content: space-between;
@@ -439,7 +455,7 @@ button:hover {
   top: 15px;
   line-height: 1.7rem;
   border: none;
-  background-color:none;
+  background-color: none;
   border-radius: 50%;
   width: 30px;
   height: 30px;
@@ -490,7 +506,3 @@ button:hover {
   color: #000;
   font-weight: bold;
 }
-
-
-
-

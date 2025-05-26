@@ -3,6 +3,7 @@ import SidebarAdmin from '../../Components/SidebarAdmin'
 import NavbarAdmin from '../../Components/NavbarAdmin'
 import axios from 'axios'
 import 'animate.css';
+import CalificacionesAdmin from '../../Components/calificacionesAdmin';
 
 export default function InicioAdmin() {
 
@@ -51,7 +52,19 @@ export default function InicioAdmin() {
                             ))}
                         </div>
                     </div>
+
                 </div>
+                <div className="container my-5">
+                    <div className="border border-light rounded-2 shadow-lg p-5 mx-auto" style={{ maxWidth: "95%" }}>
+                        <h2 className='bebas text-center text-white fs-1 pb-3 border-bottom border-light'>
+                            CALIFICACIONES A LA BARBERÍA
+                        </h2>
+                        <div className="text-white mx-4 mt-4">
+                            <CalificacionesAdmin />
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </div>
 

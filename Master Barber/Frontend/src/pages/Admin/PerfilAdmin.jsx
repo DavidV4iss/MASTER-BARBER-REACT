@@ -88,7 +88,7 @@ export default function PerfilAdmin() {
         iconColor: '#1bf30b',
         title: 'Perfil actualizado exitosamente.',
         showConfirmButton: false,
-        timer: 2000,
+        timer: 8000,
         customClass: {
           popup: "dark-theme-popup bg-dark antonparabackend ",
         },
