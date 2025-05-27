@@ -4,8 +4,9 @@ import Slider from "react-slick";
 import { Modal, Button } from 'react-bootstrap';
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import Swal from 'sweetalert2';
 
-export default function CalificacionesAdmin() {
+export default function CalificacionesUser() {
     const [calificaciones, setCalificaciones] = useState([]);
     const [usuarios, setUsuarios] = useState([]);
     const [show, setShow] = useState(false);
@@ -34,6 +35,49 @@ export default function CalificacionesAdmin() {
         };
         fetchUsuarios();
     }, []);
+
+    const DeleteCalificacion = async (id) => {
+        try {
+            const confirm = await Swal.fire({
+                title: '¿Estas seguro de borrar este producto?',
+                text: "No podrás revertir esta acción",
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Sí, borrar',
+                customClass: {
+                    popup: "dark-theme-popup bg-dark antonparabackend ",
+                },
+            });
+            if (!confirm.isConfirmed) {
+                return;
+            }
+            const res = await axios.delete(`http://localhost:8080/DeleteCalificaciones/${id}`);
+            console.log(res);
+            if (res.status === 200) {
+                Swal.fire({
+                    icon: 'success',
+                    title: "Calificacion borrada",
+                    customClass: {
+                        popup: "dark-theme-popup bg-dark antonparabackend ",
+                    },
+                }).then(() => {
+                    window.location.reload(0);
+                })
+            }
+        } catch (error) {
+            console.log(error);
+            Swal.fire({
+                icon: 'error',
+                title: 'Error al borrar',
+                text: error.response.data,
+                customClass: {
+                    popup: "dark-theme-popup bg-dark antonparabackend ",
+                },
+            });
+        }
+    };
 
     const handleShow = (calificacion) => {
         setSelectedCalificacion(calificacion);
@@ -73,8 +117,21 @@ export default function CalificacionesAdmin() {
                                     <p className="mt-3 text-light fs-5">{calificacion.comentario || "Sin comentario solo calificación"}</p>
                                     <div className="text-warning fs-4">{"⭐".repeat(calificacion.puntuacion)}</div>
                                 </div>
+                                <div className="card-footer mt-5">
+                                    <button
+                                        className='btn btn-outline-danger'
+                                        onClick={e => {
+                                            e.stopPropagation();
+                                            DeleteCalificacion(calificacion.id);
+                                        }}
+                                    >
+                                        <i className="bi bi-trash-fill"></i>
+                                    </button>
+                                </div>
                             </div>
+
                         </div>
+
                     );
                 })}
             </Slider>
