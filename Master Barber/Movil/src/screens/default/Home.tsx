@@ -7,7 +7,9 @@ import DefaultLayout from '../../Layouts/DefaultLayout';
 import BarberosRepository from '../../repositories/BarberosRepository';
 import { useState } from 'react';
 import InventarioRepository from '../../repositories/InventarioRepository';
+import CalificacionesRepository from '../../repositories/CalificacionesRepository';
 import { getBaseURL } from '../../config/api';
+import Ionicons from '@expo/vector-icons/Ionicons';
 
 const { width, height } = Dimensions.get('window');
 
@@ -15,6 +17,10 @@ const { width, height } = Dimensions.get('window');
 export default function Home() {
   const [barberos, setBarberos] = useState([]);
   const [inventario, setInventario] = useState([]);
+  const [calificaciones, setCalificaciones] = useState([]);
+  const [usuarios, setUsuarios] = useState([]);
+
+
 
   const [fontsLoaded] = useBebas({
     BebasNeue_400Regular,
@@ -45,6 +51,33 @@ export default function Home() {
     };
 
     fetchInventario();
+  }, []);
+
+  React.useEffect(() => {
+    const fetchCalificaciones = async () => {
+      try {
+        const response = await CalificacionesRepository.traerCalificaciones();
+        setCalificaciones(response.data);
+      } catch (err) {
+        console.log("Error al obtener los datos:", err);
+      }
+    };
+
+    fetchCalificaciones();
+  }, []);
+
+
+  React.useEffect(() => {
+    const fetchUsuarios = async () => {
+      try {
+        const response = await CalificacionesRepository.traerUsuarios();
+        setUsuarios(response.data);
+      } catch (err) {
+        console.log("Error al obtener los datos:", err);
+      }
+    };
+
+    fetchUsuarios();
   }, []);
 
   if (!fontsLoaded) {
@@ -121,14 +154,13 @@ export default function Home() {
                 <Button
                   title="VER"
                   color="#dc3545"
-                  onPress={() => {/* Add your onPress logic here */ }}
                 />
               </View>
             </View>
           </View>
           <View style={{
             ...styles.card,
-            width: Dimensions.get('window').width * 0.4, // Ajusta el ancho de las cartas
+            width: Dimensions.get('window').width * 0.4, 
             height: Dimensions.get('window').width * 0.9,
             marginHorizontal: 10,
             alignItems: 'center',
@@ -151,7 +183,7 @@ export default function Home() {
                 <Button
                   title="VER"
                   color="#dc3545"
-                  onPress={() => {/* Add your onPress logic here */ }}
+                 
                 />
               </View>
             </View>
@@ -240,55 +272,37 @@ export default function Home() {
 
 
         <View style={{ alignItems: 'center', marginTop: Dimensions.get('window').height * 0.1, }}>
-          <Text style={{ ...styles.title3, fontSize: Dimensions.get('window').width * 0.1 }}>LO QUE PIENSAN NUESTROS CLIENTES</Text>
+          <Text style={{ ...styles.title3, fontSize: 33 }}>LO QUE PIENSAN NUESTROS CLIENTES</Text>
         </View>
 
         <View style={{ flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center', marginTop: Dimensions.get('window').height * 0.05, marginBottom: Dimensions.get('window').height * 0.2 }}>
-          <View style={styles.reviewCard}>
-            <Image
-              source={require('../../assets/deiby.jpg')}
-              style={styles.reviewImage}
-            />
-            <Text style={styles.reviewName}>FIDEL ESPITIA</Text>
-            <Text style={styles.reviewText}>Excelente servicio y atención.</Text>
-            <View style={styles.starsContainer}>
-              <Icon name="star" size={Dimensions.get('window').width * 0.05} color="#ffc107" />
-              <Icon name="star" size={Dimensions.get('window').width * 0.05} color="#ffc107" />
-              <Icon name="star" size={Dimensions.get('window').width * 0.05} color="#ffc107" />
-              <Icon name="star" size={Dimensions.get('window').width * 0.05} color="#ffc107" />
-              <Icon name="star" size={Dimensions.get('window').width * 0.05} color="#ffc107" />
-            </View>
-          </View>
-          <View style={styles.reviewCard}>
-            <Image
-              source={require('../../assets/nixon.jpg')}
-              style={styles.reviewImage}
-            />
-            <Text style={styles.reviewName}>MARÍA PÉREZ</Text>
-            <Text style={styles.reviewText}>Muy profesionales y amables.</Text>
-            <View style={styles.starsContainer}>
-              <Icon name="star" size={Dimensions.get('window').width * 0.05} color="#ffc107" />
-              <Icon name="star" size={Dimensions.get('window').width * 0.05} color="#ffc107" />
-              <Icon name="star" size={Dimensions.get('window').width * 0.05} color="#ffc107" />
-              <Icon name="star" size={Dimensions.get('window').width * 0.05} color="#ffc107" />
-              <Icon name="star-half" size={Dimensions.get('window').width * 0.05} color="#ffc107" />
-            </View>
-          </View>
-          <View style={styles.reviewCard}>
-            <Image
-              source={require('../../assets/jeisson.jpg')}
-              style={styles.reviewImage}
-            />
-            <Text style={styles.reviewName}>JUAN LÓPEZ</Text>
-            <Text style={styles.reviewText}>El mejor corte que he tenido.</Text>
-            <View style={styles.starsContainer}>
-              <Icon name="star" size={Dimensions.get('window').width * 0.05} color="#ffc107" />
-              <Icon name="star" size={Dimensions.get('window').width * 0.05} color="#ffc107" />
-              <Icon name="star" size={Dimensions.get('window').width * 0.05} color="#ffc107" />
-              <Icon name="star" size={Dimensions.get('window').width * 0.05} color="#ffc107" />
-              <Icon name="star" size={Dimensions.get('window').width * 0.05} color="#ffc107" />
-            </View>
-          </View>
+          {calificaciones.map((calificacion, index) => {
+            const usuario = usuarios.find(u => u.id_usuario === calificacion.usuario_id);
+            return (
+              <View style={styles.reviewCard} key={index}>
+                  <Image
+                    source={{ uri: `${getBaseURL()}perfil/${usuario?.Foto}  ` }}
+                    style={styles.reviewImage}
+                  />
+                  <Text style={styles.reviewName}>{usuario?.nombre_usuario}</Text>
+                  <Text style={styles.reviewText}>{calificacion.comentario || "Sin Comentario"}</Text>
+                  <View style={{ flex: 1 }} /> 
+                  <View>
+                    <View style={{ height: 1, backgroundColor: '#6c757d', alignSelf: 'stretch', marginTop: 10, marginBottom: 5 }} />
+                    <View style={styles.starsContainer}>
+                      {Array(5).fill(0).map((_, i) => (
+                        <Ionicons
+                          key={i}
+                          name="star"
+                          size={20}
+                          color={i < calificacion.puntuacion ? '#ffc107' : '#ccc'}
+                        />
+                      ))}
+                    </View>
+                  </View>
+                </View>
+            );
+          })}
         </View>
       </View>
     </DefaultLayout>
@@ -515,21 +529,24 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   reviewName: {
+    marginTop: 5,
+    marginBottom: 5,  
     color: '#dc3545',
     fontSize: Dimensions.get('window').width * 0.04,
     fontWeight: 'bold',
     textAlign: 'center',
   },
   reviewText: {
+    marginTop: 9,
     color: '#ffffff',
     fontSize: Dimensions.get('window').width * 0.04,
     marginVertical: 5,
     textAlign: 'center',
   },
   starsContainer: {
+    marginTop: 2, 
     flexDirection: 'row',
     justifyContent: 'center',
-    marginTop: 5,
   },
   // FIN DE CSS PARA LAS OPINIONES DE CLIENTES
-}); 
+});

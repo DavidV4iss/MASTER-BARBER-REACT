@@ -4,7 +4,7 @@ import axios from 'axios';
 import Swal from 'sweetalert2';
 import Rating from 'react-rating-stars-component';
 import ReservaCliente from './ReservaCliente';
-import CalificacionesUserD from '../../Components/CalificacionUserD';
+import CalificacionesUser from '../../Components/CalificacionesUser';
 
 
 export default function InicioUsuario() {
@@ -79,16 +79,21 @@ export default function InicioUsuario() {
   return (
     <div>
       <NavbarUserIndex />
+      <div className="container p-5 nab table-responsive col col-sm-12" id="homeuser">
+        <div className="row row-cols-1 row-cols-md-2 g-4 text-center">
+          <div className="col">
+            <h1 className=" mt-5  pt-2  text-white display-1 anton fw-bold">
+              Hola, {user.nombre_usuario}
+            </h1>
+            <div className="container-fluid mt-5 pt-5 text-white">
+              <p>DESCRIPCION</p>
+            </div>
+          </div>
+          <div className="col ">
+              <ReservaCliente />
+          </div>
+        </div>
 
-      <div
-        className="container-fluid p-5 nab table-responsive col col-sm-12"
-        id="homeuser"
-      >
-        <h1 className=" mt-5  pt-2  text-white text-center display-1 anton fw-bold">
-          Hola, {user.nombre_usuario}
-        </h1>
-
-        <ReservaCliente />
 
 
         <div className="container text-white text-center">
@@ -122,9 +127,9 @@ export default function InicioUsuario() {
               <button type="submit" className='btn btn-danger mt-3 '>Enviar Calificación</button>
             </form>
             <div className='mt-5 pt-5'>
-              <h5 className='fw-bold fs-3 bebas text-warning'>Mis calificaciones</h5>
+              <h5 className='fw-bold fs-2 bebas text-warning'>Mis calificaciones</h5>
               <div className="mt-5">
-                <CalificacionesUserD />
+                <CalificacionesUser />
               </div>
             </div>
           </div>
