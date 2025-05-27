@@ -622,7 +622,6 @@ app.put('/UpdateBarberos/:id', uploadBarbero.single('foto'), (req, res) => {
 
         const nombre = req.body.nombre
         const email = req.body.email
-        const contrasena = req.body.contrasena
         const descripcion = req.body.descripcion
         const fotoName = req.file ? req.file.filename : ''
 
@@ -639,12 +638,11 @@ app.put('/UpdateBarberos/:id', uploadBarbero.single('foto'), (req, res) => {
             }
         });
 
-        const q = 'UPDATE usuarios SET nombre_usuario = ?, email = ?, contrasena = ?, descripcion = ?, Foto = ? WHERE id_usuario = ? AND id_rol = 2'
+        const q = 'UPDATE usuarios SET nombre_usuario = ?, email = ?, descripcion = ?, Foto = ? WHERE id_usuario = ? AND id_rol = 2'
 
         const values = [
             nombre,
             email,
-            contrasena,
             descripcion,
             fotoName,
             id
