@@ -13,14 +13,15 @@ class BarberosRepository {
         }
     }
 
-    static async traerUsuarios() {
+    static async TraerUsuario(email) {
         try {
-            const response = await API.get("traerUsuarios");
+            const response = await API.get(`traerUsuario/${email}`);
             return response;
         } catch (error) {
-            const errorMessage = error?.response?.data?.message || "Error al obtener los usuarios.";
+            const errorMessage = error?.response?.data?.message || "Error al obtener el usuario.";
             throw new Error(errorMessage);
         }
+
     }
 
 
