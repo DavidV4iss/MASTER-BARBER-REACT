@@ -7,11 +7,11 @@ import PerfilRepository from '../../repositories/PerfilRepository';
 import { getBaseURL } from '../../config/api';
 
 export default function CustomDrawerContent(props) {
-    const [admin, setAdmin] = useState({});
+    const [usuario, setUsuario] = useState({});
     const [imagePreviewEditar, setImagePreviewEditar] = useState(null);
 
     useEffect(() => {
-        const fetchAdmin = async () => {
+        const fetchUsuario = async () => {
             try {
                 const token = await AsyncStorage.getItem('token');
                 if (!token) return;
@@ -19,9 +19,9 @@ export default function CustomDrawerContent(props) {
                 const usuario = JSON.parse(atob(token.split('.')[1]));
                 const email = usuario.email;
 
-                const res = await PerfilRepository.TraerUsuario(email);
+                const res = await PerfilRepository.traerUsuarios(email);
                 const user = res.data[0];
-                setAdmin(user);
+                setUsuario(user);
 
                 if (user.Foto) {
                     setImagePreviewEditar(`${getBaseURL()}perfil/${user.Foto}`);
@@ -31,7 +31,7 @@ export default function CustomDrawerContent(props) {
             }
         };
 
-        fetchAdmin();
+        fetchUsuario();
     }, []);
 
     return (
@@ -42,7 +42,7 @@ export default function CustomDrawerContent(props) {
                 <View style={{ flex: 1 }} />
 
                 <DrawerItem
-                    label={admin.nombre_usuario || ''}
+                    label={usuario.nombre_usuario || ''}
                     icon={() => (
                         imagePreviewEditar ? (
                             <Image
@@ -53,7 +53,7 @@ export default function CustomDrawerContent(props) {
                             <Ionicons name="person-circle" size={35} color="#fff" />
                         )
                     )}
-                    onPress={() => props.navigation.navigate('Perfil')}
+                    onPress={() => props.navigation.navigate('PerfilUsuario')}
                     labelStyle={{ color: 'gray', fontSize: 20, fontFamily: 'BebasNeue_400Regular' }}
                 />
             </View>

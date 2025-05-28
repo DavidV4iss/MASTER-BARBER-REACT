@@ -12,8 +12,9 @@ import PerfilRepository from '../../repositories/PerfilRepository';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { getBaseURL } from '../../config/api';
 import { showMessage } from 'react-native-flash-message';
+import ReservasClientesRepository from '../../repositories/ReservasClientesRepository';
 
-export default function PerfilAdmin() {
+export default function PerfilUsuario() {
     const [fontsLoaded] = useFonts({
         Anton: Anton_400Regular,
         BebasNeue_400Regular,
@@ -22,12 +23,12 @@ export default function PerfilAdmin() {
     const { logout } = useAuth();
     const navigation = useNavigation();
 
-    const [admin, setAdmin] = useState<any>({});
+    const [usuario, setUsuario] = useState<any>({});
     const [imagePreviewEditar, setImagePreviewEditar] = useState<string | null>(null);
     const [nuevoNombre, setNuevoNombre] = useState('');
 
     React.useEffect(() => {
-        const fetchAdmin = async () => {
+        const fetchUsuario = async () => {
             try {
                 const token = await AsyncStorage.getItem('token');
                 if (!token) return;
@@ -35,9 +36,9 @@ export default function PerfilAdmin() {
                 const usuario = JSON.parse(atob(token.split('.')[1]));
                 const email = usuario.email;
 
-                const res = await PerfilRepository.TraerUsuario(email);
+                const res = await ReservasClientesRepository.TraerUsuario(email);
                 const user = res.data[0];
-                setAdmin(user);
+                setUsuario(user);
                 setNuevoNombre(user.nombre || '');
 
                 if (user.Foto) {
@@ -47,7 +48,7 @@ export default function PerfilAdmin() {
                 console.log("Error al obtener los datos:", err);
             }
         };
-        fetchAdmin();
+        fetchUsuario();
     }, []);
 
 
@@ -67,7 +68,7 @@ export default function PerfilAdmin() {
                 type: 'image/jpeg',
                 name: `foto_${Date.now()}.jpg`,
             };
-            setAdmin(prev => ({ ...prev, foto }));
+            setUsuario(prev => ({ ...prev, foto }));
             setImagePreviewEditar(asset.uri);
         }
     };
@@ -81,11 +82,11 @@ export default function PerfilAdmin() {
             const email = usuario.email;
 
             const formData = new FormData();
-            if (nuevoNombre && nuevoNombre !== admin.nombre) {
+            if (nuevoNombre && nuevoNombre !== usuario.nombre) {
                 formData.append('nombre', nuevoNombre);
             }
-            if (admin.foto) {
-                formData.append('file', admin.foto);
+            if (usuario.foto) {
+                formData.append('file', usuario.foto);
             }
 
             if (!formData.has('nombre') && !formData.has('file')) {
@@ -102,7 +103,7 @@ export default function PerfilAdmin() {
             })
             navigation.reset({
                 index: 0,
-                routes: [{ name: 'Perfil' }],
+                routes: [{ name: 'PerfilUsuario' }],
             });
         } catch (error) {
             console.error('Error al actualizar perfil:', error);
@@ -119,15 +120,12 @@ export default function PerfilAdmin() {
     return (
         <View style={styles.container}>
             <View style={styles.header}>
-                <TouchableOpacity onPress={() => navigation.openDrawer()}>
-                    <Icon name="bars" size={30} color="#ffffff" style={styles.iconBars} />
-                </TouchableOpacity>
-                <TouchableOpacity onPress={handleLogout}>
-                    <Icon name="sign-out" size={30} color="#ffffff" style={styles.iconUser} />
+                <TouchableOpacity onPress={() => navigation.navigate('Usuario')} style={styles.iconBars}>
+                    <Ionicons name="arrow-back-circle-outline" size={30} color="#ffffff" style={styles.iconUser} />
                 </TouchableOpacity>
             </View>
 
-            <Text style={{ ...styles.title, fontFamily: 'BebasNeue_400Regular', marginTop: 70 }}>¡Perfil!</Text>
+            <Text style={{ ...styles.title, fontFamily: 'BebasNeue_400Regular', marginTop: 20 }}>¡Perfil!</Text>
             <Text style={{ color: 'gray', marginTop: 10, fontFamily: 'BebasNeue_400Regular', fontSize: 15, marginBottom: 15 }}>Para cambiar tu foto de perfil presiona sobre la imagen</Text>
 
             <TouchableOpacity onPress={handleSeleccionarImagenEditar} style={styles.imageUploadButton}>
@@ -145,7 +143,7 @@ export default function PerfilAdmin() {
                 )}
             </TouchableOpacity>
 
-            <Text style={{ color: '#ffffff', marginTop: 10, fontFamily: 'BebasNeue_400Regular', fontSize: 20 }}>Nombre actual:     {admin.nombre_usuario}</Text>
+            <Text style={{ color: '#ffffff', marginTop: 10, fontFamily: 'BebasNeue_400Regular', fontSize: 20 }}>Nombre actual:     {usuario.nombre_usuario}</Text>
             <TextInput
                 style={styles.input}
                 placeholder="Nuevo Nombre"
@@ -180,7 +178,7 @@ const styles = StyleSheet.create({
         marginLeft: 20,
     },
     iconUser: {
-        marginRight: 20,
+        marginRight: 10,
     },
     title: {
         color: '#ffc107',

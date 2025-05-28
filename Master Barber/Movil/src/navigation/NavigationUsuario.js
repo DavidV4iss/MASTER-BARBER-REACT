@@ -4,6 +4,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import InicioUsuario from '../screens/usuarios/InicioUsuario';
 import ReservasNoti from '../screens/usuarios/ReservasNoti';
+import PerfilUsuario from '../screens/usuarios/perfilUsuario';
 
 const Tab = createBottomTabNavigator();
 export default function NavigationUsuario() {
@@ -36,6 +37,16 @@ export default function NavigationUsuario() {
     >
       <Tab.Screen name="Usuario" component={InicioUsuario} />
       <Tab.Screen name="Raservas-Notificadas" component={ReservasNoti} />
+      <Tab.Screen
+        name="PerfilUsuario"
+        component={PerfilUsuario} // Placeholder, replace with actual profile screen
+        options={{
+          tabBarButton: () => null, // Hide the tab button
+          tabBarStyle: { display: 'none' } // Hide the tab bar
+        }}
+      />
     </Tab.Navigator>
+
+    
   )
 };

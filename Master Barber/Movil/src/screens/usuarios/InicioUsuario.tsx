@@ -243,7 +243,7 @@ export default function InicioUsuario() {
               </TouchableOpacity>
               {isDropdownVisible && (
                 <View style={styles.dropdownMenu}>
-                  <TouchableOpacity>
+                  <TouchableOpacity onPress={() => navigation.navigate("PerfilUsuario")}> 
                     <Text
                       style={{
                         ...styles.dropdownItem,
