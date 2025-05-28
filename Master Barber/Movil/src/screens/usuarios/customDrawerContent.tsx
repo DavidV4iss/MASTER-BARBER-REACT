@@ -19,7 +19,7 @@ export default function CustomDrawerContent(props) {
                 const usuario = JSON.parse(atob(token.split('.')[1]));
                 const email = usuario.email;
 
-                const res = await PerfilRepository.traerUsuarios(email);
+                const res = await PerfilRepository.TraerUsuario(email);
                 const user = res.data[0];
                 setUsuario(user);
 
