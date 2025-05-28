@@ -1,7 +1,6 @@
 import React from 'react'
 import { StyleSheet, Text, View, ScrollView, Image, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import { Dimensions } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Anton_400Regular } from "@expo-google-fonts/anton";
 import { BebasNeue_400Regular } from "@expo-google-fonts/bebas-neue";
@@ -15,9 +14,7 @@ import { showMessage } from 'react-native-flash-message';
 import GestionInvRepository from '../../repositories/GestionInvRepository';
 import * as Print from 'expo-print';
 import * as Sharing from 'expo-sharing';
-
-
-
+import GraficaVentasNative from '../../components/GraficaVentasNative';
 
 export default function GestionDeInventario() {
     const [isDropdownVisible, setIsDropdownVisible] = React.useState(false);
@@ -25,6 +22,7 @@ export default function GestionDeInventario() {
     const [rango, setRango] = React.useState('Diario');
     const [inventario, setInventario] = React.useState<any[]>([]);
     const [venta, setVenta] = React.useState<any[]>([]);
+    const [ventasProcesadas, setVentasProcesadas] = React.useState<any[]>([]);
 
     const { logout } = useAuth();
 
@@ -45,8 +43,17 @@ export default function GestionDeInventario() {
         fetchInventario();
     }, []);
 
-
-
+    React.useEffect(() => {
+        const fetchVentas = async () => {
+            try {
+                const response = await GestionInvRepository.GetVentas(rango);
+                setVentasProcesadas(response.data);
+            } catch (err) {
+                console.error("Error al obtener las ventas:", err);
+            }
+        };
+        fetchVentas();
+    }, [rango]);
 
     const agregarProducto = (id_producto: number) => {
         setInventario((prevInventario) => {
@@ -77,12 +84,9 @@ export default function GestionDeInventario() {
         });
     };
 
-
-
     const calcularTotal = () => {
         return venta.reduce((total, item) => total + (item.PrecioUnitario * item.cantidad), 0);
     };
-
 
     const handleSubmit = async () => {
         try {
@@ -119,9 +123,6 @@ export default function GestionDeInventario() {
         }
     };
 
-
-
-
     const generarPDF = async () => {
         try {
             const response = await GestionInvRepository.GetVentas(rango);
@@ -151,7 +152,6 @@ export default function GestionDeInventario() {
                 </style>
             </head>
             <body>
-            
                 <h1>Reporte de Ventas</h1>
                 <p><strong>Rango:</strong> ${rango}</p>
                 <p><strong>Fecha de Generación:</strong> ${new Date().toLocaleString()}</p>
@@ -202,34 +202,30 @@ export default function GestionDeInventario() {
         }
     };
 
-
-
-
     if (!fontsLoaded) return null;
 
     const handleLogout = () => {
         logout();
     }
 
-
     return (
         <DefaultLayout>
-            <View style={{ flex: 1, backgroundColor: '#212529', padding: 20 }}>
+            <ScrollView style={{ flex: 1, backgroundColor: '#181A20' }}>
                 <View style={styles.header}>
                     <TouchableOpacity onPress={() => navigation.openDrawer()}>
-                        <Icon name="bars" size={Dimensions.get('window').width * 0.08} color="#ffffff" style={styles.iconBars} />
+                        <Icon name="bars" size={32} color="#fff" style={styles.iconBars} />
                     </TouchableOpacity>
                     <TouchableOpacity onPress={handleLogout}>
-                        <Icon name="sign-out" size={Dimensions.get('window').width * 0.08} color="#ffffff" style={styles.iconUser} />
-                    </TouchableOpacity >
+                        <Icon name="sign-out" size={32} color="#fff" style={styles.iconUser} />
+                    </TouchableOpacity>
                 </View>
 
                 <Text style={styles.title}>
-                    HOLA, <Text style={styles.admin}>ADMINISTRADOR</Text> | ESTE ES EL INVENTARIO DE LOS PRODUCTOS QUE SALEN DE LA BARBERÍA
+                    HOLA, <Text style={styles.admin}>ADMINISTRADOR</Text>
                 </Text>
-
-
-
+                <Text style={styles.subtitle}>
+                    Este es el inventario de los productos que salen de la barbería
+                </Text>
                 <View style={styles.pickerWrapper}>
                     <Picker
                         selectedValue={rango}
@@ -243,15 +239,14 @@ export default function GestionDeInventario() {
                     </Picker>
                 </View>
 
-
-
-                <TouchableOpacity onPress={generarPDF} style={{ ...styles.pdfButton, marginBottom: 40, marginTop: 25 }}>
-                    <Text style={styles.pdfButtonText}>GENERAR PDF</Text>
+                <TouchableOpacity onPress={generarPDF} style={styles.pdfButton}>
+                    <Icon name="file-pdf-o" size={18} color="#fff" style={{ marginRight: 8 }} />
+                    <Text style={styles.pdfButtonText}>Generar PDF</Text>
                 </TouchableOpacity>
 
-
-                <View>
-                    {inventario.map((item, id_producto) => (
+                <Text style={styles.sectionTitle}>Inventario</Text>
+                <View style={styles.productsContainer}>
+                    {inventario.map((item) => (
                         <TouchableOpacity key={item.id_producto} onPress={() => agregarProducto(item.id_producto)}
                             style={styles.card}>
                             <View style={styles.cardContent}>
@@ -270,14 +265,15 @@ export default function GestionDeInventario() {
                         </TouchableOpacity>
                     ))}
                 </View>
+
+                <Text style={styles.sectionTitle}>Productos Seleccionados</Text>
                 <View style={styles.tableContainer}>
                     <View style={[styles.tableRow, styles.tableHeader]}>
                         <Text style={[styles.tableCell, styles.cellCantidad]}>Cantidad</Text>
                         <Text style={styles.tableCell}>ID</Text>
-                        <Text style={styles.tableCell}>Nombre Producto</Text>
+                        <Text style={styles.tableCell}>Nombre</Text>
                         <Text style={styles.tableCell}>Precio</Text>
                     </View>
-
                     {venta.length > 0 ? (
                         venta.map((item) => (
                             <View key={item.id_producto} style={styles.tableRow}>
@@ -294,12 +290,26 @@ export default function GestionDeInventario() {
                     )}
                 </View>
 
-
                 <Text style={styles.total}>Total: ${calcularTotal().toFixed(2)}</Text>
-                <TouchableOpacity style={styles.subtractButton} onPress={handleSubmit}>
-                    <Text style={styles.subtractButtonText}>RESTAR DEL INVENTARIO</Text>
-                </TouchableOpacity>
-            </ View>
+                <View style={styles.actionButtonsRow}>
+                    {venta.length > 0 && (
+                        <TouchableOpacity
+                            style={styles.clearButton}
+                            onPress={() => setVenta([])}
+                        >
+                            <Icon name="trash" size={18} color="#fff" style={{ marginRight: 8 }} />
+                            <Text style={styles.clearButtonText}>Limpiar</Text>
+                        </TouchableOpacity>
+                    )}
+                    <TouchableOpacity style={styles.subtractButton} onPress={handleSubmit}>
+                        <Text style={styles.subtractButtonText}>Restar del Inventario</Text>
+                    </TouchableOpacity>
+                </View>
+
+                <View>
+                    <GraficaVentasNative ventas={ventasProcesadas} />
+                </View>
+            </ScrollView>
         </DefaultLayout>
     )
 }
@@ -309,116 +319,144 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
-        paddingHorizontal: Dimensions.get('window').width * 0.00,
-        paddingTop: 20,
-        backgroundColor: '#212529',
-        marginBottom: 15,
+        paddingHorizontal: 24,
+        paddingTop: 32,
+        backgroundColor: '#181A20',
+        marginBottom: 10,
     },
     iconBars: {
-        marginLeft: Dimensions.get('window').width * 0.07,
-        marginTop: Dimensions.get('window').height * 0.02,
+        marginLeft: 0,
     },
     iconUser: {
-        marginRight: Dimensions.get('window').width * 0.07,
-        marginTop: Dimensions.get('window').height * 0.02,
-    },
-    dropdownMenu: {
-        position: 'absolute',
-        right: Dimensions.get('window').width * 0.2,
-        backgroundColor: '#343a40',
-        padding: 10,
-        borderRadius: 5,
-    },
-    dropdownItem: {
-        color: '#ffffff',
-        fontSize: Dimensions.get('window').width * 0.04,
-        paddingVertical: 5,
+        marginRight: 0,
     },
     title: {
-        marginTop: 40,
+        marginTop: 10,
         fontFamily: 'Anton',
-        fontSize: 20,
-        color: '#ffffff',
+        fontSize: 28,
+        color: '#fff',
         textAlign: 'center',
-        marginHorizontal: 15,
-        marginVertical: 10,
+        letterSpacing: 1,
+    },
+    subtitle: {
+        color: '#b0b0b0',
+        fontFamily: 'BebasNeue_400Regular',
+        fontSize: 16,
+        textAlign: 'center',
+        marginBottom: 18,
+        marginHorizontal: 20,
     },
     admin: {
         color: '#dc3545',
+        fontFamily: 'BebasNeue_400Regular',
+        fontSize: 35,
     },
     pickerWrapper: {
-        marginTop: 25,
+        marginTop: 10,
+        marginHorizontal: 24,
         borderWidth: 1,
-        borderColor: '#6c757d',
-        borderRadius: 5,
-        backgroundColor: '#212529',
+        borderColor: '#343a40',
+        borderRadius: 12,
+        backgroundColor: '#23272b',
         overflow: 'hidden',
-        marginBottom: 15
+        marginBottom: 18,
     },
-
     picker: {
         color: '#fff',
         height: 48,
         paddingHorizontal: 10,
+        fontSize: 16,
     },
-
     pdfButton: {
+        flexDirection: 'row',
+        alignItems: 'center',
         alignSelf: 'flex-end',
-        backgroundColor: '#28a745',
-        paddingHorizontal: 15,
-        paddingVertical: 8,
-        borderRadius: 5,
-        marginRight: 15,
+        backgroundColor: '#dc3545',
+        paddingHorizontal: 18,
+        paddingVertical: 10,
+        borderRadius: 8,
+        marginRight: 24,
+        marginBottom: 24,
+        shadowColor: '#dc3545',
+        shadowOpacity: 0.2,
+        shadowRadius: 6,
+        elevation: 3,
     },
     pdfButtonText: {
         color: '#fff',
         fontFamily: 'BebasNeue_400Regular',
-        fontSize: 16,
+        fontSize: 18,
+        letterSpacing: 1,
+    },
+    sectionTitle: {
+        color: '#ffc107',
+        fontFamily: 'BebasNeue_400Regular',
+        fontSize: 22,
+        marginLeft: 24,
+        marginTop: 10,
+        marginBottom: 10,
+        letterSpacing: 1,
     },
     productsContainer: {
         flexDirection: 'row',
-        justifyContent: 'space-around',
-        marginVertical: 10,
+        flexWrap: 'wrap',
+        justifyContent: 'space-between',
+        marginHorizontal: 16,
+        marginBottom: 24,
     },
     card: {
-        backgroundColor: '#343a40',
-        borderRadius: 10,
-        marginBottom: 20,
-        overflow: 'hidden',
+        backgroundColor: '#23272b',
+        borderRadius: 16,
+        marginBottom: 18,
+        width: '47%',
+        shadowColor: '#000',
+        shadowOpacity: 0.15,
+        shadowRadius: 8,
+        elevation: 4,
     },
     cardContent: {
-        padding: 15,
+        padding: 14,
+        alignItems: 'center',
     },
     cardTitle: {
-        color: '#dc3545',
+        color: '#ffc107',
         fontSize: 18,
         fontWeight: 'bold',
-        marginBottom: 20,
-        alignSelf: 'center',
+        marginBottom: 10,
         marginTop: 10,
         fontFamily: 'BebasNeue_400Regular',
+        textAlign: 'center',
     },
     cardText: {
-        color: '#ffffff',
+        color: '#fff',
         fontSize: 14,
-        marginBottom: 10,
+        marginBottom: 6,
+        textAlign: 'center',
+    },
+    cardImage: {
+        width: '100%',
+        height: 120,
+        borderRadius: 10,
+        marginBottom: 8,
+        backgroundColor: '#181A20',
     },
     tableContainer: {
-        marginTop: 30,
-        marginHorizontal: 10,
+        marginTop: 10,
+        marginHorizontal: 16,
         borderWidth: 1,
-        borderColor: '#6c757d',
-        borderRadius: 5,
+        borderColor: '#343a40',
+        borderRadius: 12,
         overflow: 'hidden',
-        backgroundColor: '#2a2a2a',
+        backgroundColor: '#23272b',
+        marginBottom: 18,
     },
     tableHeader: {
-        backgroundColor: '#1f1f1f',
+        backgroundColor: '#181A20',
     },
     tableRow: {
         flexDirection: 'row',
         borderBottomWidth: 1,
-        borderBottomColor: '#444',
+        borderBottomColor: '#343a40',
     },
     tableCell: {
         flex: 1,
@@ -426,6 +464,7 @@ const styles = StyleSheet.create({
         color: '#fff',
         textAlign: 'center',
         fontSize: 14,
+        fontFamily: 'BebasNeue_400Regular',
     },
     cellCantidad: {
         color: '#ffc107',
@@ -436,30 +475,58 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         padding: 15,
         width: '100%',
-    },
-
-    total: {
-        color: '#ffc107',
         fontFamily: 'BebasNeue_400Regular',
-        fontSize: 18,
+    },
+    total: {
+        color: '#28a745',
+        fontFamily: 'BebasNeue_400Regular',
+        fontSize: 22,
         textAlign: 'center',
         marginTop: 10,
+        marginBottom: 20,
+        letterSpacing: 1,
+    },
+    actionButtonsRow: {
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginBottom: 30,
+    },
+    clearButton: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        backgroundColor: '#dc3545',
+        paddingHorizontal: 18,
+        paddingVertical: 12,
+        borderRadius: 10,
+        marginRight: 10,
+        shadowColor: '#dc3545',
+        shadowOpacity: 0.18,
+        shadowRadius: 5,
+        elevation: 2,
+    },
+    clearButtonText: {
+        color: '#fff',
+        fontFamily: 'BebasNeue_400Regular',
+        fontSize: 18,
+        letterSpacing: 1,
     },
     subtractButton: {
         backgroundColor: '#ffc107',
-        padding: 10,
-        margin: 20,
-        borderRadius: 5,
+        paddingHorizontal: 18,
+        paddingVertical: 12,
+        borderRadius: 10,
+        shadowColor: '#ffc107',
+        shadowOpacity: 0.15,
+        shadowRadius: 6,
+        elevation: 3,
     },
     subtractButtonText: {
         textAlign: 'center',
         fontFamily: 'BebasNeue_400Regular',
-        fontSize: 16,
-    },
-    cardImage: {
-        width: '100%',
-        height: 270,
-        resizeMode: 'cover',
+        fontSize: 18,
+        color: '#181A20',
+        letterSpacing: 1,
     },
 
-})
+});

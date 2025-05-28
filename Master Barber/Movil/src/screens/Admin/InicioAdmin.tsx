@@ -9,10 +9,7 @@ import { BebasNeue_400Regular } from "@expo-google-fonts/bebas-neue";
 import useAuth from "../../hooks/useAuth";
 import BarberosRepository from '../../repositories/BarberosRepository';
 import DefaultLayout from '../../Layouts/DefaultLayout';
-
-
-
-
+import CalificacionesAdmin from '../../components/CalificacionesAdmin';
 
 
 export default function InicioAdmin() {
@@ -99,6 +96,9 @@ export default function InicioAdmin() {
                                 <Text style={styles.barberItem}>{barbero.descripcion}</Text>
                             </View>
                         ))}
+                    </View>
+                    <View>
+                        <CalificacionesAdmin />
                     </View>
                 </ScrollView>
             </View>
@@ -249,6 +249,5 @@ const styles = StyleSheet.create({
     },
 },
 );
-
 
 

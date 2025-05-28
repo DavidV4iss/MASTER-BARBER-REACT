@@ -145,27 +145,27 @@ export default function Gestiondeinventario() {
         <div>
             <NavbarAdmin />
             <SidebarAdmin />
-            <div className='container mt-5 mb-5 p-5'>
-                <p className='text-center text-white display-6 bebas contenido'>Hola, <span className='text-danger'>Administrador</span> | Inventario de productos</p>
-                <div className="d-flex justify-content-end my-3">
-                    <select className="form-select bg-dark text-white w-auto" value={rango} onChange={(e) => setRango(e.target.value)}>
-                        <option value="diario">Diario</option>
-                        <option value="mensual">Mensual</option>
-                        <option value="semanal">Semanal</option>
-                        <option value="anual">Anual</option>
-                    </select>
-                </div>
-                <div className="d-flex justify-content-end">
-                    <button onClick={generarPDF} className="btn btn-success bebas">Generar PDF</button>
-                </div>
+            <div className="container py-5 ">
+                <h2 className="text-center text-white bebas display-6 mb-5 contenido3">
+                    Hola, <span className="text-danger">Administrador</span> | Este es el inventario de los productos que salen de la barberia
+                </h2>
 
-                <div className="row row-cols-1 row-cols-md-2 g-4 mt-4">
-                    <div className="col">
-                        <div className="row row-cols-1 row-cols-md-2 g-3">
-                            {inventario.map(item => (
-                                <Link key={item.id_producto} onClick={() => agregarProducto(item)} className="text-decoration-none col">
-                                    <div className="card bg-dark shadow-lg rounded-4">
-                                        <img src={`http://localhost:8080/ImagesInventario/${item.Foto}`} alt={item.nombre} className="card-img-top rounded-top-4 border border-light" />
+                <div className="row g-4 contenido mt-5 pt-5">
+                    <div className="col-lg-7">
+                        <div className="row row-cols-1 row-cols-md-3 g-4">
+                            {inventario.map((item) => (
+                                <Link
+                                    key={item.id_producto}
+                                    onClick={() => agregarProducto(item)}
+                                    className="col text-decoration-none"
+                                >
+                                    <div className="card bg-dark h-100 shadow-lg rounded-4">
+                                        <img
+                                            src={`http://localhost:8080/ImagesInventario/${item.Foto}`}
+                                            alt={item.nombre}
+                                            className="card-img-top rounded-top-4 border border-light"
+                                            style={{ height: '200px', objectFit: 'cover' }}
+                                        />
                                         <div className="card-body text-center">
                                             <h5 className="text-warning bebas">{item.nombre}</h5>
                                             <p className="text-white">${item.PrecioUnitario}</p>
@@ -176,44 +176,80 @@ export default function Gestiondeinventario() {
                             ))}
                         </div>
                     </div>
-                    <div className="col">
-                        <table className="table table-dark table-striped text-center">
-                            <thead>
-                                <tr>
-                                    <th className='text-warning'>Cantidad</th>
-                                    <th className='text-warning'>ID</th>
-                                    <th className='text-warning'>Nombre Producto</th>
-                                    <th className='text-warning'>Precio</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {venta.length > 0 ? venta.map(item => (
-                                    <tr key={item.id_producto}>
-                                        <td>{item.cantidad}</td>
-                                        <td>{item.id_producto}</td>
-                                        <td>{item.nombre}</td>
-                                        <td>${item.PrecioUnitario}</td>
-                                    </tr>
-                                )) : (
-                                    <tr><td colSpan="4">No hay productos</td></tr>
-                                )}
-                            </tbody>
-                        </table>
 
-                        <div className="d-flex gap-2 justify-content-between">
-                            <button className="btn btn-warning bebas">Total: ${calcularTotal().toFixed(2)}</button>
-                            <button onClick={handleSubmit} className="btn btn-warning bebas">Restar Del Inventario</button>
-                            <button onClick={() => setVenta([])} className="btn btn-danger bebas">Limpiar Productos</button>
+                    <div className="col-lg-4 contenidol mt-5 pt-5">
+                        <div className="card bg-dark text-white p-3 rounded-4 shadow">
+                            <div className="row justify-content-end align-items-center mb-2">
+                                <div className="col-auto">
+                                    <select
+                                        className="form-select bg-dark text-white"
+                                        value={rango}
+                                        onChange={(e) => setRango(e.target.value)}
+                                    >
+                                        <option value="diario">Diario</option>
+                                        <option value="mensual">Mensual</option>
+                                        <option value="semanal">Semanal</option>
+                                        <option value="anual">Anual</option>
+                                    </select>
+                                </div>
+                                <div className="col-auto me-5">
+                                    <button onClick={generarPDF} className="btn btn-danger bebas ">
+                                        Generar PDF
+                                    </button>
+                                </div>
+                            </div>
+
+                            <hr />
+                            <table className="table table-dark table-striped text-center mb-3 mt-3">
+                                <thead>
+                                    <tr>
+                                        <th className="text-warning">Cantidad</th>
+                                        <th className="text-warning">ID</th>
+                                        <th className="text-warning">Producto</th>
+                                        <th className="text-warning">Precio</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {venta.length > 0 ? (
+                                        venta.map((item) => (
+                                            <tr key={item.id_producto}>
+                                                <td>{item.cantidad}</td>
+                                                <td>{item.id_producto}</td>
+                                                <td>{item.nombre}</td>
+                                                <td>${item.PrecioUnitario}</td>
+                                            </tr>
+                                        ))
+                                    ) : (
+                                        <tr>
+                                            <td colSpan="4">
+                                                No has agregado ningun producto
+                                            </td>
+                                        </tr>
+                                    )}
+                                </tbody>
+                            </table>
+
+                            <div className="d-flex flex-column gap-2">
+                                <p className="text-center text-success fs-3 bebas bebas fw-bold" >
+                                    Total: ${calcularTotal().toFixed(2)}
+                                </p>
+                                <button onClick={() => setVenta([])} disabled={venta.length === 0} className="btn btn-danger bebas">
+                                    Limpiar
+                                </button>
+                                <button onClick={handleSubmit} className="btn btn-warning bebas mt-3">
+                                    Restar Del Inventario
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <div className="mt-5 row justify-content-center">
+                <div className="row justify-content-center mt-5 pt-5">
                     <div className="col-12 col-md-10">
                         <GraficaVenta ventas={ventasFiltradas} />
                     </div>
                 </div>
             </div>
-        </div>
+        </div >
     );
 }

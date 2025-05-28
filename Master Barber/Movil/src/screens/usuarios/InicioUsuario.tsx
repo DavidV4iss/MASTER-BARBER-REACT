@@ -151,7 +151,7 @@ export default function InicioUsuario() {
       }
     });
   }, []);
-  
+
 
 
   const handleSubmit = async () => {
@@ -243,7 +243,7 @@ export default function InicioUsuario() {
               </TouchableOpacity>
               {isDropdownVisible && (
                 <View style={styles.dropdownMenu}>
-                  <TouchableOpacity onPress={() => navigation.navigate("PerfilUsuario")}> 
+                  <TouchableOpacity onPress={() => navigation.navigate("PerfilUsuario")}>
                     <Text
                       style={{
                         ...styles.dropdownItem,

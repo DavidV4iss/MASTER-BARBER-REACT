@@ -32,12 +32,19 @@ export default function GraficaVenta({ ventas }) {
 
     const productos = agruparVentasPorProducto(ventas);
 
+    const labels = Object.keys(productos);
+    const values = Object.values(productos);
+
+    const maxIndex = values.indexOf(Math.max(...values));
+    const productoMasVendido = labels[maxIndex];
+    const cantidadMasAlta = values[maxIndex];
+
     const data = {
-        labels: Object.keys(productos),
+        labels,
         datasets: [
             {
                 label: 'Cantidad Vendida',
-                data: Object.values(productos),
+                data: values,
                 borderColor: 'rgba(255, 205, 86, 1)',
                 backgroundColor: 'rgba(255, 255, 0, 0.2)',
                 pointBackgroundColor: '#ffc107',
@@ -59,7 +66,7 @@ export default function GraficaVenta({ ventas }) {
             },
             title: {
                 display: true,
-                text: 'Ventas Por Producto',
+                text: 'ANALISIS DE VENTAS',
                 color: 'yellow',
                 font: {
                     size: 24,
@@ -92,5 +99,12 @@ export default function GraficaVenta({ ventas }) {
         },
     };
 
-    return <Line data={data} options={options} />;
-} 
+    return (
+        <div className="text-center container mx-5 bg-dark border-dark shadow mt-5">
+            <Line data={data} options={options} />
+            <p className="mt-4 text-white fw-bold mb-4">
+                Producto más vendido: <span className="text-danger">{productoMasVendido}</span> ({cantidadMasAlta} unidades)
+            </p>
+        </div>
+    );
+}
