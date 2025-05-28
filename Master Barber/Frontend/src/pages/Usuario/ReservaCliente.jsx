@@ -180,7 +180,7 @@ export default function Reserva() {
                             <div className='row mt-5 mb-5 justify-content-center '>
                                 {servicios.map((servicio, index) => (
                                     <div
-                                        className="col-12 col-sm-6 col-md-4 col-lg-3 mb-4 text-decoration-none d-flex justify-content-center"
+                                        className="col-12 col-sm-6 col-md-4 col-lg-6 mb-4 text-decoration-none d-flex justify-content-end mx-auto"
                                         key={servicio.id_tipo_servicio}
                                         onClick={() => setService(servicio.id_tipo_servicio)}
                                         style={{ cursor: 'pointer' }}

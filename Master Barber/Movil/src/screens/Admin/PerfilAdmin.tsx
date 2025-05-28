@@ -81,11 +81,17 @@ export default function PerfilAdmin() {
             const email = usuario.email;
 
             const formData = new FormData();
+
             if (nuevoNombre && nuevoNombre !== admin.nombre) {
                 formData.append('nombre', nuevoNombre);
             }
+
             if (admin.foto) {
-                formData.append('file', admin.foto);
+                formData.append('file', {
+                    uri: admin.foto.uri,
+                    name: admin.foto.name || `foto_${Date.now()}.jpg`,
+                    type: admin.foto.type || 'image/jpeg',
+                });
             }
 
             if (!formData.has('nombre') && !formData.has('file')) {
@@ -98,8 +104,9 @@ export default function PerfilAdmin() {
                 message: 'PERFIL ACTUALIZADO EXITOSAMENTE',
                 description: 'Debes reiniciar la app para ver los cambios.',
                 type: 'success',
-                duration: 5000
-            })
+                duration: 5000,
+            });
+
             navigation.reset({
                 index: 0,
                 routes: [{ name: 'Perfil' }],

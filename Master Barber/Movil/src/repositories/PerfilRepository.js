@@ -10,19 +10,15 @@ class PerfilRepository {
             const errorMessage = error?.response?.data?.message || "Error al obtener el usuario.";
             throw new Error(errorMessage);
         }
-
     }
 
     static async actualizarUsuario(email, formData) {
-        return API.put(`actualizarUsuario/${email}`, formData, {
+        return API.post(`actualizarUsuario/${email}`, formData, {
             headers: {
                 'Content-Type': 'multipart/form-data',
             },
         });
     }
-
-
-
 }
 
 export default PerfilRepository;

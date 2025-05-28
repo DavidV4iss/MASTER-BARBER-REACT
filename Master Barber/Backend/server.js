@@ -696,7 +696,7 @@ const upload = multer({ storage: storage })
 
 
 
-app.put('/actualizarUsuario/:email', upload.single('file'), (req, res) => {
+app.post('/actualizarUsuario/:email', upload.single('file'), (req, res) => {
     const file = req.file;
     const email = req.params.email;
     const nombre = req.body.nombre;
@@ -739,6 +739,7 @@ app.put('/actualizarUsuario/:email', upload.single('file'), (req, res) => {
         });
     });
 });
+
 
 app.get('/traerUsuarios', (req, res) => {
     db.query('SELECT * FROM usuarios', (err, results) => {
