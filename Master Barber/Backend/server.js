@@ -1094,7 +1094,7 @@ app.delete('/DeleteNotificacionReserva/:id', (req, res) => {
 
 // VENTAS
 app.get('/GetVentas', (req, res) => {
-    const { rango } = req.query; // Rango puede ser 'diario', 'semanal', 'mensual', 'anual'
+    const { rango } = req.query;
 
     let q = 'SELECT * FROM ventas';
     const ahora = new Date();
@@ -1117,6 +1117,7 @@ app.get('/GetVentas', (req, res) => {
         res.status(200).json(results);
     });
 });
+
 
 app.post('/GuardarVentas', (req, res) => {
     const ventas = req.body;

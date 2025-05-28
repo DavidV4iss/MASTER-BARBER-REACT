@@ -25,6 +25,18 @@ export default function Gestiondeinventario() {
         getInventario();
     }, []);
 
+    useEffect(() => {
+        const getVentas = async () => {
+            try {
+                const res = await axios.get(`http://localhost:8080/GetVentas?rango=${rango}`);
+                setVentasProcesadas(res.data);
+            } catch (err) {
+                console.error('Error al obtener las ventas:', err);
+            }
+        };
+        getVentas();
+    }, [rango]);
+
     function agregarProducto(producto) {
         const productoExistente = venta.find(item => item.id_producto === producto.id_producto);
         const productoInventario = inventario.find(item => item.id_producto === producto.id_producto);
@@ -37,7 +49,7 @@ export default function Gestiondeinventario() {
                         : item
                 ));
             } else {
-                setVenta([...venta, { ...producto, cantidad: 1 }]); // No asignamos fecha aquí
+                setVenta([...venta, { ...producto, cantidad: 1 }]);
             }
 
             setInventario(inventario.map(item =>
@@ -49,7 +61,7 @@ export default function Gestiondeinventario() {
             Swal.fire({
                 icon: 'error',
                 title: 'Oops...',
-                text: `Has superado la cantidad de productos del inventario, no hay más ${producto.nombre} en stock`,
+                text: `No hay más ${producto.nombre} en stock`,
                 confirmButtonColor: "#DC3545",
                 customClass: {
                     popup: "dark-theme-popup bg-dark antonparabackend",
@@ -62,40 +74,27 @@ export default function Gestiondeinventario() {
         return venta.reduce((total, item) => total + (item.PrecioUnitario * item.cantidad), 0);
     };
 
-
     const handleSubmit = async () => {
         try {
-
-            const ventasConFecha = venta.map((producto) => ({
-                ...producto,
-                fecha: new Date(), // Asignar la fecha actual
-            }));
-
-
+            const ventasConFecha = venta.map(producto => ({ ...producto, fecha: new Date().toISOString().slice(0, 19).replace('T', ' ') }));
             for (const producto of ventasConFecha) {
                 await axios.put(`http://localhost:8080/RestarInventario/${producto.id_producto}`, {
                     cantidad: producto.cantidad,
                 });
             }
-
-
             await axios.post('http://localhost:8080/GuardarVentas', ventasConFecha);
-
-
             const res = await axios.get(`http://localhost:8080/GetVentas?rango=${rango}`);
             setVentasProcesadas(res.data);
 
             Swal.fire({
                 icon: 'success',
                 title: 'Venta Exitosa',
-                html: `El Producto <span style="color: yellow">${ventasConFecha[0].nombre}</span> Fue Restado Del Inventario Correctamente, Realizaste Una Venta Por Un Valor De: <span style="color: yellow">${calcularTotal()}</span>`,
+                html: `Productos vendidos:<br>${ventasConFecha.map(p => `<span style="color: yellow">${p.nombre} (x${p.cantidad})</span>`).join('<br>')}<br><br>Total: <span style="color: yellow">$${calcularTotal()}</span>`,
                 confirmButtonColor: '#DC3545',
                 customClass: {
                     popup: 'dark-theme-popup bg-dark antonparabackend',
                 },
-            }).then(() => {
-                setVenta([]);
-            });
+            }).then(() => setVenta([]));
         } catch (err) {
             console.error('Error al procesar la venta:', err);
             Swal.fire({
@@ -110,200 +109,108 @@ export default function Gestiondeinventario() {
         }
     };
 
-    useEffect(() => {
-        const getVentas = async () => {
-            try {
-                const res = await axios.get(`http://localhost:8080/GetVentas?rango=${rango}`);
-                setVentasProcesadas(res.data);
-            } catch (err) {
-                console.error('Error al obtener las ventas:', err);
-            }
-        };
-        getVentas();
-    }, [rango]);
-
-
-    const filtrarVentasPorRango = () => {
-        const ahora = new Date();
-        return ventasProcesadas.filter((item) => {
-            const fechaVenta = new Date(item.fecha);
-            if (rango === 'diario') {
-                return (
-                    fechaVenta.getDate() === ahora.getDate() &&
-                    fechaVenta.getMonth() === ahora.getMonth() &&
-                    fechaVenta.getFullYear() === ahora.getFullYear()
-                );
-            } else if (rango === 'mensual') {
-                return (
-                    fechaVenta.getMonth() === ahora.getMonth() &&
-                    fechaVenta.getFullYear() === ahora.getFullYear()
-                );
-            } else if (rango === 'semanal') {
-                const inicioSemana = new Date(ahora.setDate(ahora.getDate() - ahora.getDay()));
-                const finSemana = new Date(inicioSemana);
-                finSemana.setDate(finSemana.getDate() + 6);
-                return fechaVenta >= inicioSemana && fechaVenta <= finSemana;
-            } else if (rango === 'anual') {
-                return fechaVenta.getFullYear() === ahora.getFullYear();
-            }
-            return false;
-        });
-    };
-
-    const ventasFiltradas = filtrarVentasPorRango();
-
-
     const generarPDF = async () => {
         const doc = new jsPDF();
-
-        // Asegurarse de obtener las ventas actualizadas antes de generar el PDF
-        try {
-            const res = await axios.get(`http://localhost:8080/GetVentas?rango=${rango}`);
-            setVentasProcesadas(res.data);
-        } catch (err) {
-            console.error('Error al obtener las ventas para el PDF:', err);
-            Swal.fire({
-                icon: 'error',
-                title: 'Oops...',
-                text: 'Error al obtener las ventas para generar el PDF',
-                confirmButtonColor: '#DC3545',
-            });
-            return;
-        }
-
         const ventasAgrupadas = ventasProcesadas.reduce((acc, venta) => {
             const key = venta.id_producto;
-            if (!acc[key]) {
-                acc[key] = { ...venta, cantidad: 0 };
-            }
+            if (!acc[key]) acc[key] = { ...venta, cantidad: 0 };
             acc[key].cantidad += venta.cantidad;
             return acc;
         }, {});
 
         const ventasAgrupadasArray = Object.values(ventasAgrupadas);
-
-        // Configuración del PDF
         doc.setFontSize(18);
         doc.text('Reporte De Ventas', 10, 10);
         doc.setFontSize(12);
-        doc.text(`Rango: ${rango.charAt(0).toUpperCase() + rango.slice(1)}`, 10, 20);
+        doc.text(`Rango: ${rango}`, 10, 20);
 
         let y = 30;
         if (ventasAgrupadasArray.length === 0) {
             doc.text("No hay ventas en este rango.", 10, y);
         } else {
             ventasAgrupadasArray.forEach((venta, index) => {
-                doc.text(
-                    `${index + 1}. Producto: ${venta.nombre}, Cantidad: ${venta.cantidad}, Total: $${(venta.PrecioUnitario * venta.cantidad).toFixed(2)}`,
-                    10,
-                    y
-                );
+                doc.text(`${index + 1}. Producto: ${venta.nombre}, Cantidad: ${venta.cantidad}, Total: $${(venta.PrecioUnitario * venta.cantidad).toFixed(2)}`, 10, y);
                 y += 10;
             });
-
-            const totalGeneral = ventasAgrupadasArray.reduce(
-                (total, item) => total + item.PrecioUnitario * item.cantidad,
-                0
-            );
-            doc.text(`Total General: $${totalGeneral.toFixed(2)}`, 10, y + 10);
+            const total = ventasAgrupadasArray.reduce((acc, item) => acc + item.PrecioUnitario * item.cantidad, 0);
+            doc.text(`Total General: $${total.toFixed(2)}`, 10, y + 10);
         }
 
         doc.save(`Reporte_Ventas_${rango}.pdf`);
     };
 
-
+    const ventasFiltradas = ventasProcesadas;
 
     return (
         <div>
             <NavbarAdmin />
             <SidebarAdmin />
-            <div className='mt-5 container mb-5'>
-                <p className='text-center text-white mt-5 display-6 bebas contenido '>HOLA, <span className='text-danger'>ADMINISTRADOR</span>| ESTE ES EL INVENTARIO DE LOS PRODUCTOS QUE SALEN DE LA BARBERIA</p>
-                <div className="col container d-flex justify-content-end mx-5 mt-5 pt-5">
-                    <select
-                        className="form-select bg-dark text-white mx-5"
-                        value={rango}
-                        onChange={(e) => setRango(e.target.value)}
-                    >
+            <div className='container mt-5 mb-5 p-5'>
+                <p className='text-center text-white display-6 bebas contenido'>Hola, <span className='text-danger'>Administrador</span> | Inventario de productos</p>
+                <div className="d-flex justify-content-end my-3">
+                    <select className="form-select bg-dark text-white w-auto" value={rango} onChange={(e) => setRango(e.target.value)}>
                         <option value="diario">Diario</option>
                         <option value="mensual">Mensual</option>
                         <option value="semanal">Semanal</option>
                         <option value="anual">Anual</option>
                     </select>
                 </div>
-                <div className="container d-flex justify-content-end mx-1 mt-2">
-
-                    <button onClick={generarPDF} className="btn btn-success bebas mt-3">
-                        Generar PDF
-                    </button>
+                <div className="d-flex justify-content-end">
+                    <button onClick={generarPDF} className="btn btn-success bebas">Generar PDF</button>
                 </div>
-                <div className="row row-cols-1 row-cols-md-2 g-4 mt-5 contenido">
-                    <div className="col row row-cols-1 row-cols-md-2 g-3">
-                        {inventario.map((item) => (
-                            <Link onClick={() => agregarProducto(item)} className="col text-decoration-none" key={item.id_producto}>
-                                <div className="col ">
-                                    <div className="card bg-dark">
-                                        <img src={`http://localhost:8080/ImagesInventario/${item.Foto}`} alt="..." className="card-img-top" />
-                                        <div className="card-body">
-                                            <h5 className="card-title text-danger bebas text-center">{item.nombre}</h5>
-                                            <p className="card-text text-white text-center">{item.PrecioUnitario}</p>
-                                            <p className="card-text text-warning bebas text-center">{item.cantidad} Unidades</p>
+
+                <div className="row row-cols-1 row-cols-md-2 g-4 mt-4">
+                    <div className="col">
+                        <div className="row row-cols-1 row-cols-md-2 g-3">
+                            {inventario.map(item => (
+                                <Link key={item.id_producto} onClick={() => agregarProducto(item)} className="text-decoration-none col">
+                                    <div className="card bg-dark shadow-lg rounded-4">
+                                        <img src={`http://localhost:8080/ImagesInventario/${item.Foto}`} alt={item.nombre} className="card-img-top rounded-top-4 border border-light" />
+                                        <div className="card-body text-center">
+                                            <h5 className="text-warning bebas">{item.nombre}</h5>
+                                            <p className="text-white">${item.PrecioUnitario}</p>
+                                            <p className="text-success bebas">{item.cantidad} Unidades</p>
                                         </div>
                                     </div>
-                                </div>
-                            </Link>
-                        ))}
+                                </Link>
+                            ))}
+                        </div>
                     </div>
-
                     <div className="col">
-                        <table className="table-responsive table table-dark table-striped mt-5 mx-5">
+                        <table className="table table-dark table-striped text-center">
                             <thead>
                                 <tr>
-                                    <th scope="col" className='text-center text-warning'>Cantidad</th>
-                                    <th scope="col" className='text-center text-warning'>ID</th>
-                                    <th scope="col" className='text-center text-warning'>Nombre Producto</th>
-                                    <th scope="col" className='text-center text-warning'>Precio</th>
+                                    <th className='text-warning'>Cantidad</th>
+                                    <th className='text-warning'>ID</th>
+                                    <th className='text-warning'>Nombre Producto</th>
+                                    <th className='text-warning'>Precio</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                {
-                                    venta.length > 0 ?
-                                        venta.map((item) => (
-                                            <tr key={item.id_producto}>
-                                                <th scope="row" className='text-center'>{item.cantidad}</th>
-                                                <td className='text-center'>{item.id_producto}</td>
-                                                <td className='text-center'>{item.nombre}</td>
-                                                <td className='text-center'>{item.PrecioUnitario}</td>
-                                            </tr>
-                                        ))
-                                        :
-                                        <tr className="text-center ">
-                                            <td colSpan="4" >No hay productos</td>
-                                        </tr>
-                                }
+                                {venta.length > 0 ? venta.map(item => (
+                                    <tr key={item.id_producto}>
+                                        <td>{item.cantidad}</td>
+                                        <td>{item.id_producto}</td>
+                                        <td>{item.nombre}</td>
+                                        <td>${item.PrecioUnitario}</td>
+                                    </tr>
+                                )) : (
+                                    <tr><td colSpan="4">No hay productos</td></tr>
+                                )}
                             </tbody>
                         </table>
 
-                        <div className="container row mx-5 mt-4">
-
-                            <div className="col">
-                                <button className="btn btn-warning bebas">
-                                    Total: ${calcularTotal().toFixed(2)}
-                                </button>
-                            </div>
-                            <div className="col">
-                                <button onClick={handleSubmit} className="btn btn-warning bebas">
-                                    Restar Del Inventario
-                                </button>
-                            </div>
+                        <div className="d-flex gap-2 justify-content-between">
+                            <button className="btn btn-warning bebas">Total: ${calcularTotal().toFixed(2)}</button>
+                            <button onClick={handleSubmit} className="btn btn-warning bebas">Restar Del Inventario</button>
+                            <button onClick={() => setVenta([])} className="btn btn-danger bebas">Limpiar Productos</button>
                         </div>
-
                     </div>
                 </div>
-                <div className="mt-5 pt-5 row container mx-5 justify-content-center mx-5">
-                    <div className="col col-10 col-sm-10 col-md-10 mx-5">
-                        <GraficaVenta ventas={ventasFiltradas} />
 
+                <div className="mt-5 row justify-content-center">
+                    <div className="col-12 col-md-10">
+                        <GraficaVenta ventas={ventasFiltradas} />
                     </div>
                 </div>
             </div>
