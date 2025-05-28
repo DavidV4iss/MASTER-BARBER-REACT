@@ -172,13 +172,16 @@ const styles = StyleSheet.create({
         width: '100%',
         flexDirection: 'row',
         justifyContent: 'space-between',
-        paddingTop: 50,
+        paddingTop: 10,
     },
     iconBars: {
         marginLeft: 20,
     },
     iconUser: {
         marginRight: 10,
+        marginTop: 10,
+        color: '#ffffff',
+        fontSize: 30,
     },
     title: {
         color: '#ffc107',
