@@ -25,7 +25,7 @@ export default function NavbarBarber() {
         const res = await axios.get(`http://localhost:8080/traerUsuario/${email}`);
         setBarber(res.data[0]);
         if (res.data[0].Foto) {
-          setImagePreview(`http://localhost:8080/perfil/${res.data[0].Foto}`);
+          setImagePreview(`http://localhost:8080/imagesBarbero/${res.data[0].Foto}`);
         }
       } catch (err) {
         console.log("Error al obtener los datos:", err);
@@ -87,7 +87,7 @@ export default function NavbarBarber() {
                 {barber.nombre_usuario}
               </div>
               <img
-                src={imagePreview || "default-avatar.png"}
+                src={`http://localhost:8080/imagesBarbero/${barber.Foto}`}
                 alt="Imagen de perfil"
                 className="img-fluid rounded-circle contenido3 "
                 style={{ width: "40px", height: "40px", objectFit: "cover" }}

@@ -125,7 +125,7 @@ export default function PerfilBarber() {
           <div className="row justify-content-center align-items-center">
             <div className="col col-lg-6 bi-text-lg-center ">
               <img
-                src={imagePreview || "default-avatar.png"}
+                src={`http://localhost:8080/imagesBarbero/${barber.Foto}`}
                 alt="Imagen de perfil"
                 className="img-fluid rounded-circle contenido3 mt-5 zoomhover2"
                 style={{ width: "250px", height: "250px", objectFit: "cover" }}
