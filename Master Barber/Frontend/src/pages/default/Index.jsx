@@ -10,7 +10,6 @@ export default function Index() {
         return localStorage.getItem("theme") || "light";
     });
 
-    // Efecto para aplicar la clase correspondiente al body según el tema
     useEffect(() => {
         document.body.className = theme;
     }, [theme]);
@@ -257,7 +256,7 @@ export default function Index() {
                     <div className="col border border mt-4 col mx-5 mt-5">
                         <h2 className='bebas text-center text-white mt-2 border-bottom fs-1'>EXPERIENCIA GARANTIZADA ⭐</h2>
                         <div className=' text-white fs-4 mb-3 mx-4 mt-4 text-center'>
-                        Miles de clientes satisfechos nos respaldan. Tu satisfacción es nuestra prioridad.
+                            Miles de clientes satisfechos nos respaldan. Tu satisfacción es nuestra prioridad.
                         </div>
                     </div>
                 </div>

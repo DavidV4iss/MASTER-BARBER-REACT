@@ -57,17 +57,14 @@ export default function PerfilBarber() {
     e.preventDefault();
     const formData = new FormData();
 
-    // Verificar si se actualizó el nombre
     if (barber.nombre && barber.nombre.trim() !== "") {
       formData.append("nombre", barber.nombre);
     }
 
-    // Si Se Selecciono Un Archivo Lo Verifica
     if (file) {
       formData.append("file", file);
     }
 
-    // Evitar Que Ambos Campos Esten Vacios
     if (!formData.has("nombre") && !formData.has("file")) {
       return Swal.fire({
         title: "Atención",

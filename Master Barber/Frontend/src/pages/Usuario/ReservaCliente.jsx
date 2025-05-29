@@ -69,9 +69,7 @@ export default function Reserva() {
     const prevStep = () => {
         setCurrentStep((prevStep) => prevStep - 1);
     };
-    //
 
-    //LOGICA DE API
     useEffect(() => {
         axios.get('http://localhost:8080/GetBarberos')
             .then(response => {
@@ -168,7 +166,6 @@ export default function Reserva() {
             });
         }
     };
-    //
 
     return (
         <div className='text-white text-center mt-5 rounded-4 container'>

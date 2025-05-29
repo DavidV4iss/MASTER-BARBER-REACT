@@ -16,8 +16,8 @@ export default function Login() {
       const res = await axios.post('http://localhost:8080/login', { email, password });
 
       if (res.status === 200) {
-        const { token, user } = res.data; // Extraer el token y el usuario de la respuesta
-        localStorage.setItem('token', token); // Guardar el token en localStorage
+        const { token, user } = res.data;
+        localStorage.setItem('token', token);
         console.log(user);
         Swal.fire({
           title: "Iniciaste sesión",
@@ -31,15 +31,14 @@ export default function Login() {
           },
         });
 
-        // Redirigir según el rol del usuario
         switch (user.role) {
-          case 1: // Administrador
+          case 1:
             navigate('/InicioAdmin');
             break;
-          case 2: // Barbero
-            navigate('/GestionReservas');  // Cambia a la ruta correspondiente de barberos
+          case 2:
+            navigate('/GestionReservas');
             break;
-          case 3: // Cliente
+          case 3:
             navigate('/InicioUsuario');
             break;
           default:
@@ -89,22 +88,6 @@ export default function Login() {
               </h1>
 
               <form className="row g-1" onSubmit={handleSubmit}>
-                {/* <div className="text-center">
-                  <button
-                    className="btn btn  mb-3 border border rounded-circle text-primary bg-white"
-                    type="button"
-                  >
-                    {" "}
-                    <i className="bi bi-google"></i>{" "}
-                  </button>
-                  <button
-                    className="btn btn  mb-3 mx-3 border border rounded-circle text-primary bg-white"
-                    type="button"
-                  >
-                    <i className="bi bi-facebook"></i>
-                  </button>
-                </div> */}
-
                 <div className="input-group mb-3 mt-5">
                   <span className="input-group-text" id="basic-addon2">
                     <i className="bi bi-envelope"></i>
@@ -133,15 +116,15 @@ export default function Login() {
                     value={password}
                     aria-label="Recipient's username"
                     aria-describedby="basic-addon2"
-                    onChange={(e) => setPassword(e.target.value)} // Actualiza el estado
+                    onChange={(e) => setPassword(e.target.value)}
                     placeholder="Introduce tu contraseña"
                   />
                   <button
                     type="button"
-                    onClick={() => setIsPasswordVisible((prev) => !prev)} // Alterna la visibilidad
+                    onClick={() => setIsPasswordVisible((prev) => !prev)}
                     className=" bg-white border rounded-end"
                   >
-                    {isPasswordVisible ? " 🙉" : "🙈"} {/* Iconos o texto */}
+                    {isPasswordVisible ? " 🙉" : "🙈"}
                   </button>
                 </div>
 

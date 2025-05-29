@@ -57,17 +57,14 @@ export default function PerfilUser() {
     e.preventDefault();
     const formData = new FormData();
 
-    // Verificar si se actualizó el nombre
     if (user.nombre && user.nombre.trim() !== "") {
       formData.append("nombre", user.nombre);
     }
 
-    // Si Se Selecciono Un Archivo Lo Verifica
     if (file) {
       formData.append("file", file);
     }
 
-    // Evitar Que Ambos Campos Esten Vacios
     if (!formData.has("nombre") && !formData.has("file")) {
       return Swal.fire({
         title: "Atención",

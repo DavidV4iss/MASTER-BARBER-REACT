@@ -133,7 +133,7 @@ export default function InicioUsuario() {
               <div className="mb-3  d-flex justify-content-center">
                 <textarea
                   name="comentario"
-                  className="form-control bg-dark text-white border-light shadow w-50 text-center"
+                  className="form-control border-light shadow w-50 text-center"
                   value={nuevaCalificacion.comentario}
                   onChange={handleChange}
                   rows={4}

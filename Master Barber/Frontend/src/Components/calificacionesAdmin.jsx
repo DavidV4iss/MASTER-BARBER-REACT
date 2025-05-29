@@ -54,30 +54,34 @@ export default function CalificacionesAdmin() {
 
     return (
         <div className='container text-white '>
-            <Slider {...settings}>
-                {calificaciones.map((calificacion) => {
-                    const usuario = usuarios.find(u => u.id_usuario === calificacion.usuario_id);
-                    return (
-                        <div key={calificacion.id} className="d-flex justify-content-center mt-5 mb-3">
-                            <div
-                                className="card-calificaciones card bg-gradient-dark text-white"
-                                onClick={() => handleShow(calificacion)}
-                            >
-                                <div className="card-body text-center">
-                                    <img
-                                        src={`http://localhost:8080/perfil/${usuario?.Foto}`}
-                                        className="img-fluid rounded-circle mb-3 shadow mx-auto d-block"
-                                        style={{ width: "120px", height: "120px", objectFit: "cover", border: "4px solid #dc3545" }}
-                                    />
-                                    <h4 className="fw-bold text-danger">{usuario?.nombre_usuario}</h4>
-                                    <p className="mt-3 text-light fs-5">{calificacion.comentario || "Sin comentario solo calificación"}</p>
-                                    <div className="text-warning fs-4">{"⭐".repeat(calificacion.puntuacion)}</div>
+            {calificaciones.length === 0 ? (
+                <p className="text-center text-danger">No hay calificaciones disponibles.</p>
+            ) : (
+                <Slider {...settings}>
+                    {calificaciones.map((calificacion) => {
+                        const usuario = usuarios.find(u => u.id_usuario === calificacion.usuario_id);
+                        return (
+                            <div key={calificacion.id} className="d-flex justify-content-center mt-5 mb-3">
+                                <div
+                                    className="card-calificaciones card bg-gradient-dark text-white"
+                                    onClick={() => handleShow(calificacion)}
+                                >
+                                    <div className="card-body text-center">
+                                        <img
+                                            src={`http://localhost:8080/perfil/${usuario?.Foto}`}
+                                            className="img-fluid rounded-circle mb-3 shadow mx-auto d-block"
+                                            style={{ width: "120px", height: "120px", objectFit: "cover", border: "4px solid #dc3545" }}
+                                        />
+                                        <h4 className="fw-bold text-danger">{usuario?.nombre_usuario}</h4>
+                                        <p className="mt-3 text-light fs-5">{calificacion.comentario || "Sin comentario solo calificación"}</p>
+                                        <div className="text-warning fs-4">{"⭐".repeat(calificacion.puntuacion)}</div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    );
-                })}
-            </Slider>
+                        );
+                    })}
+                </Slider>
+            )}
 
             {selectedCalificacion && (
                 <Modal show={show} onHide={handleClose} centered className='justify-content-center'>

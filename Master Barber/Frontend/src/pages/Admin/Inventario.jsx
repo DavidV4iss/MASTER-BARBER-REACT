@@ -35,7 +35,6 @@ export default function Inventario() {
 
     const navigate = useNavigate();
 
-    // Crear los Productos
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -131,7 +130,6 @@ export default function Inventario() {
         }
     };
 
-    // Handle change para editar foto
     const handleFileChangeEdit = (e) => {
         const selectedFile = e.target.files[0];
         if (selectedFile && selectedFile.type.startsWith('image/')) {
@@ -155,7 +153,6 @@ export default function Inventario() {
         setProductoEditar(prev => ({ ...prev, [e.target.name]: e.target.value }));
     };
 
-    // Handle change para añadir
     const handleChange = (e) => {
         setProducto(prev => ({ ...prev, [e.target.name]: e.target.value }));
     };

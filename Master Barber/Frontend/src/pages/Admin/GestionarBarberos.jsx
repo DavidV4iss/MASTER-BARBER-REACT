@@ -26,7 +26,6 @@ export default function GestionarBarberos() {
     foto: null,
   });
 
-  // Crear barberos
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -63,7 +62,6 @@ export default function GestionarBarberos() {
     }
   };
 
-  // Editar barberos
   const handleSubmitEdit = async (e) => {
     e.preventDefault();
     try {
@@ -98,17 +96,14 @@ export default function GestionarBarberos() {
     }
   };
 
-  // Handle change para añadir
   const handleChange = (e) => {
     setBarbero(prev => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
-  // Handle change para editar
   const handleChangeEdit = (e) => {
     setBarberoEdit(prev => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
-  // Handle change para añadir foto
   const handleFileChange = (e) => {
     const selectedFile = e.target.files[0];
     if (selectedFile && selectedFile.type.startsWith('image/')) {
@@ -126,7 +121,6 @@ export default function GestionarBarberos() {
     }
   };
 
-  // Handle change para editar foto
   const handleFileChangeEdit = (e) => {
     const selectedFile = e.target.files[0];
     if (selectedFile && selectedFile.type.startsWith('image/')) {

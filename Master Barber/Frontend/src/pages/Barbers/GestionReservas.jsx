@@ -11,7 +11,7 @@ export default function GestionReservas() {
     const [isLoadingCancel, setIsLoadingCancel] = useState(false);
     const [isLoadingAccept, setIsLoadingAccept] = useState(false);
     const [finalizedReservations, setFinalizedReservations] = useState([]);
-    const [cancelTimers, setCancelTimers] = useState({}); // Estado para manejar temporizadores
+    const [cancelTimers, setCancelTimers] = useState({});
     const [Barber, setBarber] = useState({});
 
     const token = localStorage.getItem('token');
@@ -59,7 +59,6 @@ export default function GestionReservas() {
             .then(response => {
                 console.log(response.data);
                 setReservas(reservas.map(reserva => reserva.id_reserva === id ? { ...reserva, estado: 'Aceptada' } : reserva));
-                // Limpiar temporizador si existe
                 if (cancelTimers[id]) {
                     clearTimeout(cancelTimers[id]);
                     setCancelTimers(prev => {
@@ -84,7 +83,6 @@ export default function GestionReservas() {
                 console.log(response.data);
                 setReservas(reservas.map(reserva => reserva.id_reserva === id ? { ...reserva, estado: 'Cancelada' } : reserva));
 
-                // Iniciar temporizador de 1 hora
                 const timer = setTimeout(() => {
                     handleDelete(id);
                 }, 60 * 60 * 1000); s
@@ -120,7 +118,6 @@ export default function GestionReservas() {
             .then(response => {
                 console.log(response.data);
                 setReservas(reservas.filter(reserva => reserva.id_reserva !== id));
-                // Limpiar temporizador si existe
                 if (cancelTimers[id]) {
                     clearTimeout(cancelTimers[id]);
                     setCancelTimers(prev => {
