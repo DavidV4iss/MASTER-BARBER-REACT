@@ -42,7 +42,12 @@ export default function PerfilBarber() {
   }, [email]);
 
   const handleChange = (e) => {
-    setBarber({ ...barber, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setBarber((prevBarber) => ({
+      ...prevBarber,
+      [name]: value,
+      nombre_usuario: name === 'nombre' ? value : prevBarber.nombre_usuario,
+    }));
   };
 
   const handleFileChange = (e) => {
@@ -81,7 +86,7 @@ export default function PerfilBarber() {
     setIsUpdating(true);
 
     try {
-      await axios.put(
+      await axios.post(
         `http://localhost:8080/actualizarUsuario/${email}`,
         formData
       );

@@ -42,9 +42,13 @@ export default function PerfilUser() {
   }, [email]);
 
   const handleChange = (e) => {
-    setUser({ ...user, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setUser((prevUser) => ({
+      ...prevUser,
+      [name]: value,
+      nombre_usuario: name === 'nombre' ? value : prevUser.nombre_usuario,
+    }));
   };
-
   const handleFileChange = (e) => {
     const selectedFile = e.target.files[0];
     if (selectedFile) {
@@ -81,7 +85,7 @@ export default function PerfilUser() {
     setIsUpdating(true);
 
     try {
-      await axios.put(
+      await axios.post(
         `http://localhost:8080/actualizarUsuario/${email}`,
         formData
       );

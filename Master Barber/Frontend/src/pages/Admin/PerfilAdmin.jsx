@@ -5,8 +5,6 @@ import Swal from 'sweetalert2';
 import { useNavigate } from 'react-router-dom';
 
 export default function PerfilAdmin() {
-
-
   const navigate = useNavigate();
 
   const [admin, setAdmin] = useState({});
@@ -42,7 +40,12 @@ export default function PerfilAdmin() {
   }, [email]);
 
   const handleChange = (e) => {
-    setAdmin({ ...admin, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setAdmin((prevAdmin) => ({
+      ...prevAdmin,
+      [name]: value,
+      nombre_usuario: name === 'nombre' ? value : prevAdmin.nombre_usuario,
+    }));
   };
 
   const handleFileChange = (e) => {
@@ -81,7 +84,7 @@ export default function PerfilAdmin() {
     setIsUpdating(true);
 
     try {
-      await axios.put(`http://localhost:8080/actualizarUsuario/${email}`, formData);
+      await axios.post(`http://localhost:8080/actualizarUsuario/${email}`, formData);
       Swal.fire({
         position: 'top-end',
         icon: 'success',
@@ -104,6 +107,8 @@ export default function PerfilAdmin() {
         },
       });
       console.error(err);
+    } finally {
+      setIsUpdating(false);
     }
   };
 
@@ -122,9 +127,7 @@ export default function PerfilAdmin() {
                 className="img-fluid rounded-circle contenido3 mt-5 zoomhover2"
                 style={{ width: '250px', height: '250px', objectFit: 'cover' }}
               />
-              <div className="mt-5">
-
-              </div>
+              <div className="mt-5"></div>
             </div>
             <div className="col-12 col-lg-6 container">
               <h1 className="text-warning text-center anton mb-4">¡Perfil!</h1>
@@ -142,11 +145,12 @@ export default function PerfilAdmin() {
                       type="text"
                       readOnly
                       className="form-control-plaintext text-white antonparabackend"
-                      id="staticEmail"
+                      id="staticNombre"
                       value={admin.nombre_usuario || ''}
                     />
                   </div>
                 </div>
+
                 <div className="form-floating mb-3 mx-2">
                   <input
                     type="text"
@@ -161,6 +165,7 @@ export default function PerfilAdmin() {
                     Nombre
                   </label>
                 </div>
+
                 <div className="container row mt-3">
                   <p className="text-white antonparabackend">Actualizar Foto De Perfil</p>
                   <div className="input-group">
