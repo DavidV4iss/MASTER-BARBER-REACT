@@ -5,6 +5,10 @@ import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import styled from 'styled-components';
 import moment from 'moment';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import 'swiper/css';
+import 'swiper/css/pagination';
+import { Pagination } from 'swiper/modules';
 
 const formattedDate = moment().format('YYYY-MM-DD HH:mm:ss');
 const StyledDatePicker = styled(DatePicker)`
@@ -34,7 +38,6 @@ export default function Reserva() {
     const id = tokenDecoded?.id || null;
 
 
-    //PASO A PASO DE RESERVA
     const nextStep = () => {
         if (currentStep === 1 && !service) {
             Swal.fire({
@@ -143,8 +146,8 @@ export default function Reserva() {
 
             Swal.fire({
                 icon: 'success',
-                title: 'Reserva creada',
-                text: 'Tu reserva ha sido creada exitosamente.',
+                title: 'Reserva creada exitosamente',
+                text: 'Espera a que el barbero vea tu solicitud, el estado de tu reserva sera notificado.',
                 customClass: {
                     popup: "dark-theme-popup bg-dark antonparabackend ",
                 }
@@ -169,99 +172,127 @@ export default function Reserva() {
 
     return (
         <div className='text-white text-center mt-5 rounded-4 container'>
-            <h1 className='text-warning text-center mt-5 mb-5 p-5 antonparabackend'>¡Crea tu reserva ahora!</h1>
 
-            <form onSubmit={handleSubmit}>
-                {/* Paso 1: Seleccionar servicio */}
+            <form onSubmit={handleSubmit} className="fade-in">
+                {/* Paso 1: Servicio */}
                 {currentStep === 1 && (
-                    <div>
-                        <h3 className='antonparabackend mt-5'>Selecciona el servicio que deseas</h3>
+                    <>
+                        <h3 className='antonparabackend mt-5'>
+                            <i className="fas fa-scissors me-2 text-danger"></i>Selecciona el servicio que deseas
+                        </h3>
                         <div className='container-fluid w-75'>
-                            <div className='row mt-5 mb-5 justify-content-center '>
-                                {servicios.map((servicio, index) => (
-                                    <div
-                                        className="col-12 col-sm-6 col-md-4 col-lg-6 mb-4 text-decoration-none d-flex justify-content-end mx-auto"
-                                        key={servicio.id_tipo_servicio}
-                                        onClick={() => setService(servicio.id_tipo_servicio)}
-                                        style={{ cursor: 'pointer' }}
-                                    >
+                            <div className='row mt-5 mb-5 justify-content-center'>
+                                {servicios.map((servicio, index) => {
+                                    const isSelected = service === servicio.id_tipo_servicio;
+                                    return (
                                         <div
-                                            className={`w-100 ${service === servicio.id_tipo_servicio
-                                                ? 'card bg-dark border-warning border-danger rounded-3 border-success shadow w-100 '
-                                                : 'card bg-black border-warning border-start-0 rounded-3 border-success w-100 '
-                                                }`}
+                                            key={servicio.id_tipo_servicio}
+                                            className={`col-12 col-sm-6 col-md-4 col-lg-6 mb-4 d-flex justify-content-end mx-auto card-hover`}
+                                            onClick={() => setService(servicio.id_tipo_servicio)}
+                                            style={{ cursor: 'pointer', transition: 'transform 0.1s ease-in-out' }}
                                         >
-                                            <h5 className="card-title text-danger text-center UnifrakturMaguntia fs-3 mt-4">
-                                                {servicio.nombre}
-                                            </h5>
-                                            <div className="card-body">
-                                                <div className="text-center">
+                                            <div
+                                                className={`card ${isSelected ? 'border border-3 border-warning shadow-lg selected-card' : 'border border-secondary'} bg-dark text-white rounded-4 w-100`}
+                                            >
+                                                <h5 className="card-title text-center fs-3 mt-3 text-warning UnifrakturMaguntia">
+                                                    {servicio.nombre}
+                                                </h5>
+                                                <div className="card-body">
                                                     <img
                                                         src={index === 1 ? '/cortePremium.jpg' : '/corteBasico.jpg'}
-                                                        className="card-img-top rounded-2 mt-2"
+                                                        className="card-img-top rounded-3"
                                                         alt={servicio.nombre}
                                                     />
-                                                </div>
-                                                <div className="text-center mt-5">
-                                                    <p className="text-white bebas fs-5">{servicio.descripcion_S}</p>
+                                                    <p className="text-light bebas fs-5 mt-4">
+                                                        {servicio.descripcion_S}
+                                                    </p>
+                                                    {isSelected && (
+                                                        <span className="badge bg-success mt-2">Seleccionado ✅</span>
+                                                    )}
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                ))}
+                                    );
+                                })}
                             </div>
                         </div>
-                        <button type="button" className="btn btn-warning text-white" onClick={nextStep}>
-                            Siguiente
+                        <button className="btn btn-warning px-4 py-2 shadow rounded-4 text-white" onClick={nextStep}>
+                            Siguiente <i className="fas fa-arrow-right ms-2"></i>
                         </button>
-                    </div>
+                    </>
                 )}
 
-                {/* Paso 2: Seleccionar barbero */}
+                {/* Paso 2: Barbero */}
                 {currentStep === 2 && (
-                    <div>
-                        <h3 className='antonparabackend mt-5 text-white'>Selecciona tu barbero preferido</h3>
-                        <div className="row mt-5 mb-5 justify-content-center align-items-center">
-                            {barberos.map((barbero, index) => (
-                                <div
-                                    className="col-12 col-sm-6 col-md-2 col-lg-3 mb-4 text-decoration-none d-flex justify-content-center"
-                                    key={barbero.id_barbero}
-                                    onClick={() => setBarberoId(barbero.id_usuario)}
-                                    style={{ cursor: 'pointer' }}
-                                >
-                                    <div
-                                        className={`w-100 ${barberoId === barbero.id_usuario
-                                            ? 'card bg-dark border-warning border-danger rounded-3 border-success shadow w-100'
-                                            : 'card bg-black border-warning border-start-0 rounded-3 border-success w-100 contenido5 '
-                                            }`}
-                                    >
-                                        <h5 className="card-title text-danger text-center bebas fs-3 mt-4">
-                                            {barbero.nombre_usuario}
-                                        </h5>
-                                        <div className="card-body">
-                                            <div className="text-center">
-                                                <img
-                                                    src={`http://localhost:8080/imagesBarbero/${barbero.Foto}`}
-                                                    className="card-img-top img-fluid"
-                                                    alt={barbero.nombre_usuario}
-                                                />
+                    <>
+                        <h3 className='antonparabackend mt-5'>
+                            <i className="fas fa-user-alt me-2 text-danger"></i>Selecciona tu barbero preferido
+                        </h3>
+
+                        <div className="mt-5 mb-5">
+                            <Swiper
+                                slidesPerView={1}
+                                spaceBetween={20}
+                                pagination={{ clickable: true }}
+                                breakpoints={{
+                                    576: { slidesPerView: 1 },
+                                    768: { slidesPerView: 2 },
+                                    992: { slidesPerView: 3 },
+                                }}
+                                modules={[Pagination]}
+                                className="mySwiper"
+                            >
+                                {barberos.map((barbero) => {
+                                    const isSelected = barberoId === barbero.id_usuario;
+                                    return (
+                                        <SwiperSlide key={barbero.id_barbero}>
+                                            <div
+                                                onClick={() => setBarberoId(barbero.id_usuario)}
+                                                style={{ cursor: 'pointer' }}
+                                            >
+                                                <div
+                                                    className={`card ${isSelected
+                                                        ? 'border border-3 border-warning shadow-lg selected-card'
+                                                        : 'border border-secondary'
+                                                        } bg-dark text-white rounded-4 h-100`}
+                                                >
+                                                    <h5 className="card-title text-danger text-center bebas fs-4 mt-4">
+                                                        {barbero.nombre_usuario}
+                                                    </h5>
+                                                    <div className="card-body d-flex flex-column align-items-center text-center">
+                                                        <img
+                                                            src={`http://localhost:8080/imagesBarbero/${barbero.Foto}`}
+                                                            className="card-img-top rounded-3 img-fluid"
+                                                            alt={barbero.nombre_usuario}
+                                                            style={{ maxHeight: '200px', objectFit: 'cover' }}
+                                                        />
+                                                        <p className="text-light bebas fs-6 mt-4">
+                                                            {barbero.descripcion}
+                                                        </p>
+                                                        {isSelected && (
+                                                            <span className="badge bg-success mt-2">
+                                                                Seleccionado ✅
+                                                            </span>
+                                                        )}
+                                                    </div>
+                                                </div>
                                             </div>
-                                            <div className="text-center mt-5">
-                                                <p className="text-white bebas fs-5">{barbero.descripcion}</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            ))}
+                                        </SwiperSlide>
+                                    );
+                                })}
+                            </Swiper>
                         </div>
-                        <button type="button" className="btn btn-danger me-3 text-white" onClick={prevStep}>
-                            Anterior
+
+                        <button className="btn btn-danger me-3 px-4 py-2 rounded-4" onClick={prevStep}>
+                            <i className="fas fa-arrow-left me-2"></i> Anterior
                         </button>
-                        <button type="button" className="btn btn-warning text-white" onClick={nextStep}>
-                            Siguiente
+                        <button className="btn btn-warning px-4 py-2 rounded-4 text-white" onClick={nextStep}>
+                            Siguiente <i className="fas fa-arrow-right ms-2"></i>
                         </button>
-                    </div>
+                    </>
                 )}
+
+
 
                 {/* Paso 3: Seleccionar fecha y hora */}
                 {currentStep === 3 && (

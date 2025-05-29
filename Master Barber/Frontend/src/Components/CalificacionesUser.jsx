@@ -117,7 +117,7 @@ export default function CalificacionesUser() {
                                     <p className="mt-3 text-light fs-5">{calificacion.comentario || "Sin comentario solo calificación"}</p>
                                     <div className="text-warning fs-4">{"⭐".repeat(calificacion.puntuacion)}</div>
                                 </div>
-                                <div className="card-footer mt-5">
+                                <div className="card-footer mt-5 d-flex justify-content-center">
                                     <button
                                         className='btn btn-outline-danger'
                                         onClick={e => {

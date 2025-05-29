@@ -5,10 +5,13 @@ import Swal from 'sweetalert2';
 import Rating from 'react-rating-stars-component';
 import ReservaCliente from './ReservaCliente';
 import CalificacionesUser from '../../Components/CalificacionesUser';
-
+import Particles from "react-tsparticles";
+import 'animate.css';
 
 export default function InicioUsuario() {
   const [user, setUser] = useState({});
+  const [mostrarReserva, setMostrarReserva] = useState(false);
+
   const token = localStorage.getItem("token");
   const usuario = JSON.parse(atob(token.split(".")[1]));
   const email = usuario.email;
@@ -34,11 +37,11 @@ export default function InicioUsuario() {
 
   const handleChange = (e) => {
     setNuevaCalificacion(prev => ({ ...prev, [e.target.name]: e.target.value }));
-  }
+  };
 
   const handleRatingChange = (newRating) => {
     setNuevaCalificacion(prev => ({ ...prev, puntuacion: newRating }));
-  }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -53,93 +56,108 @@ export default function InicioUsuario() {
           confirmButtonColor: "#DC3545",
           confirmButtonText: "Continuar",
           customClass: {
-            popup: "dark-theme-popup bg-dark antonparabackend ",
+            popup: "dark-theme-popup bg-dark antonparabackend",
           },
           timer: 9000,
         });
-        window.location.reload(0);
+        window.location.reload();
       }
     } catch (error) {
-      if (error.response) {
-        Swal.fire({
-          title: "Error al enviar la calificación",
-          text: "Por favor, intenta nuevamente",
-          icon: "error",
-          iconColor: "#1bf30b",
-          confirmButtonColor: "#DC3545",
-          confirmButtonText: "Continuar",
-          customClass: {
-            popup: "dark-theme-popup bg-dark antonparabackend ",
-          },
-        });
-      }
+      Swal.fire({
+        title: "Error al enviar la calificación",
+        text: "Por favor, intenta nuevamente",
+        icon: "error",
+        iconColor: "#1bf30b",
+        confirmButtonColor: "#DC3545",
+        confirmButtonText: "Continuar",
+        customClass: {
+          popup: "dark-theme-popup bg-dark antonparabackend",
+        },
+      });
     }
-  }
+  };
 
   return (
     <div>
       <NavbarUserIndex />
-      <div className="container p-5 nab table-responsive col col-sm-12 " id="homeuser">
-        <div className="row row-cols-1 row-cols-md-2 g-4 text-center">
-          <div className="col mt-5 border border-5 pt-5">
-            <h1 className=" mt-5  pt-2 text-white display-1 anton fw-bold">
-              Hola, {user.nombre_usuario}
+
+
+      <div className=" py-5 text-white welcomeindex2" id="homeuser">
+        <div className=" container row mb-5 g-5 gx-5 contenido mt-5 pt-5">
+          <div className="col-12 col-md-6 mb-4 mb-md-0">
+            <h1 className="display-1 anton fw-bold">
+              Bienvenido, <span className="text-danger">{user.nombre_usuario}</span>
             </h1>
-            <div className="container-fluid mt-5 pt-5 text-white">
-              <p>DESCRIPCION</p>
-            </div>
+            <p className="mt-4 lead text-light">
+              ¡Nos alegra verte de nuevo! Reserva tu cita fácilmente, califica nuestro servicio y disfruta de la mejor experiencia en barbería.
+            </p>
           </div>
-          <div className="col col-sm-12 border border-5">
-            <ReservaCliente />
+
+          <div className="col-12 col-md-6 text-center mb-4 mb-md-0">
+            <div className="p-4 bg-dark rounded shadow text-center">
+              <i className="bi bi-question-circle display-1 mb-4"></i>
+              <h3 className="text-white fw-bold mb-4 bebas mt-3">¿Listo para un nuevo look?</h3>
+              {!mostrarReserva ? (
+                <button
+                  className="btn btn-warning btn-lg fw-bold text-dark shadow-lg animate__animated animate__pulse"
+                  onClick={() => setMostrarReserva(true)}
+                >
+                  <i className="bi bi-arrow-right mx-2"></i>Ir a Reservar
+                </button>
+              ) : (
+                <ReservaCliente />
+              )}
+            </div>
           </div>
         </div>
 
+        <div className="row welcome mx-5">
+          <div className="col-12 col-md-6 g-5">
+            <h2 className="antonparabackend fw-bold d-flex justify-content-center">
+              <span className="text-danger">CALIFICACIONES</span>
+              <span className="text-light"> || </span>
+              <span className="text-warning">VIP</span>
+            </h2>
 
-
-        <div className="container text-white text-center">
-          <div className="row row-cols-1 row-cols-md-2 g-4  p-5 mt-5 ">
-            <div className="col border border-5">
-              <h2 className="text-center antonparabackend fw-bold mt-5 pt-5">
-                <p>
-                  <span className="text-danger display-5">CALIFICACIONES </span>
-                  <span className="text-light  display-5"> || </span>
-                  <span className="text-warning display-5"> VIP</span>
-
-                </p>
-
-              </h2>
-              <form onSubmit={handleSubmit} className='text-white'>
-                <div className='contenido3'>
-                  <Rating
-                    count={5}
-                    value={nuevaCalificacion.puntuacion}
-                    onChange={handleRatingChange}
-                    size={80}
-                    activeColor="#ffd700"
-                    min={1}
-                    max={5}
-                    name="puntuacion"
-                  />
-                </div>
-                <label className='mx-3 fw-bold mb-3 fs-3 bebas text-warning'>Comentario</label>
-                <div>
-                  <textarea type="text" name="comentario" className='form-control bg-dark text-white w-50 contenido5 p-5 border-light border-1 fw-bold text-center' value={nuevaCalificacion.comentario} onChange={handleChange} />
-                </div>
-                <button type="submit" className='btn btn-danger mt-3 '>Enviar Calificación</button>
-              </form>
-            </div>
-            <div className="col border border-5 ">
-              <div className='mt-5 pt-5'>
-                <h5 className='fw-bold fs-2 bebas text-warning'>Mis calificaciones</h5>
-                <div className="mt-5">
-                  <CalificacionesUser />
-                </div>
+            <form onSubmit={handleSubmit} className="text-white">
+              <div className="mb-4 mx-5 d-flex justify-content-center">
+                <Rating
+                  count={5}
+                  value={nuevaCalificacion.puntuacion}
+                  onChange={handleRatingChange}
+                  size={60}
+                  activeColor="#ffd700"
+                  name="puntuacion"
+                />
               </div>
-            </div>
+              <div className="mb-3  d-flex justify-content-center">
+                <textarea
+                  name="comentario"
+                  className="form-control bg-dark text-white border-light shadow w-50 text-center"
+                  value={nuevaCalificacion.comentario}
+                  onChange={handleChange}
+                  rows={4}
+                  placeholder="¿Qué te pareció el servicio?"
+                />
+              </div>
+              <div className="d-flex justify-content-center">
+                <button type="submit" className="btn btn-danger">
+                  Enviar Calificación
+                </button>
+              </div>
+
+            </form>
+          </div>
+
+          <div className="col-12 col-md-6">
+            <CalificacionesUser />
           </div>
         </div>
       </div>
-    </div>
 
+      <footer className="text-center text-light py-4">
+        <small>© {new Date().getFullYear()} Barbería VIP. Todos los derechos reservados.</small>
+      </footer>
+    </div>
   );
 }
