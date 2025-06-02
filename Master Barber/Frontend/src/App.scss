@@ -256,6 +256,26 @@ footer {
 
 // FIN 
 
+//ESTILOS DE LA FOTO DE PERFIL DEL BARBERO
+
+.fade-in {
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0.3;
+    transform: scale(0.97);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+// FIN ESTILOS PARA LA FOTO DE PERFIL DEL BARBERO
+
 
 
 

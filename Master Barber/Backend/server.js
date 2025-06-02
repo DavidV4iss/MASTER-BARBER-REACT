@@ -769,6 +769,83 @@ app.get('/traerUsuario/:email', (req, res) => {
 //Fin Perfil
 
 
+//INICIODELPERFILDELBARBERO
+const uploadBarberoPerfil = multer({
+    storage: multer.diskStorage({
+        destination: function (req, file, cb) {
+            cb(null, './uploads/imagesBarbero/');
+        },
+        filename: function (req, file, cb) {
+            cb(null, `barbero_${Date.now()}-${file.originalname}`);
+        },
+    }),
+});
+
+const borrarFotoAnteriorBarbero = async (foto) => {
+    try {
+        const filePath = path.resolve(__dirname, `./uploads/imagesBarbero/${foto}`);
+        await fs.promises.unlink(filePath);
+    } catch (err) {
+        console.error('Error al eliminar la foto anterior del barbero:', err);
+    }
+};
+
+app.post('/actualizarBarbero/:email', uploadBarberoPerfil.single('file'), (req, res) => {
+    const file = req.file;
+    const email = req.params.email;
+    const nombre = req.body.nombre;
+
+    db.query('SELECT * FROM usuarios WHERE email = ? AND id_rol = 2', [email], async (err, results) => {
+        if (err) {
+            console.log(err);
+            return res.status(500).send('Error en el servidor');
+        }
+
+        if (results.length === 0) {
+            return res.status(404).send('Barbero no encontrado');
+        }
+
+        const usuario = results[0];
+        const fotoAnterior = usuario.Foto;
+
+        let queryValues = [];
+        let queryString = 'UPDATE usuarios SET ';
+        let setParts = [];
+
+        if (nombre) {
+            setParts.push('nombre_usuario = ?');
+            queryValues.push(nombre);
+        }
+
+        if (file) {
+            setParts.push('Foto = ?');
+            queryValues.push(file.filename);
+        }
+
+        if (setParts.length === 0) {
+            return res.status(400).send('No hay datos para actualizar');
+        }
+
+        queryString += setParts.join(', ');
+        queryString += ' WHERE email = ? AND id_rol = 2';
+        queryValues.push(email);
+
+        db.query(queryString, queryValues, async (err) => {
+            if (err) {
+                console.log(err);
+                return res.status(500).send('Error en el servidor');
+            } else {
+                if (file && fotoAnterior) {
+                    await borrarFotoAnteriorBarbero(fotoAnterior);
+                }
+                return res.status(200).send('Perfil del barbero actualizado exitosamente');
+            }
+        });
+    });
+});
+//PERFILDELBARBERO
+
+
 
 
 
@@ -1172,4 +1249,3 @@ app.listen(port, '0.0.0.0', () => {
     console.log(`- Local:    http://localhost:${port}`);
     console.log(`- Red:      http://${localIP}:${port}`);
 });
-

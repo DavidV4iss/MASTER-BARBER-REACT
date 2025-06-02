@@ -24,7 +24,7 @@ export default function PerfilBarber() {
         const res = await axios.get(`http://localhost:8080/traerUsuario/${email}`);
         setBarber(res.data[0]);
         if (res.data[0].Foto) {
-          setImagePreview(`http://localhost:8080/perfil/${res.data[0].Foto}`);
+          setImagePreview(`http://localhost:8080/imagesBarbero/${res.data[0].Foto}`);
         }
       } catch (err) {
         console.log("Error al obtener los datos:", err);
@@ -87,7 +87,7 @@ export default function PerfilBarber() {
 
     try {
       await axios.post(
-        `http://localhost:8080/actualizarUsuario/${email}`,
+        `http://localhost:8080/actualizarBarbero/${email}`,
         formData
       );
       Swal.fire({
@@ -125,11 +125,19 @@ export default function PerfilBarber() {
           <div className="row justify-content-center align-items-center">
             <div className="col col-lg-6 bi-text-lg-center ">
               <img
-                src={`http://localhost:8080/imagesBarbero/${barber.Foto}`}
+                src={imagePreview || `http://localhost:8080/imagesBarbero/${barber.Foto}`}
                 alt="Imagen de perfil"
-                className="img-fluid rounded-circle contenido3 mt-5 zoomhover2"
-                style={{ width: "250px", height: "250px", objectFit: "cover" }}
+                className={`img-fluid rounded-circle contenido3 zoomhover2 ${imagePreview ? "fade-in" : ""
+                  }`}
+                style={{
+                  width: "250px",
+                  height: "250px",
+                  objectFit: "cover",
+                  transition: "opacity 0.5s ease-in-out",
+                  opacity: imagePreview ? 0.9 : 1,
+                }}
               />
+
             </div>
             <div className="col-12 col-lg-6 container">
               <h1 className="text-warning text-center anton mb-4">¡Perfil!</h1>
