@@ -88,6 +88,7 @@ export default function Gestiondeinventario() {
 
             Swal.fire({
                 icon: 'success',
+                timer: 9000,
                 title: 'Venta Exitosa',
                 html: `Productos vendidos:<br>${ventasConFecha.map(p => `<span style="color: yellow">${p.nombre} (x${p.cantidad})</span>`).join('<br>')}<br><br>Total: <span style="color: yellow">$${calcularTotal()}</span>`,
                 confirmButtonColor: '#DC3545',

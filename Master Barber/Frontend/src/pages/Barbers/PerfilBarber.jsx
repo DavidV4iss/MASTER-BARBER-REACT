@@ -59,8 +59,7 @@ export default function PerfilBarber() {
   };
 
   const handleRestoreImage = () => {
-    setFile(null);
-    setImagePreview("");
+    window.location.reload();
   };
 
 

@@ -57,6 +57,10 @@ export default function PerfilUser() {
     }
   };
 
+  const handleRestoreImage = () => {
+    window.location.reload(0);
+  };
+
   const handleClick = async (e) => {
     e.preventDefault();
     const formData = new FormData();
@@ -127,7 +131,7 @@ export default function PerfilUser() {
               <img
                 src={imagePreview || "default-avatar.png"}
                 alt="Imagen de perfil"
-                className="img-fluid rounded-circle contenido3 text-white zoomhover2"
+                className="img-fluid rounded-circle contenido3 text-white zoomhover2 fade-in"
                 style={{ width: "250px", height: "250px", objectFit: "cover" }}
               />
             </div>
@@ -189,6 +193,16 @@ export default function PerfilUser() {
                     >
                       {isUpdating ? "Actualizando..." : "Actualizar"}
                     </button>
+
+                    {file && (
+                      <button
+                        type="button"
+                        className="btn btn-outline-warning mx-1"
+                        onClick={handleRestoreImage}
+                      >
+                        Restaurar Imagen
+                      </button>
+                    )}
                   </div>
                 </div>
               </form>

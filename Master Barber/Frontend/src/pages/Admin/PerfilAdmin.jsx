@@ -56,6 +56,10 @@ export default function PerfilAdmin() {
     }
   };
 
+  const handleRestoreImage = () => {
+    window.location.reload(0);
+  };
+
   const handleClick = async (e) => {
     e.preventDefault();
     const formData = new FormData();
@@ -124,7 +128,7 @@ export default function PerfilAdmin() {
               <img
                 src={imagePreview || 'default-avatar.png'}
                 alt="Imagen de perfil"
-                className="img-fluid rounded-circle contenido3 mt-5 zoomhover2"
+                className="img-fluid rounded-circle contenido3 mt-5 zoomhover2 fade-in"
                 style={{ width: '250px', height: '250px', objectFit: 'cover' }}
               />
               <div className="mt-5"></div>
@@ -180,10 +184,21 @@ export default function PerfilAdmin() {
                     <button
                       type="submit"
                       className="btn btn-outline-danger mx-1"
+                      id="inputGroupFileAddon04"
                       disabled={isUpdating}
                     >
-                      {isUpdating ? 'Actualizando...' : 'Actualizar'}
+                      {isUpdating ? "Actualizando..." : "Actualizar"}
                     </button>
+
+                    {file && (
+                      <button
+                        type="button"
+                        className="btn btn-outline-warning mx-1"
+                        onClick={handleRestoreImage}
+                      >
+                        Restaurar Imagen
+                      </button>
+                    )}
                   </div>
                 </div>
               </form>
