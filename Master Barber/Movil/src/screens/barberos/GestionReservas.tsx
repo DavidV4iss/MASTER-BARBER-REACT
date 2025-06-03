@@ -87,7 +87,7 @@ const GestionReservas = () => {
 
     const handleAccept = (id) => {
         setIsLoadingAccept(true);
-        const response = ReservasClientesRepository.UpdateReservasEstado(id , 'Aceptada');
+        const response = ReservasClientesRepository.UpdateReservasEstado(id, 'Aceptada');
         response
             .then(response => {
                 console.log(response.data);
@@ -188,19 +188,6 @@ const GestionReservas = () => {
             ? `${getBaseURL()}perfil/${cliente.Foto}`
             : null;
     };
-
-<<<<<<< Updated upstream
-    
-
-
-=======
-    const getImage = (id) => {
-        const cliente = clientes.find(cliente => cliente.id_usuario === id);
-        return cliente && cliente.Foto
-            ? `${getBaseURL()}perfil/${cliente.Foto}`
-            : null;
-    }
->>>>>>> Stashed changes
 
     const [fontsLoaded] = useFonts({
         Anton: Anton_400Regular,
