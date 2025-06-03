@@ -58,6 +58,12 @@ export default function PerfilBarber() {
     }
   };
 
+  const handleRestoreImage = () => {
+    setFile(null);
+    setImagePreview("");
+  };
+
+
   const handleClick = async (e) => {
     e.preventDefault();
     const formData = new FormData();
@@ -197,6 +203,16 @@ export default function PerfilBarber() {
                     >
                       {isUpdating ? "Actualizando..." : "Actualizar"}
                     </button>
+
+                    {file && (
+                      <button
+                        type="button"
+                        className="btn btn-outline-warning mx-1"
+                        onClick={handleRestoreImage}
+                      >
+                        Restaurar Imagen
+                      </button>
+                    )}
                   </div>
                 </div>
               </form>

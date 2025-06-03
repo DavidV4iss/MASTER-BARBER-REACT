@@ -41,7 +41,7 @@ export default function GestionarBarberos() {
         Swal.fire({
           icon: 'success',
           title: res.data,
-          timer: 1000,
+          timer: 9000,
           customClass: {
             popup: "dark-theme-popup bg-dark antonparabackend ",
           },
@@ -223,24 +223,32 @@ export default function GestionarBarberos() {
                 </tr>
               </thead>
               <tbody className='table-group-divider'>
-                {barberos.map((barbero) => (
-                  <tr key={barbero.id_usuario}>
-                    <td className='w-25 text-center p-5'>{barbero.nombre_usuario}</td>
-                    <td className='w-25 text-center p-5'>{barbero.email}</td>
-                    <td className='w-25 text-center p-5'>{barbero.descripcion}</td>
-                    <td><img src={`http://localhost:8080/imagesBarbero/${barbero.Foto}`} className='img-fluid zoomhover2' alt="" /></td>
-                    <td>
-                      <div className="d-flex justify-content-center mt-5 mx-5">
-                        <button type="button" className="btn btn-outline-warning me-5" onClick={() => openEditModal(barbero)} data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@mdo">
-                          <i className='bi bi-pencil-fill text-white'></i>
-                        </button>
-                        <button className='btn btn-outline-danger' onClick={() => DeleteBarberos(barbero.id_usuario)}>
-                          <i className="bi bi-trash-fill"  ></i>
-                        </button>
-                      </div>
+                {barberos.length === 0 ? (
+                  <tr>
+                    <td colSpan="5" className="text-center text-danger antonparabackend fs-5">
+                      No hay barberos para mostrar
                     </td>
                   </tr>
-                ))}
+                ) : (
+                  barberos.map((barbero) => (
+                    <tr key={barbero.id_usuario}>
+                      <td className='w-25 text-center p-5'>{barbero.nombre_usuario}</td>
+                      <td className='w-25 text-center p-5'>{barbero.email}</td>
+                      <td className='w-25 text-center p-5'>{barbero.descripcion}</td>
+                      <td><img src={`http://localhost:8080/imagesBarbero/${barbero.Foto}`} className='img-fluid zoomhover2' alt="" /></td>
+                      <td>
+                        <div className="d-flex justify-content-center mt-5 mx-5">
+                          <button type="button" className="btn btn-outline-warning me-5" onClick={() => openEditModal(barbero)} data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@mdo">
+                            <i className='bi bi-pencil-fill text-white'></i>
+                          </button>
+                          <button className='btn btn-outline-danger' onClick={() => DeleteBarberos(barbero.id_usuario)}>
+                            <i className="bi bi-trash-fill"  ></i>
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))
+                )}
               </tbody>
             </table>
           </div>

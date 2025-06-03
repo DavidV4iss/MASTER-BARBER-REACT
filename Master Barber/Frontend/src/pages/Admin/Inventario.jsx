@@ -54,7 +54,7 @@ export default function Inventario() {
                 Swal.fire({
                     icon: 'success',
                     title: res.data,
-                    timer: 1000,
+                    timer: 8000,
                     customClass: {
                         popup: "dark-theme-popup bg-dark antonparabackend ",
                     },
@@ -93,7 +93,7 @@ export default function Inventario() {
                 Swal.fire({
                     icon: 'success',
                     title: res.data,
-                    timer: 1000,
+                    timer: 9000,
                     customClass: {
                         popup: "dark-theme-popup bg-dark antonparabackend ",
                     },
@@ -217,7 +217,11 @@ export default function Inventario() {
     }, []);
 
     const openEditModal = (item) => {
-        setProductoEditar(item);
+        setProductoEditar({
+            ...item,
+            foto: item.Foto // Asegura que 'foto' tenga el valor correcto
+        });
+        setImagePreviewEdit('');
     };
 
 
@@ -250,30 +254,37 @@ export default function Inventario() {
                                     </tr>
                                 </thead>
                                 <tbody className='p-5'>
-                                    {inventario.map((item) => (
-                                        <tr key={item.id_producto}>
-                                            <th className='text-center'>{item.id_producto}</th>
-                                            <td className='text-center'>{item.nombre}</td>
-                                            <td className='text-center'>{item.descripcion_P}</td>
-                                            <td className='text-center'>{item.cantidad}</td>
-                                            <td className='text-center'>{categorias.find(c => c.id_categoria_producto === item.id_categoria_producto).categoria}</td>
-                                            <td className='text-center'>{item.proveedor}</td>
-                                            <td className='text-center'>{item.fecha_venta}</td>
-                                            <td className='text-center'><img src={`http://localhost:8080/ImagesInventario/${item.Foto}`} className='img-fluid zoomhover2' style={{ width: '150px', height: '150px', objectFit: 'cover' }} /></td>
-                                            <td className='text-center'>{item.PrecioUnitario}</td>
-                                            <td>
-                                                <div className="d-flex">
-                                                    <button type="button" className="btn btn-outline-warning me-3" onClick={() => openEditModal(item)} data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@mdo">
-                                                        <i className='bi bi-pencil-fill text-white'></i>
-                                                    </button>
-                                                    <button className='btn btn-outline-danger' onClick={() => DeleteInventario(item.id_producto)}>
-                                                        <i className="bi bi-trash-fill"  ></i>
-                                                    </button>
-                                                </div>
+                                    {inventario.length === 0 ? (
+                                        <tr>
+                                            <td colSpan="10" className="text-center text-danger fs-5 antonparabackend">
+                                                No hay productos para mostrar
                                             </td>
                                         </tr>
-                                    ))}
-
+                                    ) : (
+                                        inventario.map((item) => (
+                                            <tr key={item.id_producto}>
+                                                <th className='text-center'>{item.id_producto}</th>
+                                                <td className='text-center'>{item.nombre}</td>
+                                                <td className='text-center'>{item.descripcion_P}</td>
+                                                <td className='text-center'>{item.cantidad}</td>
+                                                <td className='text-center'>{categorias.find(c => c.id_categoria_producto === item.id_categoria_producto)?.categoria}</td>
+                                                <td className='text-center'>{item.proveedor}</td>
+                                                <td className='text-center'>{item.fecha_venta}</td>
+                                                <td className='text-center'><img src={`http://localhost:8080/ImagesInventario/${item.Foto}`} className='img-fluid zoomhover2' style={{ width: '150px', height: '150px', objectFit: 'cover' }} /></td>
+                                                <td className='text-center'>{item.PrecioUnitario}</td>
+                                                <td>
+                                                    <div className="d-flex">
+                                                        <button type="button" className="btn btn-outline-warning me-3" onClick={() => openEditModal(item)} data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@mdo">
+                                                            <i className='bi bi-pencil-fill text-white'></i>
+                                                        </button>
+                                                        <button className='btn btn-outline-danger' onClick={() => DeleteInventario(item.id_producto)}>
+                                                            <i className="bi bi-trash-fill"  ></i>
+                                                        </button>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        ))
+                                    )}
                                 </tbody>
                             </table>
                         </div>
@@ -291,8 +302,21 @@ export default function Inventario() {
                                         <button type="button" class="btn-close bg-white" data-bs-dismiss="modal" aria-label="Close"></button>
                                     </div>
                                     <div className="d-flex justify-content-center ">
-                                        <div className="card bg-dark" style={{ width: '10rem' }}>
-                                            <img src={imagePreviewEdit || `http://localhost:8080/ImagesInventario/${productoEditar.foto}`} style={{ width: '100%', height: '100%', objectFit: 'cover' }} className='img-fluid text-white rounded' alt="Imagen" />
+                                        <div className="card bg-dark mt-3" style={{ width: '10rem' }}>
+                                            <img
+                                                src={
+                                                    imagePreviewEdit
+                                                        ? imagePreviewEdit
+                                                        : productoEditar.foto && typeof productoEditar.foto === 'string'
+                                                            ? `http://localhost:8080/ImagesInventario/${productoEditar.foto}`
+                                                            : productoEditar.Foto && typeof productoEditar.Foto === 'string'
+                                                                ? `http://localhost:8080/ImagesInventario/${productoEditar.Foto}`
+                                                                : ''
+                                                }
+                                                style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                                                className='img-fluid text-white rounded'
+                                                alt="Imagen"
+                                            />
                                         </div>
                                     </div>
                                     <div class="modal-body">
@@ -337,7 +361,7 @@ export default function Inventario() {
                                             />
                                         </div>
                                         <div class="mb-3">
-                                            <label for="recipient-name" class="col-form-label text-white  antonparabackend">Costo de venta:</label>
+                                            <label for="recipient-name" class="col-form-label text-white  antonparabackend">Costo Total:</label>
                                             <input value={productoEditar.PrecioUnitario} type="text" class="form-control bg-dark text-white" id="recipient-name" name='PrecioUnitario' onChange={handleChangeEdit} />
                                         </div>
                                     </div>
@@ -408,8 +432,8 @@ export default function Inventario() {
                                                     style={{ width: '50f%', height: '50%', objectFit: 'cover' }}
                                                 />
                                             </div>
-                                            <div class="mb-3">
-                                                <label for="recipient-name" class="col-form-label text-white  antonparabackend">Costo de venta</label>
+                                            <div class="mb-3 mt-3">
+                                                <label for="recipient-name" class="col-form-label text-white  antonparabackend">Costo Total</label>
                                                 <input type="text" class="form-control bg-dark text-white" id="recipient-name" name='PrecioUnitario' onChange={handleChange} />
                                             </div>
                                         </form>

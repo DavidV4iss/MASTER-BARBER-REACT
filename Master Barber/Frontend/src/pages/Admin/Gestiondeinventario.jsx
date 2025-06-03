@@ -153,27 +153,33 @@ export default function Gestiondeinventario() {
                 <div className="row g-4 contenido mt-5 pt-5">
                     <div className="col-lg-7">
                         <div className="row row-cols-1 row-cols-md-3 g-4">
-                            {inventario.map((item) => (
-                                <Link
-                                    key={item.id_producto}
-                                    onClick={() => agregarProducto(item)}
-                                    className="col text-decoration-none"
-                                >
-                                    <div className="card bg-dark h-100 shadow-lg rounded-4">
-                                        <img
-                                            src={`http://localhost:8080/ImagesInventario/${item.Foto}`}
-                                            alt={item.nombre}
-                                            className="card-img-top rounded-top-4 border border-light"
-                                            style={{ height: '200px', objectFit: 'cover' }}
-                                        />
-                                        <div className="card-body text-center">
-                                            <h5 className="text-warning bebas">{item.nombre}</h5>
-                                            <p className="text-white">${item.PrecioUnitario}</p>
-                                            <p className="text-success bebas">{item.cantidad} Unidades</p>
+                            {inventario.length === 0 ? (
+                                <div className="col-12 text-center text-warning fs-4 contenido5 welcome-2 bebas">
+                                    No hay productos en el inventario para mostrar
+                                </div>
+                            ) : (
+                                inventario.map((item) => (
+                                    <Link
+                                        key={item.id_producto}
+                                        onClick={() => agregarProducto(item)}
+                                        className="col text-decoration-none"
+                                    >
+                                        <div className="card bg-dark h-100 shadow rounded-4">
+                                            <img
+                                                src={`http://localhost:8080/ImagesInventario/${item.Foto}`}
+                                                alt={item.nombre}
+                                                className="card-img-top rounded-top-4 shadow"
+                                                style={{ height: '200px', objectFit: 'cover' }}
+                                            />
+                                            <div className="card-body text-center">
+                                                <h5 className="text-warning bebas">{item.nombre}</h5>
+                                                <p className="text-white">${item.PrecioUnitario}</p>
+                                                <p className="text-success bebas">{item.cantidad} Unidades</p>
+                                            </div>
                                         </div>
-                                    </div>
-                                </Link>
-                            ))}
+                                    </Link>
+                                ))
+                            )}
                         </div>
                     </div>
 

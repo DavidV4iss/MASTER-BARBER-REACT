@@ -65,12 +65,12 @@ const GestionReservas = () => {
     }
 
     useEffect(() => {
-            const init = async () => {
-                try {
-                    const token = await AsyncStorage.getItem("token");
-                    if (token) {
-                        const payload = token.split(".")[1];
-                        const decoded = JSON.parse(Buffer.from(payload, 'base64').toString('utf8'));
+        const init = async () => {
+            try {
+                const token = await AsyncStorage.getItem("token");
+                if (token) {
+                    const payload = token.split(".")[1];
+                    const decoded = JSON.parse(Buffer.from(payload, 'base64').toString('utf8'));
                     setBarberoId(decoded.id);
                     fetchTraerUsuarios(decoded.email); // o guarda el email en estado si lo necesitas
                     fetchReservas(decoded.id);
@@ -189,9 +189,18 @@ const GestionReservas = () => {
             : null;
     };
 
+<<<<<<< Updated upstream
     
 
 
+=======
+    const getImage = (id) => {
+        const cliente = clientes.find(cliente => cliente.id_usuario === id);
+        return cliente && cliente.Foto
+            ? `${getBaseURL()}perfil/${cliente.Foto}`
+            : null;
+    }
+>>>>>>> Stashed changes
 
     const [fontsLoaded] = useFonts({
         Anton: Anton_400Regular,
@@ -280,20 +289,20 @@ const GestionReservas = () => {
                                         <Text style={styles.styleBtext}>Eliminar</Text>
                                     </TouchableOpacity>
                                 ) : (
-                                <>
+                                    <>
 
-                                    <TouchableOpacity onPress={() => handleAccept(reserva.id_reserva)} style={styles.button1}>
-                                        <Text style={styles.styleBtext}>Aceptar</Text>
-                                    </TouchableOpacity>
-                                    <TouchableOpacity onPress={() => handleFinalize(reserva.id_reserva)} style={styles.button3}>
-                                        {isLoadingFinal && <ActivityIndicator size="small" color="#ffffff" />}
-                                        <Text style={styles.styleBtext}>Finalizando</Text>
-                                    </TouchableOpacity>
+                                        <TouchableOpacity onPress={() => handleAccept(reserva.id_reserva)} style={styles.button1}>
+                                            <Text style={styles.styleBtext}>Aceptar</Text>
+                                        </TouchableOpacity>
+                                        <TouchableOpacity onPress={() => handleFinalize(reserva.id_reserva)} style={styles.button3}>
+                                            {isLoadingFinal && <ActivityIndicator size="small" color="#ffffff" />}
+                                            <Text style={styles.styleBtext}>Finalizando</Text>
+                                        </TouchableOpacity>
 
-                                    <TouchableOpacity onPress={() => handleCancel(reserva.id_reserva)} style={styles.button2}>
-                                        <Text style={styles.styleBtext}>Cancelar</Text>
-                                    </TouchableOpacity>
-                                </>
+                                        <TouchableOpacity onPress={() => handleCancel(reserva.id_reserva)} style={styles.button2}>
+                                            <Text style={styles.styleBtext}>Cancelar</Text>
+                                        </TouchableOpacity>
+                                    </>
                                 )}
 
                             </View>
