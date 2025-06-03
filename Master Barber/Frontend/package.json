@@ -36,6 +36,7 @@
     "react-scripts": "^5.0.1",
     "react-slick": "^0.30.3",
     "react-toastify": "^11.0.3",
+    "react-tsparticles": "^2.12.2",
     "reactstrap": "^9.2.2",
     "redirect": "^0.2.0",
     "sass": "^1.77.8",

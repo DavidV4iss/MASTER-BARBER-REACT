@@ -120,7 +120,7 @@ export default function PerfilUsuario() {
     return (
         <View style={styles.container}>
             <View style={styles.header}>
-                <TouchableOpacity onPress={() => navigation.navigate('Usuario')} style={styles.iconBars}>
+                <TouchableOpacity onPress={() => navigation.navigate('InicioUsuario')} style={styles.iconBars}>
                     <Ionicons name="arrow-back-circle-outline" size={30} color="#ffffff" style={styles.iconUser} />
                 </TouchableOpacity>
             </View>

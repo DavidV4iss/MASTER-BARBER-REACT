@@ -6,7 +6,7 @@ import { TextInput } from "react-native-gesture-handler";
 import { useFonts } from "expo-font";
 import { Anton_400Regular } from "@expo-google-fonts/anton";
 import { BebasNeue_400Regular } from "@expo-google-fonts/bebas-neue";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation } from '@react-navigation/native';
 import useAuth from "../../hooks/useAuth";
 import { AirbnbRating } from "react-native-ratings";
 import DateTimePicker from "@react-native-community/datetimepicker";
@@ -215,6 +215,7 @@ export default function InicioUsuario() {
       });
     }
   };
+
   const handleLogout = () => {
     logout();
   };
@@ -239,7 +240,13 @@ export default function InicioUsuario() {
               <TouchableOpacity
                 onPress={() => setIsDropdownVisible(!isDropdownVisible)}
               >
-                <Icon name="user-circle" style={styles.icon} />
+                <Image
+                  source={{
+                    uri: `${getBaseURL()}perfil/${cliente ? cliente.Foto : "default.jpg"}`,
+                  }}
+                  style={{ marginTop: 10, width: 45, height: 45, borderRadius: 25 }}
+                  resizeMode="cover"
+                />
               </TouchableOpacity>
               {isDropdownVisible && (
                 <View style={styles.dropdownMenu}>
@@ -255,6 +262,7 @@ export default function InicioUsuario() {
                       Perfil
                     </Text>
                   </TouchableOpacity>
+
                   <TouchableOpacity onPress={handleLogout}>
                     <Text
                       style={{
@@ -275,6 +283,7 @@ export default function InicioUsuario() {
                 color: "#ffffff",
                 fontFamily: "BebasNeue",
                 fontSize: 14,
+                marginTop: 5,
               }}
             >
               {cliente ? cliente.nombre_usuario : "Cargando..."}
@@ -574,7 +583,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#343a40",
     padding: 10,
     borderRadius: 5,
-    marginTop: Dimensions.get("window").height * 0.05,
+    marginTop: Dimensions.get("window").height * 0.08,
   },
   dropdownItem: {
     color: "#ffffff",
@@ -605,7 +614,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   icon: {
-    fontSize: 34,
+    fontSize: 45,
     color: "#ffff",
     paddingTop: 10,
     borderRadius: 100,

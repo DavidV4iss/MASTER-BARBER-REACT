@@ -9,12 +9,14 @@ import useAuth from '../../hooks/useAuth';
 import ReservasClientesRepository from '../../repositories/ReservasClientesRepository';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Buffer } from 'buffer'; // necesario para decodificar Base64
+import { getBaseURL } from '../../config/api';
 
 
 const GestionReservas = () => {
     const [reservas, setReservas] = useState([]);
     const [servicios, setServicios] = useState([]);
     const [clientes, setClientes] = useState([]);
+    const [images, setImages] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
     const [isLoadingFinal, setIsLoadingFinal] = useState(false);
     const [isLoadingCancel, setIsLoadingCancel] = useState(false);
@@ -85,7 +87,7 @@ const GestionReservas = () => {
 
     const handleAccept = (id) => {
         setIsLoadingAccept(true);
-        const response = ReservasClientesRepository.UpdateReservasEstado(id, 'Aceptada');
+        const response = ReservasClientesRepository.UpdateReservasEstado(id , 'Aceptada');
         response
             .then(response => {
                 console.log(response.data);
@@ -129,6 +131,23 @@ const GestionReservas = () => {
             });
     };
 
+    const handleFinalize = (id) => {
+        setIsLoadingFinal(true);
+        const response = ReservasClientesRepository.UpdateReservasEstado(id, 'finalizada');
+        response
+            .then(response => {
+                console.log(response.data);
+                setReservas(reservas.map(reserva => reserva.id_reserva === id ? { ...reserva, estado: 'finalizada' } : reserva));
+                setFinalizedReservations([...finalizedReservations, id]);
+            })
+            .catch(error => {
+                console.error('Hubo un error al finalizar la reserva:', error);
+            })
+            .finally(() => {
+                setIsLoadingFinal(false);
+            });
+    };
+
     const handleDelete = (id) => {
         const response = ReservasClientesRepository.DeleteReservas(id);
         response
@@ -150,35 +169,29 @@ const GestionReservas = () => {
             });
     };
 
-    const handleFinalize = (id) => {
-        setIsLoadingFinal(true);
-        const response = ReservasClientesRepository.UpdateReservasEstado(id, 'finalizada');
-        response
-            .then(response => {
-                console.log(response.data);
-                setReservas(reservas.map(reserva => reserva.id_reserva === id ? { ...reserva, estado: 'finalizada' } : reserva));
-                setFinalizedReservations([...finalizedReservations, id]);
-            })
-            .catch(error => {
-                console.error('Hubo un error al finalizar la reserva:', error);
-            })
-            .finally(() => {
-                setIsLoadingFinal(false);
-            });
-    };
-
 
     const getServiceName = (id) => {
         const servicio = servicios.find(servicio => servicio.id_tipo_servicio === id);
         return servicio ? servicio.nombre : 'Desconocido';
     }
 
+
     const getClientName = (id) => {
         const cliente = clientes.find(cliente => cliente.id_usuario === id);
         return [{
             nombre: cliente ? cliente.nombre_usuario : 'Desconocido',
         }];
+    }
+    const getImage = (id) => {
+        const cliente = clientes.find(cliente => cliente.id_usuario === id);
+        return cliente && cliente.Foto
+            ? `${getBaseURL()}perfil/${cliente.Foto}`
+            : null;
     };
+
+    
+
+
 
     const [fontsLoaded] = useFonts({
         Anton: Anton_400Regular,
@@ -242,7 +255,7 @@ const GestionReservas = () => {
                     {reservas.map((reserva) => (
                         <View key={reserva.id_reserva} style={styles.card}>
                             <View style={styles.cardText}>
-                                <Image source={{ uri: reserva.imagen }} style={styles.image} />
+                                <Image source={{ uri: getImage(reserva.cliente_id) }} style={styles.image} />
                                 <Text style={styles.cardClientServiceFhReserva}>
                                     Cliente:
                                     <Text style={styles.cardText2}> {getClientName(reserva.cliente_id)[0].nombre}</Text>

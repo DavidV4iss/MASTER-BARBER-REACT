@@ -7,6 +7,13 @@ import ReservasNoti from '../screens/usuarios/ReservasNoti';
 import PerfilUsuario from '../screens/usuarios/perfilUsuario';
 
 const Tab = createBottomTabNavigator();
+const Stack = createStackNavigator();
+const UsuarioStack = () => (
+  <Stack.Navigator screenOptions={{ headerShown: false }}>
+    <Stack.Screen name="InicioUsuario" component={InicioUsuario} />
+    <Stack.Screen name="PerfilUsuario" component={PerfilUsuario} />
+  </Stack.Navigator>
+);
 export default function NavigationUsuario() {
   return (
     <Tab.Navigator
@@ -22,9 +29,10 @@ export default function NavigationUsuario() {
           let iconName;
           if (route.name === "Usuario") {
             iconName = focused ? "skull" : "skull-outline";
-          }else if (route.name === "Raservas-Notificadas") {
+          }else if (route.name === "Reservas-Notificadas") {
             iconName = focused ? "notifications-sharp" : "notifications-outline";
           }
+          
           return <Ionicons name={iconName} size={size} color={color} />;
         },
         tabBarActiveTintColor: "white",
@@ -35,18 +43,9 @@ export default function NavigationUsuario() {
       inactiveColor="#3e2465"
       barStyle={{ backgroundColor: "#2B3035" }}
     >
-      <Tab.Screen name="Usuario" component={InicioUsuario} />
-      <Tab.Screen name="Raservas-Notificadas" component={ReservasNoti} />
-      <Tab.Screen
-        name="PerfilUsuario"
-        component={PerfilUsuario} // Placeholder, replace with actual profile screen
-        options={{
-          tabBarButton: () => null, // Hide the tab button
-          tabBarStyle: { display: 'none' } // Hide the tab bar
-        }}
-      />
+      <Tab.Screen name="Usuario" component={UsuarioStack} />
+      <Tab.Screen name="Reservas-Notificadas" component={ReservasNoti} />
     </Tab.Navigator>
-
-    
   )
+
 };

@@ -17,7 +17,6 @@ const AuthStack = () => (
         <Stack.Screen name="RegistrarScreen" component={RegistroScreen} />
         <Stack.Screen name="OlvidoContraseñaScreen" component={OlvidoContraseñaScreen} />
         <Stack.Screen name="RestablecerContrasena" component={RestablecerContraseñaScreen} />
-
     </Stack.Navigator>
 );
 export default function DefaultNavigator() {
