@@ -35,7 +35,7 @@ export default function NavbarIndex() {
                                 <li class="nav-item">
                                     <a class="nav-link active mt-3" href="#turno"><i class="bi bi-calendar mx-3"></i>¿Por Que Reservar Con Nosotros?</a>
                                 </li>
-                               
+
                                 <li class="nav-item">
                                     <a class="nav-link active mt-3" href="#ubicacion"><i class="bi bi-geo-alt mx-3"></i>Ubicacion</a>
                                 </li>
@@ -47,9 +47,19 @@ export default function NavbarIndex() {
                                 </li>
 
 
+
                             </ul>
 
                         </div>
+                        <footer class="bg-dark  text-white mt-5 mx-5 text-center">
+                            <ul class="list-unstyled">
+                                <li class="nav-item mt-4 mx-3 fs-5 text-decoration-none">
+                                    <a href="https://www.instagram.com/"><i class="bi bi-instagram text-white"></i></a>
+                                    <a href="https://www.facebook.com/"> <i class="bi bi-facebook mx-5"></i></a>
+                                    <a href="https://x.com/?lang=es"><i class="bi bi-twitter-x text-white"></i></a>
+                                </li>
+                            </ul>
+                        </footer>
                     </div>
                 </div>
             </nav>

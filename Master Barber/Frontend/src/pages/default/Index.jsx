@@ -38,21 +38,10 @@ export default function Index() {
 
                 <h1 className={`text-center display-1 anton fw-bold mt-5 pt-5 ${theme === "light" ? "dark" : "text-white"}`}>
                     <small>TE DAMOS LA BIENVENIDA A</small> <p>MASTER BARBER VIP</p>
-
                 </h1>
-                <ul className="nav-item">
-                    <a className="nav-link active mt-5 fs-1 text-center pt-5">
-                        <a href="https://www.facebook.com" target="_blank" rel="noopener noreferrer">
-                            <i className="bi bi-facebook m-5 text-white"></i>
-                        </a>
-                        <a href="https://www.twitter.com" target="_blank" rel="noopener noreferrer">
-                            <i className="bi bi-twitter m-5 text-white"></i>
-                        </a>
-                        <a href="https://www.instagram.com" target="_blank" rel="noopener noreferrer">
-                            <i className="bi bi-instagram m-5 text-white"></i>
-                        </a>
-                    </a>
-                </ul>
+                <p className="text-center  fs-4 mt-5 pt-5 text-light lobster fade-in">
+                    Somos una barbería dedicada al cuidado masculino, ofreciendo cortes de cabello, afeitados clásicos y modernos, tratamientos capilares y un ambiente cómodo pensado para ti. Nuestro equipo de barberos profesionales combina técnica, estilo y atención personalizada para que salgas con tu mejor versión.
+                </p>
                 <h1 className="text-center antonparabackend fw-bold mt-5 pt-5">
                     <p>
                         <span className="text-danger">"DONDE LA BARBERIA </span>
@@ -238,7 +227,7 @@ export default function Index() {
 
 
             <div className="welcome" id='shop'>
-                <h1 className='text-center text-danger display-1 bebas'>¡¡MASTER SHOP!!</h1>
+                <h1 className='text-center text-white display-1 bebas'>¡¡MASTER SHOP!!</h1>
                 {length === 0 && <p className='text-center text-danger'>No hay productos para mostrar</p>}
                 <CarrouselShop />
             </div>
