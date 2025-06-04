@@ -219,9 +219,9 @@ export default function Index() {
                 </p>
                 <div className="container mt-5 pt-5">
                     <div class="row row-cols-1 row-cols-md-3">
+                        {barberos.length === 0 && <p className='text-center text-danger'>No hay barberos para mostrar</p>}
                         {barberos.map((barbero) => (
-                            console.log(barbero),
-                            <div class="col" key={barbero.id_usuario}>
+                            <div className="col" key={barbero.id_usuario}>
                                 <div class="card bg-dark mt-5">
                                     <img src={`http://localhost:8080/imagesBarbero/${barbero.Foto}`} class="card-img-top img-fluid" alt="..." />
                                     <div class="card-body">
@@ -239,6 +239,7 @@ export default function Index() {
 
             <div className="welcome" id='shop'>
                 <h1 className='text-center text-danger display-1 bebas'>¡¡MASTER SHOP!!</h1>
+                {length === 0 && <p className='text-center text-danger'>No hay productos para mostrar</p>}
                 <CarrouselShop />
             </div>
 
@@ -280,8 +281,8 @@ export default function Index() {
             </div>
 
 
-            <footer className="mt-5">
-                <p className={`text-center ${theme === "light" ? "dark" : "text-white"}`}>Copyright © 2022. Todos los derechos reservados. MASTER BARBER VIP </p>
+            <footer className="text-center text-light py-4 mt-5">
+                <small>© {new Date().getFullYear()} Barbería VIP. Todos los derechos reservados.</small>
             </footer>
 
         </div >

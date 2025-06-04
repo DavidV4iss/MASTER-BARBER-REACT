@@ -24,6 +24,7 @@ export default function EnvEmail() {
             const res = await axios.post("http://localhost:8080/EnvEmail", user);
             if (res.status === 200) {
                 Swal.fire({
+                    timer: 9000,
                     title: 'El Codigo Fue Enviado A Tu Correo',
                     icon: 'success',
                     confirmButtonText: 'Continuar'
@@ -52,7 +53,7 @@ export default function EnvEmail() {
                             <h2 className="text-center text-warning anton mb-4 display-6 col">Recupera tu contraseña</h2>
                         </div>
                         <form className='row g-1' onSubmit={handleSubmit}>
-                            <h3 className="text-white text-center antonparabackend mb-2 p-2 col-sm-12 col">¡Se Enviara Un Codigo De Veridicación A Tu Correo!</h3>
+                            <h3 className="text-white text-center antonparabackend mb-2 p-2 col-sm-12 col">¡Se Enviara Un Codigo De Verificación A Tu Correo!</h3>
                             <div className="input-group mb-3 w-50 mx-auto mt-4 row ">
                                 <input clas required type="email" className="form-control col col-sm-2" name='email' placeholder="Correo electronico" aria-label="Recipient's username" aria-describedby="basic-addon2"
                                     onChange={handleChange}

@@ -50,6 +50,7 @@ export default function Cambiarpasscod() {
             const res = await axios.post(`http://localhost:8080/cambiarpasscod`, { ...user, verificaCode });
             if (res.status === 200) {
                 Swal.fire({
+                    timer: 9000,
                     title: 'Se a restablecido la contraseña exitosamente',
                     icon: 'success',
                     confirmButtonText: 'Continuar'
@@ -83,14 +84,14 @@ export default function Cambiarpasscod() {
                             <div class="input-group mb-1 w-75 mx-auto col col-sm-12">
                                 <span class="input-group-text bg-dark text-white"><i class="bi bi-lock"></i></span>
                                 <div class="form-floating col col-sm-12">
-                                    <input type="password" class="form-control col col-sm-12" placeholder="password" name="newcontrasena" onChange={handleChange} required />
+                                    <input type="password" class="form-control col col-sm-12" placeholder="password" name="newContrasena" onChange={handleChange} required />
                                     <label for="floatingInputGroup1" className='antonpararecuperar col col-sm-12'>Nueva contraseña</label>
                                 </div>
                             </div>
                             <div class="input-group mb-4 mt-2 w-75 mx-auto">
                                 <span class="input-group-text bg-dark text-white"><i class="bi bi-lock"></i></span>
                                 <div class="form-floating">
-                                    <input type="password" class="form-control" placeholder="password" name="confirmcontra" onChange={handleChange} required />
+                                    <input type="password" class="form-control" placeholder="password" name="confirmContra" onChange={handleChange} required />
                                     <label for="floatingInputGroup1" className='antonpararecuperar'>Confrimar contraseña</label>
                                 </div>
                             </div>

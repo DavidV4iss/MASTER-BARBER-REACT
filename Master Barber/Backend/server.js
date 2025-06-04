@@ -56,8 +56,8 @@ const transporter = nodemailer.createTransport({
     port: 465,
     secure: true,
     auth: {
-        user: 'masterbarbernotificador@gmail.com',
-        pass: 'bned donr skiq yusa',
+        user: 'cristianrueda0313@gmail.com',
+        pass: 'mzze gnmy ydng jvdk',
     }
 });
 
@@ -65,7 +65,6 @@ const transporter = nodemailer.createTransport({
 app.post('/login', (req, res) => {
     const { email, password } = req.body;
 
-    // Validar si email o contraseña no están vacíos
     if (!email || !password) {
         return res.status(400).json({ error: "Email y contraseña son requeridos" });
     }
@@ -76,12 +75,10 @@ app.post('/login', (req, res) => {
             return res.status(500).json({ error: "Error del servidor" });
         }
 
-        // Verificar si el usuario existe
         if (userResult.length === 0) {
             return res.status(400).json({ error: "El usuario no existe, por favor registrese" });
         }
 
-        // Comparar la contraseña
         const usuario = userResult[0];
         bcrypt.compare(password, usuario.contrasena, (err, isMatch) => {
             if (err) {
@@ -90,12 +87,10 @@ app.post('/login', (req, res) => {
             }
             if (isMatch) {
 
-                const secretKey = 'miClaveSecreta';  // Debes guardar la clave secreta en un entorno seguro
+                const secretKey = 'miClaveSecreta';
 
-                // Crear el token JWT con una expiración de 1 hora
                 const token = jwt.sign({ id: usuario.id_usuario, email: usuario.email, role: usuario.id_rol }, secretKey, { expiresIn: '1h' });
 
-                // Enviar la respuesta con el token generado
                 return res.status(200).json({
                     message: "Inicio de sesión exitoso",
                     token: token,
@@ -140,7 +135,6 @@ app.get('/validarToken', (req, res) => {
 
 // Registro
 app.post('/registrar', (req, res) => {
-    console.log(req.body);
     const nombreusuario = req.body.nombre_usuario;
     const email = req.body.email;
     const nit = req.body.nit;
@@ -148,7 +142,6 @@ app.post('/registrar', (req, res) => {
     const contraseña = req.body.contraseña;
     const confirmar_contraseña = req.body.confirmar_contraseña;
 
-    // Expresión regular para validar el correo electrónico y dominios permitidos
     const emailRegex = /^[a-zA-Z0-9._%+-]+@(gmail\.com|hotmail\.com|outlook\.com)$/;
 
     db.query("SELECT * FROM usuarios WHERE email = ? OR nit = ?", [email, nit], (err, result) => {
@@ -212,7 +205,6 @@ app.post('/registrar', (req, res) => {
 
 
 // Enviar correo de restablecimiento de contraseña
-
 app.post('/EnvEmail', (req, res) => {
     const email = req.body.email;
 
@@ -220,7 +212,6 @@ app.post('/EnvEmail', (req, res) => {
         return Math.floor(100000 + Math.random() * 900000).toString();
     }
 
-    // Buscar el usuario en la base de datos
     db.query('SELECT * FROM usuarios WHERE email = ?', [email], (err, results) => {
         if (err) {
             console.error('Error en la consulta:', err);
@@ -245,11 +236,11 @@ app.post('/EnvEmail', (req, res) => {
                 html: `
                 <div class="container" style="background-color: #212529; color: #fff; padding: 80px;">
                     <div style="text-align: center;">
-                        <img src="https://lh3.googleusercontent.com/p/AF1QipNNaFwUx_VedoGhL9IvGzv7J-L4D5Fgp4lAdLZ1=s680-w680-h510" alt=""
+                        <img src="https://scontent.fbog2-3.fna.fbcdn.net/v/t39.30808-6/274008068_101632669118983_8097378443996989775_n.jpg?_nc_cat=102&ccb=1-7&_nc_sid=6ee11a&_nc_eui2=AeG-vCPQgzoU3oKbCugF2pADRoqglXlLsSFGiqCVeUuxIQH8czFUHqI1WXYwEkWzhBJvHvzjQ5yuVTtPWXnbfyHV&_nc_ohc=l8zKdCrkEwoQ7kNvwFQRh5t&_nc_oc=AdmaKjultVGulBzfkXhp1Umc4P-Ed1U-fS20y3dir1ehS02H5XM60QmNtejO4T-kd26enx-rfw6QW22az1XQ6hYI&_nc_zt=23&_nc_ht=scontent.fbog2-3.fna&_nc_gid=QwYbBw7a45rY0ll452tWbQ&oh=00_AfJHR3VqU5pzz8Y5xshgTghYLNlj0FGLiKW9CAA59mHSew&oe=68456320" alt=""
                         style="width: 20%; height: 20%;">
                     </div>
                     <h1 style="color:#e9c706; text-align: center; font-weight: bold; font-size: 40px;">Recuperación De Contraseña</h1>
-                    <p style="font-size: 20px; text-align: center;">Tu Cod      igo Para Restalecer La Contraseña Es</p>
+                    <p style="font-size: 20px; text-align: center;">Tu Codigo Para Restalecer La Contraseña Es</p>
                     <h2 style="font-size: 50px; font-weight: bolder; color: #ff2f2f ; text-align: center;">${verificationCode}</h2>
                     <h3 ">El Código De Verificación Fue Enviado A Las: <b>${expirationDate}</b></h3>
                     <h3">Este Código Caducará En 1 Hora.</h3>
@@ -370,7 +361,6 @@ app.put('/UpdateInventario/:id', uploadInventario.single('foto'), (req, res) => 
     const fotoName = req.file ? req.file.filename : '';
     const precio = req.body.PrecioUnitario;
 
-    // Obtener la imagen actual del inventario
     db.query('SELECT Foto FROM inventario WHERE id_producto = ?', [id], (err, results) => {
         if (err) {
             console.log(err);
@@ -459,11 +449,11 @@ app.get('/categorias', (req, res) => {
 // CAMBIO DE CONTRASEÑA
 
 app.post('/Cambiarpasscod', (req, res) => {
+    console.log(req.body);
     const { newContrasena, confirmContra, verificaCode } = req.body;
 
     const fecha = moment().format('YYYY-MM-DD HH:mm:ss');
 
-    // Validaciones básicas
     if (!newContrasena || !confirmContra || !verificaCode) {
         return res.status(400).send('Faltan datos para restablecer la contraseña');
     }
@@ -476,7 +466,6 @@ app.post('/Cambiarpasscod', (req, res) => {
         return res.status(400).send('La contraseña debe tener al menos 8 caracteres');
     }
 
-    // Verifica el código
     db.query(
         'SELECT * FROM usuarios WHERE user_reset_code = ? AND user_reset_code_expiration > ?',
         [verificaCode, fecha],
@@ -493,7 +482,6 @@ app.post('/Cambiarpasscod', (req, res) => {
             const user = results[0];
             const hashPassword = bcrypt.hashSync(newContrasena, 10);
 
-            // Actualiza la contraseña y elimina el código temporal
             db.query(
                 'UPDATE usuarios SET contrasena = ?, user_reset_code = NULL, user_reset_code_expiration = NULL WHERE id_usuario = ?',
                 [hashPassword, user.id_usuario],
@@ -909,7 +897,6 @@ app.post('/CrearReservas', async (req, res) => {
     const { cliente_id, barbero_id, fecha, estado, servicio } = req.body;
 
     try {
-        // Verifica si ya existe una reserva para el barbero en la misma fecha y hora
         const reservaExistente = await db.query(
             'SELECT * FROM reservas WHERE barbero_id = ? AND fecha = ?',
             [barbero_id, fecha]
@@ -993,7 +980,6 @@ app.patch('/UpdateReservasEstado/:id', (req, res) => {
     const id = req.params.id;
     const nuevoEstado = req.body.estado;
 
-    // Obtener el estado actual de la reserva
     db.query('SELECT estado FROM reservas WHERE id_reserva = ?', [id], (err, results) => {
         if (err) {
             console.error('Error en la consulta:', err);
@@ -1006,12 +992,10 @@ app.patch('/UpdateReservasEstado/:id', (req, res) => {
 
         const estadoActual = results[0].estado;
 
-        // Verificar si el estado ha cambiado
         if (estadoActual === nuevoEstado) {
             return res.status(200).json({ message: 'El estado de la reserva ya es el mismo' });
         }
 
-        // Actualizar el estado de la reserva
         const q = 'UPDATE reservas SET estado = ? WHERE id_reserva = ?';
         const values = [nuevoEstado, id];
 
@@ -1021,7 +1005,6 @@ app.patch('/UpdateReservasEstado/:id', (req, res) => {
                 return res.status(500).json({ error: 'Error al actualizar la reserva' });
             }
 
-            // Enviar notificación por correo electrónico
             db.query('SELECT r.*, u.email, u.id_usuario AS cliente_id, s.nombre AS servicio_nombre FROM reservas r JOIN usuarios u ON r.cliente_id = u.id_usuario JOIN tipo_servicio s ON r.servicio = s.id_tipo_servicio WHERE r.id_reserva = ?', [id], (err, results) => {
                 if (err) {
                     console.error('Error en la consulta:', err);
@@ -1037,7 +1020,6 @@ app.patch('/UpdateReservasEstado/:id', (req, res) => {
                 const clienteId = reserva.cliente_id;
                 const servicioNombre = reserva.servicio_nombre;
 
-                // Configurar el contenido del correo electrónico
                 const mailOptions = {
                     from: 'cristianrueda0313@gmail.com',
                     to: email,
@@ -1057,14 +1039,12 @@ app.patch('/UpdateReservasEstado/:id', (req, res) => {
                     `
                 };
 
-                // Enviar el correo electrónico
                 transporter.sendMail(mailOptions, (error) => {
                     if (error) {
                         console.error('Error al enviar el correo electrónico:', error);
                         return res.status(500).json({ message: 'Error al enviar el correo electrónico' });
                     }
 
-                    // Guardar la notificación en la base de datos
                     const mensaje = `El estado de tu reserva ha sido actualizado a: ${nuevoEstado}. Servicio: ${servicioNombre}, Fecha:${new Date(reserva.fecha).toLocaleString()}`;
                     db.query(
                         'INSERT INTO notificaciones (cliente_id, mensaje, fecha) VALUES (?,?,?)',

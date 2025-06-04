@@ -39,7 +39,7 @@ export default function CalificacionesUser() {
     const DeleteCalificacion = async (id) => {
         try {
             const confirm = await Swal.fire({
-                title: '¿Estas seguro de borrar este producto?',
+                title: '¿Estas seguro de borrar esta calificacion?',
                 text: "No podrás revertir esta acción",
                 icon: 'question',
                 showCancelButton: true,
@@ -57,6 +57,7 @@ export default function CalificacionesUser() {
             console.log(res);
             if (res.status === 200) {
                 Swal.fire({
+                    timer: 9000,
                     icon: 'success',
                     title: "Calificacion borrada",
                     customClass: {
