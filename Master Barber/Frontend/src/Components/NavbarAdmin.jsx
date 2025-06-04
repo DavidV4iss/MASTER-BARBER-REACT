@@ -88,10 +88,11 @@ export default function NavbarAdmin() {
 
                 <div className='d-none d-sm-block text-white fw-bold small'>{admin.nombre_usuario}</div>
                 <img
-                  src={imagePreview || 'default-avatar.png'}
+                  src={imagePreview}
                   alt="Imagen de perfil"
                   className="img-fluid rounded-circle contenido3 "
                   style={{ width: '40px', height: '40px', objectFit: 'cover' }}
+                  onError={(e) => { e.target.src = 'https://cdn-icons-png.flaticon.com/512/149/149071.png'; }}
                 />
               </button>
               <ul className="dropdown-menu dropdown-menu-end bg-dark">

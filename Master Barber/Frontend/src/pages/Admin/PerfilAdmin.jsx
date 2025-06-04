@@ -88,31 +88,44 @@ export default function PerfilAdmin() {
     setIsUpdating(true);
 
     try {
-      await axios.post(`http://localhost:8080/actualizarUsuario/${email}`, formData);
+      await axios.post(
+        `http://localhost:8080/actualizarUsuario/${email}`,
+        formData
+      );
+
       Swal.fire({
-        position: 'top-end',
-        icon: 'success',
-        iconColor: '#1bf30b',
-        title: 'Perfil actualizado exitosamente.',
+        position: "top-end",
+        icon: "success",
+        iconColor: "#1bf30b",
+        title: "Perfil actualizado exitosamente.",
         showConfirmButton: false,
-        timer: 8000,
+        timer: 2000,
         customClass: {
           popup: "dark-theme-popup bg-dark antonparabackend ",
         },
       });
-      navigate('/Inicioadmin');
+
+      setFile(null);
+      const res = await axios.get(`http://localhost:8080/traerUsuario/${email}`);
+      setAdmin(res.data[0]);
+      if (res.data[0].Foto) {
+        setImagePreview(`http://localhost:8080/perfil/${res.data[0].Foto}`);
+      } else {
+        setImagePreview("https://cdn-icons-png.flaticon.com/512/149/149071.png");
+      }
+      setIsUpdating(false);
+
     } catch (err) {
       Swal.fire({
-        title: 'Error',
-        text: 'Hubo un problema al actualizar el perfil.',
-        icon: 'error',
+        title: "Error",
+        text: "Hubo un problema al actualizar el perfil.",
+        icon: "error",
+        confirmButtonColor: "#DC3545",
         customClass: {
           popup: "dark-theme-popup bg-dark antonparabackend ",
         },
       });
       console.error(err);
-    } finally {
-      setIsUpdating(false);
     }
   };
 
@@ -130,6 +143,7 @@ export default function PerfilAdmin() {
                 alt="Imagen de perfil"
                 className="img-fluid rounded-circle contenido3 mt-5 zoomhover2 fade-in"
                 style={{ width: '250px', height: '250px', objectFit: 'cover' }}
+                onError={(e) => { e.target.src = 'https://cdn-icons-png.flaticon.com/512/149/149071.png'; }}
               />
               <div className="mt-5"></div>
             </div>

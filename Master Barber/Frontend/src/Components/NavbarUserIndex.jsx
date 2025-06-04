@@ -35,7 +35,7 @@ export default function NavbarUserIndex() {
       try {
         const res = await axios.get(`http://localhost:8080/traerUsuario/${email}`);
         setUser(res.data[0]);
-        if (res.data[0].Foto) {
+        if (res.data.Foto) {
           setImagePreview(`http://localhost:8080/perfil/${res.data[0].Foto}`);
         }
       } catch (err) {
@@ -194,10 +194,11 @@ export default function NavbarUserIndex() {
             >
 
               <img
-                src={imagePreview || "default-avatar.png"}
-                alt="Imagen de perfil"
-                className="img-fluid rounded-circle contenido3 "
+                src={imagePreview}
+                alt='Foto de Perfil'
+                className="img-fluid rounded-circle contenido3 text-white zoomhover2 fade-in "
                 style={{ width: "50px", height: "50px", objectFit: "cover" }}
+                onError={e => { e.target.src = "https://cdn-icons-png.flaticon.com/512/149/149071.png"; }}
               />
             </button>
             <ul class="dropdown-menu dropdown-menu-start bg-dark">
