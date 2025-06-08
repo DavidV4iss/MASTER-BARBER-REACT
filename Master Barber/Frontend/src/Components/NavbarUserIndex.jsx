@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import Swal from 'sweetalert2';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import dayjs from 'dayjs'; // ✅ nuevo import
 
 export default function NavbarUserIndex() {
   const navigate = useNavigate();
@@ -14,7 +13,7 @@ export default function NavbarUserIndex() {
   const usuario = JSON.parse(atob(token.split(".")[1]));
   const email = usuario.email;
 
-  const showToast = (mensaje) => {
+  const showToast = (mensaje, notificacionesToast) => {
     Swal.fire({
       toast: true,
       position: "top-end",
@@ -27,16 +26,23 @@ export default function NavbarUserIndex() {
       color: "#fff",
       customClass: {
         popup: "swal2-toast-custom"
+      },
+      didOpen: (toast) => {
+        toast.addEventListener('click', () => handleNotification(notificacionesToast));
       }
     });
   };
+
 
   const fetchNotificaciones = async (mostrarToastInicial = false) => {
     try {
       const res = await axios.get(`http://localhost:8080/GetNotificaciones/${user.id_usuario}`);
       if (mostrarToastInicial && res.data.length > 0) {
         const ultima = res.data[0];
-        showToast(`🔔 ${ultima.mensaje.slice(0, 60)}${ultima.mensaje.length > 60 ? "..." : ""}`);
+        showToast(
+          `🔔 ${ultima.mensaje.slice(0, 60)}${ultima.mensaje.length > 60 ? "..." : ""}`,
+          res.data
+        );
       }
       setNotificaciones(res.data);
     } catch (err) {
@@ -110,8 +116,9 @@ export default function NavbarUserIndex() {
     });
   };
 
-  const handleNotification = () => {
-    if (notificaciones.length === 0) {
+  const handleNotification = (notificacionesParam) => {
+    const notifs = notificacionesParam || notificaciones;
+    if (notifs.length === 0) {
       Swal.fire({
         position: "top-end",
         title: "🚫 SIN NOTIFICACIONES",
@@ -133,22 +140,20 @@ export default function NavbarUserIndex() {
         },
         didOpen: () => {
           const container = document.getElementById("notification-list");
-          notificaciones.forEach(notif => {
+          notifs.forEach(notif => {
             const card = document.createElement("div");
             card.className = "notif-card animate__animated animate__fadeInUp";
-
-
             card.innerHTML = `
-            <div class="notif-icon">
-              <i class="bi bi-app-indicator"></i>
-            </div>
-            <div class="notif-content">
-              <i class="notif-text">${notif.mensaje}</i>
-            </div>
-            <div class="notif-delete">
-              <i class="bi bi-trash-fill" data-id="${notif.id_notificacion}" title="Eliminar"></i>
-            </div>
-          `;
+              <div class="notif-icon">
+                <i class="bi bi-app-indicator"></i>
+              </div>
+              <div class="notif-content">
+                <i class="notif-text">${notif.mensaje}</i>
+              </div>
+              <div class="notif-delete">
+                <i class="bi bi-trash-fill" data-id="${notif.id_notificacion}" title="Eliminar"></i>
+              </div>
+            `;
             card.querySelector(".bi-trash-fill").addEventListener("click", () => {
               deleteNotification(notif.id_notificacion);
             });
@@ -156,6 +161,17 @@ export default function NavbarUserIndex() {
           });
         }
       });
+    }
+  };
+
+  const handleNotificationClick = async () => {
+    try {
+      const res = await axios.get(`http://localhost:8080/GetNotificaciones/${user.id_usuario}`);
+      handleNotification(res.data);
+      setNotificaciones(res.data);
+    } catch (err) {
+      console.error("Error al obtener las notificaciones:", err);
+      handleNotification([]);
     }
   };
 
@@ -207,7 +223,7 @@ export default function NavbarUserIndex() {
         <div className="collapse navbar-collapse" id="menu">
           <button
             className="btn btn-dark mt-3 position-fixed top-0 end-0 translate-middle-x"
-            onClick={handleNotification}
+            onClick={handleNotificationClick}
           >
             <i className="bi bi-alarm-fill"></i>
             <span className="position-absolute top-0 start-100 translate-middle badge border border-light rounded-circle bg-danger p-2">
