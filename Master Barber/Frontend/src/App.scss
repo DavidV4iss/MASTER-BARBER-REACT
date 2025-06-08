@@ -3,6 +3,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Anton+SC&family=Roboto&display=swap');
 @import "../node_modules/bootstrap/scss/bootstrap";
+@import url('https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css');
 @import url('https://fonts.googleapis.com/css2?family=UnifrakturMaguntia&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Lobster&display=swap');
 
@@ -544,9 +545,7 @@ button:hover {
 
 
 
-/* Notificaciones estilo mejorado */
-@import url('https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css');
-
+//ESTILOS PARA NOTIFICACIONES DEL USUARIO
 .notif-container {
   max-height: 350px;
   overflow-y: auto;
@@ -605,3 +604,5 @@ button:hover {
   border-left: 5px solid #ffc107;
   margin-top: 25%;
 }
+
+// FIN ESTILOS PARA NOTIFICACIONES DEL USUARIO
