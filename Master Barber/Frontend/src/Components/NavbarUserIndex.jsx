@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Swal from 'sweetalert2';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import dayjs from 'dayjs'; // ✅ nuevo import
 
 export default function NavbarUserIndex() {
   const navigate = useNavigate();
@@ -9,10 +10,34 @@ export default function NavbarUserIndex() {
   const [user, setUser] = useState({});
   const [imagePreview, setImagePreview] = useState("");
   const [notificaciones, setNotificaciones] = useState([]);
+  const token = localStorage.getItem("token");
+  const usuario = JSON.parse(atob(token.split(".")[1]));
+  const email = usuario.email;
 
-  const fetchNotificaciones = async () => {
+  const showToast = (mensaje) => {
+    Swal.fire({
+      toast: true,
+      position: "top-end",
+      icon: "info",
+      title: mensaje,
+      showConfirmButton: false,
+      timer: 2050,
+      timerProgressBar: true,
+      background: "#343a40",
+      color: "#fff",
+      customClass: {
+        popup: "swal2-toast-custom"
+      }
+    });
+  };
+
+  const fetchNotificaciones = async (mostrarToastInicial = false) => {
     try {
       const res = await axios.get(`http://localhost:8080/GetNotificaciones/${user.id_usuario}`);
+      if (mostrarToastInicial && res.data.length > 0) {
+        const ultima = res.data[0];
+        showToast(`🔔 ${ultima.mensaje.slice(0, 60)}${ultima.mensaje.length > 60 ? "..." : ""}`);
+      }
       setNotificaciones(res.data);
     } catch (err) {
       console.error("Error al obtener las notificaciones:", err);
@@ -21,21 +46,27 @@ export default function NavbarUserIndex() {
 
   useEffect(() => {
     if (user.id_usuario) {
-      fetchNotificaciones();
+      fetchNotificaciones(true);
+
+      const interval = setInterval(async () => {
+        try {
+          const res = await axios.get(`http://localhost:8080/GetNotificaciones/${user.id_usuario}`);
+          setNotificaciones(res.data);
+        } catch (err) {
+          console.error("Error al actualizar notificaciones:", err);
+        }
+      }, 15000);
+
+      return () => clearInterval(interval);
     }
   }, [user.id_usuario]);
-
-  const token = localStorage.getItem("token");
-
-  const usuario = JSON.parse(atob(token.split(".")[1]));
-  const email = usuario.email;
 
   useEffect(() => {
     const fetchUser = async () => {
       try {
         const res = await axios.get(`http://localhost:8080/traerUsuario/${email}`);
         setUser(res.data[0]);
-        if (res.data.Foto) {
+        if (res.data[0].Foto) {
           setImagePreview(`http://localhost:8080/perfil/${res.data[0].Foto}`);
         }
       } catch (err) {
@@ -47,18 +78,17 @@ export default function NavbarUserIndex() {
 
   const handleLogout = () => {
     Swal.fire({
-      title: "¿Estas seguro que deseas cerrar sesion?",
+      title: "¿Estas seguro que deseas cerrar sesión?",
       text: "Tu sesión será cerrada.",
       imageUrl: "/LOGO.png",
       imageWidth: 200,
       imageHeight: 200,
       showCancelButton: true,
       confirmButtonColor: "#DC3545",
-      cancelButtonColor: "",
-      confirmButtonText: "Sí, cerrar sesión",
       cancelButtonText: "Cancelar",
+      confirmButtonText: "Sí, cerrar sesión",
       customClass: {
-        popup: "dark-theme-popup bg-dark antonparabackend ",
+        popup: "dark-theme-popup bg-dark antonparabackend",
       },
     }).then((result) => {
       if (result.isConfirmed) {
@@ -73,7 +103,7 @@ export default function NavbarUserIndex() {
           timer: 2000,
           showConfirmButton: false,
           customClass: {
-            popup: "dark-theme-popup bg-dark antonparabackend ",
+            popup: "dark-theme-popup bg-dark antonparabackend",
           },
         });
       }
@@ -84,43 +114,47 @@ export default function NavbarUserIndex() {
     if (notificaciones.length === 0) {
       Swal.fire({
         position: "top-end",
-        title: "TUS NOTIFICACIONES",
-        text: "No tienes notificaciones nuevas.",
-        confirmButtonColor: "#DC3545",
+        title: "🚫 SIN NOTIFICACIONES",
+        text: "No tienes notificaciones nuevas por ahora.",
+        confirmButtonColor: "#dc3545",
         customClass: {
-          popup: "dark-theme-popup bg-dark antonparabackend ",
+          popup: "dark-theme-popup bg-dark antonparabackend",
+          title: "text-uppercase text-warning",
         },
       });
     } else {
       Swal.fire({
-        position: "top-end",
-        title: "TUS NOTIFICACIONES",
-        html: `<ul id="notification-list" style="text-align-center; padding-left: 20px;"></ul>`,
-        confirmButtonColor: "#DC3545",
+        title: '<span class="text-warning">🔔 TUS NOTIFICACIONES</span>',
+        html: `<div id="notification-list" class="notif-container"></div>`,
+        confirmButtonText: "OK",
+        confirmButtonColor: "#dc3545",
         customClass: {
-          popup: "dark-theme-popup bg-dark antonparabackend ",
+          popup: "dark-theme-popup bg-dark antonparabackend text-white",
         },
         didOpen: () => {
-          const notificationList = document.getElementById("notification-list");
-          notificaciones.forEach((notificacion) => {
-            const li = document.createElement("li");
-            li.style.marginBottom = "10px";
-            li.style.marginTop = "10px";
-            li.innerHTML = `
-            ${notificacion.mensaje} 
-            <i 
-              class="bi bi-trash3-fill" 
-              style="margin-left: 10px; color: red; cursor: pointer; border: none; background: none;"
-              data-id="${notificacion.id_notificacion}">
-              Eliminar
-            </i>
+          const container = document.getElementById("notification-list");
+          notificaciones.forEach(notif => {
+            const card = document.createElement("div");
+            card.className = "notif-card animate__animated animate__fadeInUp";
+
+
+            card.innerHTML = `
+            <div class="notif-icon">
+              <i class="bi bi-app-indicator"></i>
+            </div>
+            <div class="notif-content">
+              <i class="notif-text">${notif.mensaje}</i>
+            </div>
+            <div class="notif-delete">
+              <i class="bi bi-trash-fill" data-id="${notif.id_notificacion}" title="Eliminar"></i>
+            </div>
           `;
-            li.querySelector("i").addEventListener("click", () => {
-              deleteNotification(notificacion.id_notificacion);
+            card.querySelector(".bi-trash-fill").addEventListener("click", () => {
+              deleteNotification(notif.id_notificacion);
             });
-            notificationList.appendChild(li);
+            container.appendChild(card);
           });
-        },
+        }
       });
     }
   };
@@ -135,7 +169,7 @@ export default function NavbarUserIndex() {
         timer: 1500,
         showConfirmButton: false,
         customClass: {
-          popup: "dark-theme-popup bg-dark antonparabackend ",
+          popup: "dark-theme-popup bg-dark antonparabackend",
         },
       });
       fetchNotificaciones();
@@ -147,21 +181,17 @@ export default function NavbarUserIndex() {
         icon: "error",
         confirmButtonColor: "#DC3545",
         customClass: {
-          popup: "dark-theme-popup bg-dark antonparabackend ",
+          popup: "dark-theme-popup bg-dark antonparabackend",
         },
       });
     }
   };
 
-
-
-
-
   return (
     <div className="navbar navbar-expand-md shadow border-bottom border-1">
-      <div class="container-fluid justify-content-end">
+      <div className="container-fluid justify-content-end">
         <button
-          class="navbar-toggler bg-secondary"
+          className="navbar-toggler bg-secondary"
           type="button"
           data-bs-toggle="collapse"
           data-bs-target="#menu"
@@ -169,11 +199,12 @@ export default function NavbarUserIndex() {
           aria-expanded="false"
           aria-label="Toggle navigation"
         >
-          <span class="navbar-toggler-icon"></span>
+          <span className="navbar-toggler-icon"></span>
         </button>
-        <p className='position-absolute top-0 start-50 translate-middle-x  fw-bold mt-4 anton fs-5 text-uppercase text-danger'>¡Bienvenido!</p>
+        <p className='position-absolute top-0 start-50 translate-middle-x fw-bold mt-4 anton fs-5 text-uppercase text-danger'>
+          ¡Bienvenido!
+        </p>
         <div className="collapse navbar-collapse" id="menu">
-
           <button
             className="btn btn-dark mt-3 position-fixed top-0 end-0 translate-middle-x"
             onClick={handleNotification}
@@ -182,39 +213,34 @@ export default function NavbarUserIndex() {
             <span className="position-absolute top-0 start-100 translate-middle badge border border-light rounded-circle bg-danger p-2">
               {notificaciones.length > 0 ? notificaciones.length : ""}
             </span>
-
           </button>
 
-          <div class="dropdown me-2 pe-5">
+
+          <div className="dropdown me-2 pe-5">
             <button
-              class=" btn dropdown-toggle text-white mx-2 "
+              className="btn dropdown-toggle text-white mx-2"
               type="button"
               data-bs-toggle="dropdown"
               aria-expanded="false"
             >
-
               <img
                 src={imagePreview}
                 alt='Foto de Perfil'
-                className="img-fluid rounded-circle contenido3 text-white zoomhover2 fade-in "
+                className="img-fluid rounded-circle contenido3 text-white zoomhover2 fade-in"
                 style={{ width: "50px", height: "50px", objectFit: "cover" }}
                 onError={e => { e.target.src = "https://cdn-icons-png.flaticon.com/512/149/149071.png"; }}
               />
             </button>
-            <ul class="dropdown-menu dropdown-menu-start bg-dark">
+            <ul className="dropdown-menu dropdown-menu-start bg-dark">
               <li>
-                <a
-                  class="dropdown-item bebas text-warning "
-                  href="/PerfilUser"
-                >
+                <a className="dropdown-item bebas text-warning" href="/PerfilUser">
                   Perfil
                 </a>
               </li>
               <li onClick={handleLogout}>
-                <div class="box-2">
-                  <div class="btn btn-two text-white">
-                    <i><i class="bi bi-box-arrow-right mx-1">
-                    </i> Cerrar sesión</i>
+                <div className="box-2">
+                  <div className="btn btn-two text-white">
+                    <i className="bi bi-box-arrow-right mx-1"></i> Cerrar sesión
                   </div>
                 </div>
               </li>

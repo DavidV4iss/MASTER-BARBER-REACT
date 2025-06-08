@@ -540,3 +540,68 @@ button:hover {
 }
 
 //FIN ESTILO PARA LA FOTO DE PERFIL
+
+
+
+
+/* Notificaciones estilo mejorado */
+@import url('https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css');
+
+.notif-container {
+  max-height: 350px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 10px;
+}
+
+.notif-card {
+  background: linear-gradient(145deg, #343a40, #212529);
+  color: white;
+  display: flex;
+  align-items: flex-start;
+  border-radius: 12px;
+  padding: 15px;
+  position: relative;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+  transition: transform 0.3s ease;
+}
+
+.notif-card:hover {
+  transform: scale(1.02);
+}
+
+.notif-icon {
+  font-size: 1.8rem;
+  margin-right: 15px;
+  color: #ffc107;
+}
+
+.notif-content {
+  flex-grow: 1;
+}
+
+.notif-text {
+  font-weight: 100;
+  margin: 0 0 5px 0;
+  font-size: 0.95rem;
+}
+
+
+.notif-delete {
+  font-size: 1.2rem;
+  color: #dc3545;
+  cursor: pointer;
+  padding-left: 10px;
+}
+
+.notif-delete:hover {
+  color: #ff6b6b;
+}
+
+.swal2-toast-custom {
+  font-family: 'Bebas Neue', sans-serif;
+  border-left: 5px solid #ffc107;
+  margin-top: 25%;
+}
