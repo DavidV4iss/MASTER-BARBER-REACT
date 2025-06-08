@@ -856,6 +856,24 @@ app.get('/traerCalificacionesUsuario/:id', (req, res) => {
     });
 });
 
+app.patch('/CancelarReservaCliente/:id', (req, res) => {
+    const id = req.params.id;
+    db.query('SELECT estado FROM reservas WHERE id_reserva = ?', [id], (err, results) => {
+        if (err) return res.status(500).json({ error: 'Error en el servidor' });
+        if (results.length === 0) return res.status(404).json({ error: 'Reserva no encontrada' });
+
+        const estadoActual = results[0].estado;
+        if (estadoActual !== 'Aceptada') {
+            return res.status(400).json({ error: 'Solo puedes cancelar reservas aceptadas.' });
+        }
+
+        db.query('UPDATE reservas SET estado = "Cancelada" WHERE id_reserva = ?', [id], (err) => {
+            if (err) return res.status(500).json({ error: 'Error al cancelar la reserva' });
+            return res.status(200).json({ message: 'Reserva cancelada exitosamente.' });
+        });
+    });
+});
+
 
 
 

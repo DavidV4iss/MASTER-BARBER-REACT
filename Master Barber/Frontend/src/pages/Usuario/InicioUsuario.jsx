@@ -5,11 +5,14 @@ import Swal from 'sweetalert2';
 import Rating from 'react-rating-stars-component';
 import ReservaCliente from './ReservaCliente';
 import CalificacionesUser from '../../Components/CalificacionesUser';
+import MisReservas from './MisReservas';
+import moment from 'moment';
 import 'animate.css';
 
 export default function InicioUsuario() {
   const [user, setUser] = useState({});
   const [mostrarReserva, setMostrarReserva] = useState(false);
+  const [reservaFactura, setReservaFactura] = useState(null);
 
   const token = localStorage.getItem("token");
   const usuario = JSON.parse(atob(token.split(".")[1]));
@@ -80,7 +83,6 @@ export default function InicioUsuario() {
     <div>
       <NavbarUserIndex />
 
-
       <div className=" py-5 text-white welcomeindex2" id="homeuser">
         <div className=" container row mb-5 g-5 gx-5 contenido mt-5 pt-5">
           <div className="col-12 col-md-6 mb-4 mb-md-0">
@@ -91,6 +93,23 @@ export default function InicioUsuario() {
               ¡Nos alegra verte de nuevo! Reserva tu cita fácilmente, califica nuestro servicio y disfruta de la mejor experiencia en barbería.
             </p>
           </div>
+
+          {/* MODAL FACTURA */}
+          {reservaFactura && (
+            <div className="modal-factura position-fixed top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center" style={{ background: 'rgba(0,0,0,0.7)', zIndex: 9999 }}>
+              <div className="bg-dark text-white p-4 rounded-4 shadow-lg" style={{ minWidth: 300 }}>
+                <h4 className="text-warning mb-3">Factura de Reserva</h4>
+                <p><b>Servicio:</b> {reservaFactura.servicio}</p>
+                <p><b>Barbero:</b> {reservaFactura.barbero}</p>
+                <p><b>Fecha:</b> {moment(reservaFactura.fecha).format('DD/MM/YYYY HH:mm')}</p>
+                <p><b>Estado:</b> {reservaFactura.estado}</p>
+                {reservaFactura.observacion && <p><b>Observación:</b> {reservaFactura.observacion}</p>}
+                <button className="btn btn-warning mt-3" onClick={() => setReservaFactura(null)}>Cerrar</button>
+              </div>
+            </div>
+          )}
+
+          <MisReservas />
 
           <div className="col-12 col-md-6 text-center mb-4 mb-md-0">
             <div className="p-4 bg-dark rounded shadow text-center">
@@ -104,7 +123,8 @@ export default function InicioUsuario() {
                   <i className="bi bi-arrow-right mx-2"></i>Ir a Reservar
                 </button>
               ) : (
-                <ReservaCliente />
+                // PASA setReservaFactura COMO PROP
+                <ReservaCliente setReservaFactura={setReservaFactura} />
               )}
             </div>
           </div>
@@ -144,7 +164,6 @@ export default function InicioUsuario() {
                   Enviar Calificación
                 </button>
               </div>
-
             </form>
           </div>
 
@@ -153,8 +172,6 @@ export default function InicioUsuario() {
           </div>
         </div>
       </div>
-
-
 
       <footer className="text-center text-light py-4">
         <small>© {new Date().getFullYear()} Barbería VIP. Todos los derechos reservados.</small>
