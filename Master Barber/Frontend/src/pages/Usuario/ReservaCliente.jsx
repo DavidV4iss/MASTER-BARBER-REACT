@@ -24,6 +24,23 @@ const StyledDatePicker = styled(DatePicker)`
   }
 `;
 
+const WhiteTextarea = styled.textarea`
+  color: #fff !important;
+  background-color: #212529 !important;
+  border: 1px solid rgb(255, 255, 255);
+  border-radius: 1rem;
+  width: 100%;
+  padding: 1rem;
+  font-size: 1rem;
+  resize: vertical;
+  min-height: 80px;
+
+  &::placeholder {
+    color: #bbb;
+    opacity: 1;
+  }
+`;
+
 export default function Reserva() {
     const [service, setService] = useState('');
     const [date, setDate] = useState(new Date());
@@ -249,15 +266,14 @@ export default function Reserva() {
                     <>
                         {service === 1 && (
                             <>
-                                <h3 className='antonparabackend mt-3 text-white'>Observaciones adicionales (opcional)</h3>
+                                <h3 className='antonparabackend mt-3 text-white'>Observaciones adicionales <span className=' text-danger'>(opcional)</span></h3>
                                 <div className='container mt-4'>
-                                    <textarea
-                                        className='form-control bg-dark text-white'
+                                    <WhiteTextarea
                                         rows='3'
                                         placeholder='Si deseas añadirle algo a tu corte hasnoslo saber'
                                         value={observacion}
                                         onChange={(e) => setObservacion(e.target.value)}
-                                    ></textarea>
+                                    />
                                 </div>
                             </>
                         )}

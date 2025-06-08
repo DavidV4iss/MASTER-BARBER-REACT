@@ -606,3 +606,9 @@ button:hover {
 }
 
 // FIN ESTILOS PARA NOTIFICACIONES DEL USUARIO
+
+/* En tu archivo CSS global */
+.form-control.bg-dark,
+.form-control.bg-dark:focus {
+  color: #fff !important;
+}
