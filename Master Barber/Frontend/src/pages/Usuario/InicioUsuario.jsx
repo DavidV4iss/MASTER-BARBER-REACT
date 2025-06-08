@@ -150,7 +150,7 @@ export default function InicioUsuario() {
           </div>
 
           <div className="col-12 col-md-6">
-            <CalificacionesUser />
+            <CalificacionesUser userId={id} />
           </div>
         </div>
       </div>
