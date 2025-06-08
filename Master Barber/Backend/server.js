@@ -847,6 +847,15 @@ app.get('/traerCalificaciones', (req, res) => {
     });
 });
 
+app.get('/traerCalificacionesUsuario/:id', (req, res) => {
+    const idUsuario = req.params.id;
+    const q = 'SELECT * FROM calificaciones WHERE usuario_id = ?';
+    db.query(q, [idUsuario], (err, results) => {
+        if (err) return res.status(500).json({ error: 'Error en el servidor' });
+        return res.status(200).json(results);
+    });
+});
+
 
 
 
@@ -894,18 +903,43 @@ app.get('/GetServicios', (req, res) => {
 });
 
 app.post('/CrearReservas', async (req, res) => {
-    const { cliente_id, barbero_id, fecha, estado, servicio } = req.body;
+    const { cliente_id, barbero_id, fecha, estado, servicio, observacion } = req.body;
 
     try {
-        const reservaExistente = await db.query(
-            'SELECT * FROM reservas WHERE barbero_id = ? AND fecha = ?',
-            [barbero_id, fecha]
-        );
+        // Validar máximo 3 reservas activas por cliente por día
+        const fechaSoloDia = moment(fecha).format('YYYY-MM-DD');
+        const q = `
+        SELECT COUNT(*) AS total FROM reservas 
+        WHERE cliente_id = ? 
+        AND DATE(fecha) = ? 
+        AND (LOWER(estado) = 'pendiente' OR LOWER(estado) = 'confirmada')
+    `;
+        const [rows] = await new Promise((resolve, reject) => {
+            db.query(q, [cliente_id, fechaSoloDia], (err, results) => {
+                if (err) reject(err);
+                else resolve([results]);
+            });
+        });
+
+        if (rows[0].total >= 3) {
+            return res.status(400).json({ message: 'Solo puedes hacer 3 reservas por día.' });
+        }
+
+        // Validar hora ocupada
+        const reservaExistente = await new Promise((resolve, reject) => {
+            db.query(
+                'SELECT * FROM reservas WHERE barbero_id = ? AND fecha = ?',
+                [barbero_id, fecha],
+                (err, results) => {
+                    if (err) reject(err);
+                    else resolve(results);
+                }
+            );
+        });
 
         if (reservaExistente.length > 0) {
             return res.status(400).json({ message: 'La hora seleccionada ya está ocupada. Por favor, elige otra hora.' });
         }
-
 
         const reserva = {
             cliente_id,
@@ -913,10 +947,16 @@ app.post('/CrearReservas', async (req, res) => {
             servicio,
             fecha,
             estado,
+            observacion
         };
 
-        await db.query('INSERT INTO reservas SET ?', reserva);
-        res.status(201).json({ message: 'Reserva creada exitosamente.' });
+        db.query('INSERT INTO reservas SET ?', reserva, (err) => {
+            if (err) {
+                console.error(err);
+                return res.status(500).json({ message: 'Error al crear la reserva.' });
+            }
+            res.status(201).json({ message: 'Reserva creada exitosamente.' });
+        });
 
     } catch (error) {
         console.error(error);
@@ -938,6 +978,20 @@ app.get('/GetReservas/barbero/:id', (req, res) => {
         return res.status(200).json(results);
     });
 });
+
+app.get('/GetReservas/cliente/:id', (req, res) => {
+    const clienteId = req.params.id;
+
+    db.query('SELECT * FROM reservas WHERE cliente_id = ?', [clienteId], (err, results) => {
+        if (err) {
+            console.error('Error al obtener las reservas del cliente:', err);
+            return res.status(500).json({ error: 'Error interno del servidor' });
+        }
+
+        res.status(200).json(results);
+    });
+});
+
 
 app.get('/GetReservas/:id', (req, res) => {
     const id = req.params.id;

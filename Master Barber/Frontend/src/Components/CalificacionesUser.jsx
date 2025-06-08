@@ -6,7 +6,7 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Swal from 'sweetalert2';
 
-export default function CalificacionesUser() {
+export default function CalificacionesUser({ userId }) {
     const [calificaciones, setCalificaciones] = useState([]);
     const [usuarios, setUsuarios] = useState([]);
     const [show, setShow] = useState(false);
@@ -15,7 +15,8 @@ export default function CalificacionesUser() {
     useEffect(() => {
         const fetchCalificaciones = async () => {
             try {
-                const res = await axios.get("http://localhost:8080/traerCalificaciones");
+                const res = await axios.get(`http://localhost:8080/traerCalificacionesUsuario/${userId}`);
+
                 setCalificaciones(res.data);
             } catch (err) {
                 console.log("Error al obtener las calificaciones:", err);
@@ -113,6 +114,7 @@ export default function CalificacionesUser() {
                                         src={`http://localhost:8080/perfil/${usuario?.Foto}`}
                                         className="img-fluid rounded-circle mb-3 shadow mx-auto d-block"
                                         style={{ width: "120px", height: "120px", objectFit: "cover", border: "4px solid #dc3545" }}
+                                        onError={e => { e.target.src = "https://cdn-icons-png.flaticon.com/512/149/149071.png" }}
                                     />
                                     <h4 className="fw-bold text-danger">{usuario?.nombre_usuario}</h4>
                                     <p className="mt-3 text-light fs-5">{calificacion.comentario || "Sin comentario solo calificación"}</p>
