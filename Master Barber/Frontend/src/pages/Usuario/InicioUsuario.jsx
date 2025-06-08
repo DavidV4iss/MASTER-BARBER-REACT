@@ -5,9 +5,7 @@ import Swal from 'sweetalert2';
 import Rating from 'react-rating-stars-component';
 import ReservaCliente from './ReservaCliente';
 import CalificacionesUser from '../../Components/CalificacionesUser';
-import Particles from "react-tsparticles";
 import 'animate.css';
-import MisReservas from '../../Components/MisReservas';
 
 export default function InicioUsuario() {
   const [user, setUser] = useState({});
@@ -154,8 +152,6 @@ export default function InicioUsuario() {
             <CalificacionesUser userId={id} />
           </div>
         </div>
-        <MisReservas />
-
       </div>
 
 
