@@ -45,41 +45,6 @@ export default function NavbarUserIndex() {
     fetchUser();
   }, [email]);
 
-  const handleLogout = () => {
-    Swal.fire({
-      title: "¿Estas seguro que deseas cerrar sesion?",
-      text: "Tu sesión será cerrada.",
-      imageUrl: "/LOGO.png",
-      imageWidth: 200,
-      imageHeight: 200,
-      showCancelButton: true,
-      confirmButtonColor: "#DC3545",
-      cancelButtonColor: "",
-      confirmButtonText: "Sí, cerrar sesión",
-      cancelButtonText: "Cancelar",
-      customClass: {
-        popup: "dark-theme-popup bg-dark antonparabackend ",
-      },
-    }).then((result) => {
-      if (result.isConfirmed) {
-        localStorage.removeItem("token");
-        navigate("/login");
-
-        Swal.fire({
-          title: "Sesión Cerrada",
-          text: "Has cerrado sesión correctamente.",
-          icon: "success",
-          iconColor: "#1bf30b",
-          timer: 2000,
-          showConfirmButton: false,
-          customClass: {
-            popup: "dark-theme-popup bg-dark antonparabackend ",
-          },
-        });
-      }
-    });
-  };
-
   const handleNotification = () => {
     if (notificaciones.length === 0) {
       Swal.fire({
@@ -152,6 +117,41 @@ export default function NavbarUserIndex() {
       });
     }
   };
+  const handleLogout = () => {
+    Swal.fire({
+      title: "¿Estas seguro que deseas cerrar sesion?",
+      text: "Tu sesión será cerrada.",
+      imageUrl: "/LOGO.png",
+      imageWidth: 200,
+      imageHeight: 200,
+      showCancelButton: true,
+      confirmButtonColor: "#DC3545",
+      cancelButtonColor: "",
+      confirmButtonText: "Sí, cerrar sesión",
+      cancelButtonText: "Cancelar",
+      customClass: {
+        popup: "dark-theme-popup bg-dark antonparabackend ",
+      },
+    }).then((result) => {
+      if (result.isConfirmed) {
+        localStorage.removeItem("token");
+        navigate("/login");
+
+        Swal.fire({
+          title: "Sesión Cerrada",
+          text: "Has cerrado sesión correctamente.",
+          icon: "success",
+          iconColor: "#1bf30b",
+          timer: 2000,
+          showConfirmButton: false,
+          customClass: {
+            popup: "dark-theme-popup bg-dark antonparabackend ",
+          },
+        });
+      }
+    });
+  };
+
 
 
 

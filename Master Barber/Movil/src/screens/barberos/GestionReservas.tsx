@@ -1,7 +1,7 @@
 import { Anton_400Regular } from '@expo-google-fonts/anton';
 import { BebasNeue_400Regular } from '@expo-google-fonts/bebas-neue';
 import { useFonts } from 'expo-font';
-import React, { use, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, Image, ActivityIndicator, TouchableOpacity, ScrollView, Dimensions } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import DefaultLayout from '../../Layouts/DefaultLayout';
@@ -10,6 +10,7 @@ import ReservasClientesRepository from '../../repositories/ReservasClientesRepos
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Buffer } from 'buffer'; // necesario para decodificar Base64
 import { getBaseURL } from '../../config/api';
+import { useNavigation } from '@react-navigation/native';
 
 
 const GestionReservas = () => {
@@ -25,6 +26,7 @@ const GestionReservas = () => {
     const [barberoId, setBarberoId] = useState("");
     const [cancelTimers, setCancelTimers] = useState({});
     const [Barber, setBarber] = useState({});
+    const navigation = useNavigation();
 
 
     const fetchReservas = async (id) => {
@@ -216,13 +218,27 @@ const GestionReservas = () => {
                         <View style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                             <View style={styles.header}>
                                 <TouchableOpacity onPress={() => setIsDropdownVisible(!isDropdownVisible)}>
-                                    <Icon name="user-circle" style={styles.icon} />
+                                    <Image
+                                        source={{
+                                                            uri: `${getBaseURL()}imagesBarbero/${Barber ? Barber.Foto : "default.jpg"}`,
+                                                          }}
+                                        style={{ marginTop: 10, width: 45, height: 45, borderRadius: 25 }}
+                                    />
                                 </TouchableOpacity >
                                 {isDropdownVisible && (
                                     <View style={styles.dropdownMenu} >
-                                        <TouchableOpacity>
-                                            <Text style={{ ...styles.dropdownItem, marginBottom: 5, fontFamily: 'BebasNeue_400Regular', color: '#ffc107' }}>Perfil</Text>
-                                        </TouchableOpacity>
+                                        <TouchableOpacity onPress={() => navigation.navigate("PerfilBarbero")}>
+                                                            <Text
+                                                              style={{
+                                                                ...styles.dropdownItem,
+                                                                marginBottom: 5,
+                                                                fontFamily: "BebasNeue_400Regular",
+                                                                color: "#ffc107",
+                                                              }}
+                                                            >
+                                                              Perfil
+                                                            </Text>
+                                                          </TouchableOpacity>
                                         <TouchableOpacity onPress={handleLogout}>
                                             <Text style={{ ...styles.dropdownItem, padding: 10, backgroundColor: '#dc3545', fontFamily: 'BebasNeue_400Regular' }}>Cerrar Sesión</Text>
                                         </TouchableOpacity>
@@ -329,15 +345,6 @@ const styles = StyleSheet.create({
         fontFamily: 'BebasNeue',
         color: '#ffc107',
         textAlign: 'center',
-    },
-    icon: {
-        fontSize: 34,
-        color: '#ffff',
-        paddingTop: 10,
-        borderRadius: 100,
-        padding: 10,
-        borderColor: '#ffffff',
-
     },
     dropdownMenu: {
         position: 'absolute',

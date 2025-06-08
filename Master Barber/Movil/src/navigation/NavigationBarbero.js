@@ -8,9 +8,16 @@ import { Ionicons } from '@expo/vector-icons';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import GestionReservas from '../screens/barberos/GestionReservas';
+import PerfilBarbero from '../screens/barberos/perfilBarbero';
 
 const Tab = createBottomTabNavigator();
-// const Stack = createStackNavigator();
+const Stack = createStackNavigator();
+const UsuarioStack = () => (
+  <Stack.Navigator screenOptions={{ headerShown: false }}>
+    <Stack.Screen name="Inicio" component={GestionReservas} />
+    <Stack.Screen name="PerfilBarbero" component={PerfilBarbero} />
+  </Stack.Navigator>
+);
 export default function NavigationBarbero() {
   return (
     <Tab.Navigator
@@ -33,7 +40,7 @@ export default function NavigationBarbero() {
         tabBarInactiveTintColor: "#B0B0B0",
       })}
     >
-      <Tab.Screen name="Inicio" component={GestionReservas} />
+      <Tab.Screen name="Inicio" component={UsuarioStack} />
     </Tab.Navigator>
   )
 };

@@ -98,25 +98,25 @@ class ReservasClientesRepository {
     ///
 
     ///NOTIFICACIONES
-    static async GetNotificaciones(id_usuario) {
-        try {
-            const response = await API.get(`GetNotificaciones/${id_usuario}`);
-            return response;
-        } catch (error) {
-            const errorMessage = error?.response?.data?.message || "Error al obtener las notificaciones.";
-            throw new Error(errorMessage);
+        static async GetNotificaciones(id) {
+            try {
+                const response = await API.get(`GetNotificaciones/${id}`);
+                return response;
+            } catch (error) {
+                const errorMessage = error?.response?.data?.message || "Error al obtener las notificaciones.";
+                throw new Error(errorMessage);
+            }
         }
-    }
 
-    static async DeleteNotificaciones(id) {
-        try {
-            const response = await API.delete(`DeleteNotificaciones/${id}`);
-            return response;
-        } catch (error) {
-            const errorMessage = error?.response?.data?.message || "Error al eliminar la notificación.";
-            throw new Error(errorMessage);
+        static async DeleteNotificacion(id) {
+            try {
+                const response = await API.delete(`DeleteNotificacion/${id_notificacion}`);
+                return response;
+            } catch (error) {
+                const errorMessage = error?.response?.data?.message || "Error al eliminar la notificación de reserva.";
+                throw new Error(errorMessage);
+            }
         }
-    }
 
     
 
