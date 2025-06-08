@@ -108,7 +108,7 @@ class ReservasClientesRepository {
             }
         }
 
-        static async DeleteNotificacion(id) {
+        static async DeleteNotificacion(id_notificacion) {
             try {
                 const response = await API.delete(`DeleteNotificacion/${id_notificacion}`);
                 return response;

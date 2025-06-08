@@ -28,11 +28,11 @@ export default function ReservasNoti() {
                 setNotificaciones([]);
             }
 
-            console.log("Notificaciones obtenidas:", res.data); // Esto te ayuda a ver qué viene realmente
+            console.log("Notificaciones obtenidas:", res.data); 
 
         } catch (err) {
             console.error("Error al obtener las notificaciones:", err);
-            setNotificaciones([]); // Evita que se quede en estado anterior
+            setNotificaciones([]); 
         }
     };
     

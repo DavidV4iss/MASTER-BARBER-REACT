@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, StyleSheet, Image, TouchableOpacity, Dimensions, Platform, Button, } from "react-native";
+import { View, Text, StyleSheet, Image, TouchableOpacity, Dimensions, Platform, Button, FlatList } from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome";
 import DefaultLayout from "../../Layouts/DefaultLayout";
 import { TextInput } from "react-native-gesture-handler";
@@ -8,13 +8,14 @@ import { Anton_400Regular } from "@expo-google-fonts/anton";
 import { BebasNeue_400Regular } from "@expo-google-fonts/bebas-neue";
 import { useNavigation } from '@react-navigation/native';
 import useAuth from "../../hooks/useAuth";
-import { AirbnbRating } from "react-native-ratings";
+import { AirbnbRating, Rating } from "react-native-ratings";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import moment from "moment";
 import { getBaseURL } from "../../config/api";
 import { showMessage } from "react-native-flash-message";
 import ReservasClientesRepository from "../../repositories/ReservasClientesRepository";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import CalificacionesRepository from "../../repositories/CalificacionesRepository";
 
 export default function InicioUsuario() {
   const [service, setService] = useState("");
@@ -30,6 +31,11 @@ export default function InicioUsuario() {
   const [showTimePicker, setShowTimePicker] = useState(false);
   const [isDropdownVisible, setIsDropdownVisible] = useState(false);
   const [cliente, setCliente] = useState(null);
+  const [calificaciones, setCalificaciones] = useState([]);
+  const token = localStorage.getItem("token");
+  const usuario = JSON.parse(atob(token.split(".")[1]));
+  const email = usuario.email;
+  const id = usuario.id;
   const imagenesServicios = {
     "Corte basico": require("../../assets/cortebasico.jpg"),
     "Corte premium": require("../../assets/cortepremium.jpg"),
@@ -192,6 +198,7 @@ export default function InicioUsuario() {
           servicio: service,
           fecha: formattedSelectedDate,
           estado: "Pendiente",
+          observacion: "",
         });
 
       showMessage({
@@ -215,6 +222,57 @@ export default function InicioUsuario() {
       });
     }
   };
+
+  const traerCalificaciones = async () => {
+    try {
+      const response = await CalificacionesRepository.traerCalificacionesUsuario();
+      setCalificaciones(response.data);
+    } catch (err) {
+      console.log("Error al obtener los datos:", err);
+    }
+  };
+  React.useEffect(() => {
+    AsyncStorage.getItem("token").then(token => {
+      const decoded = token ? JSON.parse(atob(token.split(".")[1])) : null;
+      if (decoded?.id) {
+        setNuevaCalificacion(prev => ({ ...prev, id: decoded.id }));
+      }
+    });
+    traerCalificaciones();
+  }, []);
+  
+
+  const [nuevaCalificacion, setNuevaCalificacion] = useState({
+    id: id,
+    puntuacion: 0,
+    comentario: ""
+  });
+
+  const handleRatingChange = (newRating) => {
+    setNuevaCalificacion(prev => ({ ...prev, puntuacion: newRating }));
+  };
+
+  const handleSubmitCalificacion = async () => {
+    try {
+      console.log("Enviando nuevaCalificación:", nuevaCalificacion);
+      const res = await CalificacionesRepository.Createcalificaciones(nuevaCalificacion);
+      console.log("Respuesta:", res);
+      showMessage({
+        message: "Calificación enviada exitosamente",
+        type: "success",
+        icon: "success",
+        duration: 2000,
+      });
+      setNuevaCalificacion({ id, puntuacion: 0, comentario: "" });
+      traerCalificaciones();
+
+    } catch (err) {
+      console.log("Error al enviar la calificación:", err);
+    }
+  };
+  
+
+
 
   const handleLogout = () => {
     logout();
@@ -508,17 +566,15 @@ export default function InicioUsuario() {
             Vip
           </Text>
         </View>
-        <AirbnbRating
-          count={5}
-          reviews={["Terrible", "Malo", "Regular", "Bueno", "Excelente"]}
-          defaultRating={0}
-          reviewSize={20}
-          size={25}
-          starContainerStyle={{
-            flexDirection: "row",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
+
+        <Rating
+          type="star"
+          ratingCount={5}
+          imageSize={40}
+          startingValue={nuevaCalificacion.puntuacion || 0}
+          onFinishRating={handleRatingChange}
+          style={{ paddingVertical: 10, marginTop: 10, }}
+          tintColor="#212529"
         />
         <Text
           style={{
@@ -535,8 +591,12 @@ export default function InicioUsuario() {
           multiline={true}
           numberOfLines={4}
           textAlignVertical="top"
+          onChangeText={(text) => setNuevaCalificacion({ ...nuevaCalificacion, comentario: text })}
+          value={nuevaCalificacion.comentario}
+          placeholder="¿Qué te ha parecido nuestro servicio?"
         />
         <TouchableOpacity
+          onPress={handleSubmitCalificacion}
           style={{
             backgroundColor: "#dc3545",
             borderRadius: 10,
@@ -550,9 +610,10 @@ export default function InicioUsuario() {
           <Text
             style={{ color: "#ffffff", fontFamily: "BebasNeue", fontSize: 20 }}
           >
-            Enviar calificacion
+            Enviar calificación
           </Text>
         </TouchableOpacity>
+
 
         <Text
           style={{
@@ -564,6 +625,22 @@ export default function InicioUsuario() {
         >
           Mis calificaciones
         </Text>
+
+        <FlatList
+          data={calificaciones}
+          renderItem={({ item }) => (
+            <View style={styles.calificacionItem}>
+              <Text style={styles.calificacionText}>{item.comentario}</Text>
+              <Text style={styles.calificacionText}>Puntuación: {item.puntuacion}</Text>
+            </View>
+          )}
+          keyExtractor={(item) => item.id}
+        />
+        {calificaciones.length === 0 && (
+          <Text style={{ color: "#ffffff", fontFamily: "BebasNeue", fontSize: 16, marginTop: 10 }}>
+            No tienes calificaciones
+          </Text>
+          )}
       </View>
     </DefaultLayout>
   );
@@ -756,5 +833,25 @@ const styles = StyleSheet.create({
     textAlign: "center",
     justifyContent: "center",
     backgroundColor: "#ffc107",
+  },
+  calificacionItem: {
+    backgroundColor: "#343a40",
+    padding: 10,
+    marginBottom: 10,
+    borderRadius: 10,
+    width: "90%",
+    alignSelf: "center",
+  },
+  calificacionText: {
+    color: "#ffffff",
+    fontFamily: "BebasNeue",
+    fontSize: 16,
+    marginBottom: 5,
+  },
+  textCalificacion: {
+    color: "#ffc107",
+    fontFamily: "BebasNeue",
+    fontSize: 20,
+    marginTop: 30,
   },
 });

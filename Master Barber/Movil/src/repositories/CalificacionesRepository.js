@@ -13,6 +13,24 @@ class BarberosRepository {
         }
     }
 
+    static async traerCalificacionesUsuario() {
+        try {
+            const token = await AsyncStorage.getItem("token");
+            const tokenDecoded = token ? JSON.parse(atob(token.split(".")[1])) : null;
+            const id = tokenDecoded?.id || null;
+            if (!token) {
+                throw new Error("Token no encontrado");
+            }
+            console.log("ID del usuario:", id);
+            const response = await API.get(`traerCalificacionesUsuario/${id}`);
+            console.log("Respuesta de calificaciones:", response);
+            return response;
+        } catch (error) {
+            const errorMessage = error?.response?.data?.message || "Error al obtener los barberos.";
+            throw new Error(errorMessage);
+        }
+    }
+
     static async TraerUsuario(email) {
         try {
             const response = await API.get(`traerUsuario/${email}`);
@@ -28,7 +46,7 @@ class BarberosRepository {
 
     static async Createcalificaciones(calificaciones) {
         try {
-            const response = await API.post("Createcalificaciones", calificaciones, { headers: { "Content-Type": "multipart/form-data" } });
+            const response = await API.post("Createcalificaciones", calificaciones);
             showMessage({
                 message: "Calificación creada exitosamente",
                 type: "success",
