@@ -7,6 +7,7 @@ import ReservaCliente from './ReservaCliente';
 import CalificacionesUser from '../../Components/CalificacionesUser';
 import Particles from "react-tsparticles";
 import 'animate.css';
+import MisReservas from '../../Components/MisReservas';
 
 export default function InicioUsuario() {
   const [user, setUser] = useState({});
@@ -153,7 +154,11 @@ export default function InicioUsuario() {
             <CalificacionesUser userId={id} />
           </div>
         </div>
+        <MisReservas />
+
       </div>
+
+
 
       <footer className="text-center text-light py-4">
         <small>© {new Date().getFullYear()} Barbería VIP. Todos los derechos reservados.</small>
